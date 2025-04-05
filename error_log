@@ -1,0 +1,2 @@
+[02-Mar-2025 23:54:50 Asia/Kolkata] PHP Fatal error:  Cannot use empty array elements in arrays in /home/a8kd7h4e1qcz/public_html/testscan.doctechno.in/application/controllers/ExtractorController.php on line 313
+[03-Mar-2025 23:41:17 Asia/Kolkata] PHP Fatal error:  Cannot redeclare ExtractorController::changeRequest() in /home/a8kd7h4e1qcz/public_html/testscan.doctechno.in/application/controllers/ExtractorController.php on line 133
