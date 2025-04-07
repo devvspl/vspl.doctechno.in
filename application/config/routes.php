@@ -10,7 +10,7 @@ $route['get_overall_report'] = 'Dashboard/get_overall_report';
 $route['get_overall_report_bill_approver'] = 'Dashboard/get_overall_report_bill_approver';
 $route['get_report_for_super_approver'] = 'Dashboard/get_report_for_super_approver';
 $route['get_report_for_super_scanner'] = 'Dashboard/get_report_for_super_scanner';
-// >>>>>>>>>>>>>>>>>>>>>>>>> Master Section <<<<<<<<<<<<<<<<<<<<<<<<< //
+// >>>>>>>>>>>>>>>>>>>>>>>>> Master Section <<<<<<<<<<<<<<<<<<<<<<<<<<< //
 $route['user'] = 'master/UserController';
 $route['bill_approver'] = 'master/BillApproverController';
 $route['ledger'] = 'master/LedgerController';
@@ -35,12 +35,11 @@ $route['employee_import'] = 'master/EmployeeController/employee_import';
 $route['firm_import'] = 'master/FirmController/firm_import';
 $route['core-apis'] = 'master/CoreController/core_apis';
 $route['create_account'] = 'master/AccountController/create';
-
 // >>>>>>>>>>>>>>>>>>>>>>>>> Data Extraction Section <<<<<<<<<<<<<<<<<<<<<<<<< //
 $route['classification'] = 'extract/ExtractorController/classification';
 $route['processed'] = 'extract/ExtractorController/processed';
 $route['change-request'] = 'extract/ExtractorController/changeRequestList';
-// >>>>>>>>>>>>>>>>>>>>>>>>> Reports Section <<<<<<<<<<<<<<<<<<<<<<<<< //
+// >>>>>>>>>>>>>>>>>>>>>>>>> Reports Section <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
 $route['all_report'] = 'All_report';
 $route['search_global'] = 'Search/search_global';
 $route['search_with_filter'] = 'Search/search_with_filter';
