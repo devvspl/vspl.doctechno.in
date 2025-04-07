@@ -16,7 +16,7 @@
                     <div class="box-header with-border">
                         <h3 class="box-title">Add Unit</h3>
                     </div>
-                    <form id="form1" action="<?= base_url(); ?>Unit/create" id="unitform" name="unitform" method="post" accept-charset="utf-8">
+                    <form id="form1" action="<?= base_url(); ?>master/UnitController/create" id="unitform" name="unitform" method="post" accept-charset="utf-8">
                         <div class="box-body">
                             <?php if ($this->session->flashdata('message')) { ?>
                                 <?php echo $this->session->flashdata('message') ?>
@@ -91,10 +91,10 @@
                                                 </td>
                                                 <td class="mailbox-date pull-right no-print">
 
-                                                    <a href="<?= base_url(); ?>Unit/edit/<?php echo $row['unit_id'] ?>" class="btn btn-default btn-xs">
+                                                    <a href="<?= base_url(); ?>master/UnitController/edit/<?php echo $row['unit_id'] ?>" class="btn btn-default btn-xs">
                                                         <i class="fa fa-pencil"></i>
                                                     </a>
-                                                    <a href="<?= base_url(); ?>Unit/delete/<?php echo $row['unit_id'] ?>" class="btn btn-default btn-xs" onclick="return confirm('Are you sure to delete');">
+                                                    <a href="<?= base_url(); ?>master/UnitController/delete/<?php echo $row['unit_id'] ?>" class="btn btn-default btn-xs" onclick="return confirm('Are you sure to delete');">
                                                         <i class="fa fa-remove"></i>
                                                     </a>
 

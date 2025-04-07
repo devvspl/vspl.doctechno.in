@@ -17,7 +17,7 @@
                         <h3 class="box-title">Update Ledger</h3>
                     </div><!-- /.box-header -->
                     <!-- form start -->
-                    <form id="form1" action="<?= base_url(); ?>Ledger/update/<?= $ledger_id ?>" id="ledgerform" name="ledgerform" method="post" accept-charset="utf-8">
+                    <form id="form1" action="<?= base_url(); ?>master/LedgerController/update/<?= $ledger_id ?>" id="ledgerform" name="ledgerform" method="post" accept-charset="utf-8">
                         <div class="box-body">
                             <?php if ($this->session->flashdata('message')) { ?>
                                 <?php echo $this->session->flashdata('message') ?>

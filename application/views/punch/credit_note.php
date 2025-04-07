@@ -529,7 +529,7 @@ $temp_punch_detail = $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_i
 		function getUnitList() {
 			$.ajax({
 				type: "POST",
-				url: '<?= base_url() ?>Unit/get_unit_list',
+				url: '<?= base_url() ?>master/UnitController/get_unit_list',
 				dataType: "json",
 				success: function(response) {
 

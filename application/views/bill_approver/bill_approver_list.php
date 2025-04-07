@@ -19,7 +19,7 @@
                         <h3 class="box-title">Add Bill Approver</h3>
                     </div><!-- /.box-header -->
                     <!-- form start -->
-                    <form id="form1" action="<?= base_url(); ?>Bill_approver/create" id="userform" name="userform" method="post" accept-charset="utf-8">
+                    <form id="form1" action="<?= base_url(); ?>master/BillApproverController/create" id="userform" name="userform" method="post" accept-charset="utf-8">
                         <div class="box-body">
                             <?php if ($this->session->flashdata('message')) { ?>
                                 <?php echo $this->session->flashdata('message') ?>
@@ -183,7 +183,7 @@
         var selectedCompanies = $(this).val();
         
         $.ajax({
-            url: '<?= site_url('Bill_approver/get_departments') ?>',
+            url: '<?= site_url('master/BillApproverController/get_departments') ?>',
             type: 'POST',
             dataType: 'json',
             data: { company_ids: selectedCompanies },

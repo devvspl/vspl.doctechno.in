@@ -17,7 +17,7 @@
                         <h3 class="box-title">Update Business Entity</h3>
                     </div><!-- /.box-header -->
                     <!-- form start -->
-                    <form id="form1" action="<?= base_url(); ?>Business_entity/update/<?= $business_entity_id ?>" id="business_entityform" name="business_entityform" method="post" accept-charset="utf-8">
+                    <form id="form1" action="<?= base_url(); ?>master/BusinessEntityController/update/<?= $business_entity_id ?>" id="business_entityform" name="business_entityform" method="post" accept-charset="utf-8">
                         <div class="box-body">
                             <?php if ($this->session->flashdata('message')) { ?>
                                 <?php echo $this->session->flashdata('message') ?>

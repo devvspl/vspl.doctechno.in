@@ -16,7 +16,7 @@
 					<div class="box-header with-border">
 						<h3 class="box-title">Add Rejection Reason</h3>
 					</div>
-					<form id="form1" action="<?= base_url(); ?>Rejection_reason/create" id="add_form" name="add_form"
+					<form id="form1" action="<?= base_url(); ?>master/RejectionReasonController/create" id="add_form" name="add_form"
 						  method="post" accept-charset="utf-8">
 						<div class="box-body">
 							<?php if ($this->session->flashdata('message')) { ?>
@@ -85,11 +85,11 @@
 											</td>
 											<td class="mailbox-date pull-right no-print">
 
-												<a href="<?= base_url(); ?>Rejection_reason/edit/<?php echo $row['id'] ?>"
+												<a href="<?= base_url(); ?>master/RejectionReasonController/edit/<?php echo $row['id'] ?>"
 												   class="btn btn-default btn-xs">
 													<i class="fa fa-pencil"></i>
 												</a>
-												<a href="<?= base_url(); ?>Rejection_reason/delete/<?php echo $row['id'] ?>"
+												<a href="<?= base_url(); ?>master/RejectionReasonController/delete/<?php echo $row['id'] ?>"
 												   class="btn btn-default btn-xs"
 												   onclick="return confirm('Are you sure to delete');">
 													<i class="fa fa-remove"></i>

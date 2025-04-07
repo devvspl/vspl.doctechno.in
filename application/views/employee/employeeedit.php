@@ -17,7 +17,7 @@
 						<h3 class="box-title">Update Employee</h3>
 					</div><!-- /.box-header -->
 					<!-- form start -->
-					<form id="form1" action="<?= base_url(); ?>Employee/update/<?= $id ?>" id="emp_form" name="emp_form"
+					<form id="form1" action="<?= base_url(); ?>master/EmployeeController/update/<?= $id ?>" id="emp_form" name="emp_form"
 						  method="post" accept-charset="utf-8">
 						<div class="box-body">
 							<?php if ($this->session->flashdata('message')) { ?>
@@ -110,7 +110,7 @@
 											</td>
 											<?php if ($row['emp_vspl'] == 'N') { ?>
 												<td class="mailbox-date pull-right no-print">
-													<a href="<?= base_url(); ?>Employee/delete/<?php echo $row['id'] ?>"
+													<a href="<?= base_url(); ?>master/EmployeeController/delete/<?php echo $row['id'] ?>"
 													   class="btn btn-default btn-xs"
 													   onclick="return confirm('Are you sure to delete');">
 														<i class="fa fa-remove"></i>

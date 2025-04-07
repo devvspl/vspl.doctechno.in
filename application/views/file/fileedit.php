@@ -17,7 +17,7 @@
                         <h3 class="box-title">Update File</h3>
                     </div><!-- /.box-header -->
                     <!-- form start -->
-                    <form id="form1" action="<?= base_url(); ?>File/update/<?= $file_id ?>" id="fileform" name="fileform" method="post" accept-charset="utf-8">
+                    <form id="form1" action="<?= base_url(); ?>master/FileController/update/<?= $file_id ?>" id="fileform" name="fileform" method="post" accept-charset="utf-8">
                         <div class="box-body">
                             <?php if ($this->session->flashdata('message')) { ?>
                                 <?php echo $this->session->flashdata('message') ?>

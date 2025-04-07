@@ -399,7 +399,7 @@ $ledger_list = $this->customlib->getLedgerList();
 		function getUnitList() {
 			$.ajax({
 				type: "POST",
-				url: '<?= base_url() ?>Unit/get_unit_list',
+				url: '<?= base_url() ?>master/UnitController/get_unit_list',
 				dataType: "json",
 				success: function (response) {
 

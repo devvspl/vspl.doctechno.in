@@ -2,6 +2,7 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 
 $route['default_controller'] = 'Auth_ctrl/login';
+// >>>>>>>>>>>>>>>>>>>>>>>>> Dashboard Section <<<<<<<<<<<<<<<<<<<<<<<<< //
 $route['dashboard'] = 'Dashboard';
 $route['logout'] = 'Dashboard/logout';
 $route['changepass'] = 'Dashboard/changepass';
@@ -33,6 +34,12 @@ $route['approve_bill/(:any)'] = 'master/BillApproverController/approve_bill/$1';
 $route['employee_import'] = 'master/EmployeeController/employee_import';
 $route['firm_import'] = 'master/FirmController/firm_import';
 $route['core-apis'] = 'master/CoreController/core_apis';
+$route['create_account'] = 'master/AccountController/create';
+
+// >>>>>>>>>>>>>>>>>>>>>>>>> Data Extraction Section <<<<<<<<<<<<<<<<<<<<<<<<< //
+$route['classification'] = 'extract/ExtractorController/classification';
+$route['processed'] = 'extract/ExtractorController/processed';
+$route['change-request'] = 'extract/ExtractorController/changeRequestList';
 // >>>>>>>>>>>>>>>>>>>>>>>>> Reports Section <<<<<<<<<<<<<<<<<<<<<<<<< //
 $route['all_report'] = 'All_report';
 $route['search_global'] = 'Search/search_global';
@@ -97,13 +104,8 @@ $route['reject_approved_file/(:any)'] = 'Record/reject_approved_file/$1';   //$1
 $route['report'] = 'Record/report';
 $route['bill_approval_report'] = 'Record/bill_approval_report';
 //----------------data extraction ------------------
-$route['classification'] = 'ExtractorController/classification';
-$route['processed'] = 'ExtractorController/processed';
-$route['change-request'] = 'ExtractorController/changeRequestList';
 
 
-$route['404_override'] = '';
-$route['translate_uri_dashes'] = FALSE;
 
 
 //===========================Entry Confirmation On Tally/ERP===========================
@@ -118,5 +120,10 @@ $route['journal-entry/get-account-options'] = 'form/JournalEntry_ctrl/getAccount
 $route['temp-files'] = 'TempFilesController/temp_files';
 //Routes for core apis
 
+
+
+
+$route['404_override'] = '';
+$route['translate_uri_dashes'] = FALSE;
 //==========================================
 $route['ledger_wise_report'] ='Record/ledger_wise_report';
