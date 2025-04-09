@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class UserController extends CI_Controller
+class User extends CI_Controller
 {
 
     function __construct()
@@ -126,10 +126,10 @@ class UserController extends CI_Controller
         $result = $this->User_model->set_permission($user_id, $permission_id);
         if ($result) {
             $this->session->set_flashdata('message', '<p class="text-success text-center">Permission Updated Successfully.</p>');
-            redirect('master/UserController/permission/' . $user_id);
+            redirect('user/permission/' . $user_id);
         } else {
             $this->session->set_flashdata('message', '<p class="text-danger text-center">Something went wrong. Please try again.</p>');
-            redirect('master/UserController/permission/' . $user_id);
+            redirect('user/permission/' . $user_id);
         }
     }
 }

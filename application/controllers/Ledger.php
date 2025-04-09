@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class LedgerController extends CI_Controller
+class Ledger extends CI_Controller
 {
 
     function __construct()

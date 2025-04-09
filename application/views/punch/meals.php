@@ -31,7 +31,7 @@ $temp_punch_detail = $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_i
 				</script>
 			<?php } ?>
 		</div>
-		<form action="<?= base_url(); ?>form/Miscellaneous_ctrl/Save_Meals" id="Form" name="Form" method="post"
+		<form action="<?= base_url(); ?>Form/Miscellaneous_ctrl/Save_Meals" id="Form" name="Form" method="post"
 			  accept-charset="utf-8">
 			<div class="col-md-6">
 				<input type="hidden" name="Scan_Id" id="Scan_Id" value="<?= $Scan_Id ?>">

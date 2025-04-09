@@ -17,7 +17,7 @@
                         <h3 class="box-title">Update Business Unit</h3>
                     </div><!-- /.box-header -->
                     <!-- form start -->
-                    <form id="form1" action="<?= base_url(); ?>master/BusinessUnitController/update/<?= $business_unit_id ?>" id="business_unitform" name="business_unitform" method="post" accept-charset="utf-8">
+                    <form id="form1" action="<?= base_url(); ?>Business_unit/update/<?= $business_unit_id ?>" id="business_unitform" name="business_unitform" method="post" accept-charset="utf-8">
                         <div class="box-body">
                             <?php if ($this->session->flashdata('message')) { ?>
                                 <?php echo $this->session->flashdata('message') ?>

@@ -124,7 +124,7 @@
          </script>
          <?php } ?>
       </div>
-      <form action="<?= base_url(); ?>form/Cashpayment_New_ctrl/create" id="journal_enty_form" name="journal_enty_form" method="post" accept-charset="utf-8">
+      <form action="<?= base_url(); ?>Form/Cashpayment_New_ctrl/create" id="journal_enty_form" name="journal_enty_form" method="post" accept-charset="utf-8">
          <div class="col-md-7">
             <input  required type="hidden" name="Scan_Id" id="Scan_Id" value="<?= $Scan_Id ?>">
             <input  required type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">

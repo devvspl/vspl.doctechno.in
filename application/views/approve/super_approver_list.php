@@ -241,7 +241,7 @@ $doctype_list = $this->db->select('type_id,file_type')->from('master_doctype')->
 		}
 		$.ajax({
 			type: 'POST',
-			url: '<?= base_url() ?>master/RejectionReasonController/save_reason',
+			url: '<?= base_url() ?>Rejection_reason/save_reason',
 			data: {
 				reason: reason,
 			},

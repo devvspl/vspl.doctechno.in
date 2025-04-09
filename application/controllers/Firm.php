@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class FirmController extends CI_Controller
+class Firm extends CI_Controller
 {
 
     function __construct()

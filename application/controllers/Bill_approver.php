@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class BillApproverController extends CI_Controller
+class Bill_approver extends CI_Controller
 {
 
     function __construct()

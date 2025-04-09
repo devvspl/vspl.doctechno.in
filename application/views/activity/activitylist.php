@@ -17,7 +17,7 @@
                         <h3 class="box-title">Add Activity</h3>
                     </div><!-- /.box-header -->
                     <!-- form start -->
-                    <form id="form1" action="<?= base_url(); ?>master/ActivityController/create" id="activityform" name="activityform" method="post" accept-charset="utf-8">
+                    <form id="form1" action="<?= base_url(); ?>Activity/create" id="activityform" name="activityform" method="post" accept-charset="utf-8">
                         <div class="box-body">
                             <?php if ($this->session->flashdata('message')) { ?>
                                 <?php echo $this->session->flashdata('message') ?>

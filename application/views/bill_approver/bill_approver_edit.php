@@ -210,7 +210,7 @@
         var selectedCompanies = $(this).val();
         
         $.ajax({
-            url: '<?= site_url('master/BillApproverController/get_departments') ?>',
+            url: '<?= site_url('Bill_approver/get_departments') ?>',
             type: 'POST',
             dataType: 'json',
             data: { company_ids: selectedCompanies },

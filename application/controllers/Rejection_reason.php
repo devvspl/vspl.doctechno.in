@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class RejectionReasonController extends CI_Controller
+class Rejection_reason extends CI_Controller
 {
 
 	function __construct()

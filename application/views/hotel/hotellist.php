@@ -16,7 +16,7 @@
 					<div class="box-header with-border">
 						<h3 class="box-title">Add Hotel</h3>
 					</div>
-					<form id="form1" action="<?= base_url(); ?>master/HotelController/create" id="hotel_form" name="hotel_form"
+					<form id="form1" action="<?= base_url(); ?>Hotel/create" id="hotel_form" name="hotel_form"
 						  method="post" accept-charset="utf-8">
 						<div class="box-body">
 							<?php if ($this->session->flashdata('message')) { ?>
@@ -120,11 +120,11 @@
 											</td>
 											<td class="mailbox-date pull-right no-print">
 
-												<a href="<?= base_url(); ?>master/HotelController/edit/<?php echo $row['hotel_id'] ?>"
+												<a href="<?= base_url(); ?>Hotel/edit/<?php echo $row['hotel_id'] ?>"
 												   class="btn btn-default btn-xs">
 													<i class="fa fa-pencil"></i>
 												</a>
-												<a href="<?= base_url(); ?>master/HotelController/delete/<?php echo $row['hotel_id'] ?>"
+												<a href="<?= base_url(); ?>Hotel/delete/<?php echo $row['hotel_id'] ?>"
 												   class="btn btn-default btn-xs"
 												   onclick="return confirm('Are you sure to delete');">
 													<i class="fa fa-remove"></i>

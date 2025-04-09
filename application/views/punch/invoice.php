@@ -81,7 +81,7 @@ $temp_punch_detail = $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_i
 				</script>
 			<?php } ?>
 		</div>
-		<form action="<?= base_url(); ?>form/Invoice_ctrl/create" id="invoice_form" name="invoice_form" method="post"
+		<form action="<?= base_url(); ?>Form/Invoice_ctrl/create" id="invoice_form" name="invoice_form" method="post"
 			  accept-charset="utf-8">
 			  <div style="display: flex; flex-direction: column; align-items: center;">
 				<div class="loader" id="loader" style="display: none;"></div>
@@ -573,7 +573,7 @@ $temp_punch_detail = $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_i
 		function getUnitList() {
 			$.ajax({
 				type: "POST",
-				url: '<?= base_url() ?>master/UnitController/get_unit_list',
+				url: '<?= base_url() ?>Unit/get_unit_list',
 				dataType: "json",
 				success: function (response) {
 
@@ -662,7 +662,7 @@ $temp_punch_detail = $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_i
 			var Scan_Id = $('#Scan_Id').val();
 			toggleLoader(true, 'contnetBody');
 			$.ajax({
-				url: '<?= base_url() ?>form/Invoice_ctrl/getInvoiceItem',
+				url: '<?= base_url() ?>Form/Invoice_ctrl/getInvoiceItem',
 				type: 'POST',
 				data: {
 					Scan_Id: Scan_Id
@@ -988,7 +988,7 @@ $temp_punch_detail = $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_i
 		}
 		$.ajax({
 			type: 'POST',
-			url: '<?= base_url() ?>form/Invoice_ctrl/add_item',
+			url: '<?= base_url() ?>Form/Invoice_ctrl/add_item',
 			data: {
 				item_name: item_name,
 				item_code: item_code

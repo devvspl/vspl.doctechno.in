@@ -17,7 +17,7 @@
 						<h3 class="box-title">Update Reason</h3>
 					</div><!-- /.box-header -->
 					<!-- form start -->
-					<form id="form1" action="<?= base_url(); ?>master/RejectionReasonController/update/<?= $id ?>" id="add_form"
+					<form id="form1" action="<?= base_url(); ?>Rejection_reason/update/<?= $id ?>" id="add_form"
 						  name="add_form" method="post" accept-charset="utf-8">
 						<div class="box-body">
 							<?php if ($this->session->flashdata('message')) { ?>
@@ -101,7 +101,7 @@
 												<?php echo ($row['status'] == 'A') ? 'Active' : 'Deactive' ?>
 											</td>
 											<td class="mailbox-date pull-right no-print">
-												<a href="<?= base_url(); ?>master/RejectionReasonController/delete/<?php echo $row['id'] ?>"
+												<a href="<?= base_url(); ?>Rejection_reason/delete/<?php echo $row['id'] ?>"
 												   class="btn btn-default btn-xs"
 												   onclick="return confirm('Are you sure to delete');">
 													<i class="fa fa-remove"></i>

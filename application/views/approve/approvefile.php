@@ -216,7 +216,7 @@ $rj_list = $this->customlib->getRejectReason();
 		}
 		$.ajax({
 			type: 'POST',
-			url: '<?= base_url() ?>master/RejectionReasonController/save_reason',
+			url: '<?= base_url() ?>Rejection_reason/save_reason',
 			data: {
 				reason: reason,
 			},

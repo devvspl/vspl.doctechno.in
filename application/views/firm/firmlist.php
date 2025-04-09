@@ -17,7 +17,7 @@
                         <h3 class="box-title">Add Company-Vendor-Farmer</h3>
                     </div><!-- /.box-header -->
                     <!-- form start -->
-                    <form id="form1" action="<?= base_url(); ?>master/FirmController/create" id="firm_form" name="firm_form" method="post" accept-charset="utf-8">
+                    <form id="form1" action="<?= base_url(); ?>Firm/create" id="firm_form" name="firm_form" method="post" accept-charset="utf-8">
                         <div class="box-body">
                             <?php if ($this->session->flashdata('message')) { ?>
                                 <?php echo $this->session->flashdata('message') ?>

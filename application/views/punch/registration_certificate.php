@@ -29,7 +29,7 @@ $punch_detail = $this->db->get_where('punchfile2', ['Scan_Id' => $Scan_Id])->row
                 </script>
             <?php } ?>
         </div>
-        <form action="<?= base_url(); ?>form/RegCert_ctrl/create" id="registrationform" name="registrationform" method="post" accept-charset="utf-8">
+        <form action="<?= base_url(); ?>Form/RegCert_ctrl/create" id="registrationform" name="registrationform" method="post" accept-charset="utf-8">
             <div class="col-md-6">
                 <input type="hidden" name="Scan_Id" id="Scan_Id" value="<?= $Scan_Id ?>">
                 <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">
@@ -130,7 +130,7 @@ $punch_detail = $this->db->get_where('punchfile2', ['Scan_Id' => $Scan_Id])->row
     $(document).on('change', '#Company', function() {
         var company_id = $(this).val();
         $.ajax({
-            url: "<?= base_url(); ?>form/RegCert_ctrl/getDepartment",
+            url: "<?= base_url(); ?>Form/RegCert_ctrl/getDepartment",
             type: "post",
             dataType: "json",
             data: {

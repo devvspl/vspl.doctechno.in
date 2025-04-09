@@ -43,7 +43,7 @@ $punch_detail = $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row(
                 </script>
             <?php } ?>
         </div>
-        <form action="<?= base_url(); ?>form/Challan_ctrl/Save_GST_Challan" id="bankstatementform" name="bankstatementform" method="post" accept-charset="utf-8">
+        <form action="<?= base_url(); ?>Form/Challan_ctrl/Save_GST_Challan" id="bankstatementform" name="bankstatementform" method="post" accept-charset="utf-8">
             <div class="col-md-7">
                 <input type="hidden" name="Scan_Id" id="Scan_Id" value="<?= $Scan_Id ?>">
                 <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">
@@ -205,7 +205,7 @@ $punch_detail = $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row(
     function getMultiRecord() {
         var Scan_Id = $('#Scan_Id').val();
         $.ajax({
-            url: '<?= base_url() ?>form/Challan_ctrl/getGstItem',
+            url: '<?= base_url() ?>Form/Challan_ctrl/getGstItem',
             type: 'POST',
             data: {
                 Scan_Id: Scan_Id
