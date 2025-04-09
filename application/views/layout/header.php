@@ -114,8 +114,8 @@
                   <li class="<?php echo set_Submenu('user'); ?>"><a href="<?= base_url(); ?>user"><i
                      class="fa fa-angle-double-right"></i> User</a></li>
                      <li class="<?php echo set_Submenu('bill_approver'); ?>"><a href="<?= base_url(); ?>bill_approver"><i class="fa fa-angle-double-right"></i> Bill Approver</a></li>
-                     <li class="<?php echo set_Submenu('Temp_doctype'); ?>"><a href="<?= base_url(); ?>Temp_doctype"><i class="fa fa-angle-double-right"></i> Temp Doctype</a></li>
-                     <li class="<?php echo set_Submenu('country'); ?>"><a href="<?= base_url(); ?>country"><i
+                     <!-- <li class="<?php echo set_Submenu('Temp_doctype'); ?>"><a href="<?= base_url(); ?>Temp_doctype"><i class="fa fa-angle-double-right"></i> Temp Doctype</a></li> -->
+                     <!-- <li class="<?php echo set_Submenu('country'); ?>"><a href="<?= base_url(); ?>country"><i
                      class="fa fa-angle-double-right"></i>Country</a></li>
                   <li class="<?php echo set_Submenu('state'); ?>"><a href="<?= base_url(); ?>state"><i
                      class="fa fa-angle-double-right"></i>State</a></li>
@@ -124,15 +124,15 @@
                   <li class="<?php echo set_Submenu('location'); ?>"><a href="<?= base_url(); ?>location"><i
                      class="fa fa-angle-double-right"></i>Location</a></li>
 				  <li class="<?php echo set_Submenu('cost_center'); ?>"><a href="<?= base_url(); ?>cost_center"><i
-                     class="fa fa-angle-double-right"></i>Cost Center</a></li>
+                     class="fa fa-angle-double-right"></i>Cost Center</a></li> -->
                   <li class="<?php echo set_Submenu('category'); ?>"><a href="<?= base_url(); ?>category"><i
                      class="fa fa-angle-double-right"></i>Category</a></li>
                   <li class="<?php echo set_Submenu('ledger'); ?>"><a href="<?= base_url(); ?>ledger"><i
                      class="fa fa-angle-double-right"></i>Ledger</a></li>
                   <li class="<?php echo set_Submenu('firm'); ?>"><a href="<?= base_url(); ?>firm"><i
                      class="fa fa-angle-double-right"></i>Company / Vendor</a></li>
-                  <li class="<?php echo set_Submenu('department'); ?>"><a href="<?= base_url(); ?>department"><i
-                     class="fa fa-angle-double-right"></i>Department</a></li>
+                  <!-- <li class="<?php echo set_Submenu('department'); ?>"><a href="<?= base_url(); ?>department"><i
+                     class="fa fa-angle-double-right"></i>Department</a></li> -->
                   <li class="<?php echo set_Submenu('file'); ?>"><a href="<?= base_url(); ?>file"><i
                      class="fa fa-angle-double-right"></i>File</a></li>
                   <li class="<?php echo set_Submenu('unit'); ?>"><a href="<?= base_url(); ?>unit"><i
@@ -153,10 +153,10 @@
                      class="fa fa-angle-double-right"></i>Activity</a></li>
                   <li class="<?php echo set_Submenu('business_unit'); ?>"><a href="<?= base_url(); ?>business_unit"><i
                      class="fa fa-angle-double-right"></i>Business Unit</a></li>
-                  <li class="<?php echo set_Submenu('crop_category'); ?>"><a href="<?= base_url(); ?>crop_category"><i
+                  <!-- <li class="<?php echo set_Submenu('crop_category'); ?>"><a href="<?= base_url(); ?>crop_category"><i
                      class="fa fa-angle-double-right"></i>Crop Category</a></li>
                   <li class="<?php echo set_Submenu('crop'); ?>"><a href="<?= base_url(); ?>crop"><i
-                     class="fa fa-angle-double-right"></i>Crop</a></li>
+                     class="fa fa-angle-double-right"></i>Crop</a></li> -->
                   <li class="<?php echo set_Submenu('business_entity'); ?>"><a href="<?= base_url(); ?>business_entity"><i
                      class="fa fa-angle-double-right"></i>Business Entity</a></li>
                      

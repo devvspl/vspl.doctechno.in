@@ -141,8 +141,6 @@ class CoreController extends CI_Controller {
                     $this->db->insert($table_name, $row);
                 }
             }
-
-            // DELETE records that are no longer in the API response
             if (!empty($api_ids)) {
                 $this->db->where_not_in('api_id', $api_ids);
                 $this->db->delete($table_name);

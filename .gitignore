@@ -31,3 +31,4 @@ uploads/*
 *.sublime-project
 /tests/tests/
 /tests/results/
+application/config/database.php
