@@ -29,7 +29,7 @@ $punch_detail = $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row(
                 </script>
             <?php } ?>
         </div>
-        <form action="<?= base_url(); ?>Form/Telephone_ctrl/save_phone_fax" id="bankstatementform" name="bankstatementform" method="post" accept-charset="utf-8">
+        <form action="<?= base_url(); ?>form/Telephone_ctrl/save_phone_fax" id="bankstatementform" name="bankstatementform" method="post" accept-charset="utf-8">
             <div class="col-md-6">
                 <input type="hidden" name="Scan_Id" id="Scan_Id" value="<?= $Scan_Id ?>">
                 <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">

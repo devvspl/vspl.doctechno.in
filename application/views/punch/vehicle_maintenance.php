@@ -31,7 +31,7 @@ $temp_punch_detail = $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_i
 				</script>
 			<?php } ?>
 		</div>
-		<form action="<?= base_url(); ?>Form/Vehicle_ctrl/Save_Vehicle_Maintenance" id="punch_form" name="punch_form"
+		<form action="<?= base_url(); ?>form/Vehicle_ctrl/Save_Vehicle_Maintenance" id="punch_form" name="punch_form"
 			  method="post" accept-charset="utf-8">
 			<div class="col-md-6">
 				<input type="hidden" name="Scan_Id" id="Scan_Id" value="<?= $Scan_Id ?>">
@@ -315,7 +315,7 @@ $temp_punch_detail = $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_i
 		function getUnitList() {
 			$.ajax({
 				type: "POST",
-				url: '<?= base_url() ?>Unit/get_unit_list',
+				url: '<?= base_url() ?>master/UnitController/get_unit_list',
 				dataType: "json",
 				success: function (response) {
 
@@ -346,7 +346,7 @@ $temp_punch_detail = $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_i
 		function getMultiRecord() {
 			var Scan_Id = $('#Scan_Id').val();
 			$.ajax({
-				url: '<?= base_url() ?>Form/Invoice_ctrl/getInvoiceItem',
+				url: '<?= base_url() ?>form/Invoice_ctrl/getInvoiceItem',
 				type: 'POST',
 				data: {
 					Scan_Id: Scan_Id

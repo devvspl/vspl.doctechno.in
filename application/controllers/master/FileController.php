@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Department extends CI_Controller
+class FileController extends CI_Controller
 {
 
     function __construct()
@@ -9,6 +9,7 @@ class Department extends CI_Controller
         parent::__construct();
         $this->logged_in();
         $this->load->database();
+        $this->load->model('File_model');
         $this->load->model('Department_model');
     }
 
@@ -22,9 +23,9 @@ class Department extends CI_Controller
     public function index()
     {
         $this->session->set_userdata('top_menu', 'master');
-        $this->session->set_userdata('sub_menu', 'department');
-        $this->data['main'] = 'department/departmentlist';
-        $this->data['departmentlist'] = $this->Department_model->get_department_list();
+        $this->session->set_userdata('sub_menu', 'file');
+        $this->data['main'] = 'file/filelist';
+        $this->data['filelist'] = $this->File_model->get_file_list();
         $this->data['companylist'] = $this->Department_model->get_companylist();
         $this->load->view('layout/template', $this->data);
     }
@@ -32,68 +33,65 @@ class Department extends CI_Controller
     public function create()
     {
 
-        $this->form_validation->set_rules('department_name', 'Department Name', 'trim|required');
-        $this->form_validation->set_rules('department_code', 'Department Code', 'trim|required');
+        $this->form_validation->set_rules('file_name', 'File Name', 'trim|required');
+        $this->form_validation->set_rules('file_code', 'File Code', 'trim|required');
         $this->form_validation->set_rules('company_id', 'Company', 'trim|required');
-    
+
         if ($this->form_validation->run() == false) {
-            $this->data['main'] = 'department/departmentlist';
+            $this->data['main'] = 'file/filelist';
             $this->load->view('layout/template', $this->data);
         } else {
-            $data['department_name'] = $this->input->post('department_name');
-            $data['department_code'] = $this->input->post('department_code');
+            $data['file_name'] = $this->input->post('file_name');
+            $data['file_code'] = $this->input->post('file_code');
             $data['company_id'] = $this->input->post('company_id');
             $data['status'] = $this->input->post('status');
             $data['created_by'] = $this->session->userdata('user_id');
-            
-            $result = $this->Department_model->create($data);
+
+            $result = $this->File_model->create($data);
             if ($result) {
-                $this->session->set_flashdata('message', '<p class="text-success text-center">Department Created Successfully.</p>');
-                redirect('department');
+                $this->session->set_flashdata('message', '<p class="text-success text-center">File Created Successfully.</p>');
+                redirect('file');
             } else {
                 $this->session->set_flashdata('message', '<p class="text-danger text-center">Something went wrong. Please try again.</p>');
-                redirect('department');
+                redirect('file');
             }
         }
     }
 
     function delete($id)
     {
-        $this->Department_model->delete($id);
-        redirect('department');
+        $this->File_model->delete($id);
+        redirect('file');
     }
 
     function edit($id)
     {
         $this->session->set_userdata('top_menu', 'master');
-        $this->session->set_userdata('sub_menu', 'department');
-        $this->data['departmentlist'] = $this->Department_model->get_department_list();
-        $this->data['department'] = $this->Department_model->get_department_list($id);
+        $this->session->set_userdata('sub_menu', 'file');
+        $this->data['filelist'] = $this->File_model->get_file_list();
+        $this->data['file'] = $this->File_model->get_file_list($id);
         $this->data['companylist'] = $this->Department_model->get_companylist();
-        $this->data['department_id'] = $id;
-        $this->data['main'] = 'department/departmentedit';
+        $this->data['file_id'] = $id;
+        $this->data['main'] = 'file/fileedit';
         $this->load->view('layout/template', $this->data);
     }
 
     function update($id)
     {
-        $data['department_id'] = $id;
-        $data['department_name'] = $this->input->post('department_name');
-        $data['department_code'] = $this->input->post('department_code');
+        $data['file_id'] = $id;
+        $data['file_name'] = $this->input->post('file_name');
+        $data['file_code'] = $this->input->post('file_code');
         $data['company_id'] = $this->input->post('company_id');
         $data['status'] = $this->input->post('status');
         $data['updated_by'] = $this->session->userdata('user_id');
         $data['updated_at'] = date('Y-m-d H:i:s');
-        $result = $this->Department_model->update($data);
+        $result = $this->File_model->update($data);
         if ($result) {
-            $this->session->set_flashdata('message', '<p class="text-success text-center">Department Updated Successfully.</p>');
-            redirect('department');
+            $this->session->set_flashdata('message', '<p class="text-success text-center">File Updated Successfully.</p>');
+            redirect('file');
         } else {
             $this->session->set_flashdata('message', '<p class="text-danger text-center">Something went wrong. Please try again.</p>');
-            redirect('department');
+            redirect('file');
         }
     }
-
-   
-
 }

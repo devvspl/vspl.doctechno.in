@@ -31,7 +31,7 @@ $temp_punch_detail = $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_i
 				</script>
 			<?php } ?>
 		</div>
-		<form action="<?= base_url(); ?>Form/Vehicle_ctrl/save_local_conveyance" id="punch_form" name="punch_form" method="post" accept-charset="utf-8">
+		<form action="<?= base_url(); ?>form/Vehicle_ctrl/save_local_conveyance" id="punch_form" name="punch_form" method="post" accept-charset="utf-8">
 			<div class="col-md-7">
 				<input type="hidden" name="Scan_Id" id="Scan_Id" value="<?= $Scan_Id ?>">
 				<input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">
@@ -238,7 +238,7 @@ $temp_punch_detail = $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_i
 	function getMultiRecord() {
 		var Scan_Id = $('#Scan_Id').val();
 		$.ajax({
-			url: '<?= base_url() ?>Form/Vehicle_ctrl/getTwoFourWheelerRecord',
+			url: '<?= base_url() ?>form/Vehicle_ctrl/getTwoFourWheelerRecord',
 			type: 'POST',
 			data: {
 				Scan_Id: Scan_Id

@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Business_entity extends CI_Controller
+class BusinessEntityController extends CI_Controller
 {
 
     function __construct()

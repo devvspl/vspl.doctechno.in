@@ -17,7 +17,7 @@
                </div>
                <!-- /.box-header -->
                <!-- form start -->
-               <form id="form1" action="<?= base_url(); ?>Account/update/<?= $account_id ?>" id="accountform" name="accountform" method="post" accept-charset="utf-8">
+               <form id="form1" action="<?= base_url(); ?>master/AccountController/update/<?= $account_id ?>" id="accountform" name="accountform" method="post" accept-charset="utf-8">
                   <div class="box-body">
                      <?php if ($this->session->flashdata('message')) { ?>
                      <?php echo $this->session->flashdata('message') ?>

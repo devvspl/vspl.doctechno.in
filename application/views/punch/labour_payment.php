@@ -49,7 +49,7 @@ $punch_detail = $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row(
                 </script>
             <?php } ?>
         </div>
-        <form action="<?= base_url(); ?>Form/Labour_ctrl/save" id="labour_form" name="labour_form" method="post" accept-charset="utf-8">
+        <form action="<?= base_url(); ?>form/Labour_ctrl/save" id="labour_form" name="labour_form" method="post" accept-charset="utf-8">
         <div style="display: flex; flex-direction: column; align-items: center;">
 				<div class="loader" id="loader" style="display: none;"></div>
 				<span id="loader-text" style="display: none; margin-top: 10px; font-size: 14px; color: #3a495e;">Please Wait...</span>
@@ -175,7 +175,7 @@ $punch_detail = $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row(
     function getMultiRecord() {
         var Scan_Id = $('#Scan_Id').val();
         $.ajax({
-            url: '<?= base_url() ?>Form/Labour_ctrl/getLabourRecord',
+            url: '<?= base_url() ?>form/Labour_ctrl/getLabourRecord',
             type: 'POST',
             data: {
                 Scan_Id: Scan_Id

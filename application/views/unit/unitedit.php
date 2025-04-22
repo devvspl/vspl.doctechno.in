@@ -17,7 +17,7 @@
                         <h3 class="box-title">Update Unit</h3>
                     </div><!-- /.box-header -->
                     <!-- form start -->
-                    <form id="form1" action="<?= base_url(); ?>Unit/update/<?= $unit_id ?>" id="locationform" name="locationform" method="post" accept-charset="utf-8">
+                    <form id="form1" action="<?= base_url(); ?>master/UnitController/update/<?= $unit_id ?>" id="locationform" name="locationform" method="post" accept-charset="utf-8">
                         <div class="box-body">
                             <?php if ($this->session->flashdata('message')) { ?>
                                 <?php echo $this->session->flashdata('message') ?>
@@ -101,7 +101,7 @@
                                                     <?php echo ($row['status'] == 'A') ? 'Active' : 'Deactive' ?>
                                                 </td>
                                                 <td class="mailbox-date pull-right no-print">
-                                                    <a href="<?= base_url(); ?>Unit/delete/<?php echo $row['unit_id'] ?>" class="btn btn-default btn-xs" onclick="return confirm('Are you sure to delete');">
+                                                    <a href="<?= base_url(); ?>master/UnitController/delete/<?php echo $row['unit_id'] ?>" class="btn btn-default btn-xs" onclick="return confirm('Are you sure to delete');">
                                                         <i class="fa fa-remove"></i>
                                                     </a>
 

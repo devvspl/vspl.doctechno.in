@@ -24,6 +24,7 @@
                            </tr>
                         </thead>
                         <tbody>
+                           <?php if(is_array($data) && count($data) > 0): ?>
                            <?php foreach ($data as $file): ?>
                            <tr>
                               <td><a href="javascript:void(0)" onclick="openFilePopup('<?php echo site_url('TempFilesController/view/' . $file['name']); ?>')"><?php echo $file['name']; ?></a></td>
@@ -34,9 +35,13 @@
                                     <a class="btn btn-sm btn-primary" href="<?php echo site_url('TempFilesController/download/' . $file['name']); ?>">Download</a> 
                                     <a class="btn btn-sm btn-danger" href="<?php echo site_url('TempFilesController/delete/' . $file['name']); ?>" onclick="return confirm('Are you sure you want to delete this file?')">Delete</a>
                                 </td>
-
                            </tr>
                            <?php endforeach; ?>
+                           <?php else: ?>
+                           <tr>
+                              <td colspan="4" class="text-center">No temporary files found.</td>
+                           </tr>
+                           <?php endif; ?>
                         </tbody>
                      </table>
                   </div>

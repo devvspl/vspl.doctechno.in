@@ -184,7 +184,7 @@
       </div>
       <div id="additional-info" class="tab-content">
          <div class="col-md-7">
-         <form action="<?= base_url(); ?>Form/VSPL_cash_voucher_ctrl/create" id="cash_voucher_form" name="cash_voucher_form" method="post">
+         <form action="<?= base_url(); ?>form/VSPL_cash_voucher_ctrl/create" id="cash_voucher_form" name="cash_voucher_form" method="post">
             <input type="hidden" name="Scan_Id" id="Scan_Id" value="<?= $Scan_Id ?>">
             <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">
             <div class="row" style="background-color: #fff;">
@@ -880,7 +880,7 @@
    
            function fetchSubLedgerOptions(debitAccountId, subLedgerDropdown) {
                $.ajax({
-                   url: '<?php echo base_url("Form/JournalEntry_ctrl/getSubLedgers");?>',
+                   url: '<?php echo base_url("form/JournalEntry_ctrl/getSubLedgers");?>',
                    type: "POST",
                    data: { debit_ac_id: debitAccountId },
                    dataType: "json",
@@ -965,7 +965,7 @@
        $("#account").autocomplete({
            source: function (request, response) {
                $.ajax({
-                   url: "<?php echo base_url('Form/JournalEntry_ctrl/getAllAccountList');?>",
+                   url: "<?php echo base_url('form/JournalEntry_ctrl/getAllAccountList');?>",
                    type: "GET",
                    dataType: "json",
                    data: {

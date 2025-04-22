@@ -14,7 +14,7 @@
                <div class="box-header with-border">
                   <h3 class="box-title">Add Account</h3>
                </div>
-               <form id="form1" action="<?= base_url(); ?>Account/create" id="accountform" name="accountform" method="post" accept-charset="utf-8">
+               <form id="form1" action="<?= base_url(); ?>create_account" id="accountform" name="accountform" method="post" accept-charset="utf-8">
                   <div class="box-body">
                      <?php if ($this->session->flashdata('message')) { ?>
                      <?php echo $this->session->flashdata('message') ?>
@@ -64,19 +64,23 @@
                <div class="box-body  ">
                   <div class="table-responsive mailbox-messages">
                      <div class="download_label">Account List</div>
-                     <form method="get" action="<?= base_url('account/index') ?>">
-                        <select name="group" onchange="this.form.submit()">
-                            <option value="">All Groups</option>
-                            <?php foreach ($getGroupedData as $group) { ?>
-                                <option value="<?= $group['account_group'] ?>" <?= ($selected_group == $group['account_group']) ? 'selected' : '' ?>>
+                     <!-- <form method="get" action="<?= base_url('account/index') ?>" class="form-inline" style="margin-bottom: 15px;">
+                        <div class="form-group">
+                           <select name="group" id="groupFilter" class="form-control" onchange="this.form.submit()">
+                              <option value="">All Groups</option>
+                              <?php foreach ($getGroupedData as $group) { ?>
+                                 <option value="<?= $group['account_group'] ?>" <?= ($selected_group == $group['account_group']) ? 'selected' : '' ?>>
                                     <?= $group['account_group'] ?>
-                                </option>
-                            <?php } ?>
-                        </select>
-                        <input type="text" name="search" placeholder="Search by account name or code" value="<?= isset($search) ? htmlspecialchars($search) : '' ?>" />
-                        <button type="submit">Search</button>
-                    </form>
-                     <table class="table table-striped table-bordered table-hover">
+                                 </option>
+                              <?php } ?>
+                           </select>
+                        </div>
+                        <div class="form-group" style="margin-left: 10px;">
+                           <input type="text" name="search" id="searchInput" class="form-control" placeholder="Account name or code" value="<?= isset($search) ? htmlspecialchars($search) : '' ?>" />
+                        </div>
+                        <button type="submit" class="btn btn-info" style="margin-left: 10px;">Search</button>
+                     </form> -->
+                     <table class="table table-striped table-bordered table-hover example1">
                         <thead>
                            <tr>
                               <th>Account Id</th>
@@ -95,16 +99,16 @@
                            <?php } else {
                               foreach ($accountlist as $row) { ?>
                            <tr>
-                              <td><?= $row['account_id']; ?></td>
+                              <td><?= $row['id']; ?></td>
                               <td><?= $row['account_name']; ?></td>
                               <td><?= $row['account_code'] ?></td>
                               <td><?= $row['account_group'] ?></td>
                               <td><?= ($row['status'] == 'A') ? 'Active' : 'Deactive' ?></td>
                               <td class="text-right no-print">
-                                 <a href="<?= base_url('account/edit/' . $row['account_id']) ?>" class="btn btn-default btn-xs">
+                                 <a href="<?= base_url('account/edit/' . $row['id']) ?>" class="btn btn-default btn-xs">
                                  <i class="fa fa-pencil"></i>
                                  </a>
-                                 <a href="<?= base_url('account/delete/' . $row['account_id']) ?>" class="btn btn-default btn-xs" onclick="return confirm('Are you sure to delete');">
+                                 <a href="<?= base_url('account/delete/' . $row['id']) ?>" class="btn btn-default btn-xs" onclick="return confirm('Are you sure to delete');">
                                  <i class="fa fa-remove"></i>
                                  </a>
                               </td>
@@ -113,9 +117,9 @@
                               } ?>
                         </tbody>
                      </table>
-                     <div class="pagination" style="display: flex;justify-content: center;gap: 10px;">
+                     <!-- <div class="pagination" style="display: flex;justify-content: center;gap: 10px;">
                         <?= isset($pagination); ?>
-                     </div>
+                     </div> -->
                   </div>
                </div>
             </div>

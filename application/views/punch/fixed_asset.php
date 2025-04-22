@@ -61,7 +61,7 @@ $ledger_list = $this->customlib->getLedgerList();
 			</script>
 			<?php } ?>
 		</div>
-		<form action="<?= base_url(); ?>Form/FixedAsset_ctrl/create" id="fixed_asset_form" name="fixed_asset_form"
+		<form action="<?= base_url(); ?>form/FixedAsset_ctrl/create" id="fixed_asset_form" name="fixed_asset_form"
 			method="post" accept-charset="utf-8">
 			<div class="col-md-7">
 				<input type="hidden" name="Scan_Id" id="Scan_Id" value="<?= $Scan_Id ?>">
@@ -399,7 +399,7 @@ $ledger_list = $this->customlib->getLedgerList();
 		function getUnitList() {
 			$.ajax({
 				type: "POST",
-				url: '<?= base_url() ?>Unit/get_unit_list',
+				url: '<?= base_url() ?>master/UnitController/get_unit_list',
 				dataType: "json",
 				success: function (response) {
 
@@ -439,7 +439,7 @@ $ledger_list = $this->customlib->getLedgerList();
 		function getMultiRecord() {
 			var Scan_Id = $('#Scan_Id').val();
 			$.ajax({
-				url: '<?= base_url() ?>Form/Invoice_ctrl/getInvoiceItem',
+				url: '<?= base_url() ?>form/Invoice_ctrl/getInvoiceItem',
 				type: 'POST',
 				data: {
 					Scan_Id: Scan_Id

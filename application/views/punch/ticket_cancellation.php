@@ -32,7 +32,7 @@ $employee_list = $this->customlib->getEmployeeList();
 			</script>
 			<?php } ?>
 		</div>
-		<form action="<?= base_url(); ?>Form/Ticket_ctrl/save_ticket_cancellation" id="ticket_form" name="ticket_form"
+		<form action="<?= base_url(); ?>form/Ticket_ctrl/save_ticket_cancellation" id="ticket_form" name="ticket_form"
 			method="post" accept-charset="utf-8">
 			<div class="col-md-6">
 				<input type="hidden" name="Scan_Id" id="Scan_Id" value="<?= $Scan_Id ?>">
@@ -225,7 +225,7 @@ $employee_list = $this->customlib->getEmployeeList();
 	function getMultiRecord() {
 		var Scan_Id = $('#Scan_Id').val();
 		$.ajax({
-			url: '<?= base_url() ?>Form/Ticket_ctrl/get_ticket_cancel_employee_list',
+			url: '<?= base_url() ?>form/Ticket_ctrl/get_ticket_cancel_employee_list',
 			type: 'POST',
 			data: {
 				Scan_Id: Scan_Id

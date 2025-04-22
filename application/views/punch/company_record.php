@@ -29,7 +29,7 @@ $report_type = $this->customlib->getReportType();
                 </script>
             <?php } ?>
         </div>
-        <form action="<?= base_url(); ?>Form/CompanyRecord_ctrl/create" id="company_recordform" name="boardingpassform" method="post" accept-charset="utf-8">
+        <form action="<?= base_url(); ?>form/CompanyRecord_ctrl/create" id="company_recordform" name="boardingpassform" method="post" accept-charset="utf-8">
             <div class="col-md-6">
                 <input type="hidden" name="Scan_Id" id="Scan_Id" value="<?= $Scan_Id ?>">
                 <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">

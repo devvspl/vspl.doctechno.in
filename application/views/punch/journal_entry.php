@@ -140,7 +140,7 @@
       </script>
       <?php } ?>
    </div>
-   <form action="<?= base_url(); ?>Form/JournalEntry_ctrl/create" id="invoice_form" name="invoice_form" method="post"
+   <form action="<?= base_url(); ?>form/JournalEntry_ctrl/create" id="invoice_form" name="invoice_form" method="post"
       accept-charset="utf-8">
       
       <?php 
@@ -1541,7 +1541,7 @@
    	function getUnitList() {
    		$.ajax({
    			type: "POST",
-   			url: '<?= base_url() ?>Unit/get_unit_list',
+   			url: '<?= base_url() ?>master/UnitController/get_unit_list',
    			dataType: "json",
    			success: function (response) {
    
@@ -1606,7 +1606,7 @@
    	function getMultiRecord() {
    		var Scan_Id = $('#Scan_Id').val();
    		$.ajax({
-   			url: '<?= base_url() ?>Form/Invoice_ctrl/getInvoiceItem',
+   			url: '<?= base_url() ?>form/Invoice_ctrl/getInvoiceItem',
    			type: 'POST',
    			data: {
    				Scan_Id: Scan_Id
@@ -1920,7 +1920,7 @@
    	}
    	$.ajax({
    		type: 'POST',
-   		url: '<?= base_url() ?>Form/Invoice_ctrl/add_item',
+   		url: '<?= base_url() ?>form/Invoice_ctrl/add_item',
    		data: {
    			item_name: item_name,
    			item_code: item_code
@@ -2032,7 +2032,7 @@
 
 function fetchSubLedgerOptions(debitAccountId, subLedgerDropdown) {
     $.ajax({
-        url: '<?php echo base_url("Form/JournalEntry_ctrl/getSubLedgers");?>',
+        url: '<?php echo base_url("form/JournalEntry_ctrl/getSubLedgers");?>',
         type: 'POST',
         data: { debit_ac_id: debitAccountId },
         dataType: 'json',

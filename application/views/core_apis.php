@@ -119,7 +119,7 @@
             showLoading(button);
     
             $.ajax({
-                url: "<?= base_url('CoreController/fetch_apis') ?>",
+                url: "<?= base_url('master/CoreController/fetch_apis') ?>",
                 type: "GET",
                 dataType: "json",
                 success: function (response) {
@@ -136,57 +136,57 @@
         });
     
         $("#syncApis").click(function () {
-    var button = $(this);
-    showLoading(button);
+            var button = $(this);
+            showLoading(button);
 
-    $.ajax({
-        url: "<?= base_url('CoreController/sync_apis') ?>",
-        type: "GET",
-        dataType: "text", 
-        success: function (responseText) {
-            try {
-             
-                let jsonMatches = responseText.match(/{[^}]+}/g); 
-                let syncedData = [];
+            $.ajax({
+                url: "<?= base_url('master/CoreController/sync_apis') ?>",
+                type: "GET",
+                dataType: "text", 
+                success: function (responseText) {
+                    try {
+                    
+                        let jsonMatches = responseText.match(/{[^}]+}/g); 
+                        let syncedData = [];
 
-                if (jsonMatches) {
-                    jsonMatches.forEach(jsonString => {
-                        let response = JSON.parse(jsonString);
-                        if (response.status === "success") {
-                            syncedData.push(response.message);
+                        if (jsonMatches) {
+                            jsonMatches.forEach(jsonString => {
+                                let response = JSON.parse(jsonString);
+                                if (response.status === "success") {
+                                    syncedData.push(response.message);
+                                }
+                            });
                         }
-                    });
-                }
 
-                if (syncedData.length > 0) {
-                    let syncList = "<ul>";
-                    syncedData.forEach(item => {
-                        syncList += `<li>${item}</li>`;
-                    });
-                    syncList += "</ul>";
+                        if (syncedData.length > 0) {
+                            let syncList = "<ul>";
+                            syncedData.forEach(item => {
+                                syncList += `<li>${item}</li>`;
+                            });
+                            syncList += "</ul>";
 
-                    $("#syncList").html(syncList);
-                    $("#syncedDataList").fadeIn(); 
+                            $("#syncList").html(syncList);
+                            $("#syncedDataList").fadeIn(); 
 
-                    setTimeout(function () {
-                        $("#syncedDataList").fadeOut(); 
-                    }, 10000);
-                } else {
-                    alert("No data was synced.");
-                }
-            } catch (error) {
-                console.error("JSON Parsing Error:", error);
-                alert("Failed to parse API response.");
-            }
-        },
-        error: function () {
-            alert("Failed to sync API data.");
-        },
-        complete: function () {
-            hideLoading(button);
-        },
-    });
-});
+                            setTimeout(function () {
+                                $("#syncedDataList").fadeOut(); 
+                            }, 10000);
+                        } else {
+                            alert("No data was synced.");
+                        }
+                    } catch (error) {
+                        console.error("JSON Parsing Error:", error);
+                        alert("Failed to parse API response.");
+                    }
+                },
+                error: function () {
+                    alert("Failed to sync API data.");
+                },
+                complete: function () {
+                    hideLoading(button);
+                },
+            });
+        });
 
     
   $(".sync-api-btn").click(function () {
@@ -198,10 +198,10 @@
     var requestData = {
         api_end_point: apiEndPoint,
         table_name: tableName,
-        params: {}  // Object to store parameter values
+        params: {}  
     };
 
-    // If parameters exist, ask the user for values
+    
     if (parameters) {
         var paramArray = parameters.split(",").map(param => param.trim());
 
@@ -221,9 +221,9 @@
     showLoading(button);
 
     $.ajax({
-        url: "<?= base_url('CoreController/sync_single_api') ?>",
+        url: "<?= base_url('master/CoreController/sync_single_api') ?>",
         type: "POST",
-        data: JSON.stringify(requestData), // Send data as JSON
+        data: JSON.stringify(requestData), 
         contentType: "application/json",
         dataType: "json",
         success: function (response) {
@@ -245,7 +245,7 @@
             showLoading(button);
             $("#dataTitle").text(button.data("table"));
             $.ajax({
-                url: "<?= base_url('CoreController/get_api_data') ?>",
+                url: "<?= base_url('master/CoreController/get_api_data') ?>",
                 type: "POST",
                 data: { table_name: button.data("table") },
                 dataType: "json",
@@ -299,7 +299,7 @@
             showLoading(button);
     
             $.ajax({
-                url: "<?= base_url('CoreController/empty_table') ?>",
+                url: "<?= base_url('master/CoreController/empty_table') ?>",
                 type: "POST",
                 data: { table_name: button.data("table") },
                 dataType: "json",
@@ -321,7 +321,7 @@
             showLoading(button);
     
             $.ajax({
-                url: "<?= base_url('CoreController/drop_table') ?>",
+                url: "<?= base_url('master/CoreController/drop_table') ?>",
                 type: "POST",
                 data: { table_name: button.data("table") },
                 dataType: "json",

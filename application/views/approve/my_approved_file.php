@@ -82,7 +82,7 @@
                         <thead>
                            <tr>
                               <th>S.No</th>
-                              <th>Group/Company</th>
+                              <th>master/GroupController/Company</th>
                               <th>Document Name</th>
                               <th>Document Type</th>
                               <th>File</th>

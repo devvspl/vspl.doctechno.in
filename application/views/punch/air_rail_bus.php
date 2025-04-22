@@ -28,7 +28,7 @@ $locationlist = $this->customlib->getWorkLocationList();
                 </script>
             <?php } ?>
         </div>
-        <form action="<?= base_url(); ?>Form/Vehicle_ctrl/Save_Air_Bus_Fare" id="airbustrainform" name="airbustrainform" method="post" accept-charset="utf-8">
+        <form action="<?= base_url(); ?>form/Vehicle_ctrl/Save_Air_Bus_Fare" id="airbustrainform" name="airbustrainform" method="post" accept-charset="utf-8">
             <div class="col-md-6">
                 <input type="hidden" name="Scan_Id" id="Scan_Id" value="<?= $Scan_Id ?>">
                 <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">

@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Item extends CI_Controller
+class ItemController extends CI_Controller
 {
 
 	function __construct()

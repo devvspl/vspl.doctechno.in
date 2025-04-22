@@ -15,7 +15,7 @@
 					<div class="box-header with-border">
 						<h3 class="box-title">Add Employee</h3>
 					</div>
-					<form id="form1" action="<?= base_url(); ?>Employee/create" id="emp_form" name="emp_form"
+					<form id="form1" action="<?= base_url(); ?>master/EmployeeController/create" id="emp_form" name="emp_form"
 						method="post" accept-charset="utf-8">
 						<div class="box-body">
 							<?php if ($this->session->flashdata('message')) { ?>

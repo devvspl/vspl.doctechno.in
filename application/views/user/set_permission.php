@@ -34,7 +34,7 @@
                         </div>
                     </div>
                     <div class="box-body">
-                    <form id="form1" action="<?= base_url(); ?>User/set_permission" id="userform" name="userform" method="post" accept-charset="utf-8">
+                    <form id="form1" action="<?= base_url(); ?>master/UserController/set_permission" id="userform" name="userform" method="post" accept-charset="utf-8">
                         <div class="box-group" id="accordion">
                             <input type="hidden" name="user_id" id="user_id" value="<?= $id; ?>">
                             <?php

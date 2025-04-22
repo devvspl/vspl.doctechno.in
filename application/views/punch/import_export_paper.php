@@ -28,7 +28,7 @@ $punch_detail = $this->db->get_where('punchfile2', ['Scan_Id' => $Scan_Id])->row
                 </script>
             <?php } ?>
         </div>
-        <form action="<?= base_url(); ?>Form/ImportExport_ctrl/create" id="importexportform" name="importexportform" method="post" accept-charset="utf-8">
+        <form action="<?= base_url(); ?>form/ImportExport_ctrl/create" id="importexportform" name="importexportform" method="post" accept-charset="utf-8">
             <div class="col-md-6">
                 <input type="hidden" name="Scan_Id" id="Scan_Id" value="<?= $Scan_Id ?>">
                 <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">

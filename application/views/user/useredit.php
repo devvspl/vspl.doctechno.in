@@ -17,7 +17,7 @@
                         <h3 class="box-title">Update User</h3>
                     </div><!-- /.box-header -->
                     <!-- form start -->
-                    <form id="form1" action="<?= base_url(); ?>User/update/<?= $id ?>" id="userform" name="userform" method="post" accept-charset="utf-8">
+                    <form id="form1" action="<?= base_url(); ?>master/UserController/update/<?= $id ?>" id="userform" name="userform" method="post" accept-charset="utf-8">
                         <div class="box-body">
                             <?php if ($this->session->flashdata('message')) { ?>
                                 <?php echo $this->session->flashdata('message') ?>
@@ -102,10 +102,10 @@
                                                     <?php echo $row['username'] ?>
                                                 </td>
                                                 <td class="mailbox-date pull-right no-print">
-                                                    <a href="<?= base_url(); ?>user/permission/<?php echo $row['user_id'] ?>" class="btn btn-default btn-xs">
+                                                    <a href="<?= base_url(); ?>master/UserController/permission/<?php echo $row['user_id'] ?>" class="btn btn-default btn-xs">
                                                         <i class="fa fa-key"></i>
                                                     </a>
-                                                    <a href="<?= base_url(); ?>user/edit/<?php echo $row['user_id'] ?>" class="btn btn-default btn-xs">
+                                                    <a href="<?= base_url(); ?>master/UserController/edit/<?php echo $row['user_id'] ?>" class="btn btn-default btn-xs">
                                                         <i class="fa fa-pencil"></i>
                                                     </a>
                                                     <a href="<?= base_url(); ?>user/delete/<?php echo $row['user_id'] ?>" class="btn btn-default btn-xs" onclick="return confirm('Are you sure to delete');">
