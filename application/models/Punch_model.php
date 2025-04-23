@@ -25,7 +25,7 @@ class Punch_model extends MY_Model {
 
     function vspl_get_file_for_punch() {
         $group_id = $this->session->userdata('group_id');
-        $this->db->select('*')->from('scan_file')->where('File_Punched', 'N')->where('Scan_Resend', 'N')->where_in('Group_Id', $group_id)->where('Final_Submit', 'Y')->where('at_finance', 'N')->where('Is_Rejected', 'N')->where('Is_Finance_Rejected', 'N')->where("((Location IS NOT NULL AND Bill_Approved = 'Y')  OR Location IS NULL)")->order_by('Scan_Id', 'ASC');
+        $this->db->select('*')->from('scan_file')->where('File_Punched', 'Y')->where('Scan_Resend', 'N')->where_in('Group_Id', $group_id)->where('Final_Submit', 'Y')->where('at_finance', 'N')->where('Is_Rejected', 'N')->where('Is_Finance_Rejected', 'N')->where("((Location IS NOT NULL AND Bill_Approved = 'Y')  OR Location IS NULL)")->order_by('Scan_Id', 'ASC');
         $query = $this->db->get();
         return $query->result_array();
     }
