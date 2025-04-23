@@ -71,17 +71,19 @@
                                                 <?php
 											if ($this->session->flashdata('message')) { echo $this->session->flashdata('message'); } ?>
                                                 <form action="<?= base_url() ?>Auth_ctrl/login" method="post">
-                                                    <div class="form-group has-feedback">
-                                                        <?php if (isset($financial_years)) { ?>
+                                                <div class="form-group has-feedback">
+                                                    <?php if (isset($financial_years)) { ?>
                                                         <select name="financial_year" class="form-control">
                                                             <option value="">Select Financial Year</option>
                                                             <?php foreach ($financial_years as $f) { ?>
-                                                            <option value="<?= $f['id'] ?>"><?= $f['label'] ?></option>
+                                                                <option value="<?= $f['id'] ?>" <?= isset($f['is_current']) && $f['is_current'] == 1 ? 'selected' : '' ?>>
+                                                                    <?= $f['label'] ?>
+                                                                </option>
                                                             <?php } ?>
                                                         </select>
-                                                        <?php } ?>
-                                                        <?php echo form_error('financial_year'); ?>
-                                                    </div>
+                                                    <?php } ?>
+                                                    <?php echo form_error('financial_year'); ?>
+                                                </div>
 
                                                     <div class="form-group has-feedback">
                                                         <input type="text" name="identity" placeholder="Username" value="" class="form-username form-control" id="identity" />

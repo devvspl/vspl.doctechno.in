@@ -16,7 +16,7 @@
                      <?php endif; ?>
                      <form method="GET" action="<?= base_url('classification'); ?>" style="margin-bottom: 15px;">
                         <div class="row mb-3">
-                           <div class="col-md-4">
+                           <!-- <div class="col-md-4">
                               <label>Company:</label>
                               <select name="group_id" class="form-control">
                                  <option value="">All Company</option>
@@ -27,7 +27,7 @@
                                  </option>
                                  <?php endforeach; ?>
                               </select>
-                           </div>
+                           </div> -->
                            <div class="col-md-4">
                               <label>Location:</label>
                               <select name="location_id" class="form-control">
@@ -50,7 +50,6 @@
                         <thead>
                            <tr>
                               <th class="text-center">S No.</th>
-                              <th class="text-center">Group Name</th>
                               <th class="text-center">Location</th>
                               <th class="text-center">File Name</th>
                               <th class="text-center">Scanned By</th>
@@ -65,7 +64,6 @@
                            <?php $i = 1; foreach ($documents as $doc) : ?>
                            <tr>
                               <td class="text-center"><?= $i++ ?></td>
-                              <td class="text-center"><?= htmlspecialchars($doc->group_name ?? ''); ?></td>
                                 <td class="text-center"><?= htmlspecialchars($doc->location_name ?? ''); ?></td>
                                 <td class="text-center"><?= $doc->Document_Name ?? ''; ?></td>
                                 <td class="text-center"><?= htmlspecialchars($doc->Scan_By ?? ''); ?></td>
@@ -115,7 +113,7 @@ $(document).ready(function () {
         let scanId = $(this).data("scan-id");
         $("#documentDetailsModal").modal("show");
         $.ajax({
-            url: "<?= base_url('ExtractorController/getDetails'); ?>",
+            url: "<?= base_url('extract/ExtractorController/getDetails'); ?>",
             type: "POST",
             data: { scan_id: scanId },
             beforeSend: function () {
@@ -142,7 +140,7 @@ $(document).ready(function () {
         $button.prop("disabled", true).text("Please wait...");
 
         $.ajax({
-            url: "<?= base_url('ExtractorController/extractDetails'); ?>",
+            url: "<?= base_url('extract/ExtractorController/extractDetails'); ?>",
             type: "POST",
             data: { scan_id: scanId, type_id: typeId },
            success: function (response) {

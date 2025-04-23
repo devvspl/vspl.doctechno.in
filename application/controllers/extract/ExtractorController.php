@@ -54,6 +54,7 @@ class ExtractorController extends CI_Controller {
         }
         $this->db->where("s.Group_Id", '16');
         $query = $this->db->get();
+
         $this->data["documents"] = $query->result();
         $this->data["main"] = "extract/classification";
         $this->load->view("layout/template", $this->data);
@@ -198,7 +199,6 @@ class ExtractorController extends CI_Controller {
         $timestamp = strtotime($date);
         return $timestamp !== false && date('Y-m-d', $timestamp) === date('Y-m-d', $timestamp);
     }
-
     private function storeExtractedData($typeId, $scanId, $data) {
         $tableName = "ext_tempdata_" . $typeId;
         if (!$this->db->table_exists($tableName)) {
@@ -378,52 +378,6 @@ class ExtractorController extends CI_Controller {
 
         return ["status" => "success", "message" => "Data moved successfully."];
     }
-    // private function getClosestValueMatch($table, $searchColumn, $searchValue, $returnColumn, $addCondition) {
-    //     $ci = & get_instance();
-    //     $ci->load->database();
-    //     if (empty($table) || empty($searchColumn) || empty($returnColumn)) {
-    //         return null;  
-    //     }
-    //     $searchValue = trim((string)$searchValue);
-    //     $ci->db->select("$searchColumn, $returnColumn");
-    //     $ci->db->from($table);
-    //     if (!empty($addCondition)) {
-    //         $ci->db->where($addCondition);
-    //     }
-    //     $list = $ci->db->get()->result();
-    //     if (empty($list)) {
-    //         return null;
-    //     }
-    //     $bestMatch = null;
-    //     $bestRelationValue = null;
-    //     $highestSimilarity = 0;
-    //     $smallestDistance = PHP_INT_MAX;
-    //     foreach ($list as $item) {
-    //         $itemValue = isset($item->$searchColumn) ? trim((string)$item->$searchColumn) : "";
-    //         $relationValue = isset($item->$returnColumn) ? trim((string)$item->$returnColumn) : null;
-    //         if (empty($itemValue) || empty($relationValue)) {
-    //             continue;
-    //         }
-    //         if ($itemValue === $searchValue) {
-    //             return $relationValue;
-    //         }
-    //         if (strpos($itemValue, $searchValue) !== false || strpos($searchValue, $itemValue) !== false) {
-    //             return $relationValue;
-    //         }
-    //         if (is_numeric($searchValue) && is_numeric($itemValue)) {
-    //             $distance = abs($searchValue - $itemValue);
-    //         } else {
-    //             similar_text($searchValue, $itemValue, $percent);
-    //             $distance = levenshtein($searchValue, $itemValue);
-    //         }
-    //         if ($percent > $highestSimilarity || ($percent == $highestSimilarity && $distance < $smallestDistance)) {
-    //             $highestSimilarity = $percent;
-    //             $smallestDistance = $distance;
-    //             $bestRelationValue = $relationValue;
-    //         }
-    //     }
-    //     return $bestRelationValue??$searchValue;
-    // }
     private function getClosestValueMatch($table, $searchColumn, $searchValue, $returnColumn, $addCondition) {
         $ci = & get_instance();
         $ci->load->database();
@@ -443,9 +397,6 @@ class ExtractorController extends CI_Controller {
         }
     
         $result = $ci->db->get()->row();
-        // echo $this->db->last_query();
-        // exit;
-    
         return $result ? $result->$returnColumn : null;
     }
     private function getApiEndpoint($typeId) {
@@ -530,67 +481,67 @@ class ExtractorController extends CI_Controller {
         echo json_encode($columns);
     }
     public function saveFieldMappings() {
-    $doctype_id = $this->input->post("doctype_id");
-    $has_items_feild = $this->input->post("has_items_feild");
-    $fieldMappings = $this->input->post("fieldMappings");
-    
-    $defaultMappings = [
-        [
-            "has_items_feild" => $has_items_feild,
-            "temp_column" => "scan_id",
-            "input_type" => "input",
-            "select_table" => null,
-            "relation_column" => null,
-            "relation_value" => null,
-            "punch_table" => "punchfile",
-            "punch_column" => "Scan_Id",
-        ],
-        [
-            "has_items_feild" => $has_items_feild,
-            "temp_column" => "group_id",
-            "input_type" => "input",
-            "select_table" => null,
-            "relation_column" => null,
-            "relation_value" => null,
-            "punch_table" => "punchfile",
-            "punch_column" => "Group_Id",
-        ],
-    ];
-    
-    $allMappings = array_merge($defaultMappings, $fieldMappings);
-    $errors = [];
-    
-    $this->db->where(["doctype_id" => $doctype_id, "has_items_feild" => $has_items_feild])->delete("ext_field_mappings");
-    
-    foreach ($allMappings as $field) {
-        if (empty($field["punch_table"]) || empty($field["punch_column"])) {
-            continue;
-        }
+        $doctype_id = $this->input->post("doctype_id");
+        $has_items_feild = $this->input->post("has_items_feild");
+        $fieldMappings = $this->input->post("fieldMappings");
         
-        $data = [
-            "doctype_id" => $doctype_id,
-            "has_items_feild" => $has_items_feild,
-            "temp_column" => $field["temp_column"],
-            "input_type" => $field["input_type"],
-            "select_table" => !empty($field["select_table"]) ? $field["select_table"] : null,
-            "relation_column" => !empty($field["relation_column"]) ? $field["relation_column"] : null,
-            "relation_value" => !empty($field["relation_value"]) ? $field["relation_value"] : null,
-            "punch_table" => $field["punch_table"],
-            "punch_column" => $field["punch_column"],
-            "add_condition" => isset($field["add_condition"]) ? $field["add_condition"] : null,
-            "created_at" => date("Y-m-d H:i:s"),
-            "updated_at" => date("Y-m-d H:i:s"),
+        $defaultMappings = [
+            [
+                "has_items_feild" => $has_items_feild,
+                "temp_column" => "scan_id",
+                "input_type" => "input",
+                "select_table" => null,
+                "relation_column" => null,
+                "relation_value" => null,
+                "punch_table" => "punchfile",
+                "punch_column" => "Scan_Id",
+            ],
+            [
+                "has_items_feild" => $has_items_feild,
+                "temp_column" => "group_id",
+                "input_type" => "input",
+                "select_table" => null,
+                "relation_column" => null,
+                "relation_value" => null,
+                "punch_table" => "punchfile",
+                "punch_column" => "Group_Id",
+            ],
         ];
         
-        if (!$this->db->insert("ext_field_mappings", $data)) {
-            $errors[] = "Failed to insert mapping for column: " . $field["temp_column"];
+        $allMappings = array_merge($defaultMappings, $fieldMappings);
+        $errors = [];
+        
+        $this->db->where(["doctype_id" => $doctype_id, "has_items_feild" => $has_items_feild])->delete("ext_field_mappings");
+        
+        foreach ($allMappings as $field) {
+            if (empty($field["punch_table"]) || empty($field["punch_column"])) {
+                continue;
+            }
+            
+            $data = [
+                "doctype_id" => $doctype_id,
+                "has_items_feild" => $has_items_feild,
+                "temp_column" => $field["temp_column"],
+                "input_type" => $field["input_type"],
+                "select_table" => !empty($field["select_table"]) ? $field["select_table"] : null,
+                "relation_column" => !empty($field["relation_column"]) ? $field["relation_column"] : null,
+                "relation_value" => !empty($field["relation_value"]) ? $field["relation_value"] : null,
+                "punch_table" => $field["punch_table"],
+                "punch_column" => $field["punch_column"],
+                "add_condition" => isset($field["add_condition"]) ? $field["add_condition"] : null,
+                "created_at" => date("Y-m-d H:i:s"),
+                "updated_at" => date("Y-m-d H:i:s"),
+            ];
+            
+            if (!$this->db->insert("ext_field_mappings", $data)) {
+                $errors[] = "Failed to insert mapping for column: " . $field["temp_column"];
+            }
+        }
+        
+        if (empty($errors)) {
+            echo json_encode(["status" => "success", "message" => "Field mappings saved successfully."]);
+        } else {
+            echo json_encode(["status" => "error", "message" => "Some field mappings failed to save.", "errors" => $errors]);
         }
     }
-    
-    if (empty($errors)) {
-        echo json_encode(["status" => "success", "message" => "Field mappings saved successfully."]);
-    } else {
-        echo json_encode(["status" => "error", "message" => "Some field mappings failed to save.", "errors" => $errors]);
-    }
-}
 }

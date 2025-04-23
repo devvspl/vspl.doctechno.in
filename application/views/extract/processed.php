@@ -10,7 +10,7 @@
                   <div class="table-responsive mailbox-messages">
                      <form method="GET" action="<?= base_url('processed'); ?>" style="margin-bottom: 15px;">
                         <div class="row mb-3">
-                           <div class="col-md-4">
+                           <!-- <div class="col-md-4">
                               <label>Company:</label>
                               <select name="group_id" class="form-control">
                                  <option value="">All Company</option>
@@ -21,7 +21,7 @@
                                  </option>
                                  <?php endforeach; ?>
                               </select>
-                           </div>
+                           </div> -->
                            <div class="col-md-4">
                               <label>Location:</label>
                               <select name="location_id" class="form-control">
@@ -44,7 +44,7 @@
                         <thead>
                            <tr>
                               <th class="text-center">S No.</th>
-                              <th class="text-center">Company</th>
+                              <!-- <th class="text-center">Company</th> -->
                               <th class="text-center">Location</th>
                               <th class="text-center">File Name</th>
                               <th class="text-center">Document</th>
@@ -60,7 +60,7 @@
                            <?php $i = 1; foreach ($documents as $doc) : ?>
                            <tr>
                                 <td class="text-center"><?= $i++ ?></td>
-                                <td class="text-center"><?= htmlspecialchars($doc->group_name ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
+                                <!-- <td class="text-center"><?= htmlspecialchars($doc->group_name ?? '', ENT_QUOTES, 'UTF-8'); ?></td> -->
                                 <td class="text-center"><?= htmlspecialchars($doc->location_name ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
                                 <td class="text-center"><?= htmlspecialchars($doc->Document_Name ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
                                 <td class="text-center text-primary"><?= htmlspecialchars($doc->file_type ?? '', ENT_QUOTES, 'UTF-8'); ?></td>

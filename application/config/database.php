@@ -6,10 +6,10 @@ if ($_SERVER['SERVER_NAME'] == 'localhost') {
     // Local Development Configuration
     $db['default'] = [
         'dsn' => '',
-        'hostname' => 'localhost',
-        'username' => 'root',
-        'password' => '',
-        'database' => 'vspl_scanocr',
+        'hostname' => '184.168.114.42',
+        'username' => 'test_scan_user',
+        'password' => 'testscan@192',
+        'database' => 'test_scan',
         'dbdriver' => 'mysqli',
         'dbprefix' => '',
         'pconnect' => false,

@@ -45,7 +45,7 @@ class Auth_model extends CI_Model {
         else return null;
     }
 	function get_financial_years() {
-		$this->db->select('id, label');
+		$this->db->select('id, label, is_current');
 		$this->db->order_by('id', 'desc');
 		$result = $this->db->get('financial_years')->result_array();
 		return count($result) ? $result : null;
