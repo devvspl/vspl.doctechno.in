@@ -1089,7 +1089,11 @@
                   <label style="float: right;">Total: <input  type="number" name="finance_total_Amount" readonly id="billAmount" value="<?php echo isset($punch_detail->finance_total_Amount) ? $punch_detail->finance_total_Amount : ''; ?>" class="form-control" /></label>
                </div>
             </div>
-           
+            <div class="box-footer">
+               <button type="reset" class="btn btn-danger">Reset</button>
+               <input type="submit" class="btn btn-info pull-right" style="margin-left: 20px;" id="f_save_as_draft" name="f_save_as_draft" value="Save as Draft"></input>
+               <input   type="submit" class="btn btn-success pull-right" name="submit" id="finalSubmitBtn" value="Final Submit"></input>
+            </div>
          </form>
          </div>
       </div>
