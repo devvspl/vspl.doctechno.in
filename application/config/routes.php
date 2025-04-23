@@ -12,6 +12,7 @@ $route['get_report_for_super_approver'] = 'Dashboard/get_report_for_super_approv
 $route['get_report_for_super_scanner'] = 'Dashboard/get_report_for_super_scanner';
 // >>>>>>>>>>>>>>>>>>>>>>>>> Master Section <<<<<<<<<<<<<<<<<<<<<<<<<<< //
 $route['user'] = 'master/UserController';
+$route['user/delete/(:any)'] = 'master/UserController';
 $route['bill_approver'] = 'master/BillApproverController';
 $route['ledger'] = 'master/LedgerController';
 $route['firm'] = 'master/FirmController';

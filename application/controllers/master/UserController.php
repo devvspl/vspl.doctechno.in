@@ -24,30 +24,38 @@ class UserController extends CI_Controller
         $this->session->set_userdata('top_menu', 'master');
         $this->session->set_userdata('sub_menu', 'user');
         $this->data['main'] = 'user/userlist';
+        $this->data['departments'] = $this->db->select('api_id, department_name, department_code')->from('core_department')->where('is_active', 1)->get()->result();
         $this->data['userlist'] = $this->User_model->get_user_list();
         $this->data['grouplist'] = $this->Group_model->get_group_list();
-
         $this->load->view('layout/template', $this->data);
     }
+    
 
     public function create()
     {
-
         $this->form_validation->set_rules('first_name', 'First Name', 'trim|required');
         $this->form_validation->set_rules('last_name', 'Last Name', 'trim|required');
         $this->form_validation->set_rules('role', 'User Role', 'trim|required');
         $this->form_validation->set_rules('username', 'Username', 'trim|required');
         $this->form_validation->set_rules('password', 'Password', 'trim|required');
+        $this->form_validation->set_rules('department[]', 'Department', 'trim|required');
+    
         if ($this->form_validation->run() == false) {
             $this->data['main'] = 'user/userlist';
+            $this->data['departments'] = $this->db->select('api_id, department_name, department_code')
+                                                  ->from('core_department')
+                                                  ->where('is_active', 1)
+                                                  ->get()->result();
+            $this->data['grouplist'] = $this->Group_model->get_group_list();
             $this->load->view('layout/template', $this->data);
         } else {
-
             if ($_SESSION['role'] == 'super_admin') {
                 $group_id = $this->input->post('group');
             } else {
                 $group_id = $_SESSION['group_id'];
             }
+    
+            $department_ids = $this->input->post('department'); // This is an array
             $data['created_by'] = $this->session->userdata('user_id');
             $data['first_name'] = $this->input->post('first_name');
             $data['last_name'] = $this->input->post('last_name');
@@ -55,16 +63,20 @@ class UserController extends CI_Controller
             $data['password'] = md5($this->input->post('password'));
             $data['role'] = $this->input->post('role');
             $data['group_id'] = $group_id;
+            $data['department_id'] = implode(',', $department_ids); // Convert to string for DB
+    
             $result = $this->User_model->create($data);
+    
             if ($result) {
                 $this->session->set_flashdata('message', '<p class="text-success text-center">User Created Successfully.</p>');
-                redirect('user');
             } else {
                 $this->session->set_flashdata('message', '<p class="text-danger text-center">Something went wrong. Please try again.</p>');
-                redirect('user');
             }
+            redirect('user');
         }
     }
+    
+
 
     function delete($id)
     {
