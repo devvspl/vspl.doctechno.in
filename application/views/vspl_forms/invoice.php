@@ -466,11 +466,11 @@
 					</div>
 				</div>
 
-				<div class="box-footer">
+				<!-- <div class="box-footer">
 					<button type="reset" class="btn btn-danger">Reset</button>
 					<input type="submit" class="btn btn-info pull-right" style="margin-left: 20px;" name="save_as_draft" value="Save as Draft"></input>
 					<input type="submit" class="btn btn-success pull-right" name="submit" value="Final Submit"></input>
-				</div>
+				</div> -->
 				<?php
 				if ($this->customlib->haveSupportFile($Scan_Id) == 1) {
 					?>
