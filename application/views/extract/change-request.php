@@ -99,7 +99,7 @@
        }
        $button.prop("disabled", true).text("Please wait...");
        $.ajax({
-           url: "<?= base_url('ExtractorController/approveChangeRequest'); ?>",
+           url: "<?= base_url('extract/ExtractorController/approveChangeRequest'); ?>",
            type: "POST",
            data: { scan_id: scanId },
            success: function (response) {
@@ -119,7 +119,6 @@
                $button.prop("disabled", false).text("Approve Request");
            },
        });
-   });
-   
+      });
    });
 </script>

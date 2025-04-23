@@ -108,7 +108,7 @@ $(document).ready(function () {
         $("#docTypeName").text(doctypeId);
 
         $.ajax({
-            url: "<?= base_url('ExtractorController/getFieldDetails/'); ?>" + has_items_feild,
+            url: "<?= base_url('extract/ExtractorController/getFieldDetails/'); ?>" + has_items_feild,
             type: "POST",
             data: { doctype_id: doctypeId },
             beforeSend: function () {
@@ -246,7 +246,7 @@ $(document).ready(function () {
     });
     function fetchSelectTable(selectedTable = "", tableDropdown) {
         $.ajax({
-            url: "<?= base_url('ExtractorController/getAllTables'); ?>",
+            url: "<?= base_url('extract/ExtractorController/getAllTables'); ?>",
             type: "POST",
             success: function (response) {
                 let tables = JSON.parse(response);
@@ -264,7 +264,7 @@ $(document).ready(function () {
     }
     function fetchSelectTableColumns(tableName, columnDropdown, selectedColumn = "") {
         $.ajax({
-            url: "<?= base_url('ExtractorController/getTableColumns'); ?>",
+            url: "<?= base_url('extract/ExtractorController/getTableColumns'); ?>",
             type: "POST",
             data: { table: tableName },
             success: function (response) {
@@ -283,7 +283,7 @@ $(document).ready(function () {
     }
     function fetchSelectTableValue(tableName, columnDropdown, selectedColumn = "") {
         $.ajax({
-            url: "<?= base_url('ExtractorController/getTableColumns'); ?>",
+            url: "<?= base_url('extract/ExtractorController/getTableColumns'); ?>",
             type: "POST",
             data: { table: tableName },
             success: function (response) {
@@ -302,7 +302,7 @@ $(document).ready(function () {
     }
     function fetchPunchColumns(tableName, columnDropdown, selectedColumn = "") {
         $.ajax({
-            url: "<?= base_url('ExtractorController/getPunchTableColumns'); ?>",
+            url: "<?= base_url('extract/ExtractorController/getPunchTableColumns'); ?>",
             type: "POST",
             data: { table: tableName },
             success: function (response) {
@@ -346,7 +346,7 @@ $(document).ready(function () {
             });
         });
         $.ajax({
-            url: "<?= base_url('ExtractorController/saveFieldMappings'); ?>",
+            url: "<?= base_url('extract/ExtractorController/saveFieldMappings'); ?>",
             type: "POST",
             data: {
                 doctype_id: saveButton.data("value"),
@@ -383,7 +383,7 @@ $(document).ready(function () {
         $(".punch-table").each(function () {
             let columnDropdown = $(this).closest("tr").find(".punch-column");
             $.ajax({
-                url: "<?= base_url('ExtractorController/getPunchTableColumns'); ?>",
+                url: "<?= base_url('extract/ExtractorController/getPunchTableColumns'); ?>",
                 type: "POST",
                 data: { table: selectedTable },
                 success: function (response) {

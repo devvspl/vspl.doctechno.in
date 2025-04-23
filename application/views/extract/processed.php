@@ -104,7 +104,7 @@
        }
        $button.prop("disabled", true).text("Please wait...");
        $.ajax({
-           url: "<?= base_url('ExtractorController/changeRequest'); ?>",
+           url: "<?= base_url('extract/ExtractorController/changeRequest'); ?>",
            type: "POST",
            data: { scan_id: scanId },
            success: function (response) {
