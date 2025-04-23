@@ -1570,7 +1570,7 @@
    	function getItemList() {
    		$.ajax({
    			type: "POST",
-   			url: '<?= base_url() ?>ItemController/get_item_list',
+   			url: '<?= base_url() ?>master/ItemController/get_item_list',
    			dataType: "json",
    			success: function (response) {
    
