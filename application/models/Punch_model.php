@@ -160,7 +160,7 @@ class Punch_model extends MY_Model {
     function vspl_pending_for_punch() {
         $group_id = $this->session->userdata('group_id');
         $this->db->where('Final_Submit', 'Y');
-        $this->db->where('File_Punched', 'N');
+        $this->db->where('File_Punched', 'Y');
         $this->db->where('Is_Rejected', 'N');
         $this->db->where('Scan_Resend', 'N');
         $this->db->where('Is_Deleted', 'N');
