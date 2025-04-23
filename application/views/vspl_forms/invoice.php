@@ -9,6 +9,7 @@
    $department_list = $this->customlib->getDepartmentList();
    $file_list = $this->customlib->getFileList();
    $worklocation_list = $this->customlib->getWorkLocationList();
+   $firm = $this->db->get_where('master_firm', ['status' => 'A'])->result_array();
    $ledger_list = $this->customlib->getLedgerList();
    $category_list = $this->customlib->getCategoryList();
    $item_list = $this->customlib->getItemList();

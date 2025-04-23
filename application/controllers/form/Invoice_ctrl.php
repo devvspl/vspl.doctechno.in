@@ -102,6 +102,7 @@ class Invoice_ctrl extends CI_Controller
 			'Remark' => $Remark,
 			'Created_By' => $this->session->userdata('user_id'),
 			'Created_Date' => date('Y-m-d H:i:s'),
+			'at_finance' => 'N'
 		);
 		$this->db->trans_start();
 		$this->db->trans_strict(FALSE);
