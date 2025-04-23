@@ -145,7 +145,7 @@ class Customlib
     {
         $result = $this->CI->db
             ->select('*')
-            ->from('financial_year')
+            ->from('financial_years')
             ->get()
             ->result_array();
         return $result;
