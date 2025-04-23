@@ -102,7 +102,7 @@ class Invoice_ctrl extends CI_Controller
 			'Remark' => $Remark,
 			'Created_By' => $this->session->userdata('user_id'),
 			'Created_Date' => date('Y-m-d H:i:s'),
-			'at_finance' => 'N'
+			
 		);
 		$this->db->trans_start();
 		$this->db->trans_strict(FALSE);
@@ -134,7 +134,7 @@ class Invoice_ctrl extends CI_Controller
 				);
 			}
 			$this->db->insert_batch('invoice_detail', $array);
-			$this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array('Is_Rejected' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N'));
+			$this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array('Is_Rejected' => 'N', 'at_finance' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N'));
 		} else {
 			//Insert
 			$this->db->insert('punchfile', $data);
