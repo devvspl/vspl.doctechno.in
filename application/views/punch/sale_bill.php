@@ -585,7 +585,7 @@ $temp_punch_detail = $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_i
 		function getItemList() {
 			$.ajax({
 				type: "POST",
-				url: '<?= base_url() ?>Item/get_item_list',
+				url: '<?= base_url() ?>ItemController/get_item_list',
 				dataType: "json",
 				success: function (response) {
 
