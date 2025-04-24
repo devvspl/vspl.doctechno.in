@@ -41,6 +41,7 @@ $route['classification'] = 'extract/ExtractorController/classification';
 $route['processed'] = 'extract/ExtractorController/processed';
 $route['change-request'] = 'extract/ExtractorController/changeRequestList';
 $route['extraction-queue'] = 'extract/ExtractorController/getQueueList';
+$route['cron-process-queue'] = 'extract/ExtractorController/processQueue';
 // >>>>>>>>>>>>>>>>>>>>>>>>> Reports Section <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
 $route['all_report'] = 'All_report';
 $route['search_global'] = 'Search/search_global';
