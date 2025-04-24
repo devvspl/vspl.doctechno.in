@@ -96,7 +96,7 @@
                   <?php } ?>
             <input type="hidden" readonly name="Scan_Id" id="Scan_Id" value="<?= $Scan_Id ?>">
             <input type="hidden" readonly name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">
-            <form action="<?= base_url(); ?>form/Invoice_ctrl/create" id="invoice_form" name="invoice_form" method="post"
+            <form action="<?= base_url(); ?>form/InvoiceController/create" id="invoice_form" name="invoice_form" method="post"
 			  accept-charset="utf-8">
 			  <div style="display: flex; flex-direction: column; align-items: center;">
 				<div class="loader" id="loader" style="display: none;"></div>
@@ -1553,7 +1553,7 @@
 			var Scan_Id = $('#Scan_Id').val();
 			toggleLoader(true, 'contnetBody');
 			$.ajax({
-				url: '<?= base_url() ?>form/Invoice_ctrl/getInvoiceItem',
+				url: '<?= base_url() ?>form/InvoiceController/getInvoiceItem',
 				type: 'POST',
 				data: {
 					Scan_Id: Scan_Id
@@ -1879,7 +1879,7 @@
 		}
 		$.ajax({
 			type: 'POST',
-			url: '<?= base_url() ?>form/Invoice_ctrl/add_item',
+			url: '<?= base_url() ?>form/InvoiceController/add_item',
 			data: {
 				item_name: item_name,
 				item_code: item_code

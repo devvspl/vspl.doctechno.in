@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Invoice_ctrl extends CI_Controller
+class InvoiceController extends CI_Controller
 {
 
 	function __construct()

@@ -439,7 +439,7 @@ $ledger_list = $this->customlib->getLedgerList();
 		function getMultiRecord() {
 			var Scan_Id = $('#Scan_Id').val();
 			$.ajax({
-				url: '<?= base_url() ?>form/Invoice_ctrl/getInvoiceItem',
+				url: '<?= base_url() ?>form/InvoiceController/getInvoiceItem',
 				type: 'POST',
 				data: {
 					Scan_Id: Scan_Id

@@ -1606,7 +1606,7 @@
    	function getMultiRecord() {
    		var Scan_Id = $('#Scan_Id').val();
    		$.ajax({
-   			url: '<?= base_url() ?>form/Invoice_ctrl/getInvoiceItem',
+   			url: '<?= base_url() ?>form/InvoiceController/getInvoiceItem',
    			type: 'POST',
    			data: {
    				Scan_Id: Scan_Id
@@ -1920,7 +1920,7 @@
    	}
    	$.ajax({
    		type: 'POST',
-   		url: '<?= base_url() ?>form/Invoice_ctrl/add_item',
+   		url: '<?= base_url() ?>form/InvoiceController/add_item',
    		data: {
    			item_name: item_name,
    			item_code: item_code

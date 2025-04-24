@@ -1,47 +1,3 @@
-<style>
-	.form-group {
-		margin-bottom: 4px;
-	}
-
-	th {
-		text-align: center;
-	}
-
-	.form-control-sm {
-		display: inline-block;
-		height: auto;
-		font-size: 10pt;
-		line-height: 1.42857143;
-		color: #555;
-		background-color: #fff;
-		background-image: none;
-		border: 1px solid #ccc;
-	}
-
-	.d-none {
-		display: none !important;
-	}
-	.loader {
-  width: 48px;
-  height: 48px;
-  border: 5px dotted #3a495e;
-  border-radius: 50%;
-  display: inline-block;
-  position: relative;
-  box-sizing: border-box;
-  animation: rotation 2s linear infinite;
-}
-
-@keyframes rotation {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-</style>
 <?php
 $Scan_Id = $this->uri->segment(2);
 $DocType_Id = $this->uri->segment(3);
@@ -81,7 +37,7 @@ $temp_punch_detail = $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_i
 				</script>
 			<?php } ?>
 		</div>
-		<form action="<?= base_url(); ?>form/Invoice_ctrl/create" id="invoice_form" name="invoice_form" method="post"
+		<form action="<?= base_url(); ?>form/InvoiceController/create" id="invoice_form" name="invoice_form" method="post"
 			  accept-charset="utf-8">
 			  <div style="display: flex; flex-direction: column; align-items: center;">
 				<div class="loader" id="loader" style="display: none;"></div>
@@ -216,7 +172,7 @@ $temp_punch_detail = $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_i
 						</select>
 					</div>
 					<div class="col-md-3 form-group">
-						<label for="">Voucher Type/Category:</label>
+						<label for="">Voucher Type:</label>
 						 <small class="text-danger">
                             <?php echo $temp_punch_detail->voucher_type_category; ?>
                         </small>
@@ -662,7 +618,7 @@ $temp_punch_detail = $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_i
 			var Scan_Id = $('#Scan_Id').val();
 			toggleLoader(true, 'contnetBody');
 			$.ajax({
-				url: '<?= base_url() ?>form/Invoice_ctrl/getInvoiceItem',
+				url: '<?= base_url() ?>form/InvoiceController/getInvoiceItem',
 				type: 'POST',
 				data: {
 					Scan_Id: Scan_Id
@@ -988,7 +944,7 @@ $temp_punch_detail = $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_i
 		}
 		$.ajax({
 			type: 'POST',
-			url: '<?= base_url() ?>form/Invoice_ctrl/add_item',
+			url: '<?= base_url() ?>form/InvoiceController/add_item',
 			data: {
 				item_name: item_name,
 				item_code: item_code

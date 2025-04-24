@@ -63,7 +63,7 @@ $temp_punch_detail = $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_i
 			</script>
 			<?php } ?>
 		</div>
-		<form action="<?= base_url(); ?>form/Invoice_ctrl/sale_bill_save" id="invoice_form" name="invoice_form"
+		<form action="<?= base_url(); ?>form/InvoiceController/sale_bill_save" id="invoice_form" name="invoice_form"
 			method="post" accept-charset="utf-8">
 			<div class="col-md-7">
 				<input type="hidden" name="Scan_Id" id="Scan_Id" value="<?= $Scan_Id ?>">
@@ -621,7 +621,7 @@ $temp_punch_detail = $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_i
 		function getMultiRecord() {
 			var Scan_Id = $('#Scan_Id').val();
 			$.ajax({
-				url: '<?= base_url() ?>form/Invoice_ctrl/getInvoiceItem',
+				url: '<?= base_url() ?>form/InvoiceController/getInvoiceItem',
 				type: 'POST',
 				data: {
 					Scan_Id: Scan_Id
@@ -960,7 +960,7 @@ $temp_punch_detail = $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_i
 		}
 		$.ajax({
 			type: 'POST',
-			url: '<?= base_url() ?>form/Invoice_ctrl/add_item',
+			url: '<?= base_url() ?>form/InvoiceController/add_item',
 			data: {
 				item_name: item_name,
 				item_code: item_code
