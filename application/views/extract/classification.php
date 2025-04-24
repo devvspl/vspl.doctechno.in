@@ -16,18 +16,6 @@
                      <?php endif; ?>
                      <form method="GET" action="<?= base_url('classification'); ?>" style="margin-bottom: 15px;">
                         <div class="row mb-3">
-                           <!-- <div class="col-md-4">
-                              <label>Company:</label>
-                              <select name="group_id" class="form-control">
-                                 <option value="">All Company</option>
-                                 <?php foreach ($groups as $group): ?>
-                                 <option value="<?= $group->group_id; ?>" 
-                                    <?= isset($_GET['group_id']) && $_GET['group_id'] == $group->group_id ? 'selected' : ''; ?>>
-                                    <?= htmlspecialchars($group->group_name); ?>
-                                 </option>
-                                 <?php endforeach; ?>
-                              </select>
-                           </div> -->
                            <div class="col-md-4">
                               <label>Location:</label>
                               <select name="location_id" class="form-control">
@@ -62,7 +50,7 @@
                         <tbody>
                            <?php if (!empty($documents)) : ?>
                            <?php $i = 1; foreach ($documents as $doc) : ?>
-                           <tr>
+                           <tr data-scan-id="<?= $doc->Scan_Id; ?>">
                               <td class="text-center"><?= $i++ ?></td>
                                 <td class="text-center"><?= htmlspecialchars($doc->location_name ?? ''); ?></td>
                                 <td class="text-center"><?= $doc->Document_Name ?? ''; ?></td>
@@ -127,39 +115,55 @@ $(document).ready(function () {
             },
         });
     });
+
     $(document).on("click", ".extract-btn", function () {
         let $button = $(this);
         let scanId = $button.data("scan-id");
         let typeId = $("#docType_" + scanId).val();
-
         if (typeId === "") {
             alert("Please select a document type.");
             return;
         }
-
         $button.prop("disabled", true).text("Please wait...");
-
         $.ajax({
             url: "<?= base_url('extract/ExtractorController/extractDetails'); ?>",
             type: "POST",
             data: { scan_id: scanId, type_id: typeId },
-           success: function (response) {
+            success: function (response) {
                 let jsonResponse = JSON.parse(response);
                 if (jsonResponse.status == 'success') {
-                    alert(jsonResponse.message); 
-                    setTimeout(function () {
-                        location.reload(); 
-                    }, 1000);
+                    $("#documentDetailsModal").modal("hide");
+                    $('tr[data-scan-id="' + scanId + '"]').fadeOut(500, function() {
+                        $(this).remove();
+                        $('table tbody tr').each(function(index) {
+                            $(this).find('td:first').text(index + 1);
+                        });
+                    });
+                    showNotification('success', jsonResponse.message);
                 } else {
-                    alert("Extraction failed: " + jsonResponse.message);
+                    $button.prop("disabled", false).text("Update");
+                    showNotification('error', jsonResponse.message);
                 }
             },
-
             error: function () {
-                alert("Error fetching details.");
                 $button.prop("disabled", false).text("Update");
+                showNotification('error', 'Error processing document');
             },
         });
     });
+
+    function showNotification(type, message) {
+        let alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+        let $alert = $('<div class="alert ' + alertClass + ' alert-dismissible fade show" role="alert">' +
+            message +
+            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+            '<span aria-hidden="true">&times;</span>' +
+            '</button>' +
+            '</div>');
+        $('.box-body').prepend($alert);
+        setTimeout(function() {
+            $alert.alert('close');
+        }, 5000);
+    }
 });
 </script>

@@ -1,0 +1,125 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
+
+<div class="content-wrapper" style="min-height: 946px;">
+   <section class="content">
+      <div class="row">
+         <div class="col-md-12">
+            <div class="box box-primary">
+               <div class="box-header with-border">
+                  <h3 class="box-title">Extraction Queue List</h3>
+                  <div class="box-tools pull-right">
+                     <button type="button" class="btn btn-primary" onclick="processQueue()">
+                        <i class="fa fa-play"></i> Process Queue
+                     </button>
+                  </div>
+               </div>
+               <div class="box-body">
+                  <div class="table-responsive mailbox-messages">
+                     <?php if ($this->session->flashdata('message')): ?>
+                     <div class="alert alert-info">
+                        <?php echo $this->session->flashdata('message'); ?>
+                     </div>
+                     <?php endif; ?>
+                     
+                     <table class="table table-striped table-hover example">
+                        <thead>
+                           <tr>
+                              <th class="text-center">S No.</th>
+                              <th class="text-center">Document Name</th>
+                              <th class="text-center">Document Type</th>
+                              <th class="text-center">Status</th>
+                              <th class="text-center">Created At</th>
+                              <th class="text-center">Action</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <?php if (!empty($queues)) : ?>
+                           <?php $i = 1; foreach ($queues as $queue) : ?>
+                           <tr>
+                              <td class="text-center"><?= $i++ ?></td>
+                              <td class="text-center"><?= htmlspecialchars($queue->Document_Name); ?></td>
+                              <td class="text-center"><?= htmlspecialchars($queue->file_type); ?></td>
+                              <td class="text-center">
+                                 <span class="badge badge-<?php 
+                                    echo $queue->status == 'pending' ? 'warning' : 
+                                       ($queue->status == 'processing' ? 'info' : 
+                                       ($queue->status == 'completed' ? 'success' : 'danger')); 
+                                 ?>">
+                                    <?php echo ucfirst($queue->status); ?>
+                                 </span>
+                              </td>
+                              <td class="text-center"><?= date('Y-m-d H:i:s', strtotime($queue->created_at)); ?></td>
+                              <td class="text-center">
+                                 <button class="btn btn-danger btn-sm remove-queue" data-queue-id="<?= $queue->id; ?>">
+                                    <i class="fa fa-trash"></i> Remove
+                                 </button>
+                              </td>
+                           </tr>
+                           <?php endforeach; ?>
+                           <?php else : ?>
+                           <tr>
+                              <td colspan="6" class="text-center">No records found in queue</td>
+                           </tr>
+                           <?php endif; ?>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </section>
+</div>
+
+<script>
+function processQueue() {
+    $.ajax({
+        url: '<?php echo base_url("extract/ExtractorController/processQueue"); ?>',
+        type: 'POST',
+        dataType: 'json',
+        beforeSend: function() {
+            // Show loading indicator
+            $('.box-body').prepend('<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>');
+        },
+        success: function(response) {
+            if (response.status === 'success') {
+                alert(response.message);
+                location.reload();
+            } else {
+                alert('Error: ' + response.message);
+            }
+        },
+        error: function() {
+            alert('Error processing queue');
+        },
+        complete: function() {
+            // Hide loading indicator
+            $('.overlay').remove();
+        }
+    });
+}
+
+// Remove from queue
+$(document).on('click', '.remove-queue', function() {
+    if (confirm('Are you sure you want to remove this item from the queue?')) {
+        var queueId = $(this).data('queue-id');
+        $.ajax({
+            url: '<?php echo base_url("extract/ExtractorController/removeFromQueue"); ?>',
+            type: 'POST',
+            data: { queue_id: queueId },
+            dataType: 'json',
+            success: function(response) {
+                if (response.status === 'success') {
+                    alert(response.message);
+                    location.reload();
+                } else {
+                    alert('Error: ' + response.message);
+                }
+            },
+            error: function() {
+                alert('Error removing from queue');
+            }
+        });
+    }
+});
+</script> 
