@@ -37,14 +37,16 @@ $temp_punch_detail = $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_i
 				</script>
 			<?php } ?>
 		</div>
-		<form action="<?= base_url(); ?>form/InvoiceController/create" id="invoice_form" name="invoice_form" method="post"
-			  accept-charset="utf-8">
+		
 			  <div style="display: flex; flex-direction: column; align-items: center;">
 				<div class="loader" id="loader" style="display: none;"></div>
 				<span id="loader-text" style="display: none; margin-top: 10px; font-size: 14px; color: #3a495e;">Please Wait...</span>
 				</div>
 
 			<div class="col-md-7" id="contnetBody">
+
+			<form action="<?= base_url(); ?>form/InvoiceController/create" id="invoice_form" name="invoice_form" method="post"
+			  accept-charset="utf-8">
 		    	
 				<input type="hidden" name="Scan_Id" id="Scan_Id" value="<?= $Scan_Id ?>">
 				<input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">
@@ -156,21 +158,7 @@ $temp_punch_detail = $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_i
 					</div>
 				</div>
 				<div class="row mt-2" style="margin-bottom: 5px;">
-					<div class="col-md-3 form-group">
-						<label for="">Department:</label>
-						 <small class="text-danger">
-                            <?php echo $temp_punch_detail->department; ?>
-                        </small>
-						<select name="Department" id="Department" class="form-control form-control-sm">
-							<?php foreach ($department_list as $key => $value) { ?>
-								<option value="<?= $value['department_id'] ?>" <?php if (isset($punch_detail->DepartmentID)) {
-									if ($value['department_id'] == $punch_detail->DepartmentID) {
-										echo "selected";
-									}
-								} ?>><?= $value['department_name'] ?></option>
-							<?php } ?>
-						</select>
-					</div>
+				
 					<div class="col-md-3 form-group">
 						<label for="">Voucher Type:</label>
 						 <small class="text-danger">
@@ -187,54 +175,7 @@ $temp_punch_detail = $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_i
 							<?php } ?>
 						</select>
 					</div>
-					<div class="col-md-3 form-group">
-						<label for="">Ledger:</label>
-						<select name="Ledger" id="Ledger" class="form-control form-control-sm">
-							<option value="">Select</option>
-							<?php foreach ($ledger_list as $key => $value) { ?>
-								<option value="<?= $value['ledger_name'] ?>" <?php if (isset($punch_detail->Ledger)) {
-									if ($value['ledger_name'] == $punch_detail->Ledger) {
-										echo "selected";
-									}
-								} ?>><?= $value['ledger_name'] ?></option>
-							<?php } ?>
-						</select>
-					</div>
 
-					<div class="col-md-3 form-group">
-						<label for="">File:</label>
-						 <small class="text-danger">
-                            <?php echo $temp_punch_detail->file; ?>
-                        </small>
-						<select name="File" id="File" class="form-control form-control-sm">
-							<option value="">Select</option>
-							<?php foreach ($file_list as $key => $value) { ?>
-								<option value="<?= $value['file_name'] ?>" <?php if (isset($punch_detail->FileName)) {
-									if ($value['file_name'] == $punch_detail->FileName) {
-										echo "selected";
-									}
-								} ?>><?= $value['file_name'] ?></option>
-							<?php } ?>
-						</select>
-					</div>
-				</div>
-				<div class="row" style="margin-bottom: 5px;">
-				<div class="col-md-3 form-group">
-						<label for="">Location:</label>
-						 <small class="text-danger">
-                            <?php echo $temp_punch_detail->location; ?>
-                        </small>
-						<select name="Location" id="Location" class="form-control form-control-sm">
-							<option value="">Select</option>
-							<?php foreach ($locationlist as $key => $value) { ?>
-								<option value="<?= $value['location_name'] ?>" <?php if (isset($punch_detail->Loc_Name)) {
-									if ($value['location_name'] == $punch_detail->Loc_Name) {
-										echo "selected";
-									}
-								}  ?>><?= $value['location_name'] ?></option>
-							<?php } ?>
-						</select>
-					</div>
 					<div class="form-group col-md-3">
 						<label for="">LR Number:</label>
 						<input type="text" name="LR_Number" id="LR_Number" class="form-control form-control-sm" value="<?= (isset($punch_detail->FDRNo)) ? $punch_detail->FDRNo : '' ?>">
@@ -247,8 +188,11 @@ $temp_punch_detail = $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_i
 						<label for="">Cartoon Number:</label>
 						<input type="text" name="Cartoon_Number" id="Cartoon_Number" class="form-control form-control-sm" value="<?= (isset($punch_detail->RegNo)) ? $punch_detail->RegNo : '' ?>">
 					</div>
-				</div>
+					
 
+					
+				</div>
+				
 				<div class="row" style="height: 300px; overflow:auto">
 					<div class="" style="overflow-x:scroll;">
 					  
@@ -453,8 +397,9 @@ $temp_punch_detail = $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_i
 						</div>
 					</div>
 				<?php } ?>
+				</form>
 			</div>
-		</form>
+		
 	</div>
 
 </div>
@@ -496,480 +441,216 @@ $temp_punch_detail = $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_i
 	</div>
 </div>
 <script>
-
-
 	$(document).ready(function () {
-		$("#From").select2();
-		$("#To").select2();
-		$(document).on("change", "#From", function () {
-			var address = $(this).find(':selected').data('address');
-			$("#Buyer_Address").val(address);
-		});
-		$(document).on("change", "#To", function () {
-			var address = $(this).find(':selected').data('address');
-			$("#Vendor_Address").val(address);
-		});
-		$(".particular").select2({
-			allowClear: true,
-			escapeMarkup: function (markup) {
-				return markup;
-			},
-			placeholder: "Select Item/Particular",
-			language: {
-				noResults: function () {
-					//open modal to add new item
-					return "<button class='btn btn-primary btn-block' data-target='#myModal' data-toggle='modal'>Add Item</button>";
-				}
-			}
-		});
+		// Initialize Select2 and Datepickers
+		initUI();
 
-		var unit_list;
-		getUnitList();
+		let unitList = '';
+		let itemList = '';
+		let count = 1;
 
-		function getUnitList() {
-			$.ajax({
-				type: "POST",
-				url: '<?= base_url() ?>master/UnitController/get_unit_list',
-				dataType: "json",
-				success: function (response) {
+		// Load unit and item lists
+		loadUnitList();
+		loadItemList();
 
-					if (response.status == 200) {
-						var x = '<option value="" selected >Select Unit</option>';
-						$.each(response.unit_list, function (k, v) {
-							x =
-								x +
-								'<option value="' +
-								v.unit_id +
-								'">' +
-								v.unit_name +
-
-								"</option>";
-						});
-					}
-
-					unit_list = x;
-				},
-			});
-		}
-
-		var item_list;
-		getItemList();
-
-		function getItemList() {
-			$.ajax({
-				type: "POST",
-				url: '<?= base_url() ?>master/ItemController/get_item_list',
-				dataType: "json",
-				success: function (response) {
-
-					if (response.status == 200) {
-						var x = '<option value="" selected >Select Item/Particular</option>';
-						$.each(response.item_list, function (k, v) {
-							x =
-								x +
-								'<option value="' +
-								v.item_name +
-								'">' +
-								v.item_name +
-
-								"</option>";
-						});
-					}
-
-					item_list = x;
-				},
-			});
-		}
-
-		$('.datepicker').datetimepicker({
-			timepicker: false,
-			format: 'Y-m-d',
-		});
-
-
-		var Count = 1;
-
-		function toggleLoader(show, tableId) {
-  const loader = document.getElementById('loader');
-  const loaderText = document.getElementById('loader-text');
-  const table = document.getElementById(tableId);
-
-  if (show) {
-    
-    loader.style.marginTop = '230px'; 
-
-    loader.style.display = 'inline-block';
-    loaderText.style.display = 'block';
-    table.style.visibility = 'hidden';
-  } else {
-    
-    loader.style.marginTop = '0'; 
-
-    loader.style.display = 'none';
-    loaderText.style.display = 'none';
-    table.style.visibility = 'visible';
-  }
-}
-
-
+		// Load data for edit/view
 		getMultiRecord();
 
-		function getMultiRecord() {
-			var Scan_Id = $('#Scan_Id').val();
-			toggleLoader(true, 'contnetBody');
-			$.ajax({
-				url: '<?= base_url() ?>form/InvoiceController/getInvoiceItem',
-				type: 'POST',
-				data: {
-					Scan_Id: Scan_Id
-				},
-				dataType: 'json',
-				success: function (response) {
+		// Event bindings
+		$(document).on("change", "#From", updateBuyerAddress);
+		$(document).on("change", "#To", updateVendorAddress);
+		$(document).on("click", "#add", addItemRow);
+		$(document).on("click", "#remove", removeItemRow);
+		$(document).on("change", ".plus_minus", calculatePlusMinus);
 
-					if (response.status == 200) {
-						Count = (response.data).length;
-
-						for (var i = 1; i <= Count; i++) {
-							if (i >= 2) {
-								multi_record(i);
-							}
-							$("#Particular" + i).val(response.data[i - 1].Particular).trigger('change');
-							$("#HSN" + i).val(response.data[i - 1].HSN);
-							$("#Qty" + i).val(response.data[i - 1].Qty);
-							$("#Unit" + i).val(response.data[i - 1].Unit);
-							$("#MRP" + i).val(response.data[i - 1].MRP);
-							$("#Discount" + i).val(response.data[i - 1].Discount);
-							$("#GST" + i).val(response.data[i - 1].GST);
-							$("#SGST" + i).val(response.data[i - 1].SGST);
-							$("#IGST" + i).val(response.data[i - 1].IGST);
-							$("#Cess" + i).val(response.data[i - 1].Cess);
-							$("#Price" + i).val(response.data[i - 1].Price);
-							$("#Amount" + i).val(response.data[i - 1].Amount);
-							$("#TAmount" + i).val(response.data[i - 1].Total_Amount);
-						}
-					}
-				},
-				complete: function () {
-
-					toggleLoader(false, 'contnetBody');
-				},
-				error: function () {
-					alert('Error fetching data.');
-					$('#loader').hide();
-				}
-			});
-		}
-
-		$(document).on('click', '#add', function () {
-			Count++;
-			multi_record(Count);
-		});
-
-		$(document).on('click', '#remove', function () {
-
-			$(this).closest('tr').remove();
-			// Count--;
-			calculate(Count);
-
-		});
-
-		function multi_record(num) {
-			var html = '';
-			html += '<tr>';
-			html += '<td>' + num + '</td>';
-			html += '<td>';
-			html += '<select  name="Particular[]" id="Particular' + num + '" class="form-control form-control-sm particular">' + item_list + '</select>';
-			html += '</td>';
-			html += '<td>';
-			html += '<input type="text" name="HSN[]" id="HSN' + num + '" class="form-control form-control-sm">';
-			html += '</td>';
-			html += '<td>';
-			html += '<input type="text" name="Qty[]" id="Qty' + num + '" class="form-control form-control-sm" onKeyPress="return isNumberKey(event)" onchange="calculate(' + num + ')">';
-			html += '</td>';
-			html += '<td>';
-			html += '<select  name="Unit[]" id="Unit' + num + '" class="form-control form-control-sm">' + unit_list + '</select>';
-			html += '</td>';
-			html += '<td>';
-			html += '<input type="text" name="MRP[]" id="MRP' + num + '" class="form-control form-control-sm" onKeyPress="return isNumberKey(event)" onchange="calculate(' + num + ')">';
-			html += '</td>';
-			html += '<td>';
-			html += '<input type="text" name="Discount[]" id="Discount' + num + '" class="form-control form-control-sm" onKeyPress="return isNumberKey(event)" onchange="calculate(' + num + ')">';
-			html += '</td>';
-			html += '<td>';
-			html += '<input type="text" name="Price[]" id="Price' + num + '" class="form-control form-control-sm" readonly>';
-			html += '</td>';
-			html += '<td>';
-			html += '<input type="text" name="Amount[]" id="Amount' + num + '" class="form-control form-control-sm Amount" readonly>';
-			html += '</td>';
-			html += '<td>';
-			html += '<input type="text" name="GST[]" id="GST' + num + '" class="form-control form-control-sm" onKeyPress="return isNumberKey(event)" onchange="calculate(' + num + ')">';
-			html += '</td>';
-			html += '<td>';
-			html += '<input type="text" name="SGST[]" id="SGST' + num + '" class="form-control form-control-sm" readonly>';
-			html += '</td>';
-			html += '<td>';
-			html += '<input type="text" name="IGST[]" id="IGST' + num + '" class="form-control form-control-sm" onKeyPress="return isNumberKey(event)" onchange="calculate(' + num + ')">';
-			html += '</td>';
-			html += '<td>';
-			html += '<input type="text" name="Cess[]" id="Cess' + num + '" class="form-control form-control-sm" onKeyPress="return isNumberKey(event)" onchange="calculate(' + num + ')">';
-			html += '</td>';
-			html += '<td>';
-			html += '<input type="text" name="TAmount[]" id="TAmount' + num + '" class="form-control form-control-sm TAmount" readonly>';
-			html += '</td>';
-
-			html += '<td><button type="button" name="remove" id="remove" class="btn btn-danger btn-xs" style="margin-top: 2px;"><i class="fa fa-minus"></i></button></td>';
-			html += '</tr>';
-			$('#multi_record').append(html);
-			$('.datepicker').datetimepicker({});
-			$('.particular').select2({
+		function initUI() {
+			$("#From, #To").select2();
+			$(".datepicker").datetimepicker({ timepicker: false, format: 'Y-m-d' });
+			$(".particular").select2({
 				allowClear: true,
-				escapeMarkup: function (markup) {
-					return markup;
-				},
+				escapeMarkup: m => m,
 				placeholder: "Select Item/Particular",
 				language: {
-					noResults: function () {
-						//open modal to add new item
-						return "<button class='btn btn-primary btn-block' data-target='#myModal' data-toggle='modal'>Add Item</button>";
-					}
+					noResults: () => "<button class='btn btn-primary btn-block' data-target='#myModal' data-toggle='modal'>Add Item</button>"
 				}
 			});
 		}
 
-	});
-
-	function isNumberKey(evt) {
-		var charCode = evt.which ? evt.which : evt.keyCode;
-		if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
-			return false;
-
-		return true;
-	}
-
-	//radio button checked event
-	$(document).on('change', '.plus_minus', function () {
-		var id = $(this).attr('id');
-		var Total_Discount = $('#Total_Discount').val();
-		var Total = $('#Total').val();
-		//  var total_amount_array = Total.split('.');
-		//  var total_amount_int = total_amount_array[0];
-		if (id == 'plus') {
-			var Total = parseFloat($('#Total').val()) + parseFloat(Total_Discount);
-			$('#Grand_Total').val(Total);
-		} else {
-			var Total = parseFloat($('#Total').val()) - parseFloat(Total_Discount);
-			$('#Grand_Total').val(Total);
-		}
-	});
-
-
-	function calculate(num) {
-		var Qty = $('#Qty' + num).val();
-		var MRP = $('#MRP' + num).val();
-		var Discount = $('#Discount' + num).val();
-		var GST = $('#GST' + num).val();
-		var SGST = $('#SGST' + num).val(GST);
-		var IGST = $('#IGST' + num).val();
-		var Cess = $('#Cess' + num).val();
-		var TAmount = 0;
-		if (isNaN(Qty) || Qty == '') {
-			Qty = 0;
-		}
-		if (isNaN(MRP) || MRP == '') {
-			MRP = 0;
-		}
-		if (isNaN(Discount) || Discount == '') {
-			Discount = 0;
-		}
-		if (isNaN(GST) || GST == '') {
-			GST = 0;
-		}
-		if (isNaN(SGST) || SGST == '') {
-			SGST = 0;
-		}
-		if (isNaN(IGST) || IGST == '') {
-			IGST = 0;
-		}
-		if (isNaN(Cess) || Cess == '') {
-			Cess = 0;
-		}
-		
-		if (parseFloat(Discount) > parseFloat(MRP)) {
-        alert('Discount cannot be greater than MRP');
-        Discount = 0;
-        $('#Discount' + num).val(Discount);
-         }
-
-		if (GST > 0) {
-			$('#IGST' + num).attr('readonly', true);
-			$('#IGST' + num).val();
-		} else {
-			$('#IGST' + num).attr('readonly', false);
-			$('#IGST' + num).val();
+		function updateBuyerAddress() {
+			const address = $(this).find(':selected').data('address');
+			$("#Buyer_Address").val(address);
 		}
 
-		var Price = MRP - Discount;
-		$('#Price' + num).val(Price);
-		var Amount = Qty * Price;
-		$('#Amount' + num).val(Amount);
-		$('#TAmount' + num).val(Amount);
-
-		var GSTAmount = (Amount * (GST * 2)) / 100;
-		var AF_GSTAmount = Amount + GSTAmount;
-
-		$('#TAmount' + num).val(AF_GSTAmount);
-		if (GST == 0 || GST == '') {
-			var IGSTAmount = (Amount * IGST) / 100;
-			var AF_IGSTAmount = Amount + IGSTAmount;
-			$('#TAmount' + num).val(AF_IGSTAmount);
+		function updateVendorAddress() {
+			const address = $(this).find(':selected').data('address');
+			$("#Vendor_Address").val(address);
 		}
 
-		if (Cess > 0) {
-			var CessAmount = (Amount * Cess) / 100;
-			var TAmount = $('#TAmount' + num).val();
-			var FinalAmount = parseFloat(TAmount) + parseFloat(CessAmount);
-			$('#TAmount' + num).val(FinalAmount);
-		}
-		var SubTotal = 0;
-		var Total = 0;
-		$('.TAmount').each(function () {
-			SubTotal += +$(this).val();
-		});
+		function toggleLoader(show, tableId) {
+			const loader = $('#loader');
+			const loaderText = $('#loader-text');
+			const table = $('#' + tableId);
 
-		$("#Sub_Total").val(SubTotal);
-		$("#Total").val(SubTotal.toFixed(2));
-
-		//split decimal point from total amount
-		var total_amount = $("#Total").val();
-		var total_amount_array = total_amount.split('.');
-		var total_amount_int = total_amount_array[0];
-		var total_amount_dec = total_amount_array[1];
-
-		//check total amount is decimal or not
-		if (total_amount_dec == undefined) {
-			total_amount_dec = 0;
+			loader.css('marginTop', show ? '230px' : '0');
+			loader.toggle(show);
+			loaderText.toggle(show);
+			table.css('visibility', show ? 'hidden' : 'visible');
 		}
 
-		$("#Total_Discount").val('0.' + total_amount_dec);
-
-		$("#Grand_Total").val(total_amount_int);
-
-	}
-
-	function cal_tax() {
-		var TCS = $('#TCS').val();
-		var Sub_Total = $('#Sub_Total').val();
-
-
-		if (isNaN(TCS) || TCS == '') {
-			TCS = 0;
-		} else {
-			TCS = (TCS / 100) * Sub_Total;
+		function loadUnitList() {
+			$.post('<?= base_url() ?>master/UnitController/get_unit_list', response => {
+				if (response.status === 200) {
+					unitList = `<option value="">Select Unit</option>` + response.unit_list.map(v =>
+						`<option value="${v.unit_id}">${v.unit_name}</option>`
+					).join('');
+				}
+			}, 'json');
 		}
 
-
-		var Total = (parseFloat(Sub_Total) + parseFloat(TCS));
-		$('#Total').val(Total);
-		var total_amount = $("#Total").val();
-		var total_amount_array = total_amount.split('.');
-		var total_amount_int = total_amount_array[0];
-		var total_amount_dec = total_amount_array[1];
-
-		//check total amount is decimal or not
-		if (total_amount_dec == undefined) {
-			total_amount_dec = 0;
+		function loadItemList() {
+			$.post('<?= base_url() ?>master/ItemController/get_item_list', response => {
+				if (response.status === 200) {
+					itemList = `<option value="">Select Item/Particular</option>` + response.item_list.map(v =>
+						`<option value="${v.item_name}">${v.item_name}</option>`
+					).join('');
+				}
+			}, 'json');
 		}
 
-		$("#Total_Discount").val('0.' + total_amount_dec);
-		var Discount = $('#Total_Discount').val();
-		var Grand_Total = Total - Discount;
-		$('#Grand_Total').val(Grand_Total);
+		function getMultiRecord() {
+			const scanId = $('#Scan_Id').val();
+			toggleLoader(true, 'contnetBody');
 
-	}
-
-	function getFile() {
-		var Company = $("#From").val();
-		$.ajax({
-			url: '<?= base_url() ?>Punch/getFileList',
-			type: 'POST',
-			data: {
-				Company: Company
-			},
-			dataType: 'json',
-			success: function (response) {
-				$("#File").empty();
-				if (response.status == 200) {
-					$("#File").append('<option value="">Select File</option>');
-					$.each(response.data, function (key, value) {
-						$('#File').append('<option value="' + value.file_name + '">' + value.file_name + '</option>');
+			$.post('<?= base_url() ?>form/InvoiceController/getInvoiceItem', { Scan_Id: scanId }, response => {
+				if (response.status === 200) {
+					count = response.data.length;
+					response.data.forEach((item, index) => {
+						if (index > 0) addItemRow();
+						populateRow(index + 1, item);
 					});
-				} else {
-					$("#File").append('<option value="">Select File</option>');
 				}
-			}
-		});
-	}
-
-	function getDepartment() {
-		var Company = $("#From").val();
-		$.ajax({
-			url: '<?= base_url() ?>Punch/getDepartmentList',
-			type: 'POST',
-			data: {
-				Company: Company
-			},
-			dataType: 'json',
-			success: function (response) {
-				$("#Department").empty();
-				if (response.status == 200) {
-					$("#Department").append('<option value="">Select Department</option>');
-					$.each(response.data, function (key, value) {
-						$('#Department').append('<option value="' + value.department_id + '">' + value.department_name + '</option>');
-					});
-				} else {
-					$("#File").append('<option value="">Select File</option>');
-				}
-			}
-		});
-	}
-
-	$(document).on('click', "#save_btn", function () {
-		var item_name = $("#item_name").val();
-		var item_code = $("#item_code").val();
-
-		if (item_name == '' || item_name == null) {
-			$("#item_name").focus();
-			$("#item_name").css('border-color', 'red');
-			return false;
+			}, 'json').always(() => toggleLoader(false, 'contnetBody'))
+			  .fail(() => alert('Error fetching data.'));
 		}
-		$.ajax({
-			type: 'POST',
-			url: '<?= base_url() ?>form/InvoiceController/add_item',
-			data: {
-				item_name: item_name,
-				item_code: item_code
-			},
 
-			async: false,
-			dataType: 'json',
-			beforeSend: function () {
-			},
-			success: function (response) {
-				if (response.status == 200) {
-					$(".particular").append('<option value="' + item_name + '">' + item_name + '</option>');
-					$("#item_name").val('');
-					$("#item_code").val('');
-					//modal close
-					$("#myModal").modal('hide');
-				} else {
-					alert(response.msg);
-				}
-			},
+		function populateRow(index, item) {
+			$(`#Particular${index}`).val(item.Particular).trigger('change');
+			$(`#HSN${index}`).val(item.HSN);
+			$(`#Qty${index}`).val(item.Qty);
+			$(`#Unit${index}`).val(item.Unit);
+			$(`#MRP${index}`).val(item.MRP);
+			$(`#Discount${index}`).val(item.Discount);
+			$(`#GST${index}`).val(item.GST);
+			$(`#SGST${index}`).val(item.SGST);
+			$(`#IGST${index}`).val(item.IGST);
+			$(`#Cess${index}`).val(item.Cess);
+			$(`#Price${index}`).val(item.Price);
+			$(`#Amount${index}`).val(item.Amount);
+			$(`#TAmount${index}`).val(item.Total_Amount);
+		}
 
-		});
-	});
+		function addItemRow() {
+			count++;
+			let html = `
+				<tr>
+					<td>${count}</td>
+					<td><select name="Particular[]" id="Particular${count}" class="form-control form-control-sm particular">${itemList}</select></td>
+					<td><input type="text" name="HSN[]" id="HSN${count}" class="form-control form-control-sm"></td>
+					<td><input type="text" name="Qty[]" id="Qty${count}" class="form-control form-control-sm" onkeypress="return isNumberKey(event)" onchange="calculate(${count})"></td>
+					<td><select name="Unit[]" id="Unit${count}" class="form-control form-control-sm">${unitList}</select></td>
+					<td><input type="text" name="MRP[]" id="MRP${count}" class="form-control form-control-sm" onkeypress="return isNumberKey(event)" onchange="calculate(${count})"></td>
+					<td><input type="text" name="Discount[]" id="Discount${count}" class="form-control form-control-sm" onkeypress="return isNumberKey(event)" onchange="calculate(${count})"></td>
+					<td><input type="text" name="Price[]" id="Price${count}" class="form-control form-control-sm" readonly></td>
+					<td><input type="text" name="Amount[]" id="Amount${count}" class="form-control form-control-sm Amount" readonly></td>
+					<td><input type="text" name="GST[]" id="GST${count}" class="form-control form-control-sm" onkeypress="return isNumberKey(event)" onchange="calculate(${count})"></td>
+					<td><input type="text" name="SGST[]" id="SGST${count}" class="form-control form-control-sm" readonly></td>
+					<td><input type="text" name="IGST[]" id="IGST${count}" class="form-control form-control-sm" onkeypress="return isNumberKey(event)" onchange="calculate(${count})"></td>
+					<td><input type="text" name="Cess[]" id="Cess${count}" class="form-control form-control-sm" onkeypress="return isNumberKey(event)" onchange="calculate(${count})"></td>
+					<td><input type="text" name="TAmount[]" id="TAmount${count}" class="form-control form-control-sm TAmount" readonly></td>
+					<td><button type="button" name="remove" id="remove" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></button></td>
+				</tr>`;
+			$('#multi_record').append(html);
+			initUI(); // rebind select2 etc.
+		}
 
-	$("#item_name").on('keyup', function () {
-		$("#item_name").css('border-color', '');
+		function removeItemRow() {
+			$(this).closest('tr').remove();
+			calculate(count);
+		}
+
+		function isNumberKey(evt) {
+			const charCode = evt.which || evt.keyCode;
+			return !(charCode !== 46 && charCode > 31 && (charCode < 48 || charCode > 57));
+		}
+
+		function calculate(num) {
+			let qty = parseFloat($('#Qty' + num).val()) || 0;
+			let mrp = parseFloat($('#MRP' + num).val()) || 0;
+			let discount = parseFloat($('#Discount' + num).val()) || 0;
+			let gst = parseFloat($('#GST' + num).val()) || 0;
+			let igst = parseFloat($('#IGST' + num).val()) || 0;
+			let cess = parseFloat($('#Cess' + num).val()) || 0;
+
+			if (discount > mrp) {
+				alert('Discount cannot be greater than MRP');
+				discount = 0;
+				$('#Discount' + num).val(discount);
+			}
+
+			let price = mrp - discount;
+			let amount = qty * price;
+			let total = amount;
+
+			if (gst > 0) {
+				$('#IGST' + num).attr('readonly', true);
+				$('#SGST' + num).val(gst);
+				total += (amount * gst * 2) / 100;
+			} else {
+				$('#IGST' + num).attr('readonly', false);
+				total += (amount * igst) / 100;
+			}
+
+			if (cess > 0) {
+				total += (amount * cess) / 100;
+			}
+
+			$('#Price' + num).val(price.toFixed(2));
+			$('#Amount' + num).val(amount.toFixed(2));
+			$('#TAmount' + num).val(total.toFixed(2));
+
+			let subtotal = 0;
+			$('.TAmount').each(function () {
+				subtotal += parseFloat($(this).val()) || 0;
+			});
+
+			const decimal = (subtotal % 1).toFixed(2).split('.')[1] || '00';
+			$('#Sub_Total').val(subtotal.toFixed(2));
+			$('#Total').val(subtotal.toFixed(2));
+			$('#Total_Discount').val('0.' + decimal);
+			$('#Grand_Total').val(Math.floor(subtotal));
+		}
+
+		function calculatePlusMinus() {
+			const discount = parseFloat($('#Total_Discount').val()) || 0;
+			let total = parseFloat($('#Total').val()) || 0;
+			if ($(this).attr('id') === 'plus') {
+				total += discount;
+			} else {
+				total -= discount;
+			}
+			$('#Grand_Total').val(total.toFixed(2));
+		}
+
+		window.cal_tax = function () {
+			let tcs = parseFloat($('#TCS').val()) || 0;
+			let subTotal = parseFloat($('#Sub_Total').val()) || 0;
+			let tcsAmount = (tcs / 100) * subTotal;
+			let total = subTotal + tcsAmount;
+
+			const decimal = (total % 1).toFixed(2).split('.')[1] || '00';
+			$('#Total').val(total.toFixed(2));
+			$('#Total_Discount').val('0.' + decimal);
+			$('#Grand_Total').val((total - parseFloat('0.' + decimal)).toFixed(2));
+		}
 	});
 </script>

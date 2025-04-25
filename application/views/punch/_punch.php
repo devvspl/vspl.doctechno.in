@@ -1,9 +1,6 @@
 <?php
-
 $Scan_Id = $this->uri->segment(2);
 $DocType_Id = $this->uri->segment(3);
-
-
 ?>
 <div class="content-wrapper" style="min-height: 946px;">
 	<section class="content">
@@ -25,8 +22,6 @@ $DocType_Id = $this->uri->segment(3);
 						</div>
 					</div>
 					<?php
-
-					//--------------------------Normal Punch-----------------------
 					if ($DocType_Id == 4) {
 						$this->load->view('punch/bank_statement');
 					} elseif ($DocType_Id == 5) {
@@ -57,7 +52,7 @@ $DocType_Id = $this->uri->segment(3);
 						$this->load->view('punch/tax_credit_document');
 					} elseif ($DocType_Id == 45) {
 						$this->load->view('punch/vehicle_registration_paper');
-					} //--------------------------Accounting Punch-----------------------
+					}
 					elseif ($DocType_Id == 1) {
 						$this->load->view('punch/two_four_wheeler');
 					} elseif ($DocType_Id == 2) {
@@ -140,12 +135,6 @@ $DocType_Id = $this->uri->segment(3);
 						$this->load->view('punch/ticket_cancellation');
 					}elseif ($DocType_Id == 56) {
 						$this->load->view('punch/credit_note');
-					}
-					elseif ($DocType_Id == 57) {
-						$this->load->view('punch/journal_entry');
-					}
-					elseif ($DocType_Id == 58) {
-						$this->load->view('punch/cash_payment_new');
 					}
 					?>
 				</div>
