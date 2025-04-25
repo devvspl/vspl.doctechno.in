@@ -29,51 +29,15 @@
          </span>
          </a>
          <nav class="navbar navbar-static-top" role="navigation">
-            <a onclick="collapseSidebar()" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <!--<a onclick="collapseSidebar()" class="sidebar-toggle" data-toggle="offcanvas" role="button">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
-            </a>
-            <div class="col-lg-5 col-md-3 col-sm-2 col-xs-5">
-               <span href="#" class="sidebar-session">
-               <?php $group_id = $this->session->userdata('group_id'); if ($group_id !=0) { $sql = "SELECT group_name FROM `master_group` WHERE `group_id` = $group_id"; $query = $this->db->query($sql); $result =
-                  $query->result_array(); if($result != null){ echo $result[0]['group_name']; } } ?>
-               </span>
-            </div>
-            <div class="col-lg-7 col-md-9 col-sm-10 col-xs-7">
-               <div class="pull-right">
-                  <div class="navbar-custom-menu">
-                     <ul class="nav navbar-nav headertopmenu">
-                        <li class="dropdown user-menu">
-                           <a class="dropdown-toggle" style="padding: 15px 13px;" data-toggle="dropdown" href="#" aria-expanded="false">
-                           <img src="<?= base_url(); ?>assets/images/default_male.jpg" class="topuser-image" alt="User Image" />
-                           </a>
-                           <ul class="dropdown-menu dropdown-user menuboxshadow">
-                              <li>
-                                 <div class="sstopuser">
-                                    <div class="sstopuser-test">
-                                       <h4 class="text-capitalize"><?= $_SESSION['name']; ?></h4>
-                                       <h5><?= $_SESSION['role']; ?></h5>
-                                    </div>
-                                    <div class="divider"></div>
-                                    <div class="sspass">
-                                       <a href="#" data-toggle="tooltip" title="" data-original-title="My Profile"><i class="fa fa-user"></i>Profile </a>
-                                       <a class="pl25" href="<?= base_url(); ?>changepass" data-toggle="tooltip" title="" data-original-title="Change Password"><i class="fa fa-key"></i>Password</a>
-                                       <a class="pull-right" href="<?= base_url() ?>logout"><i class="fa fa-sign-out fa-fw"></i>Logout</a>
-                                    </div>
-                                 </div>
-                              </li>
-                           </ul>
-                        </li>
-                     </ul>
-                  </div>
-               </div>
-            </div>
-         </nav>
-      </header>
-      <aside class="main-sidebar" id="alert2">
-         <section class="sidebar" id="sibe-box">
+            </a>-->
+            <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
+            <aside class="main-sidebar" id="alert2" style="position:unset;width:auto;padding-top:0px;background-color: transparent;box-shadow: 0 0 0;height:50px;">
+         <section class="sidebar" id="sibe-box" style="height:50px;">
             <ul class="sidebar-menu">
                <li class="treeview <?= set_Topmenu('dashboard'); ?>">
                   <a href="<?= base_url(); ?>"> <i class="fa fa-dashboard"></i> <span>Dashboard</span> </a>
@@ -297,6 +261,78 @@
             </ul>
          </section>
       </aside>
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+               <div class="pull-right">
+                  <div class="navbar-custom-menu">
+                     <ul class="nav navbar-nav headertopmenu">
+                        <li class="dropdown user-menu">
+                           <a class="dropdown-toggle" style="padding: 15px 13px;" data-toggle="dropdown" href="#" aria-expanded="false">
+                           <img src="<?= base_url(); ?>assets/images/default_male.jpg" class="topuser-image" alt="User Image" />
+                           </a>
+                           <ul class="dropdown-menu dropdown-user menuboxshadow">
+                              <li>
+                                 <div class="sstopuser">
+                                    <div class="sstopuser-test">
+                                       <h4 class="text-capitalize"><?= $_SESSION['name']; ?></h4>
+                                       <h5><?= $_SESSION['role']; ?></h5>
+                                    </div>
+                                    <div class="divider"></div>
+                                    <div class="sspass">
+                                       <a href="#" data-toggle="tooltip" title="" data-original-title="My Profile"><i class="fa fa-user"></i>Profile </a>
+                                       <a class="pl25" href="<?= base_url(); ?>changepass" data-toggle="tooltip" title="" data-original-title="Change Password"><i class="fa fa-key"></i>Password</a>
+                                       <a class="pull-right" href="<?= base_url() ?>logout"><i class="fa fa-sign-out fa-fw"></i>Logout</a>
+                                    </div>
+                                 </div>
+                              </li>
+                           </ul>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+         </nav>
+      </header>
+     
       <script src="<?= base_url(); ?>assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
    </div>
 </body>
+<script>
+  $(document).ready(function () {
+    // When .treeview is clicked
+    $(".treeview > a").click(function (e) {
+      e.stopPropagation(); // Prevent body click
+      var $treeview = $(this).parent(); // Get the parent <li>
+      var $menu = $treeview.find(".treeview-menu");
+
+      // Show menu and style
+      $treeview.addClass("active");
+      $menu
+        .addClass("menu-open")
+        .css({
+          "background": "#5d7479",
+          "position": "fixed",
+          "display": "block"
+        });
+
+      // Adjust heights
+      $(".slimScrollDiv").css("height", "50px");
+      $(".main-sidebar").css("height", "50px");
+    });
+
+    // Hide treeview-menu when clicking elsewhere on the body
+    $("body").click(function () {
+      $(".treeview").removeClass("active");
+      $(".treeview-menu")
+        .removeClass("menu-open")
+        .css("display", "none");
+    });
+
+    // Prevent hiding when clicking inside the menu
+    $(".treeview-menu").click(function (e) {
+      e.stopPropagation();
+    });
+  });
+</script>
+
+
