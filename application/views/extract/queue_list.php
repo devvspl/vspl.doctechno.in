@@ -8,7 +8,7 @@
                <div class="box-header with-border">
                   <h3 class="box-title">Extraction Queue List</h3>
                   <div class="box-tools pull-right">
-                     <button type="button" class="btn btn-primary" onclick="processQueue()">
+                     <button id="processQueueBtn" type="button" class="btn btn-primary" onclick="processQueue()">
                         <i class="fa fa-play"></i> Process Queue
                      </button>
                   </div>
@@ -73,13 +73,15 @@
 
 <script>
 function processQueue() {
+    var $btn = $('#processQueueBtn'); // Cache button
+
     $.ajax({
-        url: '<?php echo base_url("extract/ExtractorController/processQueue"); ?>',
+        url: '<?php echo base_url("cron-process-queue"); ?>',
         type: 'POST',
         dataType: 'json',
         beforeSend: function() {
-            // Show loading indicator
-            $('.box-body').prepend('<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>');
+            // Disable button and change text
+            $btn.prop('disabled', true).html('Please wait...');
         },
         success: function(response) {
             if (response.status === 'success') {
@@ -93,11 +95,11 @@ function processQueue() {
             alert('Error processing queue');
         },
         complete: function() {
-            // Hide loading indicator
-            $('.overlay').remove();
+            $btn.prop('disabled', false).html('Process Queue');
         }
     });
 }
+
 
 // Remove from queue
 $(document).on('click', '.remove-queue', function() {
