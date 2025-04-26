@@ -3,26 +3,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Punch_model extends MY_Model {
     function get_file_for_punch() {
         $group_id = $this->session->userdata('group_id');
-        $this->db->select('*')
-            ->from('scan_file')
-            ->where('File_Punched', 'N')
-            ->where('Scan_Resend', 'N')
-            ->where_in('Group_Id', $group_id)
-            ->where('Final_Submit', 'Y')
-            ->where('at_finance', 'P')
-            ->where('temp_scan_reject', 'N')
-            ->where("Document_Name !=", '')
-            ->where("((Location IS NOT NULL AND Bill_Approved = 'Y') OR Location IS NULL)")
-            ->order_by('Scan_Id', 'desc');
-    
+        $this->db->select('*')->from('scan_file')->where('File_Punched', 'N')->where('Scan_Resend', 'N')->where_in('Group_Id', $group_id)->where('Final_Submit', 'Y')->where('at_finance', 'P')->where('temp_scan_reject', 'N')->where("Document_Name !=", '')->where("((Location IS NOT NULL AND Bill_Approved = 'Y') OR Location IS NULL)")->order_by('Scan_Id', 'desc');
         if ($group_id === '16') {
             $this->db->where('is_extract', 'Y');
         }
-    
         $query = $this->db->get();
         return $query->result_array();
     }
-
     function vspl_get_file_for_punch() {
         $group_id = $this->session->userdata('group_id');
         $this->db->select('*')->from('scan_file')->where('File_Punched', 'Y')->where('Scan_Resend', 'N')->where_in('Group_Id', $group_id)->where('Final_Submit', 'Y')->where('at_finance', 'N')->where('Is_Rejected', 'N')->where('Is_Finance_Rejected', 'N')->where("((Location IS NOT NULL AND Bill_Approved = 'Y')  OR Location IS NULL)")->order_by('Scan_Id', 'ASC');
@@ -87,27 +74,13 @@ class Punch_model extends MY_Model {
         return $query->num_rows();
     }
     function pending_for_punch() {
-          $group_id = $this->session->userdata('group_id');
-        $this->db->select('*')
-            ->from('scan_file')
-            ->where('File_Punched', 'N')
-            ->where('Scan_Resend', 'N')
-            ->where_in('Group_Id', $group_id)
-            ->where('Final_Submit', 'Y')
-            ->where('at_finance', 'P')
-            ->where('temp_scan_reject', 'N')
-            ->where("Document_Name !=", '')
-            ->where("((Location IS NOT NULL AND Bill_Approved = 'Y') OR Location IS NULL)")
-            ->order_by('Scan_Id', 'desc');
-    
+        $group_id = $this->session->userdata('group_id');
+        $this->db->select('*')->from('scan_file')->where('File_Punched', 'N')->where('Scan_Resend', 'N')->where_in('Group_Id', $group_id)->where('Final_Submit', 'Y')->where('at_finance', 'P')->where('temp_scan_reject', 'N')->where("Document_Name !=", '')->where("((Location IS NOT NULL AND Bill_Approved = 'Y') OR Location IS NULL)")->order_by('Scan_Id', 'desc');
         if ($group_id === '16') {
             $this->db->where('is_extract', 'Y');
         }
-    
         $query = $this->db->get();
-          return $query->num_rows();
-        
-        
+        return $query->num_rows();
     }
     function rejected_punch() {
         $user_id = $this->session->userdata('user_id');
@@ -203,7 +176,7 @@ class Punch_model extends MY_Model {
         $this->db->join('master_work_location', 'cash_voucher_items.location_id = master_work_location.location_id', 'left');
         $this->db->join('master_region', 'cash_voucher_items.region_id = master_region.region_id', 'left');
         $this->db->join('master_department', 'cash_voucher_items.DepartmentID = master_department.department_id', 'left');
-        $this->db->where(['scan_file.Group_Id' => 16,  'scan_file.at_finance' => 'Y','scan_file.File_Approved' => 'Y', 'scan_file.Is_Finance_Rejected' => 'N', 'punchfile.finance_punch_date IS NOT NULL' => null, 'punchfile.Finance_Punch_By IS NOT NULL' => null, ]);
+        $this->db->where(['scan_file.Group_Id' => 16, 'scan_file.at_finance' => 'Y', 'scan_file.File_Approved' => 'Y', 'scan_file.Is_Finance_Rejected' => 'N', 'punchfile.finance_punch_date IS NOT NULL' => null, 'punchfile.Finance_Punch_By IS NOT NULL' => null, ]);
         if (!empty($doctype)) {
             $this->db->where('scan_file.DocType_Id', $doctype);
         }
@@ -239,8 +212,8 @@ class Punch_model extends MY_Model {
         }
         return $this->db->count_all_results();
     }
-	public function get_export_data($doctype, $from_date, $to_date) {
-		$this->db->select(['punchfile.document_number AS DocNo', 'punchfile.finance_punch_date AS Date', "'' AS EmptyField", 'punchfile.account AS CashBankAC', 'master_business_entity.business_entity_code AS BusinessEntity', 'punchfile.narration AS sNarration', 'punchfile.favouring AS Favouring', 'punchfile.TDS_JV_no AS TDSJVNo', 'master_cost_center.cost_center_name AS CostCenter', 'master_work_location.location_name AS Location', 'master_crop.crop_code AS Crop', 'master_activity.activity_code AS Activity', 'master_state.state_code AS State', 'master_crop_category.crop_category_code AS Category', 'master_region.region_code AS Region', 'master_department.department_code AS Department', 'cash_voucher_items.payment_method AS PMTCategory', 'master_business_unit.business_unit_code AS BusinessUnit', 'master_account_ledger.account_code AS Account', 'cash_voucher_items.Total_Amount AS TotalAmount', 'cash_voucher_items.ReferenceNo AS Reference', 'cash_voucher_items.Remark AS sRemarks', 'punchfile.TDS_section AS TDS']);
+    public function get_export_data($doctype, $from_date, $to_date) {
+        $this->db->select(['punchfile.document_number AS DocNo', 'punchfile.finance_punch_date AS Date', "'' AS EmptyField", 'punchfile.account AS CashBankAC', 'master_business_entity.business_entity_code AS BusinessEntity', 'punchfile.narration AS sNarration', 'punchfile.favouring AS Favouring', 'punchfile.TDS_JV_no AS TDSJVNo', 'master_cost_center.cost_center_name AS CostCenter', 'master_work_location.location_name AS Location', 'master_crop.crop_code AS Crop', 'master_activity.activity_code AS Activity', 'master_state.state_code AS State', 'master_crop_category.crop_category_code AS Category', 'master_region.region_code AS Region', 'master_department.department_code AS Department', 'cash_voucher_items.payment_method AS PMTCategory', 'master_business_unit.business_unit_code AS BusinessUnit', 'master_account_ledger.account_code AS Account', 'cash_voucher_items.Total_Amount AS TotalAmount', 'cash_voucher_items.ReferenceNo AS Reference', 'cash_voucher_items.Remark AS sRemarks', 'punchfile.TDS_section AS TDS']);
         $this->db->from('cash_voucher_items');
         $this->db->join('scan_file', 'scan_file.Scan_Id = cash_voucher_items.Scan_Id', 'left');
         $this->db->join('punchfile', 'scan_file.Scan_Id = punchfile.Scan_Id', 'left');
@@ -255,7 +228,7 @@ class Punch_model extends MY_Model {
         $this->db->join('master_work_location', 'cash_voucher_items.location_id = master_work_location.location_id', 'left');
         $this->db->join('master_region', 'cash_voucher_items.region_id = master_region.region_id', 'left');
         $this->db->join('master_department', 'cash_voucher_items.DepartmentID = master_department.department_id', 'left');
-        $this->db->where(['scan_file.Group_Id' => 16, 'scan_file.at_finance' => 'Y','scan_file.File_Approved' => 'Y', 'scan_file.Is_Finance_Rejected' => 'N', 'punchfile.finance_punch_date IS NOT NULL' => null, 'punchfile.Finance_Punch_By IS NOT NULL' => null, ]);
+        $this->db->where(['scan_file.Group_Id' => 16, 'scan_file.at_finance' => 'Y', 'scan_file.File_Approved' => 'Y', 'scan_file.Is_Finance_Rejected' => 'N', 'punchfile.finance_punch_date IS NOT NULL' => null, 'punchfile.Finance_Punch_By IS NOT NULL' => null, ]);
         if (!empty($doctype)) {
             $this->db->where('scan_file.DocType_Id', $doctype);
         }
@@ -265,8 +238,19 @@ class Punch_model extends MY_Model {
         if (!empty($to_date)) {
             $this->db->where('punchfile.finance_punch_date <=', $to_date);
         }
-  
         $query = $this->db->get();
         return $query->result_array();
-	}
+    }
+    public function get_punched_files($user_id, $from_date = null, $to_date = null, $show_all = false) {
+        $this->db->select('*')->from('scan_file')->where('File_Punched', 'Y')->where('Punch_By', $user_id);
+        if (!$show_all) {
+            if (!empty($from_date) && !empty($to_date)) {
+                $this->db->where('DATE(Punch_Date) >=', $from_date)->where('DATE(Punch_Date) <=', $to_date);
+            } else {
+                $this->db->where('DATE(Punch_Date)', date('Y-m-d'));
+            }
+        }
+        $this->db->order_by('Scan_Id', 'desc');
+        return $this->db->get()->result_array();
+    }
 }

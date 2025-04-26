@@ -16,6 +16,9 @@ $route['user/delete/(:any)'] = 'master/UserController';
 $route['bill_approver'] = 'master/BillApproverController';
 $route['ledger'] = 'master/LedgerController';
 $route['firm'] = 'master/FirmController';
+$route['new-vendor-request'] = 'master/FirmController/saveVendor';
+$route['vendor-request'] = 'master/FirmController/vendorRequest';
+$route['approve-vendor'] = 'master/FirmController/approveVendor';
 $route['file'] = 'master/FileController';
 $route['group'] = 'master/GroupController';
 $route['unit'] = 'master/UnitController';
@@ -43,12 +46,36 @@ $route['change-request'] = 'extract/ExtractorController/changeRequestList';
 $route['extraction-queue'] = 'extract/ExtractorController/getQueueList';
 $route['process-queue'] = 'extract/ExtractorController/processQueue';
 $route['cron-process-queue'] = 'PublicController/processQueue';
+// >>>>>>>>>>>>>>>>>>>>>>>>> Common Section <<<<<<<<<<<<<<<<<<<<<<<<< //
+$route['get-country'] = 'master/CommonController/getCountry';
+$route['get-state'] = 'master/CommonController/getState';
 // >>>>>>>>>>>>>>>>>>>>>>>>> Reports Section <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
 $route['all_report'] = 'All_report';
 $route['search_global'] = 'Search/search_global';
 $route['search_with_filter'] = 'Search/search_with_filter';
 $route['search_with_filter_status'] = 'Search/search_with_filter_status';
 $route['get_search_with_filter_data'] = 'Search/get_search_with_filter_data';
+// >>>>>>>>>>>>>>>>>>>>>>>>> Punch Section <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
+// Punch routes
+$route['punch/my-punched-file'] = 'punch/my_punched_file';      
+$route['punch/my-punched-file/all'] = 'punch/my_punched_file/1';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //--------------Scan File-------------------
 $route['scan'] = 'Scan';
 $route['myscannedfiles'] = 'Scan/myscannedfiles';
@@ -81,7 +108,7 @@ $route['finance_rejected_punch'] = 'Punch/finance_rejected_punch';
 $route['resend_scan/(:any)'] = 'Punch/resend_scan/$1';
 $route['finance_resend_scan/(:any)'] = 'Punch/finance_resend_scan/$1';
 // VSPL Punch
-$route['vspl_file_entry/(:any)/(:any)'] = 'VSPL_Punch/file_entry/$1/$2'; 
+$route['vspl_file_entry/(:any)/(:any)'] = 'Punch/file_entry/$1/$2'; 
 $route['focus_exports'] = 'VSPL_Punch/focus_exports'; 
 $route['export_cash_payment'] = 'VSPL_Punch/export_cash_payment'; 
 //--------------Finance_Punch File-------------------

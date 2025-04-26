@@ -29,7 +29,7 @@
    $businessUnits = fetchData('master_business_unit', $this->db);
    $groupedUnits = [];
    foreach ($businessUnits as $unit) {
-   $groupedUnits[$unit['business_unit_group']][] = $unit;
+      $groupedUnits[$unit['business_unit_group']][] = $unit;
    }
    $states = fetchData('master_state', $this->db);
    $locations = fetchData('master_work_location', $this->db);
@@ -466,12 +466,6 @@
 								  class="form-control form-control-sm"><?= (isset($punch_detail->Remark)) ? $punch_detail->Remark : '' ?></textarea>
 					</div>
 				</div>
-
-				<!-- <div class="box-footer">
-					<button type="reset" class="btn btn-danger">Reset</button>
-					<input type="submit" class="btn btn-info pull-right" style="margin-left: 20px;" name="save_as_draft" value="Save as Draft"></input>
-					<input type="submit" class="btn btn-success pull-right" name="submit" value="Final Submit"></input>
-				</div> -->
 				<?php
 				if ($this->customlib->haveSupportFile($Scan_Id) == 1) {
 					?>
@@ -563,14 +557,7 @@
                         ?>
                   </select>
                </div>
-               <div class="form-group col-md-4" style="background-color: #ffffff; margin-bottom: 0;padding-bottom: 5px;">
-                  <label for="">Account (Cash/Bank A/C)</label>
-                  <input type="text" name="account" id="account" placeholder="Select Cash or Bank Account" class="form-control"  value="<?php echo isset($punch_detail->account) ? $punch_detail->account : ''; ?>" >
-               </div>
-               <div class="form-group col-md-4" style="background-color: #ffffff; margin-bottom: 0;padding-bottom: 5px;">
-                  <label for="">Favouring</label>
-                  <input type="text" name="favouring" id="favouring" placeholder="Enter the favouring" class="form-control"  value="<?php echo isset($punch_detail->favouring) ? $punch_detail->favouring : ''; ?>" >
-               </div>
+             
                <div class="form-group col-md-12" style="background-color: #ffffff; margin-bottom: 0;padding-bottom: 5px;">
                   <label for="">Narration</label>
                   <textarea name="narration" id="narration" placeholder="Enter transaction details"  class="form-control" ><?php echo isset($punch_detail->narration) ? $punch_detail->narration : $punch_detail->Remark; ?></textarea>
@@ -839,15 +826,17 @@
                            <option value="">Select Payment Method</option>
                            <?php
                               $selectedPaymentMethod = $entry['payment_method'];
-                              foreach ($paymentMethods as $method): ?>
-                           <option 
-                              value="<?= $method; ?>"
-                              <?= ($method == $selectedPaymentMethod) ? 'selected' : ''; ?>
+                              foreach ($master_payment_method as $method) { 
+                           ?>
+                              <option 
+                                 value="<?= $method['payment_method_name']; ?>" 
+                                 <?= ($method['payment_method_name'] == $selectedPaymentMethod) ? 'selected' : ''; ?>
                               >
-                              <?= $method; ?>
-                           </option>
-                           <?php endforeach; ?>
+                                 <?= $method['payment_method_name']; ?>
+                              </option>
+                           <?php } ?>
                         </select>
+
                      </div>
                      <div class="form-group col-md-4">
                         <label for="amount">Amount</label>

@@ -200,7 +200,7 @@
                                  <a href="<?= base_url(); ?>punch"><i class="fa fa-angle-double-right"></i>Punch File</a>
                               </li>
                               <li class="<?php echo set_Submenu('my_punched_file'); ?>">
-                                 <a href="<?= base_url(); ?>my_punched_file"><i class="fa fa-angle-double-right"></i>My Punched Files</a>
+                                 <a href="<?= base_url(); ?>punch/my-punched-file/all"><i class="fa fa-angle-double-right"></i>My Punched Files</a>
                               </li>
                            </ul>
                         </li>
@@ -252,6 +252,23 @@
                            <a href="<?= base_url(); ?>temp-files"> <i class="fa fa-file-pdf-o" aria-hidden="true"></i> <span>Temp Files</span> </a>
                         </li>
                         <?php } ?>
+                        <?php if ($_SESSION['role'] == 'super_scan' || $_SESSION['role'] == 'super_admin') { ?>
+                           <li class="treeview <?= set_Topmenu('search_master'); ?>">
+                              <a href="#"> 
+                                    <i class="fa fa-search"></i> <span>Request</span> 
+                                    <i class="fa fa-angle-left pull-right"></i> 
+                              </a>
+                              <ul class="treeview-menu">
+                                    <li class="<?php echo set_Submenu('vendor-request'); ?>">
+                                       <a href="<?= base_url(); ?>vendor-request">
+                                          <i class="fa fa-angle-double-right"></i>Vendor Request
+                                       </a>
+                                    </li>
+
+                        <?php } ?>
+
+                           </ul>
+                        </li>
                      </ul>
                   </section>
                </aside>
@@ -292,21 +309,7 @@
 </body>
 <script>
    $(document).ready(function () {
-     $(".treeview > a").click(function (e) {
-       e.stopPropagation();
-       var $treeview = $(this).parent(); 
-       var $menu = $treeview.find(".treeview-menu");
-       $treeview.addClass("active");
-       $menu
-         .addClass("menu-open")
-         .css({
-           "background": "#5d7479",
-           "position": "fixed",
-           "display": "block"
-         });
-       $(".slimScrollDiv").css("height", "50px");
-       $(".main-sidebar").css("height", "50px");
-     });
+
    
      $("body").click(function () {
        $(".treeview").removeClass("active");

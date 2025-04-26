@@ -3761,3 +3761,13 @@ textarea.form-control {resize: none;}
 .form-group {
     margin-bottom: 5px !important;
 }
+
+.slimScrollDiv{
+    height:50px !important;
+    }
+    .slimScrollDiv .sidebar{
+        height:50px !important;
+        }
+    .treeview-menu.menu-open{
+        position: fixed;
+    }
