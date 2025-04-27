@@ -253,4 +253,14 @@ class Punch_model extends MY_Model {
         $this->db->order_by('Scan_Id', 'desc');
         return $this->db->get()->result_array();
     }
+    public function checkUserPermission($user_id) {
+        $query = $this->db->select('permission_id')->from('user_permission')->where('user_id', $user_id)->where('permission_id', 4)->get();
+        if ($query->num_rows() > 0) {
+            return 'Y';
+        } else {
+            return 'N';
+        }
+    }
+    
+    
 }

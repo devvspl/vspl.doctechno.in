@@ -30,6 +30,7 @@ class Punch extends CI_Controller
         $this->session->set_userdata('top_menu', 'punch_master');
         $this->session->set_userdata('sub_menu', 'punch');
         $data = $this->getCommonPunchData($Scan_Id, $DocType_Id);
+        $data['user_permission'] = $this->Punch_model->checkUserPermission($this->session->userdata('user_id'));
         $data['main'] = 'punch/_punch';
         if (!empty($data['doc_config']) && !empty($data['doc_config']['data_method'])) {
             $method = $data['doc_config']['data_method'];
@@ -125,26 +126,7 @@ class Punch extends CI_Controller
             'locationlist' => $this->customlib->getWorkLocationList(),
             'temp_punch_detail' => $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_id' => $Scan_Id])->row(),
             'document_number' => 'CASH/' . date('y-m') . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT),
-            'business_entity' => $this->db->where(['status'=>'A', 'is_deleted'=> 'N'])->get('master_business_entity')->result_array(),
-            'headquarter' => $this->db->get('master_headquarter')->result_array(),
-            'voucher_items' => $this->db->where(['Scan_Id'=>$Scan_Id])->get('cash_voucher_items'),
-            'core_department' => $this->BaseModel->getData('core_department', ['is_active'=>1])->result_array(),
-            'core_business_unit' => $this->BaseModel->getData('core_business_unit', ['is_active'=>1])->result_array(),
-            'core_region' => $this->BaseModel->getData('core_region', ['is_active'=>1])->result_array(),
-            'core_state' => $this->BaseModel->getData('core_state', ['is_active'=>1])->result_array(),
-            'core_category' => $this->BaseModel->getData('core_category', ['is_active'=>1])->result_array(),
-            'master_payment_method' => $this->BaseModel->getData('master_payment_method')->result_array(),
-
-            
-            'states' => $this->fetchData('master_state', $this->db),
-            'locations' => $this->fetchData('master_work_location', $this->db),
-            'categories' => $this->fetchData('master_crop_category', $this->db),
-            'activities' => $this->fetchData('master_activity', $this->db),
-            'crop_list' => $this->fetchData('master_crop', $this->db),
-            'cost_centers' => $this->fetchData('master_cost_center', $this->db),
-            'region_list' => $this->fetchData('master_region', $this->db), 
-            'tdsJvNo' => 'TDSCASH/' . date('Y-m', strtotime($this->db->select('Created_Date')->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->order_by('Created_Date', 'DESC')->limit(1)->get('punchfile')->row()->Created_Date ?? date('Y-m'))) . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT)
-   
+            'tdsJvNo' => 'TDSCASH/' . date('Y-m', strtotime($this->db->select('Created_Date')->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->order_by('Created_Date', 'DESC')->limit(1)->get('punchfile')->row()->Created_Date ?? date('Y-m'))) . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT),
         ];
     }
     private function getTwoFourWheelerData($Scan_Id, $DocType_Id)
