@@ -61,21 +61,18 @@ $route['punch/my-punched-file/all'] = 'punch/my_punched_file/1';
 // >>>>>>>>>>>>>>>>>>>>>>>>> Additional Information <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
 $route['get-business-entities'] = 'accounts/AdditionalController/get_business_entities';
 $route['get-tds-section'] = 'accounts/AdditionalController/get_tds_section';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+$route['get-cost-centers'] = 'accounts/AdditionalController/get_cost_centers';
+$route['get-departments'] = 'accounts/AdditionalController/get_departments';
+$route['get-business-units'] = 'accounts/AdditionalController/get_business_units';
+$route['get-regions'] = 'accounts/AdditionalController/get_regions';
+$route['get-states'] = 'accounts/AdditionalController/get_states';
+$route['get-locations'] = 'accounts/AdditionalController/get_locations';
+$route['get-categories'] = 'accounts/AdditionalController/get_categories';
+$route['get-crops'] = 'accounts/AdditionalController/get_crops';
+$route['get-activities'] = 'accounts/AdditionalController/get_activities';
+$route['get-debit-accounts'] = 'accounts/AdditionalController/get_debit_accounts';
+$route['get-payment-methods'] = 'accounts/AdditionalController/get_payment_methods';
+$route['store-additional-detail'] = 'accounts/AdditionalController/StoreUpdate';
 
 
 

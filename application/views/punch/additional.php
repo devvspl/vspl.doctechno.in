@@ -1,181 +1,190 @@
 <div id="additional-info" class="tab-content">
-      <form action="<?= base_url(); ?>form/VSPL_cash_voucher_ctrl/create" id="cash_voucher_form" name="cash_voucher_form" method="post">
-         <input type="hidden" name="Scan_Id" id="Scan_Id" value="<?= $Scan_Id ?>">
-         <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">
-         <div class="row" style="background-color: #fff;">
-            <div class="form-group col-md-4" style="background-color: #ffffff;     margin-bottom: 0;padding-bottom: 5px;">
-               <label for="">Document No</label>
-               <input type="text" name="document_number" id="document_number" class="form-control" readonly value="<?= $document_number ?>" >
+   <form action="<?= base_url('store-additional-detail'); ?>"  method="post">
+      <input type="hidden" name="scan_id" id="scan_id" value="<?= $Scan_Id ?>">
+      <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">
+      <div class="row" style="background-color: #fff;">
+         <div class="form-group col-md-4" style="background-color: #ffffff;     margin-bottom: 0;padding-bottom: 5px;">
+            <label for="">Document No <span class="text-danger">*</span></label>
+            <input type="text" name="document_number" id="document_number" class="form-control" readonly value="<?= $document_number ?>" >
+         </div>
+         <div class="form-group col-md-4" style="background-color: #ffffff;     margin-bottom: 0;padding-bottom: 5px;">
+            <label for="">Date <span class="text-danger">*</span></label>
+            <input type="text" name="finance_pucnh_date" id="date" class="form-control" readonly value="<?php echo date('Y-m-d'); ?>" >
+         </div>
+         <div class="form-group col-md-4" style="background-color: #ffffff; margin-bottom: 0; padding-bottom: 5px;">
+            <label for="">Business Entity</label>
+            <input type="text" id="business_entity" name="business_entity" class="form-control" placeholder="Select Business Entity">
+            <input type="hidden" id="business_entity_id" name="business_entity_id">
+         </div>
+         <div class="form-group col-md-12" style="background-color: #ffffff; margin-bottom: 0;padding-bottom: 5px;">
+            <label for="">Narration <span class="text-danger">*</span></label>
+            <textarea name="narration" id="narration" placeholder="Enter transaction details"  class="form-control" ><?php echo isset($punch_detail->narration) ? $punch_detail->narration : $punch_detail->Remark; ?></textarea>
+         </div>
+         <div class="form-group col-md-12 tds-applicable-group" style="display: flex; gap: 15px;background-color: #ffffff;     margin-bottom: 0;
+            padding-bottom: 5px;">
+            <label for="tdsApplicable">TDS Applicable</label>
+            <div class="form-check">
+               <input 
+                  class="form-check-input" 
+                  type="radio" 
+                  name="tdsApplicable" 
+                  id="tdsApplicableYes" 
+                  value="yes"
+                  >
+               <label class="form-check-label" for="tdsApplicableYes">Yes</label>
             </div>
-            <div class="form-group col-md-4" style="background-color: #ffffff;     margin-bottom: 0;padding-bottom: 5px;">
-               <label for="">Date</label>
-               <input type="text" name="finance_pucnh_date" id="date" class="form-control" readonly value="<?php echo date('Y-m-d'); ?>" >
+            <div class="form-check">
+               <input 
+                  class="form-check-input" 
+                  type="radio" 
+                  name="tdsApplicable" 
+                  id="tdsApplicableNo" 
+                  value="no"
+                  checked
+                  >
+               <label class="form-check-label" for="tdsApplicableNo">No</label>
             </div>
-            <div class="form-group col-md-4" style="background-color: #ffffff; margin-bottom: 0; padding-bottom: 5px;">
-                <label for="">Business Entity</label>
-                <input type="text" id="business_entity" class="form-control" placeholder="Select Business Entity">
-                <input type="hidden" id="business_entity_id">
+         </div>
+         <div id="tdsDetailsForm" class="tds-details-form" style="display: none; margin-top: 15px;">
+            <div class="form-group col-md-3" style="background-color: #ffffff;     margin-bottom: 0;padding-bottom: 5px;">
+               <label for="tdsJvNo">TDS JV No</label>
+               <input   type="text" id="tdsJvNo" name="TDS_JV_no" class="form-control" readonly value="<?php echo isset($punch_detail->TDS_percentage) ? $punch_detail->TDS_percentage : ''; ?>">
             </div>
+            <div class="form-group col-md-3" style="background-color: #ffffff;     margin-bottom: 0;padding-bottom: 5px;">
+               <label for="tdsJvNo">TDS Section</label>
+               <input type="text" id="tds_section" class="form-control" placeholder="Select TDS Section">
+               <input type="hidden" id="tds_section_id">
+               <input type="hidden" id="tds_rate">
+            </div>
+            <div class="form-group col-md-3" style="background-color: #ffffff;     margin-bottom: 0;padding-bottom: 5px;">
+               <label for="tdsPercentage">TDS Percentage</label>
+               <input type="text" value="<?php echo isset($punch_detail->TDS_percentage) ? $punch_detail->TDS_percentage : ''; ?>" id="tds_percentage" name="tds_percentage" class="form-control" readonly placeholder="Enter TDS Percentage">
+            </div>
+            <div class="form-group col-md-3" style="background-color: #ffffff;     margin-bottom: 0;padding-bottom: 5px;">
+               <label for="tdsAmount">TDS Amount</label>
+               <input   type="text" id="tds_amount" value="<?php echo isset($punch_detail->TDS_amount) ? $punch_detail->TDS_amount : ''; ?>" name="tds_amount" class="form-control" readonly>
+            </div>
+         </div>
+         <div id="rows_container">
+            <div class="row form-row" id="row_1" style="padding: 5px;">
+              <!-- Cost Center -->
+<div class="form-group col-md-3">
+    <label for="cost_center">Cost Center</label>
+    <input type="text" name="cost_center_name[]" id="cost_center_1" class="form-control autocomplete-cost-center">
+    <input type="hidden" name="cost_center_id[]" id="cost_center_id_1" value="">
+</div>
 
-            <div class="form-group col-md-12" style="background-color: #ffffff; margin-bottom: 0;padding-bottom: 5px;">
-               <label for="">Narration</label>
-               <textarea name="narration" id="narration" placeholder="Enter transaction details"  class="form-control" ><?php echo isset($punch_detail->narration) ? $punch_detail->narration : $punch_detail->Remark; ?></textarea>
-            </div>
-            <div class="form-group col-md-12 tds-applicable-group" style="display: flex; gap: 15px;background-color: #ffffff;     margin-bottom: 0;
-               padding-bottom: 5px;">
-               <label for="tdsApplicable">TDS Applicable</label>
-               <div class="form-check">
-                  <input 
-                     class="form-check-input" 
-                     type="radio" 
-                     name="tdsApplicable" 
-                     id="tdsApplicableYes" 
-                     value="yes"
-                     
-                     >
-                  <label class="form-check-label" for="tdsApplicableYes">Yes</label>
+<!-- Department -->
+<div class="form-group col-md-3">
+    <label for="department">Department</label>
+    <input type="text" name="department_name[]" id="department_1" class="form-control autocomplete-department">
+    <input type="hidden" name="department_id[]" id="department_id_1" value="">
+</div>
+
+<!-- Business Unit -->
+<div class="form-group col-md-3">
+    <label for="business_unit">Business Unit</label>
+    <input type="text" name="business_unit_name[]" id="business_unit_1" class="form-control autocomplete-business-unit">
+    <input type="hidden" name="business_unit_id[]" id="business_unit_id_1" value="">
+</div>
+
+<!-- Region -->
+<div class="form-group col-md-3">
+    <label for="region">Region</label>
+    <input type="text" name="region_name[]" id="region_1" class="form-control autocomplete-region">
+    <input type="hidden" name="region_id[]" id="region_id_1" value="">
+</div>
+
+<!-- State -->
+<div class="form-group col-md-3">
+    <label for="state">State</label>
+    <input type="text" name="state_name[]" id="state_1" class="form-control autocomplete-state">
+    <input type="hidden" name="state_id[]" id="state_id_1" value="">
+</div>
+
+<!-- Location -->
+<div class="form-group col-md-3">
+    <label for="location">Location</label>
+    <input type="text" name="location_name[]" id="location_1" class="form-control autocomplete-location">
+    <input type="hidden" name="location_id[]" id="location_id_1" value="">
+</div>
+
+<!-- Category -->
+<div class="form-group col-md-3">
+    <label for="category">Category</label>
+    <input type="text" name="category_name[]" id="category_1" class="form-control autocomplete-category">
+    <input type="hidden" name="category_id[]" id="category_id_1" value="">
+</div>
+
+<!-- Crop -->
+<div class="form-group col-md-3">
+    <label for="crop">Crop</label>
+    <input type="text" name="crop_name[]" id="crop_1" class="form-control autocomplete-crop">
+    <input type="hidden" name="crop_id[]" id="crop_id_1" value="">
+</div>
+
+<!-- Activity -->
+<div class="form-group col-md-3">
+    <label for="activity">Activity</label>
+    <input type="text" name="activity_name[]" id="activity_1" class="form-control autocomplete-activity">
+    <input type="hidden" name="activity_id[]" id="activity_id_1" value="">
+</div>
+
+<!-- Debit A/C -->
+<div class="form-group col-md-3">
+    <label for="debit_ac">Debit A/C</label>
+    <input type="text" name="debit_ac[]" id="debit_ac_1" class="form-control autocomplete-debit-ac">
+    <input type="hidden" name="debit_ac_id[]" id="debit_ac_id_1" value="">
+</div>
+
+<!-- Payment Method -->
+<div class="form-group col-md-3">
+    <label for="payment_method">Payment Method</label>
+    <input type="text" name="payment_method_name[]" id="payment_method_1" class="form-control autocomplete-payment-method">
+    <input type="hidden" name="payment_method_id[]" id="payment_method_id_1" value="">
+</div>
+
+               <div class="form-group col-md-3">
+                  <label for="amount">Amount</label>
+                  <input type="number" name="item_total_amount[]" class="form-control amount" >
                </div>
-               <div class="form-check">
-                  <input 
-                     class="form-check-input" 
-                     type="radio" 
-                     name="tdsApplicable" 
-                     id="tdsApplicableNo" 
-                     value="no"
-                   
-                     >
-                  <label class="form-check-label" for="tdsApplicableNo">No</label>
+               <div class="form-group col-md-3">
+                  <label for="reference">Reference</label>
+                  <input type="text" name="reference_no[]" id="reference_1" class="form-control" >
                </div>
-            </div>
-            <div id="tdsDetailsForm" class="tds-details-form" style="display: none; margin-top: 15px;">
-               <div class="form-group col-md-3" style="background-color: #ffffff;     margin-bottom: 0;padding-bottom: 5px;">
-                  <label for="tdsJvNo">TDS JV No</label>
-                  <input   type="text" id="tdsJvNo" name="TDS_JV_no" class="form-control" readonly value="<?php echo isset($punch_detail->TDS_percentage) ? $punch_detail->TDS_percentage : ''; ?>">
+               <div class="form-group col-md-3">
+                  <label for="remark">Remark</label>
+                  <input type="text" name="item_remark[]" id="remark_1" class="form-control" >
                </div>
-               <div class="form-group col-md-3" style="background-color: #ffffff;     margin-bottom: 0;padding-bottom: 5px;">
-                  <label for="tdsJvNo">TDS Section</label>
-                  <input type="text" id="tds_section" class="form-control" placeholder="Select TDS Section">
-                  <input type="hidden" id="tds_section_id">
-                  <input type="hidden" id="tds_rate">
+               <div class="form-group col-md-3">
+                  <label for="tds_amount">TDS Amount</label>
+                  <input type="number" name="item_tds_amount[]" class="form-control" >
                </div>
-               <div class="form-group col-md-3" style="background-color: #ffffff;     margin-bottom: 0;padding-bottom: 5px;">
-                  <label for="tdsPercentage">TDS Percentage</label>
-                  <input type="text" value="<?php echo isset($punch_detail->TDS_percentage) ? $punch_detail->TDS_percentage : ''; ?>" id="tds_percentage" name="tds_percentage" class="form-control" readonly placeholder="Enter TDS Percentage">
+               <div class="form-group col-md-3">
+                  <button type="button" style="margin-top: 20px;" class="btn btn-danger btn-sm remove_row">Remove</button>
                </div>
-               <div class="form-group col-md-3" style="background-color: #ffffff;     margin-bottom: 0;padding-bottom: 5px;">
-                  <label for="tdsAmount">TDS Amount</label>
-                  <input   type="text" id="tds_amount" value="<?php echo isset($punch_detail->TDS_amount) ? $punch_detail->TDS_amount : ''; ?>" name="tds_amount" class="form-control" readonly>
-               </div>
-            </div>
-            <div id="rows_container">
-               <div class="row form-row" id="row_1" style="    padding: 5px;">
-                  <div class="form-group col-md-4">
-                     <label for="cost_center">Cost Center</label>
-                     <select  name="cost_center_id[]" id="cost_center" class="form-control">
-                        <option value="">Select Cost Center</option>
-                     </select>
-                  </div>
-                  <div class="form-group col-md-4">
-                     <label for="department">Department</label>
-                     <select  name="DepartmentID[]" id="department" class="form-control">
-                        <option value="">Select Department</option>
-                     </select>
-                  </div>
-                  <div class="form-group col-md-4">
-                     <label for="business_unit">Business Unit</label>
-                     <select  name="business_unit_id[]" id="business_unit" class="form-control">
-                        <option value="">Select Business Unit</option>
-                     </select>
-                  </div>
-                  <div class="form-group col-md-4">
-                     <label for="region">Region</label>
-                     <select name="region_id[]" id="region_id" class="form-control region_id">
-                        <option value="">Select Region</option>
-                     </select>
-                  </div>
-                  <div class="form-group col-md-4">
-                     <label for="state">State</label>
-                     <select  name="state_id[]" id="state" class="form-control  state_select">
-                        <option value="">Select State</option>
-                     </select>
-                  </div>
-                  <div class="form-group col-md-4">
-                     <label for="location">Location</label>
-                     <select  name="location_id[]" id="location" class="form-control">
-                        <option value="">Select Location</option>
-                     </select>
-                  </div>
-                  <div class="form-group col-md-4">
-                     <label for="category">Category</label>
-                     <select  name="category_id[]" class="form-control category_select" onchange="fetchCrops(this.value, this)">
-                        <option value="">Select Category</option>
-                     </select>
-                  </div>
-                  <div class="form-group col-md-4">
-                     <label for="crop">Crop</label>
-                     <select name="crop_id[]" id="crop_id" class="form-control crop_id">
-                        <option value="">Select Crop</option>
-                     </select>
-                  </div>
-                  <div class="form-group col-md-4">
-                     <label for="activity">Activity</label>
-                     <select  name="activity_id[]" id="activity" class="form-control">
-                        <option value="">Select Activity</option>
-                     </select>
-                  </div>
-                  <div class="form-group col-md-4">
-                     <label for="debit_ac">Debit A/C</label>
-                     <input type="text" name="debit_ac[]" class="form-control debit-ac" placeholder="Type to search Debit A/C">
-                     <div class="custom-dropdown debit-ac-options" style="display:none; border: 1px solid #ccc; max-height: 150px; overflow-y: auto; position: absolute; background: white; z-index: 1000;"></div>
-                  </div>
-                  <div class="form-group col-md-4">
-                     <label for="payment_method">Payment Method</label>
-                     <select name="payment_method[]" id="payment_method" class="form-control payment_method">
-                        <option value="">Select Payment Method</option>
-                     </select>
-                  </div>
-                  <div class="form-group col-md-4">
-                     <label for="amount">Amount</label>
-                     <input  type="number" placeholder="0.00" name="Item_Total_Amount[]" class="form-control amount" />
-                  </div>
-                  <div class="form-group col-md-4">
-                     <label for="reference">Reference</label>
-                     <input type="text" placeholder="Enter Reference" name="Item_ReferenceNo[]" id="reference" class="form-control"  />
-                  </div>
-                  <div class="form-group col-md-4">
-                     <label for="remark">Remark</label>
-                     <input type="text" placeholder="Enter Remark" name="Item_Remark[]" id="remark" class="form-control" value="" />
-                  </div>
-                  <div class="form-group col-md-4">
-                     <label for="amount">TDS Amount</label>
-                     <input  type="number" placeholder="0.00" name="Item_TDS_Amount[]" class="form-control" />
-                  </div>
-                  <div class="form-group col-md-4">
-                     <button type="button" style="margin-top: 20px;" class="btn btn-danger btn-sm remove_row">Remove</button>
-                  </div>
-               </div>
-            </div>
-            <div class="form-group col-md-12" style="margin-top: 5px;">
-               <button type="button" class="btn btn-success" id="add_row">Add Row</button>
-               <label style="float: right;">Total: <input  type="number" name="finance_total_Amount" readonly id="billAmount" value="<?php echo isset($punch_detail->finance_total_Amount) ? $punch_detail->finance_total_Amount : ''; ?>" class="form-control" /></label>
             </div>
          </div>
-         <div class="box-footer">
-            <button type="reset" class="btn btn-danger">Reset</button>
-            <input type="submit" class="btn btn-info pull-right" style="margin-left: 20px;" id="f_save_as_draft" name="f_save_as_draft" value="Save as Draft"></input>
-            <input   type="submit" class="btn btn-success pull-right" name="submit" id="finalSubmitBtn" value="Final Submit"></input>
+         <div class="form-group col-md-12" style="margin-top: 5px;">
+            <button type="button" class="btn btn-success" id="add_row">Add Row</button>
+            <label style="float: right;">Total: <input  type="number" name="finance_total_Amount" readonly id="billAmount" value="<?php echo isset($punch_detail->finance_total_Amount) ? $punch_detail->finance_total_Amount : ''; ?>" class="form-control" /></label>
          </div>
-      </form>
+      </div>
+      <div class="box-footer">
+         <button type="reset" class="btn btn-danger">Reset</button>
+         <input type="submit" class="btn btn-info pull-right" style="margin-left: 20px;" id="f_save_as_draft" name="f_save_as_draft" value="Save as Draft"></input>
+         <input   type="submit" class="btn btn-success pull-right" name="submit" id="finalSubmitBtn" value="Final Submit"></input>
+      </div>
+   </form>
 </div>
 <script>
 $(document).ready(function () {
     let rowCount = 1;
-    initializeAutocomplete("row_1");
+    initializeAllAutoCompleteInputs(rowCount);
     initAutoCompleteInput("#business_entity", "<?= site_url('get-business-entities') ?>");
-    initAutoCompleteInput("#tds_section", "<?= site_url('get-tds-section') ?>", function(item) {
-        console.log(item);
-        $('#tds_rate').val(item.rate); 
-        $("#tds_section").trigger('change');
+    initAutoCompleteInput("#tds_section", "<?= site_url('get-tds-section') ?>", function (item) {
+        $("#tds_rate").val(item.rate);
+        $("#tds_section").trigger("change");
     });
     $("#account").autocomplete({
         source: function (request, response) {
@@ -214,31 +223,26 @@ $(document).ready(function () {
     });
     $("#add_row").click(function () {
         rowCount++;
-        let newRow = $("#row_1")
-            .clone()
-            .attr("id", "row_" + rowCount);
-        newRow.find("select, input").each(function () {
+        let newRow = $("#row_1").clone();
+        newRow.attr("id", "row_" + rowCount);
+
+        newRow.find("input").each(function () {
             let $this = $(this);
-            let id = $this.attr("id");
-            if (id) {
-                let newId = id.replace(/\d+$/, "") + rowCount;
+            let oldId = $this.attr("id");
+            if (oldId) {
+                let newId = oldId.replace(/\d+$/, "") + rowCount;
                 $this.attr("id", newId);
             }
-            if ($this.is('input[type="text"], input[type="number"], input[type="hidden"], select')) {
-                $this.val("");
-            }
+            $this.val("");
         });
+
         newRow.find(".remove_row").show();
         $("#rows_container").append(newRow);
-        initializeAutocomplete(newRow.attr("id"));
-        updateBillAmount();
+        initializeAllAutoCompleteInputs(rowCount);
     });
     $(document).on("click", ".remove_row", function () {
-        let totalRows = $(".form-row").length;
-
-        if (totalRows > 1) {
+        if ($(".form-row").length > 1) {
             $(this).closest(".form-row").remove();
-            updateBillAmount();
         } else {
             alert("At least one row must remain.");
         }
@@ -279,145 +283,57 @@ $(document).ready(function () {
         var tds_amount = (grand_total * tds_rate) / 100;
         $("#tds_amount").val(tds_amount.toFixed(2));
     });
-    
 });
 
+function initializeAllAutoCompleteInputs(rowNo) {
+    initAutoCompleteInput("#cost_center_" + rowNo, "<?= site_url('get-cost-centers') ?>");
+    initAutoCompleteInput("#department_" + rowNo, "<?= site_url('get-departments') ?>");
+    initAutoCompleteInput("#business_unit_" + rowNo, "<?= site_url('get-business-units') ?>");
+    initAutoCompleteInput("#region_" + rowNo, "<?= site_url('get-regions') ?>");
+    initAutoCompleteInput("#state_" + rowNo, "<?= site_url('get-states') ?>");
+    initAutoCompleteInput("#location_" + rowNo, "<?= site_url('get-locations') ?>");
+    initAutoCompleteInput("#category_" + rowNo, "<?= site_url('get-categories') ?>");
+    initAutoCompleteInput("#crop_" + rowNo, "<?= site_url('get-crops') ?>");
+    initAutoCompleteInput("#activity_" + rowNo, "<?= site_url('get-activities') ?>");
+    initAutoCompleteInput("#debit_ac_" + rowNo, "<?= site_url('get-debit-accounts') ?>");
+    initAutoCompleteInput("#payment_method_" + rowNo, "<?= site_url('get-payment-methods') ?>");
+}
+
 function initAutoCompleteInput(selector, url, onSelectCallback = null) {
-    $(selector).autocomplete({
-        source: function(request, response) {
-            $.ajax({
-                url: url,
-                type: "POST",
-                dataType: "json",
-                data: { term: request.term },
-                success: function(data) {
-                    response(data);
-                }
-            });
-        },
-        minLength: 0,
-        appendTo: "body", // <- Important addition
-        select: function(event, ui) {
-            $(this).val(ui.item.label);
-            var hiddenField = $(this).attr('id') + '_id';
-            $('#' + hiddenField).val(ui.item.value);
-
-            if (typeof onSelectCallback === 'function') {
-                onSelectCallback(ui.item);
-            }
-
-            return false;
-        },
-        focus: function(event, ui) {
-            $(this).val(ui.item.label);
-            return false;
-        }
-    }).focus(function() {
-        $(this).autocomplete("search", "");
-    });
-}
-
-
-function fetchAccountOptions(inputType, query) {
-    return $.ajax({
-        url: '<?php echo base_url("journal-entry/get-account-options");?>',
-        type: "GET",
-        data: {
-            type: inputType,
-            query: query,
-        },
-        dataType: "json",
-    });
-}
-
-function initializeAutocomplete(rowId) {
-    $(`#${rowId} .debit-ac`).autocomplete({
-        source: function (request, response) {
-            fetchAccountOptions("debit", request.term).done(function (data) {
-                if (Array.isArray(data)) {
-                    response(
-                        data.map((account) => {
-                            return {
-                                label: `${account.account_name} (${account.account_code})`,
-                                value: account.account_name,
-                                id: account.id,
-                            };
-                        })
-                    );
-                } else {
-                    console.error("Expected an array but received:", data);
-                }
-            });
-        },
-        minLength: 2,
-        select: function (event, ui) {
-            $(this).val(ui.item.label);
-            $(this).siblings(".hidden-debit-id").remove();
-            $(this).after(`<input type="hidden" class="hidden-debit-id" name="debit_ac_id[]" value="${ui.item.id}">`);
-
-            let parentRow = $(this).closest(".row");
-            let subLedgerDropdown = parentRow.find(".subledger");
-
-            fetchSubLedgerOptions(ui.item.value, subLedgerDropdown);
-
-            return false;
-        },
-    });
-
-    function fetchSubLedgerOptions(debitAccountId, subLedgerDropdown) {
-        $.ajax({
-            url: '<?php echo base_url("form/JournalEntry_ctrl/getSubLedgers");?>',
-            type: "POST",
-            data: { debit_ac_id: debitAccountId },
-            dataType: "json",
-            success: function (data) {
-                console.log(data);
-                subLedgerDropdown.empty();
-                subLedgerDropdown.append('<option value="">Select Subledger</option>');
-                if (Array.isArray(data)) {
-                    data.forEach(function (subLedger) {
-                        subLedgerDropdown.append(`<option value="${subLedger.id}">${subLedger.sub_ledger}</option>`);
-                    });
-                } else {
-                    console.error("Failed to fetch sub-ledgers: Unexpected response format.");
-                }
+    $(selector)
+        .autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response(data);
+                    },
+                });
             },
-            error: function (xhr, status, error) {
-                console.error("AJAX Error: " + error);
+            minLength: 0,
+            appendTo: "body",
+            select: function (event, ui) {
+                $(this).val(ui.item.label);
+                let hiddenField = $(this).attr("id") + "_id";
+                $("#" + hiddenField).val(ui.item.value);
+
+                if (typeof onSelectCallback === "function") {
+                    onSelectCallback(ui.item);
+                }
+
+                return false;
             },
+            focus: function (event, ui) {
+                $(this).val(ui.item.label);
+                return false;
+            },
+        })
+        .focus(function () {
+            $(this).autocomplete("search", "");
         });
-    }
-
-    $(`#${rowId} .creadit-ac`).autocomplete({
-        source: function (request, response) {
-            fetchAccountOptions("credit", request.term).done(function (data) {
-                console.log("Credit Data:", data);
-                if (Array.isArray(data)) {
-                    response(
-                        data.map((account) => {
-                            return {
-                                label: `${account.account_name} (${account.account_code})`,
-                                value: account.account_name,
-                                id: account.id,
-                            };
-                        })
-                    );
-                } else {
-                    console.error("Expected an array but received:", data);
-                }
-            });
-        },
-        minLength: 2,
-        select: function (event, ui) {
-            $(this).val(ui.item.label);
-
-            $(this).siblings(".hidden-creadit-id").remove();
-
-            $(this).after(`<input type="hidden" class="hidden-creadit-id" name="credit_ac_id[]" value="${ui.item.id}">`);
-
-            return false;
-        },
-    });
 }
 
 function updateBillAmount() {
@@ -448,4 +364,5 @@ function generateTdsJvNo() {
     const jvNo = "<?php echo $tdsJvNo;?>";
     $("#tdsJvNo").val(jvNo);
 }
+
 </script>
