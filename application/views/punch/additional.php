@@ -11,12 +11,12 @@
                <label for="">Date</label>
                <input type="text" name="finance_pucnh_date" id="date" class="form-control" readonly value="<?php echo date('Y-m-d'); ?>" >
             </div>
-            <div class="form-group col-md-4" style="background-color: #ffffff;     margin-bottom: 0;padding-bottom: 5px;">
-               <label for="">Business Entity</label>
-               <select  name="business_entity_id" id="business_entity_id" class="form-control">
-                  <option value="">Select</option>
-               </select>
+            <div class="form-group col-md-4" style="background-color: #ffffff; margin-bottom: 0; padding-bottom: 5px;">
+                <label for="">Business Entity</label>
+                <input type="text" id="business_entity" class="form-control" placeholder="Select Business Entity">
+                <input type="hidden" id="business_entity_id">
             </div>
+
             <div class="form-group col-md-12" style="background-color: #ffffff; margin-bottom: 0;padding-bottom: 5px;">
                <label for="">Narration</label>
                <textarea name="narration" id="narration" placeholder="Enter transaction details"  class="form-control" ><?php echo isset($punch_detail->narration) ? $punch_detail->narration : $punch_detail->Remark; ?></textarea>
@@ -54,20 +54,17 @@
                </div>
                <div class="form-group col-md-3" style="background-color: #ffffff;     margin-bottom: 0;padding-bottom: 5px;">
                   <label for="tdsJvNo">TDS Section</label>
-                  <?php
-                     $selectedTdsSection = isset($punch_detail->TDS_section) ? $punch_detail->TDS_section : '';
-                     ?>
-                  <select id="tdsSection" name="TDS_section" class="form-control">
-                     <option value="">Select Section</option>
-                  </select>
+                  <input type="text" id="tds_section" class="form-control" placeholder="Select TDS Section">
+                  <input type="hidden" id="tds_section_id">
+                  <input type="hidden" id="tds_rate">
                </div>
                <div class="form-group col-md-3" style="background-color: #ffffff;     margin-bottom: 0;padding-bottom: 5px;">
                   <label for="tdsPercentage">TDS Percentage</label>
-                  <input type="text" value="<?php echo isset($punch_detail->TDS_percentage) ? $punch_detail->TDS_percentage : ''; ?>" id="tdsPercentage" name="TDS_percentage" class="form-control" readonly placeholder="Enter TDS Percentage">
+                  <input type="text" value="<?php echo isset($punch_detail->TDS_percentage) ? $punch_detail->TDS_percentage : ''; ?>" id="tds_percentage" name="tds_percentage" class="form-control" readonly placeholder="Enter TDS Percentage">
                </div>
                <div class="form-group col-md-3" style="background-color: #ffffff;     margin-bottom: 0;padding-bottom: 5px;">
                   <label for="tdsAmount">TDS Amount</label>
-                  <input   type="text" id="tdsAmount" value="<?php echo isset($punch_detail->TDS_amount) ? $punch_detail->TDS_amount : ''; ?>" name="TDS_amount" class="form-control" readonly>
+                  <input   type="text" id="tds_amount" value="<?php echo isset($punch_detail->TDS_amount) ? $punch_detail->TDS_amount : ''; ?>" name="tds_amount" class="form-control" readonly>
                </div>
             </div>
             <div id="rows_container">
@@ -171,139 +168,15 @@
       </form>
 </div>
 <script>
-  $(document).ready(function () {
+$(document).ready(function () {
     let rowCount = 1;
-
-    function fetchAccountOptions(inputType, query) {
-        return $.ajax({
-            url: '<?php echo base_url("journal-entry/get-account-options");?>',
-            type: "GET",
-            data: {
-                type: inputType,
-                query: query,
-            },
-            dataType: "json",
-        });
-    }
-
-    function initializeAutocomplete(rowId) {
-        $(`#${rowId} .debit-ac`).autocomplete({
-            source: function (request, response) {
-                fetchAccountOptions("debit", request.term).done(function (data) {
-                    if (Array.isArray(data)) {
-                        response(
-                            data.map((account) => {
-                                return {
-                                    label: `${account.account_name} (${account.account_code})`,
-                                    value: account.account_name,
-                                    id: account.id,
-                                };
-                            })
-                        );
-                    } else {
-                        console.error("Expected an array but received:", data);
-                    }
-                });
-            },
-            minLength: 2,
-            select: function (event, ui) {
-                $(this).val(ui.item.label);
-                $(this).siblings(".hidden-debit-id").remove();
-                $(this).after(`<input type="hidden" class="hidden-debit-id" name="debit_ac_id[]" value="${ui.item.id}">`);
-
-                let parentRow = $(this).closest(".row");
-                let subLedgerDropdown = parentRow.find(".subledger");
-
-                fetchSubLedgerOptions(ui.item.value, subLedgerDropdown);
-
-                return false;
-            },
-        });
-
-        function fetchSubLedgerOptions(debitAccountId, subLedgerDropdown) {
-            $.ajax({
-                url: '<?php echo base_url("form/JournalEntry_ctrl/getSubLedgers");?>',
-                type: "POST",
-                data: { debit_ac_id: debitAccountId },
-                dataType: "json",
-                success: function (data) {
-                    console.log(data);
-                    subLedgerDropdown.empty();
-                    subLedgerDropdown.append('<option value="">Select Subledger</option>');
-                    if (Array.isArray(data)) {
-                        data.forEach(function (subLedger) {
-                            subLedgerDropdown.append(`<option value="${subLedger.id}">${subLedger.sub_ledger}</option>`);
-                        });
-                    } else {
-                        console.error("Failed to fetch sub-ledgers: Unexpected response format.");
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error("AJAX Error: " + error);
-                },
-            });
-        }
-
-        $(`#${rowId} .creadit-ac`).autocomplete({
-            source: function (request, response) {
-                fetchAccountOptions("credit", request.term).done(function (data) {
-                    console.log("Credit Data:", data);
-                    if (Array.isArray(data)) {
-                        response(
-                            data.map((account) => {
-                                return {
-                                    label: `${account.account_name} (${account.account_code})`,
-                                    value: account.account_name,
-                                    id: account.id,
-                                };
-                            })
-                        );
-                    } else {
-                        console.error("Expected an array but received:", data);
-                    }
-                });
-            },
-            minLength: 2,
-            select: function (event, ui) {
-                $(this).val(ui.item.label);
-
-                $(this).siblings(".hidden-creadit-id").remove();
-
-                $(this).after(`<input type="hidden" class="hidden-creadit-id" name="credit_ac_id[]" value="${ui.item.id}">`);
-
-                return false;
-            },
-        });
-    }
-
     initializeAutocomplete("row_1");
-
-    function updateBillAmount() {
-        let total = 0;
-
-        $(".amount").each(function () {
-            let value = parseFloat($(this).val()) || 0;
-            total += value;
-        });
-
-        var Grand_Total = parseFloat("<?= isset($punch_detail->Total_Amount) && $punch_detail->Total_Amount ? $punch_detail->Total_Amount : ($punch_detail->Grand_Total ?? 0) ?>");
-
-        let TDS_amount = $("#tdsAmount").val() || 0;
-
-        var maxAllowedAmount = total + parseFloat(TDS_amount);
-
-        if (maxAllowedAmount > Grand_Total) {
-            alert("Total bill amount cannot exceed the Grand Total including the TDS amount!");
-            $("#finalSubmitBtn").attr("disabled", "disabled");
-            $("#f_save_as_draft").attr("disabled", "disabled");
-        } else {
-            $("#finalSubmitBtn").removeAttr("disabled");
-            $("#f_save_as_draft").removeAttr("disabled");
-        }
-
-        $("#billAmount").val(maxAllowedAmount.toFixed(2));
-    }
-
+    initAutoCompleteInput("#business_entity", "<?= site_url('get-business-entities') ?>");
+    initAutoCompleteInput("#tds_section", "<?= site_url('get-tds-section') ?>", function(item) {
+        console.log(item);
+        $('#tds_rate').val(item.rate); 
+        $("#tds_section").trigger('change');
+    });
     $("#account").autocomplete({
         source: function (request, response) {
             $.ajax({
@@ -339,35 +212,27 @@
             return false;
         },
     });
-
     $("#add_row").click(function () {
         rowCount++;
         let newRow = $("#row_1")
             .clone()
             .attr("id", "row_" + rowCount);
-
         newRow.find("select, input").each(function () {
             let $this = $(this);
             let id = $this.attr("id");
-
             if (id) {
                 let newId = id.replace(/\d+$/, "") + rowCount;
                 $this.attr("id", newId);
             }
-
             if ($this.is('input[type="text"], input[type="number"], input[type="hidden"], select')) {
                 $this.val("");
             }
         });
-
         newRow.find(".remove_row").show();
         $("#rows_container").append(newRow);
-
         initializeAutocomplete(newRow.attr("id"));
-
         updateBillAmount();
     });
-
     $(document).on("click", ".remove_row", function () {
         let totalRows = $(".form-row").length;
 
@@ -378,11 +243,9 @@
             alert("At least one row must remain.");
         }
     });
-
     $(document).on("input", ".amount", function () {
         updateBillAmount();
     });
-
     $('input[name="tdsApplicable"]').change(function () {
         if ($("#tdsApplicableYes").is(":checked")) {
             generateTdsJvNo();
@@ -392,28 +255,6 @@
             $("#tdsJvNo").val("");
         }
     });
-
-    function generateTdsJvNo() {
-        const date = new Date();
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-
-        const jvNo = "<?php echo $tdsJvNo;?>";
-        $("#tdsJvNo").val(jvNo);
-    }
-
-    const tdsSections = [
-        { section: "194R", description: "Benefit or perquisite in respect of business or profession", rate: "10%" },
-        { section: "194H", description: "Commission or brokerage", rate: "5%" },
-        { section: "194JB", description: "Fee for professional service or royalty etc @10%", rate: "10%" },
-        { section: "194JA", description: "Fees for Technical Services (not being professional services) @2%", rate: "2%" },
-        { section: "194A", description: "Interest other than Interest on securities", rate: "10%" },
-        { section: "194C", description: "Payment to Contractor / Subcontractor / Advertisements", rate: "1%" },
-        { section: "194C", description: "Payment to Contractor / Subcontractor / Advertisements", rate: "2%" },
-        { section: "194I", description: "Rent (Land, building or furniture)", rate: "10%" },
-        { section: "194Q", description: "TDS on purchase of Goods", rate: "0.10%" },
-    ];
-
     $("#tdsSection").on("change", function () {
         var selectedSection = $(this).val();
         var sectionDetails = tdsSections.find((section) => section.section === selectedSection);
@@ -424,13 +265,187 @@
             $("#tdsPercentage").val("");
         }
     });
-
     $("#billAmount, #tdsPercentage").on("input change", function () {
         var billAmount = parseFloat("<?= isset($punch_detail->Grand_Total) ? $punch_detail->Grand_Total : 0 ?>");
-
         var percentage = parseFloat($("#tdsPercentage").val()) || 0;
         var tdsAmount = (billAmount * percentage) / 100;
         $("#tdsAmount").val(tdsAmount.toFixed(2));
     });
+    $("#tds_section").change(function () {
+        var tds_section_id = $("#tds_section_id").val();
+        var grand_total = parseFloat($("#Grand_Total").val()) || 0;
+        var tds_rate = parseFloat($("#tds_rate").val()) || 0;
+        $("#tds_percentage").val(tds_rate);
+        var tds_amount = (grand_total * tds_rate) / 100;
+        $("#tds_amount").val(tds_amount.toFixed(2));
+    });
+    
 });
+
+function initAutoCompleteInput(selector, url, onSelectCallback = null) {
+    $(selector).autocomplete({
+        source: function(request, response) {
+            $.ajax({
+                url: url,
+                type: "POST",
+                dataType: "json",
+                data: { term: request.term },
+                success: function(data) {
+                    response(data);
+                }
+            });
+        },
+        minLength: 0,
+        appendTo: "body", // <- Important addition
+        select: function(event, ui) {
+            $(this).val(ui.item.label);
+            var hiddenField = $(this).attr('id') + '_id';
+            $('#' + hiddenField).val(ui.item.value);
+
+            if (typeof onSelectCallback === 'function') {
+                onSelectCallback(ui.item);
+            }
+
+            return false;
+        },
+        focus: function(event, ui) {
+            $(this).val(ui.item.label);
+            return false;
+        }
+    }).focus(function() {
+        $(this).autocomplete("search", "");
+    });
+}
+
+
+function fetchAccountOptions(inputType, query) {
+    return $.ajax({
+        url: '<?php echo base_url("journal-entry/get-account-options");?>',
+        type: "GET",
+        data: {
+            type: inputType,
+            query: query,
+        },
+        dataType: "json",
+    });
+}
+
+function initializeAutocomplete(rowId) {
+    $(`#${rowId} .debit-ac`).autocomplete({
+        source: function (request, response) {
+            fetchAccountOptions("debit", request.term).done(function (data) {
+                if (Array.isArray(data)) {
+                    response(
+                        data.map((account) => {
+                            return {
+                                label: `${account.account_name} (${account.account_code})`,
+                                value: account.account_name,
+                                id: account.id,
+                            };
+                        })
+                    );
+                } else {
+                    console.error("Expected an array but received:", data);
+                }
+            });
+        },
+        minLength: 2,
+        select: function (event, ui) {
+            $(this).val(ui.item.label);
+            $(this).siblings(".hidden-debit-id").remove();
+            $(this).after(`<input type="hidden" class="hidden-debit-id" name="debit_ac_id[]" value="${ui.item.id}">`);
+
+            let parentRow = $(this).closest(".row");
+            let subLedgerDropdown = parentRow.find(".subledger");
+
+            fetchSubLedgerOptions(ui.item.value, subLedgerDropdown);
+
+            return false;
+        },
+    });
+
+    function fetchSubLedgerOptions(debitAccountId, subLedgerDropdown) {
+        $.ajax({
+            url: '<?php echo base_url("form/JournalEntry_ctrl/getSubLedgers");?>',
+            type: "POST",
+            data: { debit_ac_id: debitAccountId },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                subLedgerDropdown.empty();
+                subLedgerDropdown.append('<option value="">Select Subledger</option>');
+                if (Array.isArray(data)) {
+                    data.forEach(function (subLedger) {
+                        subLedgerDropdown.append(`<option value="${subLedger.id}">${subLedger.sub_ledger}</option>`);
+                    });
+                } else {
+                    console.error("Failed to fetch sub-ledgers: Unexpected response format.");
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX Error: " + error);
+            },
+        });
+    }
+
+    $(`#${rowId} .creadit-ac`).autocomplete({
+        source: function (request, response) {
+            fetchAccountOptions("credit", request.term).done(function (data) {
+                console.log("Credit Data:", data);
+                if (Array.isArray(data)) {
+                    response(
+                        data.map((account) => {
+                            return {
+                                label: `${account.account_name} (${account.account_code})`,
+                                value: account.account_name,
+                                id: account.id,
+                            };
+                        })
+                    );
+                } else {
+                    console.error("Expected an array but received:", data);
+                }
+            });
+        },
+        minLength: 2,
+        select: function (event, ui) {
+            $(this).val(ui.item.label);
+
+            $(this).siblings(".hidden-creadit-id").remove();
+
+            $(this).after(`<input type="hidden" class="hidden-creadit-id" name="credit_ac_id[]" value="${ui.item.id}">`);
+
+            return false;
+        },
+    });
+}
+
+function updateBillAmount() {
+    let total = 0;
+    $(".amount").each(function () {
+        let value = parseFloat($(this).val()) || 0;
+        total += value;
+    });
+    var Grand_Total = parseFloat("<?= isset($punch_detail->Total_Amount) && $punch_detail->Total_Amount ? $punch_detail->Total_Amount : ($punch_detail->Grand_Total ?? 0) ?>");
+    let TDS_amount = $("#tdsAmount").val() || 0;
+    var maxAllowedAmount = total + parseFloat(TDS_amount);
+    if (maxAllowedAmount > Grand_Total) {
+        alert("Total bill amount cannot exceed the Grand Total including the TDS amount!");
+        $("#finalSubmitBtn").attr("disabled", "disabled");
+        $("#f_save_as_draft").attr("disabled", "disabled");
+    } else {
+        $("#finalSubmitBtn").removeAttr("disabled");
+        $("#f_save_as_draft").removeAttr("disabled");
+    }
+    $("#billAmount").val(maxAllowedAmount.toFixed(2));
+}
+
+function generateTdsJvNo() {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+
+    const jvNo = "<?php echo $tdsJvNo;?>";
+    $("#tdsJvNo").val(jvNo);
+}
 </script>

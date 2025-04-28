@@ -47,7 +47,7 @@
                      <?php echo $this->session->flashdata('message'); ?>
                      <?php if (!empty($user_permission) && $user_permission == 'Y') : ?>
                         <div class="tabs-container">
-                           <div class="tabs active-tab" id="invoice-tab">Invoice Details</div>
+                           <div class="tabs active-tab" id="invoice-tab">Basic Details</div>
                            <div class="tabs" id="additional-info-tab">Additional Information</div>
                         </div>
                         <?php endif; ?>

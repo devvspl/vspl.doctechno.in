@@ -56,9 +56,12 @@ $route['search_with_filter'] = 'Search/search_with_filter';
 $route['search_with_filter_status'] = 'Search/search_with_filter_status';
 $route['get_search_with_filter_data'] = 'Search/get_search_with_filter_data';
 // >>>>>>>>>>>>>>>>>>>>>>>>> Punch Section <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
-// Punch routes
 $route['punch/my-punched-file'] = 'punch/my_punched_file';      
 $route['punch/my-punched-file/all'] = 'punch/my_punched_file/1';
+// >>>>>>>>>>>>>>>>>>>>>>>>> Additional Information <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
+$route['get-business-entities'] = 'accounts/AdditionalController/get_business_entities';
+$route['get-tds-section'] = 'accounts/AdditionalController/get_tds_section';
+
 
 
 
