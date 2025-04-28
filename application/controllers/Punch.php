@@ -159,7 +159,7 @@ class Punch extends CI_Controller {
         $user_id = $this->session->userdata('user_id');
         $Reject_Remark = $this->input->post('Remark');
         $this->db->where('Scan_Id', $Scan_Id);
-        $result = $this->db->update('scan_file', ['punch_rejected_finance' => 'Y', 'Finance_Resend_By' => $user_id, 'Finance_Resend_Remark' => $Reject_Remark, 'finance_punch' => 'P', 'Finance_Resend_Date' => date('Y-m-d') ]);
+        $result = $this->db->update('scan_file', ['finance_punch_status' => 'Y', 'Finance_Resend_By' => $user_id, 'Finance_Resend_Remark' => $Reject_Remark, 'finance_punch' => 'P', 'Finance_Resend_Date' => date('Y-m-d') ]);
         if ($result) {
             echo json_encode(['status' => '200', 'message' => 'File Resend Successfully.']);
         } else {

@@ -12,7 +12,7 @@ class Punch_model extends MY_Model {
     }
     function vspl_get_file_for_punch() {
         $group_id = $this->session->userdata('group_id');
-        $this->db->select('*')->from('scan_file')->where('File_Punched', 'Y')->where('Scan_Resend', 'N')->where_in('Group_Id', $group_id)->where('Final_Submit', 'Y')->where('finance_punch', 'N')->where('Is_Rejected', 'N')->where('punch_rejected_finance', 'N')->where("((Location IS NOT NULL AND Bill_Approved = 'Y')  OR Location IS NULL)")->order_by('Scan_Id', 'ASC');
+        $this->db->select('*')->from('scan_file')->where('File_Punched', 'Y')->where('Scan_Resend', 'N')->where_in('Group_Id', $group_id)->where('Final_Submit', 'Y')->where('finance_punch', 'N')->where('Is_Rejected', 'N')->where('finance_punch_status', 'N')->where("((Location IS NOT NULL AND Bill_Approved = 'Y')  OR Location IS NULL)")->order_by('Scan_Id', 'ASC');
         $query = $this->db->get();
         return $query->result_array();
     }
@@ -55,7 +55,7 @@ class Punch_model extends MY_Model {
     }
     function get_finance_rejected_punch_list() {
         $user_id = $this->session->userdata('user_id');
-        $query = $this->db->select('*')->from('scan_file')->where(array('Punch_By' => $user_id, 'punch_rejected_finance' => 'Y'))->order_by('Scan_Id', 'desc')->get();
+        $query = $this->db->select('*')->from('scan_file')->where(array('Punch_By' => $user_id, 'finance_punch_status' => 'Y'))->order_by('Scan_Id', 'desc')->get();
         return $query->result_array();
     }
     function get_total_punched_by_me() {
@@ -91,7 +91,7 @@ class Punch_model extends MY_Model {
     function finance_rejected_punch() {
         $user_id = $this->session->userdata('user_id');
         $this->db->where('Punch_By', $user_id);
-        $this->db->where('punch_rejected_finance', 'Y');
+        $this->db->where('finance_punch_status', 'Y');
         $query = $this->db->get('scan_file');
         return $query->num_rows();
     }
@@ -175,7 +175,7 @@ class Punch_model extends MY_Model {
         $this->db->join('master_work_location', 'cash_voucher_items.location_id = master_work_location.location_id', 'left');
         $this->db->join('master_region', 'cash_voucher_items.region_id = master_region.region_id', 'left');
         $this->db->join('master_department', 'cash_voucher_items.DepartmentID = master_department.department_id', 'left');
-        $this->db->where(['scan_file.Group_Id' => 16, 'scan_file.finance_punch' => 'Y', 'scan_file.File_Approved' => 'Y', 'scan_file.punch_rejected_finance' => 'N', 'punchfile.finance_punch_date IS NOT NULL' => null, 'punchfile.Finance_Punch_By IS NOT NULL' => null, ]);
+        $this->db->where(['scan_file.Group_Id' => 16, 'scan_file.finance_punch' => 'Y', 'scan_file.File_Approved' => 'Y', 'scan_file.finance_punch_status' => 'N', 'punchfile.finance_punch_date IS NOT NULL' => null, 'punchfile.Finance_Punch_By IS NOT NULL' => null, ]);
         if (!empty($doctype)) {
             $this->db->where('scan_file.DocType_Id', $doctype);
         }
@@ -196,7 +196,7 @@ class Punch_model extends MY_Model {
         $this->db->from('cash_voucher_items');
         $this->db->join('scan_file', 'scan_file.Scan_Id = cash_voucher_items.Scan_Id', 'left');
         $this->db->join('punchfile', 'scan_file.Scan_Id = punchfile.Scan_Id', 'left');
-        $this->db->where(['scan_file.Group_Id' => 16, 'scan_file.finance_punch' => 'Y', 'scan_file.punch_rejected_finance' => 'N', 'punchfile.finance_punch_date IS NOT NULL' => null, 'punchfile.Finance_Punch_By IS NOT NULL' => null, ]);
+        $this->db->where(['scan_file.Group_Id' => 16, 'scan_file.finance_punch' => 'Y', 'scan_file.finance_punch_status' => 'N', 'punchfile.finance_punch_date IS NOT NULL' => null, 'punchfile.Finance_Punch_By IS NOT NULL' => null, ]);
         if (!empty($doctype)) {
             $this->db->where('scan_file.DocType_Id', $doctype);
         }
@@ -227,7 +227,7 @@ class Punch_model extends MY_Model {
         $this->db->join('master_work_location', 'cash_voucher_items.location_id = master_work_location.location_id', 'left');
         $this->db->join('master_region', 'cash_voucher_items.region_id = master_region.region_id', 'left');
         $this->db->join('master_department', 'cash_voucher_items.DepartmentID = master_department.department_id', 'left');
-        $this->db->where(['scan_file.Group_Id' => 16, 'scan_file.finance_punch' => 'Y', 'scan_file.File_Approved' => 'Y', 'scan_file.punch_rejected_finance' => 'N', 'punchfile.finance_punch_date IS NOT NULL' => null, 'punchfile.Finance_Punch_By IS NOT NULL' => null, ]);
+        $this->db->where(['scan_file.Group_Id' => 16, 'scan_file.finance_punch' => 'Y', 'scan_file.File_Approved' => 'Y', 'scan_file.finance_punch_status' => 'N', 'punchfile.finance_punch_date IS NOT NULL' => null, 'punchfile.Finance_Punch_By IS NOT NULL' => null, ]);
         if (!empty($doctype)) {
             $this->db->where('scan_file.DocType_Id', $doctype);
         }
