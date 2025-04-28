@@ -208,6 +208,36 @@
                            <a href="<?= base_url(); ?>entry_confirmation"> <i class="fa fa-file"></i> <span>Entry Confirmation</span> </a>
                         </li>
                         <?php } ?>
+                        <?php if ($this->customlib->has_permission('Finance')) { ?>
+                        <li class="treeview <?= set_Topmenu('punch_master'); ?>">
+                           <a href="#"> <i class="fa fa-pencil-square-o"></i> <span>Punch Document</span> <i class="fa fa-angle-left pull-right"></i> </a>
+                           <ul class="treeview-menu">
+                              <li class="<?php echo set_Submenu('punch'); ?>">
+                                 <a href="<?= base_url(); ?>finance_punch"><i class="fa fa-angle-double-right"></i>Punch File</a>
+                              </li>
+                              <li class="<?php echo set_Submenu('my_punched_file'); ?>">
+                                 <a href="<?= base_url(); ?>finance/my-punched-file/all"><i class="fa fa-angle-double-right"></i>My Punched Files</a>
+                              </li>
+                           </ul>
+                        </li>
+                        <?php } ?>
+                        <?php if ($_SESSION['role'] == 'vspl_bill_approver') { ?>
+                        <li class="treeview <?= set_Topmenu('punch_master'); ?>">
+                           <a href="#"> <i class="fa fa-pencil-square-o"></i> <span>Bill Approval</span> <i class="fa fa-angle-left pull-right"></i> </a>
+                           <ul class="treeview-menu">
+                              <li class="<?php echo set_Submenu('finance/bill-approval/pending'); ?>">
+                                 <a href="<?= base_url(); ?>finance/bill-approval/N"><i class="fa fa-angle-double-right"></i>Pending</a>
+                              </li>
+                              <li class="<?php echo set_Submenu('finance/bill-approval/approved'); ?>">
+                                 <a href="<?= base_url(); ?>finance/bill-approval/Y"><i class="fa fa-angle-double-right"></i>Approved</a>
+                              </li>
+                              <li class="<?php echo set_Submenu('finance/bill-approval/approved'); ?>">
+                                 <a href="<?= base_url(); ?>finance/bill-approval/R"><i class="fa fa-angle-double-right"></i>Rejected</a>
+                              </li>
+                           </ul>
+                        </li>
+                        <?php } ?>
+                        
                         <?php if ($this->customlib->has_permission('Approve')) { ?>
                         <li class="treeview <?= set_Topmenu('approve_master'); ?>">
                            <a href="#"> <i class="fa fa-ils"></i> <span>Approve Document</span> <i class="fa fa-angle-left pull-right"></i> </a>
@@ -309,8 +339,6 @@
 </body>
 <script>
    $(document).ready(function () {
-
-   
      $("body").click(function () {
        $(".treeview").removeClass("active");
        $(".treeview-menu")

@@ -15,7 +15,7 @@ class VSPL_cash_voucher_ctrl extends CI_Controller
                 $Scan_Id = $this->input->post("Scan_Id");
                 $this->db->where(["Scan_Id" => $Scan_Id]);
                 $query = $this->db->update("scan_file", [
-                    "at_finance" => "Y",
+                    "finance_punch" => "Y",
                     "finance_punch_date" => date("Y-m-d"),
                     "Finance_Punch_By" => $this->session->userdata("user_id"),
                 ]);

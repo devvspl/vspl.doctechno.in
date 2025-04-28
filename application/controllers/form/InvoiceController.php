@@ -35,7 +35,7 @@ class InvoiceController extends CI_Controller {
             $this->db->insert_batch('invoice_detail', $invoice_details);
         }
         if ($is_update) {
-            $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', ['Is_Rejected' => 'N', 'at_finance' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N', ]);
+            $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', ['Is_Rejected' => 'N', 'finance_punch' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N', ]);
         }
         $this->db->trans_complete();
         if ($post['submit']) {

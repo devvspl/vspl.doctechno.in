@@ -58,6 +58,7 @@ $route['get_search_with_filter_data'] = 'Search/get_search_with_filter_data';
 // >>>>>>>>>>>>>>>>>>>>>>>>> Punch Section <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
 $route['punch/my-punched-file'] = 'punch/my_punched_file';      
 $route['punch/my-punched-file/all'] = 'punch/my_punched_file/1';
+
 // >>>>>>>>>>>>>>>>>>>>>>>>> Additional Information <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
 $route['get-business-entities'] = 'accounts/AdditionalController/get_business_entities';
 $route['get-tds-section'] = 'accounts/AdditionalController/get_tds_section';
@@ -72,7 +73,13 @@ $route['get-crops'] = 'accounts/AdditionalController/get_crops';
 $route['get-activities'] = 'accounts/AdditionalController/get_activities';
 $route['get-debit-accounts'] = 'accounts/AdditionalController/get_debit_accounts';
 $route['get-payment-methods'] = 'accounts/AdditionalController/get_payment_methods';
-$route['store-additional-detail'] = 'accounts/AdditionalController/StoreUpdate';
+$route['store-additional-detail'] = 'accounts/AdditionalController/store_update';
+$route['finance/bill-approval/(:any)'] = 'punch/my_finance_bill_approval_file/$1';
+$route['approve_file/(:num)'] = 'punch/approve_file/$1';
+$route['reject_file/(:num)'] = 'punch/reject_file/$1';
+
+
+
 
 
 

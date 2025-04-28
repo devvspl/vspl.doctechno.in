@@ -238,12 +238,12 @@ class Bank_ctrl extends CI_Controller {
                 $FileID = $this->db->select('FileID')->where('Scan_Id', $Scan_Id)->get('punchfile')->row()->FileID;
                 $this->db->where('FileID', $FileID)->update('sub_punchfile', ['Amount' => '-' . $Amount, 'Comment' => $Remark]);
                 $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', ['Is_Rejected' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N']);
-                $query = $this->db->where("Scan_Id", $Scan_Id)->update("scan_file", ['at_finance' => 'N', 'Punch_By' => $this->session->userdata("user_id"), 'Punch_Date' => date('Y-m-d H:i:s') ]);
+                $query = $this->db->where("Scan_Id", $Scan_Id)->update("scan_file", ['finance_punch' => 'N', 'Punch_By' => $this->session->userdata("user_id"), 'Punch_Date' => date('Y-m-d H:i:s') ]);
             } else {
                 $this->db->insert('punchfile', $data);
                 $insert_id = $this->db->insert_id();
                 $this->db->insert('sub_punchfile', ['FileID' => $insert_id, 'Amount' => '-' . $Amount, 'Comment' => $Remark]);
-                $query = $this->db->where("Scan_Id", $Scan_Id)->update("scan_file", ['at_finance' => 'N', 'Punch_By' => $this->session->userdata("user_id"), 'Punch_Date' => date('Y-m-d H:i:s') ]);
+                $query = $this->db->where("Scan_Id", $Scan_Id)->update("scan_file", ['finance_punch' => 'N', 'Punch_By' => $this->session->userdata("user_id"), 'Punch_Date' => date('Y-m-d H:i:s') ]);
             }
             if ($query) {
                 $this->session->set_flashdata('message', '<div class="alert alert-success text-left">Cash Voucher ' . ($this->customlib->check_punchfile($Scan_Id) ? 'updated' : 'added') . ' successfully</div>');

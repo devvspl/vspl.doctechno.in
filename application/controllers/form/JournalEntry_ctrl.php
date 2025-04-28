@@ -14,7 +14,7 @@ class JournalEntry_ctrl extends CI_Controller
             if ($this->input->post("submit")) {
                 $Scan_Id = $this->input->post("Scan_Id");
                 $this->db->where(['Scan_Id' => $Scan_Id]);
-                $query = $this->db->update('scan_file', ['at_finance' => 'Y', 'finance_punch_date' => date('Y-m-d'), 'Finance_Punch_By' => $this->session->userdata("user_id")]);
+                $query = $this->db->update('scan_file', ['finance_punch' => 'Y', 'finance_punch_date' => date('Y-m-d'), 'Finance_Punch_By' => $this->session->userdata("user_id")]);
                 $this->customlib->update_file_path($Scan_Id);
                 $this->db->trans_complete();
                 if ($this->db->trans_status() === false) {
@@ -156,7 +156,7 @@ class JournalEntry_ctrl extends CI_Controller
             }
             if ($this->input->post("submit_punch")) {
                 $Scan_Id = (int)$this->input->post('Scan_Id');
-                $query = $this->db->where("Scan_Id", $Scan_Id)->update("scan_file", ["at_finance" => "N", 'Punch_By' => $this->session->userdata("user_id"), 'Punch_Date' => date('Y-m-d H:i:s')]);
+                $query = $this->db->where("Scan_Id", $Scan_Id)->update("scan_file", ["finance_punch" => "N", 'Punch_By' => $this->session->userdata("user_id"), 'Punch_Date' => date('Y-m-d H:i:s')]);
                 $this->db->trans_complete();
                 if ($this->db->trans_status() === false) {
                     $this->db->trans_rollback();

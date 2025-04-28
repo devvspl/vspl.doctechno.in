@@ -17,10 +17,6 @@
                   </div>
                </div>
                <div class="box-body">
-                  <div style="display: flex; flex-direction: column; align-items: center;">
-                     <div class="loader" id="loader" style="display: none;"></div>
-                     <span id="loader-text" style="display: none; margin-top: 10px; font-size: 14px; color: #3a495e;">Please Wait...</span>
-                  </div>
                   <div class="row">
                      <div class="col-md-4">
                         <?php if ($rec->File_Ext == 'pdf') : ?>
@@ -55,7 +51,7 @@
                         <?php $this->load->view('punch/' . $doc_config['view']); ?>
                         <?php endif; ?>
                         <?php if (!empty($user_permission) && $user_permission == 'Y') : ?>
-                        <?php $this->load->view('punch/additional'); ?>
+                        <?php $this->load->view('punch/additional', $main_record); ?>
                         <?php endif; ?>
                      </div>
                   </div>

@@ -146,7 +146,7 @@
       <?php 
          if ($_SESSION['role'] == 'user') {  
             if ($this->customlib->has_permission('Finance')) { 
-                if ($rec->at_finance == 'N') { 
+                if ($rec->finance_punch == 'N') { 
                     ?>
       <style>.select2-container--default .select2-selection--single {
          background-color: #e9ecef !important;

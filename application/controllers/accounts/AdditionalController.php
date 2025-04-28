@@ -76,47 +76,76 @@ class AdditionalController extends CI_Controller {
         $result = $this->AdditionalModel->get_autocomplete_list('master_payment_method', 'payment_method_name', 'id', $query);
         echo json_encode($result);
     }
-    public function StoreUpdate() {
-        $this->form_validation->set_rules('document_number', 'Document Number', 'required');
-        $this->form_validation->set_rules('finance_pucnh_date', 'Document Date', 'required');
-        $this->form_validation->set_rules('narration', 'Narration', 'required');
-        if ($this->form_validation->run() == FALSE) {
-            $this->session->set_flashdata('error', validation_errors());
-            redirect($_SERVER['HTTP_REFERER']);
-        } else {
-            $post = $this->input->post();
-            $scan_id = $post['Scan_Id'];
-            $document_no = $post['document_number'];
-            $document_date = $post['finance_pucnh_date'];
-            $narration = $post['narration'];
-            $business_entity_id = $post['business_entity_id'];
-            $tds_applicable = $post['tdsApplicable']??'No';
-            $tds_jv_no = $post['TDS_JV_no']??null;
-            $tds_section_id = $post['tds_section_id']??null;
-            $tds_percentage = $post['tds_percentage']??null;
-            $tds_amount = $post['tds_amount']??null;
-            $mainData = ['scan_id' => $scan_id, 'document_no' => $document_no, 'document_date' => $document_date, 'business_entity_id' => $business_entity_id, 'narration' => $narration, 'tds_applicable' => ucfirst(strtolower($tds_applicable)), 'tds_jv_no' => $tds_jv_no, 'tds_section_id' => $tds_section_id, 'tds_percentage' => $tds_percentage, 'tds_amount' => $tds_amount, ];
-            $existing = $this->db->get_where('tbl_additional_information', ['scan_id' => $scan_id])->row();
-            if ($existing) {
-                $this->db->where('scan_id', $scan_id)->update('tbl_additional_information', $mainData);
-                $mainId = $existing->id;
+    public function store_update() {
+        $this->db->trans_start();
+        try {
+            $this->form_validation->set_rules('document_number', 'Document Number', 'required');
+            $this->form_validation->set_rules('finance_pucnh_date', 'Document Date', 'required');
+            $this->form_validation->set_rules('narration', 'Narration', 'required');
+            if ($this->form_validation->run() == FALSE) {
+                $this->session->set_flashdata('error', validation_errors());
+                redirect($_SERVER['HTTP_REFERER']);
             } else {
-                $this->db->insert('tbl_additional_information', $mainData);
-                $mainId = $this->db->insert_id();
-            }
-            if (!empty($post['cost_center_id']) && is_array($post['cost_center_id'])) {
-                $this->db->where('scan_id', $scan_id)->delete('tbl_additional_information_items');
-                foreach ($post['cost_center_id'] as $index => $cost_center_id) {
-                    if (empty($cost_center_id)) {
-                        continue;
+                $post = $this->input->post();
+                $scan_id = $post['scan_id'];
+                $document_no = $post['document_number'];
+                $document_date = $post['finance_pucnh_date'];
+                $narration = $post['narration'];
+                $business_entity_id = $post['business_entity_id'];
+                $tds_applicable = $post['tdsApplicable']??'No';
+                if ($tds_applicable === 'Yes') {
+                    $tds_jv_no = $post['TDS_JV_no']??null;
+                    $tds_section_id = $post['tds_section_id']??null;
+                    $tds_percentage = $post['tds_percentage']??null;
+                    $tds_amount = $post['tds_amount']??null;
+                } else {
+                    $tds_jv_no = null;
+                    $tds_section_id = null;
+                    $tds_percentage = null;
+                    $tds_amount = null;
+                }
+                $total_amount = $post['finance_total_Amount']??null;
+                $mainData = ['scan_id' => $scan_id, 'document_no' => $document_no, 'document_date' => $document_date, 'business_entity_id' => $business_entity_id, 'narration' => $narration, 'tds_applicable' => ucfirst(strtolower($tds_applicable)), 'tds_jv_no' => $tds_jv_no, 'tds_section_id' => $tds_section_id, 'tds_percentage' => $tds_percentage, 'tds_amount' => $tds_amount, 'total_amount' => $total_amount];
+                $existing = $this->db->get_where('tbl_additional_information', ['scan_id' => $scan_id])->row();
+                if ($existing) {
+                    $this->db->where('scan_id', $scan_id)->update('tbl_additional_information', $mainData);
+                    $mainId = $existing->id;
+                } else {
+                    $this->db->insert('tbl_additional_information', $mainData);
+                    $mainId = $this->db->insert_id();
+                }
+                if (isset($post['final_submit'])) {
+                    $updateData = ['finance_punch' => 'Y', 'finance_punch_by' => $this->session->userdata('user_id'), 'finance_punch_date' => date('Y-m-d') ];
+                    $this->db->where('scan_id', $scan_id)->update('scan_file', $updateData);
+                }
+                if (!empty($post['cost_center_id']) && is_array($post['cost_center_id'])) {
+                    $this->db->where('scan_id', $scan_id)->delete('tbl_additional_information_items');
+                    foreach ($post['cost_center_id'] as $index => $cost_center_id) {
+                        if (empty($cost_center_id)) {
+                            continue;
+                        }
+                        $itemData = ['scan_id' => $scan_id, 'cost_center_id' => $cost_center_id, 'department_id' => $post['department_id'][$index]??null, 'business_unit_id' => $post['business_unit_id'][$index]??null, 'region_id' => $post['region_id'][$index]??null, 'state_id' => $post['state_id'][$index]??null, 'location_id' => $post['location_id'][$index]??null, 'category_id' => $post['category_id'][$index]??null, 'crop_id' => $post['crop_id'][$index]??null, 'activity_id' => $post['activity_id'][$index]??null, 'debit_account_id' => $post['debit_ac_id'][$index]??null, 'payment_method_id' => $post['payment_method_id'][$index]??null, 'reference' => $post['reference_no'][$index]??null, 'remark' => $post['item_remark'][$index]??null, 'amount' => $post['item_total_amount'][$index]??null, 'tds_amount' => $post['item_tds_amount'][$index]??null, ];
+                        $this->db->insert('tbl_additional_information_items', $itemData);
                     }
-                    $itemData = ['scan_id' => $scan_id, 'cost_center_id' => $cost_center_id, 'department_id' => $post['department_id'][$index]??null, 'business_unit_id' => $post['business_unit_id'][$index]??null, 'region_id' => $post['region_id'][$index]??null, 'state_id' => $post['state_id'][$index]??null, 'location_id' => $post['location_id'][$index]??null, 'category_id' => $post['category_id'][$index]??null, 'crop_id' => $post['crop_id'][$index]??null, 'activity_id' => $post['activity_id'][$index]??null, 'debit_account_id' => $post['debit_ac_id'][$index]??null, 'payment_method_id' => $post['payment_method_id'][$index]??null, 'reference' => $post['reference_no'][$index]??null, 'remark' => $post['item_remark'][$index]??null, 'amount' => $post['item_total_amount'][$index]??null, ];
-                    $this->db->insert('tbl_additional_information_items', $itemData);
                 }
             }
-            $this->session->set_flashdata('success', 'Data saved successfully!');
+            $this->db->trans_complete();
+            if ($this->db->trans_status() === FALSE) {
+                $this->session->set_flashdata('error', 'There was an error saving the data.');
+                $this->db->trans_rollback();
+                redirect($_SERVER['HTTP_REFERER']);
+            } else {
+                $this->session->set_flashdata('success', 'Data saved successfully!');
+                redirect('finance/my-punched-file/all');
+            }
+            
+        }
+        catch(Exception $e) {
+            $this->db->trans_rollback();
+            $this->session->set_flashdata('error', 'There was an error: ' . $e->getMessage());
             redirect($_SERVER['HTTP_REFERER']);
         }
     }
+
 }
 ?>

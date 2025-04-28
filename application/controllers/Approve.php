@@ -137,8 +137,8 @@ class Approve extends CI_Controller {
         $this->db->where('Is_Deleted', 'N');
         $this->db->where('scan_file.Group_Id', $group_id);
     $case_condition = "(CASE 
-                        WHEN DocType_Id = 57 THEN at_finance = 'Y'
-                        WHEN DocType_Id = 58 THEN at_finance = 'Y'
+                        WHEN DocType_Id = 57 THEN finance_punch = 'Y'
+                        WHEN DocType_Id = 58 THEN finance_punch = 'Y'
                         ELSE 1=1
                     END)";
         $this->db->where($case_condition, null, false);
