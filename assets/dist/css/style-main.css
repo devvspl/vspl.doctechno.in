@@ -10783,7 +10783,7 @@ textarea.form-control {
 }
 .ui-widget-content {
     list-style-type: none !important;
-    width: 100% !important;
+    width: 20% !important;
 }
 .ui-widget-content li {
   cursor: pointer;
