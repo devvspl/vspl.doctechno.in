@@ -111,7 +111,7 @@
                                  <?php } ?>
                               </td>
                               <td>
-                                 <a href="<?php echo base_url(); ?>file_detail/<?= $row['Scan_Id'] ?>/<?= $row['DocType_Id'] ?>" class="btn btn-info btn-xs" target="_blank"><i class="fa fa-eye"></i></a>
+                                 <a href="<?php echo base_url(); ?>vspl_file_detail/<?= $row['Scan_Id'] ?>/<?= $row['DocType_Id'] ?>" class="btn btn-info btn-xs" target="_blank"><i class="fa fa-eye"></i></a>
                               </td>
                               <?php
                                  }

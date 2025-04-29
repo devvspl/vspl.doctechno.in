@@ -10,7 +10,13 @@
          </div>
          <div class="form-group col-md-4" style="background-color: #ffffff;     margin-bottom: 0;padding-bottom: 5px;">
             <label for="">Date <span class="text-danger">*</span></label>
-            <input type="text" name="finance_pucnh_date" id="date" class="form-control" readonly value="<?= isset($main_record) && isset($main_record['document_date']) ? $main_record['document_date'] : (isset($punch_detail) && isset($punch_detail['document_date']) ? $punch_detail['document_date'] : date('Y-m-d')); ?>" >
+            <input type="text" name="finance_pucnh_date" id="date" class="form-control" readonly 
+               value="<?= 
+                  isset($main_record) && !empty($main_record['document_date']) ? $main_record['document_date'] : 
+                  (isset($punch_detail) && !empty($punch_detail->document_date) ? $punch_detail->document_date : 
+                  date('Y-m-d')) 
+               ?>">
+
          </div>
          <div class="form-group col-md-4" style="background-color: #ffffff; margin-bottom: 0; padding-bottom: 5px;">
             <label for="">Business Entity</label>
@@ -23,26 +29,27 @@
 
          </div>
          <div class="form-group col-md-12 tds-applicable-group" style="display: flex; gap: 15px; background-color: #ffffff; margin-bottom: 0; padding-bottom: 5px;">
-            <label for="tdsApplicable">TDS Applicable</label>
-            <div class="form-check">
-            <input class="form-check-input" type="radio" name="tdsApplicable" id="tdsApplicableYes" value="Yes"
-               <?= (isset($main_record['tds_applicable']) && $main_record['tds_applicable'] === 'Yes') ? 'checked' : ''; ?>>
-               <label class="form-check-label" for="tdsApplicableYes">Yes</label>
-            </div>
-            <div class="form-check">
-            <input class="form-check-input" type="radio" name="tdsApplicable" id="tdsApplicableNo" value="No"
-            <?= (isset($main_record['tds_applicable']) && $main_record['tds_applicable'] === 'No') ? 'checked' : ''; ?>>
-            <label class="form-check-label" for="tdsApplicableNo">No</label>
-            </div>
-         </div>
+    <label for="tdsApplicable">TDS Applicable</label>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="tdsApplicable" id="tdsApplicableYes" value="Yes"
+            <?= (isset($main_record['tds_applicable']) && $main_record['tds_applicable'] === 'Yes') ? 'checked' : ''; ?>>
+        <label class="form-check-label" for="tdsApplicableYes">Yes</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="tdsApplicable" id="tdsApplicableNo" value="No"
+            <?= (isset($main_record['tds_applicable']) && $main_record['tds_applicable'] === 'No') ? 'checked' : 'checked'; ?>>
+        <label class="form-check-label" for="tdsApplicableNo">No</label>
+    </div>
+</div>
+
 
          <?php  $tds_display = (isset($main_record) && isset($main_record['tds_applicable']) && $main_record['tds_applicable'] == 'Yes') ? 'block' : 'none';?>
          <div id="tdsDetailsForm" class="tds-details-form" style="display: <?= $tds_display ?>; margin-top: 15px;">
          <div class="form-group col-md-3" style="background-color: #ffffff; margin-bottom: 0; padding-bottom: 5px;">
-   <label for="tdsJvNo">TDS JV No</label>
-   <input type="text" id="tdsJvNo" name="TDS_JV_no" class="form-control" readonly
-   value="<?= (!empty($main_record['tds_jv_no'])) ? $main_record['tds_jv_no'] : (isset($punch_detail->tdsJvNo) ? $punch_detail->tdsJvNo : ''); ?>">
-</div>
+            <label for="tdsJvNo">TDS JV No</label>
+            <input type="text" id="tdsJvNo" name="TDS_JV_no" class="form-control" readonly
+            value="<?= (!empty($main_record['tds_jv_no'])) ? $main_record['tds_jv_no'] : (isset($punch_detail->tdsJvNo) ? $punch_detail->tdsJvNo : ''); ?>">
+         </div>
 
 
             <div class="form-group col-md-3" style="background-color: #ffffff; margin-bottom: 0; padding-bottom: 5px;">
@@ -125,9 +132,9 @@
                     <input type="hidden" name="debit_ac_id[]" id="debit_ac_id_<?= $index + 1 ?>" value="<?= isset($item['debit_account_id']) ? $item['debit_account_id'] : ''; ?>">
                 </div>
                <div class="form-group col-md-3">
-                  <label for="payment_method">Payment Method</label>
-                  <input type="text" name="payment_method_name[]" id="payment_method_<?= $index + 1 ?>" class="form-control autocomplete-payment-method" value="<?= isset($item['payment_method']) ? $item['payment_method'] : ''; ?>">
-                  <input type="hidden" name="payment_method_id[]" id="payment_method_id_<?= $index + 1 ?>" value="<?= isset($item['payment_method_id']) ? $item['payment_method_id'] : ''; ?>">
+                  <label for="payment_term">Payment Term</label>
+                  <input type="text" name="payment_term_name[]" id="payment_term_<?= $index + 1 ?>" class="form-control autocomplete-payment-term" value="<?= isset($item['payment_term']) ? $item['payment_term'] : ''; ?>">
+                  <input type="hidden" name="payment_term_id[]" id="payment_term_id_<?= $index + 1 ?>" value="<?= isset($item['payment_term_id']) ? $item['payment_term_id'] : ''; ?>">
                 </div>
                <div class="form-group col-md-3">
                   <label for="amount">Amount</label>
@@ -203,9 +210,9 @@
                   <input type="hidden" name="debit_ac_id[]" id="debit_ac_id_1" value="">
                </div>
                <div class="form-group col-md-3">
-                  <label for="payment_method">Payment Method</label>
-                  <input type="text" name="payment_method_name[]" id="payment_method_1" class="form-control autocomplete-payment-method">
-                  <input type="hidden" name="payment_method_id[]" id="payment_method_id_1" value="">
+                  <label for="payment_term">Payment Term</label>
+                  <input type="text" name="payment_term_name[]" id="payment_term_1" class="form-control autocomplete-payment-term">
+                  <input type="hidden" name="payment_term_id[]" id="payment_term_id_1" value="">
                </div>
                <div class="form-group col-md-3">
                   <label for="amount">Amount</label>
@@ -376,7 +383,7 @@ function initializeAllAutoCompleteInputs(rowNo) {
     initAutoCompleteInput("#crop_" + rowNo, "<?= site_url('get-crops') ?>");
     initAutoCompleteInput("#activity_" + rowNo, "<?= site_url('get-activities') ?>");
     initAutoCompleteInput("#debit_ac_" + rowNo, "<?= site_url('get-debit-accounts') ?>");
-    initAutoCompleteInput("#payment_method_" + rowNo, "<?= site_url('get-payment-methods') ?>");
+    initAutoCompleteInput("#payment_term_" + rowNo, "<?= site_url('get-payment-term') ?>");
 }
 
 function initAutoCompleteInput(selector, url, onSelectCallback = null) {
@@ -401,12 +408,12 @@ function initAutoCompleteInput(selector, url, onSelectCallback = null) {
                 let currentId = $(this).attr("id");
                 let hiddenFieldId = currentId;
 
-                // Check if the input field has a numeric suffix to generate the hidden field
+                
                 if (/\d+$/.test(currentId)) {
-                    // If it has a number at the end (e.g., cost_center_1), change the hidden field ID to cost_center_id_1
+                    
                     hiddenFieldId = currentId.replace(/_(\d+)$/, "_id_$1");
                 } else {
-                    // If no numeric suffix, use the same ID for the hidden field
+                    
                     hiddenFieldId = currentId + "_id";
                 }
 

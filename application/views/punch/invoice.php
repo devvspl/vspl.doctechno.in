@@ -20,7 +20,8 @@
             </div>
             <div class="form-group col-md-3">
                <label for="">Purchase Order Date:</label>
-               <input type="text" name="Buyer_Order_Date" id="Buyer_Order_Date" class="form-control form-control-sm datepicker" value="<?= (isset($punch_detail->BookingDate)) ? date('Y-m-d', strtotime($punch_detail->BookingDate)) : '' ?>">
+               <input type="text" name="Buyer_Order_Date" id="Buyer_Order_Date" class="form-control form-control-sm datepicker" 
+               value="<?= formatSafeDate($punch_detail->BookingDate ?? '') ?>">
             </div>
          </div>
          <div class="row" style="margin-bottom: 5px;">
@@ -93,7 +94,7 @@
             </div>
             <div class="form-group col-md-3">
                <label for="">Delivery Note Date:</label>
-               <input type="text" name="Delivery_Note_Date" id="Delivery_Note_Date" class="form-control form-control-sm datepicker" value="<?= (isset($punch_detail->DueDate)) ? date('Y-m-d', strtotime($punch_detail->DueDate)) : '' ?>">
+               <input type="text" name="Delivery_Note_Date" id="Delivery_Note_Date" class="form-control form-control-sm datepicker" value="<?= formatSafeDate($punch_detail->DueDate ?? '') ?>">
             </div>
             <div class="form-group col-md-3">
                <label for="">LR Number:</label>
@@ -101,7 +102,7 @@
             </div>
             <div class="form-group col-md-3">
                <label for="">LR Date:</label>
-               <input type="text" name="LR_Date" id="LR_Date" class="form-control form-control-sm datepicker" value="<?= (isset($punch_detail->File_Date)) ? date('Y-m-d', strtotime($punch_detail->File_Date)) : '' ?>">
+               <input type="text" name="LR_Date" id="LR_Date" class="form-control form-control-sm datepicker" value="<?= formatSafeDate($punch_detail->File_Date ?? '') ?>" >
             </div>
             <div class="form-group col-md-3">
                <label for="">Cartoon Number:</label>

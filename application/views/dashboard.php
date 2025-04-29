@@ -776,7 +776,7 @@ $bill_pending = '';
 						</a>
 					</div>
 				</div>
-				<div class="col-md-3 col-sm-6">
+				<!-- <div class="col-md-3 col-sm-6">
 					<div class="info-box">
 						<a href="javascript:void(0);">
 							<span class="info-box-icon bg-red"><i class="fa fa-exclamation-triangle"></i></span>
@@ -786,7 +786,7 @@ $bill_pending = '';
 							</div>
 						</a>
 					</div>
-				</div>
+				</div> -->
 
 				<div class="col-md-3 col-sm-6">
 					<div class="info-box">
@@ -806,6 +806,17 @@ $bill_pending = '';
 							<div class="info-box-content">
 								<span class="info-box-text">Punch Rejected</span>
 								<span class="info-box-number"><?= $vspl_rejected_punch ?></span>
+							</div>
+						</a>
+					</div>
+				</div>
+				<div class="col-md-3 col-sm-6">
+					<div class="info-box">
+						<a href="<?= base_url(); ?>finance_rejected_punch_1">
+							<span class="info-box-icon bg-red"><i class="fa fa-exclamation-triangle"></i></span>
+							<div class="info-box-content">
+								<span class="info-box-text">Finance Punch Rejected</span>
+								<span class="info-box-number"><?= $vspl_finance_rejected_punch ?></span>
 							</div>
 						</a>
 					</div>

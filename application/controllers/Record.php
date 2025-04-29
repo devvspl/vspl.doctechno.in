@@ -12,6 +12,36 @@ class Record extends CI_Controller {
 			redirect('/');
 		}
 	}
+
+	public function get_additional_information_by_scan_id($scan_id) {
+        $this->db->select('ai.*, be.business_entity_name, td.section');
+        $this->db->from('tbl_additional_information ai');
+        $this->db->join('master_business_entity be', 'be.business_entity_id = ai.business_entity_id', 'left');
+        $this->db->join('master_tds_sections td', 'td.id = ai.tds_section_id', 'left');
+        $this->db->where('ai.scan_id', $scan_id);
+        $mainRecord = $this->db->get()->row_array();;
+        if (empty($mainRecord)) {
+            return null;
+        }
+        $this->db->select('aii.*, cc.cost_center_name, d.department_name, bu.business_unit_name, r.region_name, s.state_name, l.city_village_name as location_name, c.category_name, cr.crop_name, a.activity_name, da.account_name as debit_account, pm.payment_term_name as payment_term');
+        $this->db->from('tbl_additional_information_items aii');
+        $this->db->join('master_cost_center cc', 'cc.cost_center_id = aii.cost_center_id', 'left');
+        $this->db->join('core_department d', 'd.api_id = aii.department_id', 'left');
+        $this->db->join('core_business_unit bu', 'bu.api_id = aii.business_unit_id', 'left');
+        $this->db->join('core_region r', 'r.api_id = aii.region_id', 'left');
+        $this->db->join('core_state s', 's.api_id = aii.state_id', 'left');
+        $this->db->join('core_city_village l', 'l.api_id = aii.location_id', 'left');
+        $this->db->join('master_category c', 'c.category_id = aii.category_id', 'left');
+        $this->db->join('core_crop cr', 'cr.api_id = aii.crop_id', 'left');
+        $this->db->join('master_activity a', 'a.activity_id = aii.activity_id', 'left');
+        $this->db->join('master_account_ledger da', 'da.id = aii.debit_account_id', 'left');
+        $this->db->join('payment_term_master pm', 'pm.id = aii.payment_term_id', 'left');
+        $this->db->where('aii.scan_id', $scan_id);
+        $items = $this->db->get()->result_array();
+        $mainRecord['items'] = $items;
+        return $mainRecord;
+    }
+
 	public function index($Scan_Id, $DocTypeId) {
 		$this->session->set_userdata('top_menu', 'punch_master');
 		$this->session->set_userdata('sub_menu', 'punch');
@@ -24,6 +54,18 @@ class Record extends CI_Controller {
 		$this->data['main'] = 'records/_record';
 		$this->load->view('layout/template', $this->data);
 	}
+	public function vspl_index($Scan_Id, $DocTypeId) {
+		$this->session->set_userdata('top_menu', 'punch_master');
+		$this->session->set_userdata('sub_menu', 'punch');
+	
+		$this->data['file_detail'] = $this->Record_model->vspl_getRecordFile_Accounting($Scan_Id);
+		$mainRecord = $this->get_additional_information_by_scan_id($Scan_Id);
+		$this->data['main_record'] = $mainRecord ? $mainRecord : null;
+	
+		$this->data['main'] = 'records/_vspl_record';
+		$this->load->view('layout/template', $this->data);
+	}
+	
 	public function admin_rejected_list() {
 		$this->data['rejected_list'] = $this->Record_model->getRejectedList();
 		$this->data['main'] = 'records/admin_rejected_list';

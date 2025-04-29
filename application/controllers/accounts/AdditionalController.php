@@ -53,7 +53,7 @@ class AdditionalController extends CI_Controller {
     }
     public function get_categories() {
         $query = $this->input->post('term');
-        $result = $this->AdditionalModel->get_autocomplete_list('master_category', 'category_name', 'category_id', $query);
+        $result = $this->AdditionalModel->get_autocomplete_list('core_category', 'category_name', 'api_id', $query);
         echo json_encode($result);
     }
     public function get_crops() {
@@ -71,9 +71,9 @@ class AdditionalController extends CI_Controller {
         $result = $this->AdditionalModel->get_autocomplete_list('master_account_ledger', 'account_name', 'id', $query);
         echo json_encode($result);
     }
-    public function get_payment_methods() {
+    public function get_payment_term() {
         $query = $this->input->post('term');
-        $result = $this->AdditionalModel->get_autocomplete_list('master_payment_method', 'payment_method_name', 'id', $query);
+        $result = $this->AdditionalModel->get_autocomplete_list('payment_term_master', 'payment_term_name', 'id', $query);
         echo json_encode($result);
     }
     public function store_update() {
@@ -115,7 +115,7 @@ class AdditionalController extends CI_Controller {
                     $mainId = $this->db->insert_id();
                 }
                 if (isset($post['final_submit'])) {
-                    $updateData = ['finance_punch' => 'Y', 'finance_punch_by' => $this->session->userdata('user_id'), 'finance_punch_date' => date('Y-m-d') ];
+                    $updateData = ['finance_punch' => 'Y', 'finance_punch_status'=>'N', 'finance_punch_by' => $this->session->userdata('user_id'), 'finance_punch_date' => date('Y-m-d') ];
                     $this->db->where('scan_id', $scan_id)->update('scan_file', $updateData);
                 }
                 if (!empty($post['cost_center_id']) && is_array($post['cost_center_id'])) {
@@ -124,7 +124,7 @@ class AdditionalController extends CI_Controller {
                         if (empty($cost_center_id)) {
                             continue;
                         }
-                        $itemData = ['scan_id' => $scan_id, 'cost_center_id' => $cost_center_id, 'department_id' => $post['department_id'][$index]??null, 'business_unit_id' => $post['business_unit_id'][$index]??null, 'region_id' => $post['region_id'][$index]??null, 'state_id' => $post['state_id'][$index]??null, 'location_id' => $post['location_id'][$index]??null, 'category_id' => $post['category_id'][$index]??null, 'crop_id' => $post['crop_id'][$index]??null, 'activity_id' => $post['activity_id'][$index]??null, 'debit_account_id' => $post['debit_ac_id'][$index]??null, 'payment_method_id' => $post['payment_method_id'][$index]??null, 'reference' => $post['reference_no'][$index]??null, 'remark' => $post['item_remark'][$index]??null, 'amount' => $post['item_total_amount'][$index]??null, 'tds_amount' => $post['item_tds_amount'][$index]??null, ];
+                        $itemData = ['scan_id' => $scan_id, 'cost_center_id' => $cost_center_id, 'department_id' => $post['department_id'][$index]??null, 'business_unit_id' => $post['business_unit_id'][$index]??null, 'region_id' => $post['region_id'][$index]??null, 'state_id' => $post['state_id'][$index]??null, 'location_id' => $post['location_id'][$index]??null, 'category_id' => $post['category_id'][$index]??null, 'crop_id' => $post['crop_id'][$index]??null, 'activity_id' => $post['activity_id'][$index]??null, 'debit_account_id' => $post['debit_ac_id'][$index]??null, 'payment_term_id' => $post['payment_term_id'][$index]??null, 'reference' => $post['reference_no'][$index]??null, 'remark' => $post['item_remark'][$index]??null, 'amount' => $post['item_total_amount'][$index]??null, 'tds_amount' => $post['item_tds_amount'][$index]??null, ];
                         $this->db->insert('tbl_additional_information_items', $itemData);
                     }
                 }

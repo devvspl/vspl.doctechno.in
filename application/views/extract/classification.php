@@ -132,38 +132,32 @@ $(document).ready(function () {
             success: function (response) {
                 let jsonResponse = JSON.parse(response);
                 if (jsonResponse.status == 'success') {
-                    $("#documentDetailsModal").modal("hide");
-                    $('tr[data-scan-id="' + scanId + '"]').fadeOut(500, function() {
-                        $(this).remove();
-                        $('table tbody tr').each(function(index) {
-                            $(this).find('td:first').text(index + 1);
+                    $("#documentDetailsContent").html('<p class="text-success text-center">' + jsonResponse.message + '</p>');
+                    setTimeout(function () {
+                        $("#documentDetailsModal").modal("hide");
+                        $('tr[data-scan-id="' + scanId + '"]').fadeOut(500, function() {
+                            $(this).remove();
+                            $('table tbody tr').each(function(index) {
+                                $(this).find('td:first').text(index + 1);
+                            });
                         });
-                    });
-                    showNotification('success', jsonResponse.message);
+                    }, 1000);
                 } else {
+                    $("#documentDetailsContent").html('<p class="text-danger text-center">' + jsonResponse.message + '</p>');
                     $button.prop("disabled", false).text("Update");
-                    showNotification('error', jsonResponse.message);
+                    setTimeout(function () {
+                        $("#documentDetailsModal").modal("hide");
+                    }, 1000);
                 }
             },
             error: function () {
+                $("#documentDetailsContent").html('<p class="text-danger text-center">Error processing document.</p>');
                 $button.prop("disabled", false).text("Update");
-                showNotification('error', 'Error processing document');
+                setTimeout(function () {
+                    $("#documentDetailsModal").modal("hide");
+                }, 1000);
             },
         });
     });
-
-    function showNotification(type, message) {
-        let alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
-        let $alert = $('<div class="alert ' + alertClass + ' alert-dismissible fade show" role="alert">' +
-            message +
-            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
-            '<span aria-hidden="true">&times;</span>' +
-            '</button>' +
-            '</div>');
-        $('.box-body').prepend($alert);
-        setTimeout(function() {
-            $alert.alert('close');
-        }, 5000);
-    }
 });
 </script>

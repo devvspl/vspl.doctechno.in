@@ -44,6 +44,7 @@ class Dashboard extends CI_Controller
 		$this->data['vspl_total_approved'] = $this->Punch_model->vspl_get_total_approved();
 		$this->data['vspl_pending_for_punch'] = $this->Punch_model->vspl_pending_for_punch();
 		$this->data['vspl_rejected_punch'] = $this->Punch_model->vspl_rejected_punch();
+		$this->data['vspl_finance_rejected_punch'] = $this->Punch_model->vspl_finance_rejected_punch();
 		$this->data['vspl_pending_for_approval_punch_by_me'] = $this->Punch_model->vspl_pending_for_approval_punch_by_me(); 
 		
 		$this->load->view('layout/template', $this->data);

@@ -59,7 +59,7 @@ class AdditionalModel extends CI_Model
         $this->db->where('ai.scan_id', $scan_id);
         $mainRecord = $this->db->get()->row_array();
        
-        $this->db->select('aii.*, cc.cost_center_name, d.department_name, bu.business_unit_name, r.region_name, s.state_name, l.location_name, c.category_name, cr.crop_name, a.activity_name, da.account_name, pm.payment_method_name');
+        $this->db->select('aii.*, cc.cost_center_name, d.department_name, bu.business_unit_name, r.region_name, s.state_name, l.location_name, c.category_name, cr.crop_name, a.activity_name, da.account_name, pm.payment_term_name');
         $this->db->from('tbl_additional_information_items aii');
         $this->db->join('master_cost_center cc', 'cc.cost_center_id = aii.cost_center_id', 'left');
         $this->db->join('core_department d', 'd.department_id = aii.department_id', 'left');
@@ -71,7 +71,7 @@ class AdditionalModel extends CI_Model
         $this->db->join('core_crop cr', 'cr.crop_id = aii.crop_id', 'left');
         $this->db->join('master_activity a', 'a.activity_id = aii.activity_id', 'left');
         $this->db->join('master_account_ledger da', 'da.id = aii.debit_account_id', 'left');
-        $this->db->join('master_payment_method pm', 'pm.id = aii.payment_method_id', 'left');
+        $this->db->join('payment_term_master pm', 'pm.id = aii.payment_term_id', 'left');
         $this->db->where('aii.scan_id', $scan_id);
         $items = $this->db->get()->result_array();
 

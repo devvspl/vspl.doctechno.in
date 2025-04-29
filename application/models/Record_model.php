@@ -9,6 +9,10 @@ class Record_model extends MY_Model {
         $result = $this->db->select('punchfile.*,scan_file.File_Punched,scan_file.Is_Rejected,scan_file.File_Approved')->from('punchfile')->join('scan_file', 'scan_file.Scan_Id=punchfile.Scan_Id')->where('punchfile.Scan_Id', $Scan_Id)->get()->row();
         return $result;
     }
+    function vspl_getRecordFile_Accounting($Scan_Id) {
+        $result = $this->db->select('punchfile.*,scan_file.File_Punched,scan_file.Is_Rejected,scan_file.File_Approved')->from('punchfile')->join('scan_file', 'scan_file.Scan_Id=punchfile.Scan_Id')->where('punchfile.Scan_Id', $Scan_Id)->get()->row();
+        return $result;
+    }
     function getRejectedList() {
         $group_id = $this->session->userdata('group_id');
         $query = $this->db->select('*')->from('scan_file')->where(array('Group_Id' => $group_id, 'Is_Rejected' => 'Y', 'Edit_Permission' => 'N'))->where('Is_Deleted', 'N')->order_by('Scan_Id', 'desc')->get();

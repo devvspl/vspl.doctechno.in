@@ -31,7 +31,7 @@ class Punch extends CI_Controller {
         if (empty($mainRecord)) {
             return null;
         }
-        $this->db->select('aii.*, cc.cost_center_name, d.department_name, bu.business_unit_name, r.region_name, s.state_name, l.city_village_name as location_name, c.category_name, cr.crop_name, a.activity_name, da.account_name as debit_account, pm.payment_method_name as payment_method');
+        $this->db->select('aii.*, cc.cost_center_name, d.department_name, bu.business_unit_name, r.region_name, s.state_name, l.city_village_name as location_name, c.category_name, cr.crop_name, a.activity_name, da.account_name as debit_account, pm.payment_term_name as payment_term');
         $this->db->from('tbl_additional_information_items aii');
         $this->db->join('master_cost_center cc', 'cc.cost_center_id = aii.cost_center_id', 'left');
         $this->db->join('core_department d', 'd.api_id = aii.department_id', 'left');
@@ -43,7 +43,7 @@ class Punch extends CI_Controller {
         $this->db->join('core_crop cr', 'cr.api_id = aii.crop_id', 'left');
         $this->db->join('master_activity a', 'a.activity_id = aii.activity_id', 'left');
         $this->db->join('master_account_ledger da', 'da.id = aii.debit_account_id', 'left');
-        $this->db->join('master_payment_method pm', 'pm.id = aii.payment_method_id', 'left');
+        $this->db->join('payment_term_master pm', 'pm.id = aii.payment_term_id', 'left');
         $this->db->where('aii.scan_id', $scan_id);
         $items = $this->db->get()->result_array();
         $mainRecord['items'] = $items;
@@ -124,7 +124,6 @@ class Punch extends CI_Controller {
         $this->load->view('layout/template', $this->data);
     }
     public function my_finance_bill_approval_file($finance_punch_status) {
-
         $punch_file_list = $this->Punch_model->get_finance_bill_approval_files($finance_punch_status);
         $this->data['my_finance_punched_file'] = $punch_file_list;
         $this->data['main'] = 'punch/my_finance_bill_approval_file';
@@ -142,6 +141,13 @@ class Punch extends CI_Controller {
         $this->session->set_userdata('sub_menu', '');
         $this->data['finance_rejected_punch_list'] = $this->Punch_model->get_finance_rejected_punch_list();
         $this->data['main'] = 'punch/finance_rejected_punch';
+        $this->load->view('layout/template', $this->data);
+    }
+    public function finance_rejected_punch_1() {
+        $this->session->set_userdata('top_menu', 'punch_master');
+        $this->session->set_userdata('sub_menu', '');
+        $this->data['finance_rejected_punch_list'] = $this->Punch_model->get_finance_rejected_punch_list_1();
+        $this->data['main'] = 'punch/finance_rejected_punch_1';
         $this->load->view('layout/template', $this->data);
     }
     public function resend_scan($Scan_Id) {
@@ -245,58 +251,29 @@ class Punch extends CI_Controller {
         $accounts = $query->result_array();
         echo json_encode($accounts);
     }
-
     public function approve_file($scan_id) {
-        // Validate Scan Id
         if ($scan_id) {
-            // Update the file status to approved (finance_punch_status = 'Y')
-            $data = array(
-                'finance_punch_status' => 'Y',
-                'finance_punch_action_by' => $this->session->userdata('user_id'),
-                'finance_punch_action' => date('Y-m-d H:i:s')
-            );
-    
-            // Update the file status in the database
+            $data = array('finance_punch_status' => 'Y', 'finance_punch_action_by' => $this->session->userdata('user_id'), 'finance_punch_action' => date('Y-m-d H:i:s'));
             $this->db->where('Scan_Id', $scan_id);
             $this->db->update('scan_file', $data);
-    
-            // Redirect with success message
             $this->session->set_flashdata('success', 'File has been approved successfully.');
-            redirect('finance/bill-approval/N'); // Redirect to your pending approval page
+            redirect('finance/bill-approval/N');
         } else {
-            // Handle case where Scan_Id is not found
             $this->session->set_flashdata('error', 'Invalid file.');
-            redirect('finance/bill-approval/N'); // Redirect to your pending approval page
+            redirect('finance/bill-approval/N');
         }
     }
-    
     public function reject_file($scan_id) {
-        // Validate Scan Id
         if ($scan_id) {
-            // Get the rejection remark from the form input
             $punch_reject_remark = $this->input->post('punch_reject_remark');
-    
-            // Update the file status to rejected (finance_punch_status = 'R') and add the remark
-            $data = array(
-                'finance_punch_status' => 'R',
-                'finance_punch_action_by' => $this->session->userdata('user_id'),
-                'finance_punch_action' => date('Y-m-d H:i:s'),
-                'punch_reject_remark' => $punch_reject_remark // Save the rejection remark
-            );
-    
-            // Update the file status in the database
+            $data = array('finance_punch_status' => 'R', 'finance_punch_action_by' => $this->session->userdata('user_id'), 'finance_punch_action' => date('Y-m-d H:i:s'), 'punch_reject_remark' => $punch_reject_remark);
             $this->db->where('Scan_Id', $scan_id);
             $this->db->update('scan_file', $data);
-    
-            // Redirect with success message
             $this->session->set_flashdata('success', 'File has been rejected with your remark.');
-            redirect('finance/bill-approval/N'); // Redirect to your pending approval page
+            redirect('finance/bill-approval/N');
         } else {
-            // Handle case where Scan_Id is not found
             $this->session->set_flashdata('error', 'Invalid file.');
-            redirect('finance/bill-approval/N'); // Redirect to your pending approval page
+            redirect('finance/bill-approval/N');
         }
     }
-    
-    
 }

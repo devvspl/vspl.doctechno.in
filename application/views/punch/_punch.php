@@ -11,9 +11,16 @@
                      <?php endif; ?>
                   </h3>
                   <div class="box-tools pull-right">
+                  <?php if (!empty($user_permission) && $user_permission == 'N') : ?>
                      <a href="<?= base_url('punch'); ?>" class="btn btn-primary btn-sm">
                      <i class="fa fa-long-arrow-left"></i> Back
                      </a>
+                  <?php endif; ?>
+                  <?php if (!empty($user_permission) && $user_permission == 'Y') : ?>
+                     <a href="<?= base_url('finance_punch'); ?>" class="btn btn-primary btn-sm">
+                     <i class="fa fa-long-arrow-left"></i> Back
+                     </a>
+                  <?php endif; ?>
                   </div>
                </div>
                <div class="box-body">

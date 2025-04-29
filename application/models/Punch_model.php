@@ -58,6 +58,11 @@ class Punch_model extends MY_Model {
         $query = $this->db->select('*')->from('scan_file')->where(array('Punch_By' => $user_id, 'finance_punch_status' => 'Y'))->order_by('Scan_Id', 'desc')->get();
         return $query->result_array();
     }
+    function get_finance_rejected_punch_list_1() {
+        $user_id = $this->session->userdata('user_id');
+        $query = $this->db->select('*')->from('scan_file')->where(array('finance_punch_by' => $user_id, 'finance_punch_status' => 'R'))->order_by('Scan_Id', 'desc')->get();
+        return $query->result_array();
+    }
     function get_total_punched_by_me() {
         $user_id = $this->session->userdata('user_id');
         $this->db->where('Punch_By', $user_id);
@@ -150,6 +155,14 @@ class Punch_model extends MY_Model {
         $query = $this->db->get('scan_file');
         return $query->num_rows();
     }
+    function vspl_finance_rejected_punch() {
+        $user_id = $this->session->userdata('user_id');
+        $this->db->where('Finance_Punch_By', $user_id);
+        $this->db->where('finance_punch', 'Y');
+        $this->db->where('finance_punch_status', 'R');
+        $query = $this->db->get('scan_file');
+        return $query->num_rows();
+    }
     function vspl_pending_for_approval_punch_by_me() {
         $user_id = $this->session->userdata('user_id');
         $this->db->where('Finance_Punch_By', $user_id);
@@ -160,7 +173,7 @@ class Punch_model extends MY_Model {
         return $query->num_rows();
     }
     public function get_records($limit, $offset, $doctype = null, $search = null, $from_date = null, $to_date = null) {
-        $this->db->select(['punchfile.document_number AS DocNo', 'punchfile.finance_punch_date AS Date', "'' AS EmptyField", 'punchfile.account AS CashBankAC', 'master_business_entity.business_entity_code AS BusinessEntity', 'punchfile.narration AS sNarration', 'punchfile.favouring AS Favouring', 'punchfile.TDS_JV_no AS TDSJVNo', 'master_cost_center.cost_center_name AS CostCenter', 'master_work_location.location_name AS Location', 'master_crop.crop_code AS Crop', 'master_activity.activity_code AS Activity', 'master_state.state_code AS State', 'master_crop_category.crop_category_code AS Category', 'master_region.region_code AS Region', 'master_department.department_code AS Department', 'cash_voucher_items.payment_method AS PMTCategory', 'master_business_unit.business_unit_code AS BusinessUnit', 'master_account_ledger.account_code AS Account', 'cash_voucher_items.Total_Amount AS TotalAmount', 'cash_voucher_items.ReferenceNo AS Reference', 'cash_voucher_items.Remark AS sRemarks', 'punchfile.TDS_section AS TDS']);
+        $this->db->select(['punchfile.document_number AS DocNo', 'punchfile.finance_punch_date AS Date', "'' AS EmptyField", 'punchfile.account AS CashBankAC', 'master_business_entity.business_entity_code AS BusinessEntity', 'punchfile.narration AS sNarration', 'punchfile.favouring AS Favouring', 'punchfile.TDS_JV_no AS TDSJVNo', 'master_cost_center.cost_center_name AS CostCenter', 'master_work_location.location_name AS Location', 'master_crop.crop_code AS Crop', 'master_activity.activity_code AS Activity', 'master_state.state_code AS State', 'master_crop_category.crop_category_code AS Category', 'master_region.region_code AS Region', 'master_department.department_code AS Department', 'cash_voucher_items.payment_term AS PMTCategory', 'master_business_unit.business_unit_code AS BusinessUnit', 'master_account_ledger.account_code AS Account', 'cash_voucher_items.Total_Amount AS TotalAmount', 'cash_voucher_items.ReferenceNo AS Reference', 'cash_voucher_items.Remark AS sRemarks', 'punchfile.TDS_section AS TDS']);
         $this->db->from('cash_voucher_items');
         $this->db->join('scan_file', 'scan_file.Scan_Id = cash_voucher_items.Scan_Id', 'left');
         $this->db->join('punchfile', 'scan_file.Scan_Id = punchfile.Scan_Id', 'left');
@@ -212,7 +225,7 @@ class Punch_model extends MY_Model {
         return $this->db->count_all_results();
     }
     public function get_export_data($doctype, $from_date, $to_date) {
-        $this->db->select(['punchfile.document_number AS DocNo', 'punchfile.finance_punch_date AS Date', "'' AS EmptyField", 'punchfile.account AS CashBankAC', 'master_business_entity.business_entity_code AS BusinessEntity', 'punchfile.narration AS sNarration', 'punchfile.favouring AS Favouring', 'punchfile.TDS_JV_no AS TDSJVNo', 'master_cost_center.cost_center_name AS CostCenter', 'master_work_location.location_name AS Location', 'master_crop.crop_code AS Crop', 'master_activity.activity_code AS Activity', 'master_state.state_code AS State', 'master_crop_category.crop_category_code AS Category', 'master_region.region_code AS Region', 'master_department.department_code AS Department', 'cash_voucher_items.payment_method AS PMTCategory', 'master_business_unit.business_unit_code AS BusinessUnit', 'master_account_ledger.account_code AS Account', 'cash_voucher_items.Total_Amount AS TotalAmount', 'cash_voucher_items.ReferenceNo AS Reference', 'cash_voucher_items.Remark AS sRemarks', 'punchfile.TDS_section AS TDS']);
+        $this->db->select(['punchfile.document_number AS DocNo', 'punchfile.finance_punch_date AS Date', "'' AS EmptyField", 'punchfile.account AS CashBankAC', 'master_business_entity.business_entity_code AS BusinessEntity', 'punchfile.narration AS sNarration', 'punchfile.favouring AS Favouring', 'punchfile.TDS_JV_no AS TDSJVNo', 'master_cost_center.cost_center_name AS CostCenter', 'master_work_location.location_name AS Location', 'master_crop.crop_code AS Crop', 'master_activity.activity_code AS Activity', 'master_state.state_code AS State', 'master_crop_category.crop_category_code AS Category', 'master_region.region_code AS Region', 'master_department.department_code AS Department', 'cash_voucher_items.payment_term AS PMTCategory', 'master_business_unit.business_unit_code AS BusinessUnit', 'master_account_ledger.account_code AS Account', 'cash_voucher_items.Total_Amount AS TotalAmount', 'cash_voucher_items.ReferenceNo AS Reference', 'cash_voucher_items.Remark AS sRemarks', 'punchfile.TDS_section AS TDS']);
         $this->db->from('cash_voucher_items');
         $this->db->join('scan_file', 'scan_file.Scan_Id = cash_voucher_items.Scan_Id', 'left');
         $this->db->join('punchfile', 'scan_file.Scan_Id = punchfile.Scan_Id', 'left');

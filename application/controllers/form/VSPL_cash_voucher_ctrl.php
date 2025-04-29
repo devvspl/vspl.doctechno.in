@@ -52,7 +52,7 @@ class VSPL_cash_voucher_ctrl extends CI_Controller
                 $activity_id = $this->input->post("activity_id[]") ?? [];
                 $debit_ac = $this->input->post("debit_ac[]") ?? [];
                 $debit_ac_id = $this->input->post("debit_ac_id[]") ?? [];
-                $payment_method = $this->input->post("payment_method[]") ?? [];
+                $payment_term = $this->input->post("payment_term[]") ?? [];
                 $Total_Amount = $this->input->post("Item_Total_Amount[]") ?? [];
                 $TDS_Amount = $this->input->post("Item_TDS_Amount[]") ?? [];
                 $ReferenceNo = $this->input->post("Item_ReferenceNo[]") ?? [];
@@ -101,7 +101,7 @@ class VSPL_cash_voucher_ctrl extends CI_Controller
                             "activity_id" => isset($activity_id[$i]) ? $activity_id[$i] : null,
                             "debit_ac" => isset($debit_ac[$i]) ? $debit_ac[$i] : null,
                             "debit_ac_id" => isset($debit_ac_id[$i]) ? $debit_ac_id[$i] : null,
-                            "payment_method" => isset($payment_method[$i]) ? $payment_method[$i] : null,
+                            "payment_term" => isset($payment_term[$i]) ? $payment_term[$i] : null,
                             "Total_Amount" => isset($Total_Amount[$i]) ? $Total_Amount[$i] : null,
                             "TDS_Amount" => isset($TDS_Amount[$i]) ? $TDS_Amount[$i] : null,
                             "ReferenceNo" => isset($ReferenceNo[$i]) ? $ReferenceNo[$i] : null,

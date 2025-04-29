@@ -29,7 +29,8 @@ class InvoiceController extends CI_Controller {
         $invoice_details = [];
         $count = count($post['Particular']);
         for ($i = 0;$i < $count;$i++) {
-            $invoice_details[] = ['Scan_Id' => $Scan_Id, 'Particular' => $post['Particular'][$i], 'HSN' => $post['HSN'][$i], 'Qty' => $post['Qty'][$i], 'Unit' => $post['Unit'][$i], 'MRP' => $post['MRP'][$i], 'Discount' => $post['Discount'][$i], 'Price' => $post['Price'][$i], 'Amount' => $post['Amount'][$i], 'GST' => $post['GST'][$i], 'SGST' => $post['SGST'][$i], 'IGST' => $post['IGST'][$i], 'Cess' => $post['Cess'][$i], 'Total_Amount' => $post['TAmount'][$i], ];
+            $unit = isset($post['Unit'][$i]) && $post['Unit'][$i] !== '' ? $post['Unit'][$i] : 'PCS';
+            $invoice_details[] = ['Scan_Id' => $Scan_Id, 'Particular' => $post['Particular'][$i], 'HSN' => $post['HSN'][$i], 'Qty' => $post['Qty'][$i], 'Unit' => $unit, 'MRP' => $post['MRP'][$i], 'Discount' => $post['Discount'][$i], 'Price' => $post['Price'][$i], 'Amount' => $post['Amount'][$i], 'GST' => $post['GST'][$i], 'SGST' => $post['SGST'][$i], 'IGST' => $post['IGST'][$i], 'Cess' => $post['Cess'][$i], 'Total_Amount' => $post['TAmount'][$i], ];
         }
         if (!empty($invoice_details)) {
             $this->db->insert_batch('invoice_detail', $invoice_details);
@@ -118,7 +119,7 @@ class InvoiceController extends CI_Controller {
         $Amount = $this->input->post('Amount');
         $TAmount = $this->input->post('TAmount');
         $Remark = $this->input->post('Remark');
-        $data = array('Scan_Id' => $Scan_Id, 'Group_Id' => $this->session->userdata('group_id'), 'DocType' => $DocType, 'DocTypeId' => $DocTypeId, 'BillDate' => $Bill_Date, 'File_No' => $Bill_No, 'NatureOfPayment' => $Payment_Mode, 'ReferenceNo' => $Supplier_Ref, 'From_ID' => $From, 'FromName' => $FromName, 'To_ID' => $To, 'ToName' => $ToNmae, 'Loc_Add' => $Buyer_Address, 'AgencyAddress' => $Vendor_Address, 'ServiceNo' => $Buyer_Order, 'BookingDate' => $Buyer_Order_Date, 'Particular' => $Dispatch_Trough, 'DueDate' => $Delivery_Note_Date, 'Department' => $Department, 'DepartmentID' => $DepartmentId, 'Category' => $Category, 'Ledger' => $Ledger, 'FileName' => $File, 'FDRNo' => $LR_Number, 'File_Date' => $LR_Date, 'RegNo' => $Cartoon_Number, 'AgentName' => $Consignee_Name, 'SubTotal' => $Sub_Total, 'Total_Amount' => $Total, 'Grand_Total' => $Grand_Total, 'Total_Discount' => $Total_Discount, 'TCS' => $TCS, 'Remark' => $Remark, 'Created_By' => $this->session->userdata('user_id'), 'Created_Date' => date('Y-m-d H:i:s'),);
+        $data = array('Scan_Id' => $Scan_Id, 'Group_Id' => $this->session->userdata('group_id'), 'DocType' => $DocType, 'DocTypeId' => $DocTypeId, 'BillDate' => $Bill_Date, 'File_No' => $Bill_No, 'From_ID' => $From, 'FromName' => $FromName, 'To_ID' => $To, 'ToName' => $ToNmae, 'Loc_Add' => $Buyer_Address, 'AgencyAddress' => $Vendor_Address, 'ServiceNo' => $Buyer_Order, 'BookingDate' => $Buyer_Order_Date, 'Particular' => $Dispatch_Trough, 'DueDate' => $Delivery_Note_Date, 'Department' => $Department, 'DepartmentID' => $DepartmentId, 'Ledger' => $Ledger, 'FileName' => $File, 'FDRNo' => $LR_Number, 'File_Date' => $LR_Date, 'RegNo' => $Cartoon_Number, 'AgentName' => $Consignee_Name, 'SubTotal' => $Sub_Total, 'Total_Amount' => $Total, 'Grand_Total' => $Grand_Total, 'Total_Discount' => $Total_Discount, 'TCS' => $TCS, 'Remark' => $Remark, 'Created_By' => $this->session->userdata('user_id'), 'Created_Date' => date('Y-m-d H:i:s'),);
         $this->db->trans_start();
         $this->db->trans_strict(FALSE);
         if ($this->customlib->check_punchfile($Scan_Id) == true) {

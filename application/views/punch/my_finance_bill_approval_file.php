@@ -2,23 +2,20 @@
    <section class="content">
       <div class="row">
          <div class="col-md-12">
-         <?php if ($this->session->flashdata('success')): ?>
-    <div class="alert alert-success">
-        <?php echo $this->session->flashdata('success'); ?>
-    </div>
-<?php endif; ?>
-
-<?php if ($this->session->flashdata('error')): ?>
-    <div class="alert alert-danger">
-        <?php echo $this->session->flashdata('error'); ?>
-    </div>
-<?php endif; ?>
-
+            <?php if ($this->session->flashdata('success')): ?>
+            <div class="alert alert-success">
+               <?php echo $this->session->flashdata('success'); ?>
+            </div>
+            <?php endif; ?>
+            <?php if ($this->session->flashdata('error')): ?>
+            <div class="alert alert-danger">
+               <?php echo $this->session->flashdata('error'); ?>
+            </div>
+            <?php endif; ?>
             <div class="box box-primary">
                <div class="box-header with-border">
                   <h3 class="box-title">Punched Files</h3>
                </div>
-             
                <div class="box-body">
                   <div class="table-responsive mailbox-messages">
                      <div class="download_label">Punched Files</div>
@@ -100,54 +97,52 @@
                                  <?php } ?>
                               </td>
                               <td>
-                                 <a href="<?php echo base_url(); ?>file_detail/<?= $row['Scan_Id'] ?>/<?= $row['DocType_Id'] ?>" class="btn btn-info btn-xs" target="_blank">
-                                    <i class="fa fa-eye"></i>
+                                 <a href="<?php echo base_url(); ?>vspl_file_detail/<?= $row['Scan_Id'] ?>/<?= $row['DocType_Id'] ?>" class="btn btn-info btn-xs" target="_blank">
+                                 <i class="fa fa-eye"></i>
                                  </a>
                               </td>
                               <td>
-        <?php if ($row['finance_punch_status'] == 'N'): ?>
-            <!-- Approve Button -->
-            <a href="<?php echo base_url(); ?>approve_file/<?= $row['Scan_Id'] ?>" class="btn btn-success btn-xs" onclick="return confirm('Are you sure you want to approve this file?')">
-                <i class="fa fa-check"></i> Approve
-            </a>
-            <!-- Reject Button -->
-            <button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#rejectModal<?= $row['Scan_Id'] ?>">
-                <i class="fa fa-times"></i> Reject
-            </button>
-        <?php else: ?>
-            <!-- Badge for other statuses -->
-            <span class="badge badge-<?php echo ($row['finance_punch_status'] == 'Y') ? 'success' : 'secondary'; ?>">
-                <?php echo ($row['finance_punch_status'] == 'Y') ? 'Approved' : 'Rejected'; ?>
-            </span>
-        <?php endif; ?>
-    </td>
-
-    <!-- Modal for Reject Remark -->
-    <div class="modal fade" id="rejectModal<?= $row['Scan_Id'] ?>" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="rejectModalLabel">Reject File</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form action="<?php echo base_url(); ?>reject_file/<?= $row['Scan_Id'] ?>" method="POST">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="remark">Reason for Rejection:</label>
-                            <textarea class="form-control" id="remark" name="punch_reject_remark" rows="4" required></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-danger">Reject</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
+                                 <?php if ($row['finance_punch_status'] == 'N'): ?>
+                                 
+                                 <a href="<?php echo base_url(); ?>approve_file/<?= $row['Scan_Id'] ?>" class="btn btn-success btn-xs" onclick="return confirm('Are you sure you want to approve this file?')">
+                                 <i class="fa fa-check"></i> Approve
+                                 </a>
+                                 
+                                 <button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#rejectModal<?= $row['Scan_Id'] ?>">
+                                 <i class="fa fa-times"></i> Reject
+                                 </button>
+                                 <?php else: ?>
+                                 
+                                 <span class="badge badge-<?php echo ($row['finance_punch_status'] == 'Y') ? 'success' : 'secondary'; ?>">
+                                 <?php echo ($row['finance_punch_status'] == 'Y') ? 'Approved' : 'Rejected'; ?>
+                                 </span>
+                                 <?php endif; ?>
+                              </td>
+                              
+                              <div class="modal fade" id="rejectModal<?= $row['Scan_Id'] ?>" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel" aria-hidden="true">
+                                 <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                       <div class="modal-header">
+                                          <h5 class="modal-title" id="rejectModalLabel">Reject File</h5>
+                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                          </button>
+                                       </div>
+                                       <form action="<?php echo base_url(); ?>reject_file/<?= $row['Scan_Id'] ?>" method="POST">
+                                          <div class="modal-body">
+                                             <div class="form-group">
+                                                <label for="remark">Reason for Rejection:</label>
+                                                <textarea class="form-control" id="remark" name="punch_reject_remark" rows="4" required></textarea>
+                                             </div>
+                                          </div>
+                                          <div class="modal-footer">
+                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                             <button type="submit" class="btn btn-danger">Reject</button>
+                                          </div>
+                                       </form>
+                                    </div>
+                                 </div>
+                              </div>
                               <?php
                                  }
                                  $count++;
@@ -162,7 +157,6 @@
       </div>
    </section>
 </div>
-
 <div id="SupportFileView" class="modal fade" role="dialog" aria-hidden="true" style="display: none;">
    <div class="modal-dialog modalwrapwidth">
       <div class="modal-content">

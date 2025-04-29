@@ -58,7 +58,8 @@ $route['get_search_with_filter_data'] = 'Search/get_search_with_filter_data';
 // >>>>>>>>>>>>>>>>>>>>>>>>> Punch Section <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
 $route['punch/my-punched-file'] = 'punch/my_punched_file';      
 $route['punch/my-punched-file/all'] = 'punch/my_punched_file/1';
-
+$route['finance/my-punched-file'] = 'punch/my_finance_punched_file';
+$route['finance/my-punched-file/all'] = 'punch/my_finance_punched_file/1';
 // >>>>>>>>>>>>>>>>>>>>>>>>> Additional Information <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
 $route['get-business-entities'] = 'accounts/AdditionalController/get_business_entities';
 $route['get-tds-section'] = 'accounts/AdditionalController/get_tds_section';
@@ -72,17 +73,11 @@ $route['get-categories'] = 'accounts/AdditionalController/get_categories';
 $route['get-crops'] = 'accounts/AdditionalController/get_crops';
 $route['get-activities'] = 'accounts/AdditionalController/get_activities';
 $route['get-debit-accounts'] = 'accounts/AdditionalController/get_debit_accounts';
-$route['get-payment-methods'] = 'accounts/AdditionalController/get_payment_methods';
+$route['get-payment-term'] = 'accounts/AdditionalController/get_payment_term';
 $route['store-additional-detail'] = 'accounts/AdditionalController/store_update';
 $route['finance/bill-approval/(:any)'] = 'punch/my_finance_bill_approval_file/$1';
 $route['approve_file/(:num)'] = 'punch/approve_file/$1';
 $route['reject_file/(:num)'] = 'punch/reject_file/$1';
-
-
-
-
-
-
 //--------------Scan File-------------------
 $route['scan'] = 'Scan';
 $route['myscannedfiles'] = 'Scan/myscannedfiles';
@@ -112,6 +107,7 @@ $route['my_saved_file'] = 'Punch/my_saved_file';
 $route['file_entry/(:any)/(:any)'] = 'Punch/file_entry/$1/$2';  
 $route['rejected_punch'] = 'Punch/rejected_punch';
 $route['finance_rejected_punch'] = 'Punch/finance_rejected_punch';
+$route['finance_rejected_punch_1'] = 'Punch/finance_rejected_punch_1';
 $route['resend_scan/(:any)'] = 'Punch/resend_scan/$1';
 $route['finance_resend_scan/(:any)'] = 'Punch/finance_resend_scan/$1';
 // VSPL Punch
@@ -125,6 +121,7 @@ $route['my_finance_punched_file/(:any)'] = 'Finance_Punch/my_punched_file/$1';
 //--------------View Record----------------------
 $route['file_detail/(:any)/(:any)'] = 'Record/index/$1/$2';   //$1=Scan_Id,$2=DocType_Id
 $route['view_record/(:any)/(:any)'] = 'MobileView/index/$1/$2';   //$1=Scan_Id,$2=DocType_Id
+$route['vspl_file_detail/(:any)/(:any)'] = 'Record/vspl_index/$1/$2';
 //--------------Approve File-------------------
 $route['approve'] = 'Approve';
 $route['my_approved_file'] = 'Approve/my_approved_file';
