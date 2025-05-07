@@ -73,7 +73,62 @@ class Punch extends CI_Controller {
     private function getCommonPunchData($Scan_Id, $DocType_Id) {
         $document_name = $this->customlib->getDocumentName($Scan_Id);
         $doc_type_name = $this->customlib->getDocType($DocType_Id);
-        $docTypeViews = [23 => ['view' => 'invoice', 'data_method' => 'getInvoiceData'], 1 => ['view' => 'two_four_wheeler', 'data_method' => 'getTwoFourWheelerData'], 4 => ['view' => 'bank_statement', 'data_method' => 'getBankStatementData'], 5 => ['view' => 'boarding_pass', 'data_method' => 'getBoardingPassData'], 8 => ['view' => 'certificate', 'data_method' => 'getCertificateData'], 10 => ['view' => 'company_record', 'data_method' => 'getCompanyRecordData'], 11 => ['view' => 'confirmation_account', 'data_method' => 'getConfirmationAccountData'], 18 => ['view' => 'id_address_proof', 'data_method' => 'getIdAddressProofData'], 19 => ['view' => 'import_export_paper', 'data_method' => 'getImportExportPaperData'], 30 => ['view' => 'mediclaim_history', 'data_method' => 'getMediclaimHistoryData'], 31 => ['view' => 'miscellaneous', 'data_method' => 'getMiscellaneousData'], 32 => ['view' => 'pf_esic', 'data_method' => 'getPfEsicData'], 35 => ['view' => 'property_record', 'data_method' => 'getPropertyRecordData'], 36 => ['view' => 'reting_credential', 'data_method' => 'getRetingCredentialData'], 37 => ['view' => 'registration_certificate', 'data_method' => 'getRegistrationCertificateData'], 41 => ['view' => 'tax_credit_document', 'data_method' => 'getTaxCreditDocumentData'], 45 => ['view' => 'vehicle_registration_paper', 'data_method' => 'getVehicleRegistrationPaperData'], 44 => ['view' => 'vehicle_maintenance', 'data_method' => 'getVehicleMaintenanceData'], 43 => ['view' => 'vehicle_fule', 'data_method' => 'getVehicleFuelData'], 42 => ['view' => 'telephone_bill', 'data_method' => 'getTelephoneBillData'], 40 => ['view' => 'subsidy', 'data_method' => 'getSubsidyData'], 39 => ['view' => 'rtgs_neft', 'data_method' => 'getRtgsNeftData'], 38 => ['view' => 'rst_ofd', 'data_method' => 'getRstOfdData'], 34 => ['view' => 'postage_courier', 'data_method' => 'getPostageCourierData'], 33 => ['view' => 'phone_fax', 'data_method' => 'getPhoneFaxData'], 29 => ['view' => 'meals', 'data_method' => 'getMealsData'], 28 => ['view' => 'lodging', 'data_method' => 'getLodgingData'], 27 => ['view' => 'local_conveyance', 'data_method' => 'getLocalConveyanceData'], 26 => ['view' => 'lease_rent', 'data_method' => 'getLeaseRentData'], 25 => ['view' => 'jeep_campaign', 'data_method' => 'getJeepCampaignData'], 24 => ['view' => 'it_return', 'data_method' => 'getItReturnData'], 22 => ['view' => 'insurance_policy', 'data_method' => 'getInsurancePolicyData'], 21 => ['view' => 'insurance_document', 'data_method' => 'getInsuranceDocumentData'], 20 => ['view' => 'income_taxt_tds', 'data_method' => 'getIncomeTaxTdsData'], 17 => ['view' => 'hired_vehicle', 'data_method' => 'getHiredVehicleData'], 16 => ['view' => 'challan', 'data_method' => 'getChallanData'], 15 => ['view' => 'fixed_deposit_receipt', 'data_method' => 'getFixedDepositReceiptData'], 14 => ['view' => 'fd_fv', 'data_method' => 'getFdFvData'], 13 => ['view' => 'electricity_bill', 'data_method' => 'getElectricityBillData'], 12 => ['view' => 'dealer_meeting', 'data_method' => 'getDealerMeetingData'], 9 => ['view' => 'cheque', 'data_method' => 'getChequeData'], 7 => ['view' => 'cash_voucher', 'data_method' => 'getCashVoucherData'], 46 => ['view' => 'gst_challan', 'data_method' => 'getGstChallanData'], 47 => ['view' => 'labour_payment', 'data_method' => 'getLabourPaymentData'], 48 => ['view' => 'cash_receipt', 'data_method' => 'getCashReceiptData'], 49 => ['view' => 'fixed_asset', 'data_method' => 'getFixedAssetData'], 50 => ['view' => 'machine_operation', 'data_method' => 'getMachineOperationData'], 51 => ['view' => 'air', 'data_method' => 'getAirData'], 52 => ['view' => 'rail', 'data_method' => 'getRailData'], 53 => ['view' => 'bus', 'data_method' => 'getBusData'], 54 => ['view' => 'sale_bill', 'data_method' => 'getSaleBillData'], 55 => ['view' => 'ticket_cancellation', 'data_method' => 'getTicketCancellationData'], 56 => ['view' => 'credit_note', 'data_method' => 'getCreditNoteData'], ];
+        $docTypeViews = [
+            23 => ['view' => 'invoice', 'data_method' => 'getInvoiceData'], 
+            1 => ['view' => 'two_four_wheeler', 'data_method' => 'getTwoFourWheelerData'], 
+            4 => ['view' => 'bank_statement', 'data_method' => 'getBankStatementData'], 
+            5 => ['view' => 'boarding_pass', 'data_method' => 'getBoardingPassData'], 
+            6 => ['view' => 'cash_deposit_withdrawals', 'data_method' => 'getCashDepositWithdrawalsData'], 
+            8 => ['view' => 'certificate', 'data_method' => 'getCertificateData'], 
+            10 => ['view' => 'company_record', 'data_method' => 'getCompanyRecordData'], 
+            11 => ['view' => 'confirmation_account', 'data_method' => 'getConfirmationAccountData'], 
+            18 => ['view' => 'id_address_proof', 'data_method' => 'getIdAddressProofData'], 
+            19 => ['view' => 'import_export_paper', 'data_method' => 'getImportExportPaperData'], 
+            30 => ['view' => 'mediclaim_history', 'data_method' => 'getMediclaimHistoryData'], 
+            31 => ['view' => 'miscellaneous', 'data_method' => 'getMiscellaneousData'], 
+            32 => ['view' => 'pf_esic', 'data_method' => 'getPfEsicData'], 
+            35 => ['view' => 'property_record', 'data_method' => 'getPropertyRecordData'], 
+            36 => ['view' => 'reting_credential', 'data_method' => 'getRetingCredentialData'], 
+            37 => ['view' => 'registration_certificate', 'data_method' => 'getRegistrationCertificateData'], 
+            41 => ['view' => 'tax_credit_document', 'data_method' => 'getTaxCreditDocumentData'], 
+            45 => ['view' => 'vehicle_registration_paper', 'data_method' => 'getVehicleRegistrationPaperData'], 
+            44 => ['view' => 'vehicle_maintenance', 'data_method' => 'getVehicleMaintenanceData'], 
+            43 => ['view' => 'vehicle_fule', 'data_method' => 'getVehicleFuelData'], 
+            42 => ['view' => 'telephone_bill', 'data_method' => 'getTelephoneBillData'], 
+            40 => ['view' => 'subsidy', 'data_method' => 'getSubsidyData'], 
+            39 => ['view' => 'rtgs_neft', 'data_method' => 'getRtgsNeftData'], 
+            38 => ['view' => 'rst_ofd', 'data_method' => 'getRstOfdData'], 
+            34 => ['view' => 'postage_courier', 'data_method' => 'getPostageCourierData'], 
+            33 => ['view' => 'phone_fax', 'data_method' => 'getPhoneFaxData'], 
+            29 => ['view' => 'meals', 'data_method' => 'getMealsData'], 
+            28 => ['view' => 'lodging', 'data_method' => 'getLodgingData'], 
+            27 => ['view' => 'local_conveyance', 'data_method' => 'getLocalConveyanceData'], 
+            26 => ['view' => 'lease_rent', 'data_method' => 'getLeaseRentData'], 
+            25 => ['view' => 'jeep_campaign', 'data_method' => 'getJeepCampaignData'], 
+            24 => ['view' => 'it_return', 'data_method' => 'getItReturnData'], 
+            22 => ['view' => 'insurance_policy', 'data_method' => 'getInsurancePolicyData'], 
+            21 => ['view' => 'insurance_document', 'data_method' => 'getInsuranceDocumentData'], 
+            20 => ['view' => 'income_taxt_tds', 'data_method' => 'getIncomeTaxTdsData'], 
+            17 => ['view' => 'hired_vehicle', 'data_method' => 'getHiredVehicleData'], 
+            16 => ['view' => 'challan', 'data_method' => 'getChallanData'], 
+            15 => ['view' => 'fixed_deposit_receipt', 'data_method' => 'getFixedDepositReceiptData'], 
+            14 => ['view' => 'fd_fv', 'data_method' => 'getFdFvData'], 
+            13 => ['view' => 'electricity_bill', 'data_method' => 'getElectricityBillData'], 
+            12 => ['view' => 'dealer_meeting', 'data_method' => 'getDealerMeetingData'], 
+            9 => ['view' => 'cheque', 'data_method' => 'getChequeData'], 
+            7 => ['view' => 'cash_voucher', 'data_method' => 'getCashVoucherData'], 
+            46 => ['view' => 'gst_challan', 'data_method' => 'getGstChallanData'], 
+            47 => ['view' => 'labour_payment', 'data_method' => 'getLabourPaymentData'], 
+            48 => ['view' => 'cash_receipt', 'data_method' => 'getCashReceiptData'], 
+            49 => ['view' => 'fixed_asset', 'data_method' => 'getFixedAssetData'], 
+            50 => ['view' => 'machine_operation', 'data_method' => 'getMachineOperationData'], 
+            51 => ['view' => 'air', 'data_method' => 'getAirData'], 
+            52 => ['view' => 'rail', 'data_method' => 'getRailData'], 
+            53 => ['view' => 'bus', 'data_method' => 'getBusData'], 
+            54 => ['view' => 'sale_bill', 'data_method' => 'getSaleBillData'], 
+            55 => ['view' => 'ticket_cancellation', 'data_method' => 'getTicketCancellationData'], 
+            56 => ['view' => 'credit_note', 'data_method' => 'getCreditNoteData'], 
+        ];
         return ['Scan_Id' => $Scan_Id, 'DocType_Id' => $DocType_Id, 'document_name' => $document_name, 'doc_type_name' => $doc_type_name, 'doc_config' => $docTypeViews[$DocType_Id]??null];
     }
     private function fetchData($tableName, $db) {
@@ -82,6 +137,52 @@ class Punch extends CI_Controller {
     private function getInvoiceData($Scan_Id, $DocType_Id) {
         return ['rec' => $this->customlib->getScanData($Scan_Id), 'punch_detail' => $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row(), 'firm' => $this->db->get_where('master_firm', ['status' => 'A'])->result_array(), 'company_list' => $this->customlib->getCompanyList(), 'file_list' => $this->customlib->getFileList(), 'ledger_list' => $this->customlib->getLedgerList(), 'category_list' => $this->customlib->getCategoryList(), 'item_list' => $this->customlib->getItemList(), 'locationlist' => $this->customlib->getWorkLocationList(), 'temp_punch_detail' => $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_id' => $Scan_Id])->row(), 'document_number' => 'CASH/' . date('y-m') . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), 'tdsJvNo' => 'TDSCASH/' . date('Y-m', strtotime($this->db->select('Created_Date')->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->order_by('Created_Date', 'DESC')->limit(1)->get('punchfile')->row()->Created_Date??date('Y-m'))) . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), ];
     }
+    private function getIncomeTaxTdsData($Scan_Id, $DocType_Id) {
+        return [
+            'rec' => $this->customlib->getScanData($Scan_Id), 
+            'punch_detail' => $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row(), 
+            'firm' => $this->db->get_where('master_firm', ['status' => 'A'])->result_array(), 
+            'company_list' => $this->customlib->getCompanyList(), 
+            'fin_year' => $this->customlib->getFinancial_year(),
+            'temp_punch_detail' => $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_id' => $Scan_Id])->row(), 
+            'document_number' => 'CASH/' . date('y-m') . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), 
+            'tdsJvNo' => 'TDSCASH/' . date('Y-m', strtotime($this->db->select('Created_Date')->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->order_by('Created_Date', 'DESC')->limit(1)->get('punchfile')->row()->Created_Date??date('Y-m'))) . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), ];
+    }
+    private function getCashDepositWithdrawalsData($Scan_Id, $DocType_Id) {
+        return [
+            'rec' => $this->customlib->getScanData($Scan_Id), 
+            'punch_detail' => $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row(), 
+            'firm' => $this->db->get_where('master_firm', ['status' => 'A'])->result_array(), 
+            'company_list' => $this->customlib->getCompanyList(), 
+            'temp_punch_detail' => $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_id' => $Scan_Id])->row(), 
+            'document_number' => 'CASH/' . date('y-m') . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), 
+            'tdsJvNo' => 'TDSCASH/' . date('Y-m', strtotime($this->db->select('Created_Date')->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->order_by('Created_Date', 'DESC')->limit(1)->get('punchfile')->row()->Created_Date??date('Y-m'))) . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), ];
+    }
+    private function getCashReceiptData($Scan_Id, $DocType_Id) {
+        return [
+            'rec' => $this->customlib->getScanData($Scan_Id), 
+            'punch_detail' => $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row(), 
+            'company_list' => $this->customlib->getCompanyList(), 
+            'locationlist' => $this->customlib->getWorkLocationList(),
+            'temp_punch_detail' => $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_id' => $Scan_Id])->row(), 
+            'document_number' => 'CASH/' . date('y-m') . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), 
+            'tdsJvNo' => 'TDSCASH/' . date('Y-m', strtotime($this->db->select('Created_Date')->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->order_by('Created_Date', 'DESC')->limit(1)->get('punchfile')->row()->Created_Date??date('Y-m'))) . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), ];
+    }
+
+    private function getCashVoucherData($Scan_Id, $DocType_Id) {
+        return [
+            'rec' => $this->customlib->getScanData($Scan_Id), 
+            'punch_detail' => $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row(), 
+            'company_list' => $this->customlib->getCompanyList(), 
+            'locationlist' => $this->customlib->getWorkLocationList(),
+            'temp_punch_detail' => $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_id' => $Scan_Id])->row(), 
+            'document_number' => 'CASH/' . date('y-m') . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), 
+            'tdsJvNo' => 'TDSCASH/' . date('Y-m', strtotime($this->db->select('Created_Date')->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->order_by('Created_Date', 'DESC')->limit(1)->get('punchfile')->row()->Created_Date??date('Y-m'))) . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), ];
+    }
+
+    
+    
+
     private function getTwoFourWheelerData($Scan_Id, $DocType_Id) {
         return ['vehicle_info' => $this->db->get_where('vehicle_table', ['scan_id' => $Scan_Id])->row(), 'vehicle_type_list' => $this->customlib->getVehicleTypes() ];
     }

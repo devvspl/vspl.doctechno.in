@@ -109,7 +109,7 @@ class Extract_model extends CI_Model {
 
     public function getDocTypes() {
         return $this->db->where("status", "A")
-                        ->where_in("type_id", [1, 6, 7, 13, 17, 20, 22, 23, 27, 28, 29, 31, 42, 43, 44, 46, 47, 48, 50, 51, 52, 54, 55, 56])
+                        ->where_in("type_id", [1, 6, 7, 13, 17, 20, 22, 23, 27, 28, 29, 31, 42, 43, 44, 46, 47, 48, 50, 51, 52, 54, 55, 56, 59])
                         ->order_by("file_type", "ASC")
                         ->get("master_doctype")
                         ->result();
@@ -192,14 +192,107 @@ class Extract_model extends CI_Model {
         return $query->num_rows() > 0 ? $query->row()->File_Location : null;
     }
 
-    public function storeExtractedData($typeId, $scanId, $data) {
+    // public function storeExtractedData($typeId, $scanId, $data) {
+    //     $tableName = "ext_tempdata_" . $typeId;
+    //     if (!$this->db->table_exists($tableName)) {
+    //         return false;
+    //     }
+
+    //     $nestedKeys = ["Details", "Items", "Employees", "Distance Details", "Head Details", "Perticulars", "Round Off"];
+
+        
+    //     // Get scan file details
+    //     $this->db->select("Group_Id, Location");
+    //     $this->db->where("Scan_Id", $scanId);
+    //     $query = $this->db->get("scan_file");
+    //     if ($query->num_rows() == 0) {
+    //         return false;
+    //     }
+    //     $scanData = $query->row_array();
+    //     $groupId = $scanData["Group_Id"];
+    //     $location = $scanData["Location"];
+
+    //     // Delete existing data if any
+    //     $this->db->where("Scan_Id", $scanId);
+    //     if ($this->db->get($tableName)->num_rows() > 0) {
+    //         $this->db->where("Scan_Id", $scanId);
+    //         $this->db->delete($tableName);
+    //     }
+
+    //     // Flatten and prepare data
+    //     $flatData = $this->flattenArray($data, $nestedKeys);
+    //     $tableColumns = $this->db->list_fields($tableName);
+    //     $insertData = ["scan_id" => $scanId, "group_id" => $groupId, "location_id" => $location];
+
+    //     foreach ($flatData as $key => $value) {
+    //         $column = strtolower(str_replace([" ", "/", "-"], " ", $key));
+    //         $matchedColumn = $this->getBestMatch($column, $tableColumns);
+    //         if ($matchedColumn) {
+    //             if (is_string($value) && $this->isValidDate($value)) {
+    //                 $value = date('Y-m-d', strtotime($value));
+    //             } else {
+    //                 if (!is_null($value) && is_string($value)) {
+    //                     $value = preg_replace('/[₹,]/', '', $value);
+    //                 }
+    //                 if (is_numeric($value)) {
+    //                     $value = (float)$value;
+    //                 }
+    //             }
+    //             $insertData[$matchedColumn] = $value;
+    //         }
+    //     }
+
+    //     if ($this->db->insert($tableName, $insertData)) {
+    //         $docType = $this->customlib->getDocType($typeId);
+    //         $this->db->where("Scan_Id", $scanId);
+    //         $this->db->update("scan_file", ["is_extract" => "Y", "Doc_Type" => $docType, "DocType_Id" => $typeId]);
+
+    //         // Handle nested data
+    //         foreach ($nestedKeys as $section) {
+    //             if (isset($data[$section]) && is_array($data[$section])) {
+    //                 $detailsTable = "ext_tempdata_{$typeId}_details";
+    //                 if ($this->db->table_exists($detailsTable)) {
+    //                     $this->db->where("Scan_Id", $scanId)->delete($detailsTable);
+    //                     $detailsColumns = $this->db->list_fields($detailsTable);
+                        
+    //                     foreach ($data[$section] as $item) {
+    //                         $detailsData = ["scan_id" => $scanId];
+    //                         foreach ($item as $key => $value) {
+    //                             $column = strtolower(str_replace([" ", "/", "-"], "", $key));
+    //                             $matchedColumn = $this->getBestMatch($column, $detailsColumns);
+    //                             if ($matchedColumn) {
+    //                                 $detailsData[$matchedColumn] = $value;
+    //                             }
+    //                         }
+    //                         $this->db->insert($detailsTable, $detailsData);
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         return $this->moveDataToPunchfile($scanId, $typeId);
+    //     }
+    //     return false;
+    // }
+    public function storeExtractedData($typeId, $scanId, $data)
+    {
         $tableName = "ext_tempdata_" . $typeId;
         if (!$this->db->table_exists($tableName)) {
             return false;
         }
 
         $nestedKeys = ["Details", "Items", "Employees", "Distance Details", "Head Details", "Perticulars"];
-        
+
+        // Manually flatten Round Off if present
+        if (isset($data['Round Off']) && is_array($data['Round Off'])) {
+            if (isset($data['Round Off']['Value'])) {
+                $data['Round Off Value'] = $data['Round Off']['Value'];
+            }
+            if (isset($data['Round Off']['Type'])) {
+                $data['Round Off Type'] = $data['Round Off']['Type'];
+            }
+            unset($data['Round Off']);
+        }
+
         // Get scan file details
         $this->db->select("Group_Id, Location");
         $this->db->where("Scan_Id", $scanId);
@@ -207,6 +300,7 @@ class Extract_model extends CI_Model {
         if ($query->num_rows() == 0) {
             return false;
         }
+
         $scanData = $query->row_array();
         $groupId = $scanData["Group_Id"];
         $location = $scanData["Location"];
@@ -221,11 +315,20 @@ class Extract_model extends CI_Model {
         // Flatten and prepare data
         $flatData = $this->flattenArray($data, $nestedKeys);
         $tableColumns = $this->db->list_fields($tableName);
-        $insertData = ["scan_id" => $scanId, "group_id" => $groupId, "location_id" => $location];
+        $insertData = [
+            "scan_id" => $scanId,
+            "group_id" => $groupId,
+            "location_id" => $location
+        ];
 
         foreach ($flatData as $key => $value) {
+            if (is_array($value)) {
+                continue; // Skip array-type values
+            }
+
             $column = strtolower(str_replace([" ", "/", "-"], " ", $key));
             $matchedColumn = $this->getBestMatch($column, $tableColumns);
+
             if ($matchedColumn) {
                 if (is_string($value) && $this->isValidDate($value)) {
                     $value = date('Y-m-d', strtotime($value));
@@ -244,19 +347,26 @@ class Extract_model extends CI_Model {
         if ($this->db->insert($tableName, $insertData)) {
             $docType = $this->customlib->getDocType($typeId);
             $this->db->where("Scan_Id", $scanId);
-            $this->db->update("scan_file", ["is_extract" => "Y", "Doc_Type" => $docType, "DocType_Id" => $typeId]);
+            $this->db->update("scan_file", [
+                "is_extract" => "Y",
+                "Doc_Type" => $docType,
+                "DocType_Id" => $typeId
+            ]);
 
-            // Handle nested data
+            // Handle nested details
             foreach ($nestedKeys as $section) {
                 if (isset($data[$section]) && is_array($data[$section])) {
                     $detailsTable = "ext_tempdata_{$typeId}_details";
                     if ($this->db->table_exists($detailsTable)) {
                         $this->db->where("Scan_Id", $scanId)->delete($detailsTable);
                         $detailsColumns = $this->db->list_fields($detailsTable);
-                        
+
                         foreach ($data[$section] as $item) {
                             $detailsData = ["scan_id" => $scanId];
                             foreach ($item as $key => $value) {
+                                if (is_array($value)) {
+                                    continue;
+                                }
                                 $column = strtolower(str_replace([" ", "/", "-"], "", $key));
                                 $matchedColumn = $this->getBestMatch($column, $detailsColumns);
                                 if ($matchedColumn) {
@@ -268,10 +378,13 @@ class Extract_model extends CI_Model {
                     }
                 }
             }
+
             return $this->moveDataToPunchfile($scanId, $typeId);
         }
+
         return false;
     }
+
 
     private function getBestMatch($inputColumn, $columns) {
         $bestMatch = null;
