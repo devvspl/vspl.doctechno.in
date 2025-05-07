@@ -180,12 +180,261 @@ class Punch extends CI_Controller {
             'tdsJvNo' => 'TDSCASH/' . date('Y-m', strtotime($this->db->select('Created_Date')->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->order_by('Created_Date', 'DESC')->limit(1)->get('punchfile')->row()->Created_Date??date('Y-m'))) . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), ];
     }
 
-    
-    
-
     private function getTwoFourWheelerData($Scan_Id, $DocType_Id) {
-        return ['vehicle_info' => $this->db->get_where('vehicle_table', ['scan_id' => $Scan_Id])->row(), 'vehicle_type_list' => $this->customlib->getVehicleTypes() ];
+        return [
+            'rec' => $this->customlib->getScanData($Scan_Id), 
+            'punch_detail' => $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row(), 
+            'temp_punch_detail' => $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_id' => $Scan_Id])->row(), 
+            'document_number' => 'CASH/' . date('y-m') . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), 
+            'tdsJvNo' => 'TDSCASH/' . date('Y-m', strtotime($this->db->select('Created_Date')->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->order_by('Created_Date', 'DESC')->limit(1)->get('punchfile')->row()->Created_Date??date('Y-m'))) . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT),
+            'worklocation_list' => $this->customlib->getWorkLocationList(),
+            'employee_list' => $this->customlib->getEmployeeList(),
+         ];
     }
+
+    private function getAirData($Scan_Id, $DocType_Id) {
+        return [
+            'rec' => $this->customlib->getScanData($Scan_Id), 
+            'punch_detail' => $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row(), 
+            'temp_punch_detail' => $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_id' => $Scan_Id])->row(), 
+            'document_number' => 'CASH/' . date('y-m') . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), 
+            'tdsJvNo' => 'TDSCASH/' . date('Y-m', strtotime($this->db->select('Created_Date')->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->order_by('Created_Date', 'DESC')->limit(1)->get('punchfile')->row()->Created_Date??date('Y-m'))) . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT),
+            'locationlist' => $this->customlib->getWorkLocationList(),
+            'employee_list' => $this->customlib->getEmployeeList(),
+         ];
+    }
+
+    private function getCreditNoteData($Scan_Id, $DocType_Id) {
+        return [
+            'rec' => $this->customlib->getScanData($Scan_Id), 
+            'punch_detail' => $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row(), 
+            'temp_punch_detail' => $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_id' => $Scan_Id])->row(), 
+            'document_number' => 'CASH/' . date('y-m') . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), 
+            'tdsJvNo' => 'TDSCASH/' . date('Y-m', strtotime($this->db->select('Created_Date')->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->order_by('Created_Date', 'DESC')->limit(1)->get('punchfile')->row()->Created_Date??date('Y-m'))) . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT),
+            'firm' => $this->db->get_where('master_firm', ['status' => 'A'])->result_array(),
+            'company_list' => $this->customlib->getCompanyList(),
+            'department_list' => $this->customlib->getDepartmentList(),
+            'file_list' => $this->customlib->getFileList(),
+            'worklocation_list' => $this->customlib->getWorkLocationList(),
+            'ledger_list' => $this->customlib->getLedgerList(),
+            'category_list' => $this->customlib->getCategoryList(),
+            'item_list' => $this->customlib->getItemList(),
+            'locationlist' => $this->customlib->getWorkLocationList(),
+         ];
+    }
+
+
+    private function getElectricityBillData($Scan_Id, $DocType_Id) {
+        return [
+            'rec' => $this->customlib->getScanData($Scan_Id), 
+            'punch_detail' => $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row(), 
+            'temp_punch_detail' => $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_id' => $Scan_Id])->row(), 
+            'document_number' => 'CASH/' . date('y-m') . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), 
+            'tdsJvNo' => 'TDSCASH/' . date('Y-m', strtotime($this->db->select('Created_Date')->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->order_by('Created_Date', 'DESC')->limit(1)->get('punchfile')->row()->Created_Date??date('Y-m'))) . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT),
+            'company_list' => $this->customlib->getCompanyList(),
+            'locationlist' => $this->customlib->getWorkLocationList(),
+         ];
+    }
+
+    private function getGstChallanData($Scan_Id, $DocType_Id) {
+        return [
+            'rec' => $this->customlib->getScanData($Scan_Id), 
+            'punch_detail' => $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row(), 
+            'temp_punch_detail' => $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_id' => $Scan_Id])->row(), 
+            'document_number' => 'CASH/' . date('y-m') . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), 
+            'tdsJvNo' => 'TDSCASH/' . date('Y-m', strtotime($this->db->select('Created_Date')->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->order_by('Created_Date', 'DESC')->limit(1)->get('punchfile')->row()->Created_Date??date('Y-m'))) . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT),
+            'company_list' => $this->customlib->getCompanyList(),
+         ];
+    }
+
+
+    private function getHiredVehicleData($Scan_Id, $DocType_Id) {
+        return [
+            'rec' => $this->customlib->getScanData($Scan_Id), 
+            'punch_detail' => $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row(), 
+            'temp_punch_detail' => $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_id' => $Scan_Id])->row(), 
+            'document_number' => 'CASH/' . date('y-m') . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), 
+            'tdsJvNo' => 'TDSCASH/' . date('Y-m', strtotime($this->db->select('Created_Date')->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->order_by('Created_Date', 'DESC')->limit(1)->get('punchfile')->row()->Created_Date??date('Y-m'))) . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT),
+            'company_list' => $this->customlib->getCompanyList(),
+            'vendor_list' => $this->customlib->getVendorList(),
+            'locationlist' => $this->customlib->getWorkLocationList(),
+            'employee_list' => $this->customlib->getEmployeeList(),
+         ];
+    }
+    private function getInsurancePolicyData($Scan_Id, $DocType_Id) {
+        return [
+            'rec' => $this->customlib->getScanData($Scan_Id), 
+            'punch_detail' => $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row(), 
+            'temp_punch_detail' => $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_id' => $Scan_Id])->row(), 
+            'document_number' => 'CASH/' . date('y-m') . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), 
+            'tdsJvNo' => 'TDSCASH/' . date('Y-m', strtotime($this->db->select('Created_Date')->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->order_by('Created_Date', 'DESC')->limit(1)->get('punchfile')->row()->Created_Date??date('Y-m'))) . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT),
+            'company_list' => $this->customlib->getCompanyList(),
+         ];
+    }
+
+
+    private function getLabourPaymentData($Scan_Id, $DocType_Id) {
+        return [
+            'rec' => $this->customlib->getScanData($Scan_Id), 
+            'punch_detail' => $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row(), 
+            'temp_punch_detail' => $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_id' => $Scan_Id])->row(), 
+            'document_number' => 'CASH/' . date('y-m') . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), 
+            'tdsJvNo' => 'TDSCASH/' . date('Y-m', strtotime($this->db->select('Created_Date')->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->order_by('Created_Date', 'DESC')->limit(1)->get('punchfile')->row()->Created_Date??date('Y-m'))) . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT),
+          
+         ];
+    }
+    private function getLocalConveyanceData($Scan_Id, $DocType_Id) {
+        return [
+            'rec' => $this->customlib->getScanData($Scan_Id), 
+            'punch_detail' => $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row(), 
+            'temp_punch_detail' => $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_id' => $Scan_Id])->row(), 
+            'document_number' => 'CASH/' . date('y-m') . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), 
+            'tdsJvNo' => 'TDSCASH/' . date('Y-m', strtotime($this->db->select('Created_Date')->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->order_by('Created_Date', 'DESC')->limit(1)->get('punchfile')->row()->Created_Date??date('Y-m'))) . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT),
+            'locationlist' => $this->customlib->getWorkLocationList(),
+            'employee_list' => $this->customlib->getEmployeeList(),
+            'months' => array('1' => 'January', '2' => 'February', '3' => 'March', '4' => 'April', '5' => 'May', '6' => 'June', '7' => 'July', '8' => 'August', '9' => 'September', '10' => 'October', '11' => 'November', '12' => 'December')
+         ];
+    }
+    
+    private function getLodgingData($Scan_Id, $DocType_Id) {
+        return [
+            'rec' => $this->customlib->getScanData($Scan_Id), 
+            'punch_detail' => $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row(), 
+            'temp_punch_detail' => $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_id' => $Scan_Id])->row(), 
+            'document_number' => 'CASH/' . date('y-m') . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), 
+            'tdsJvNo' => 'TDSCASH/' . date('Y-m', strtotime($this->db->select('Created_Date')->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->order_by('Created_Date', 'DESC')->limit(1)->get('punchfile')->row()->Created_Date??date('Y-m'))) . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT),
+            'company_list' => $this->customlib->getCompanyList(),
+            'vendor_list' => $this->customlib->getVendorList(),
+            'locationlist' => $this->customlib->getWorkLocationList(),
+            'hotel_list' => $this->db->select('hotel_id,hotel_name,address')->get_where('master_hotel', ['status' => 'A', 'is_deleted' => 'N'])->result_array(),
+            'employee_list' => $this->customlib->getEmployeeList(),
+         ];
+    }
+
+    private function getMachineOperationData($Scan_Id, $DocType_Id) {
+        return [
+            'rec' => $this->customlib->getScanData($Scan_Id), 
+            'punch_detail' => $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row(), 
+            'temp_punch_detail' => $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_id' => $Scan_Id])->row(), 
+            'document_number' => 'CASH/' . date('y-m') . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), 
+            'tdsJvNo' => 'TDSCASH/' . date('Y-m', strtotime($this->db->select('Created_Date')->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->order_by('Created_Date', 'DESC')->limit(1)->get('punchfile')->row()->Created_Date??date('Y-m'))) . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT),
+            'company_list' => $this->customlib->getCompanyList(),
+            'vendor_list' => $this->customlib->getVendorList(),
+            'worklocation_list' => $this->customlib->getWorkLocationList(),
+            'fin_year' => $this->customlib->getFinancial_year()
+         ];
+    }
+
+    private function getMealsData($Scan_Id, $DocType_Id) {
+        return [
+            'rec' => $this->customlib->getScanData($Scan_Id), 
+            'punch_detail' => $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row(), 
+            'temp_punch_detail' => $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_id' => $Scan_Id])->row(), 
+            'document_number' => 'CASH/' . date('y-m') . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), 
+            'tdsJvNo' => 'TDSCASH/' . date('Y-m', strtotime($this->db->select('Created_Date')->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->order_by('Created_Date', 'DESC')->limit(1)->get('punchfile')->row()->Created_Date??date('Y-m'))) . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT),
+            'company_list' => $this->customlib->getCompanyList(),
+            'locationlist' => $this->customlib->getWorkLocationList(),
+            'employee_list' => $this->customlib->getEmployeeList(),
+         ];
+    }
+
+    private function getMiscellaneousData($Scan_Id, $DocType_Id) {
+        return [
+            'rec' => $this->customlib->getScanData($Scan_Id), 
+            'punch_detail' => $this->db->get_where('punchfile2', ['Scan_Id' => $Scan_Id])->row(), 
+            'temp_punch_detail' => $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_id' => $Scan_Id])->row(), 
+            'document_number' => 'CASH/' . date('y-m') . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), 
+            'tdsJvNo' => 'TDSCASH/' . date('Y-m', strtotime($this->db->select('Created_Date')->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->order_by('Created_Date', 'DESC')->limit(1)->get('punchfile')->row()->Created_Date??date('Y-m'))) . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT),
+            'company_list' => $this->customlib->getCompanyList(),
+            'vendor_list' => $this->db->get_where('master_firm', ['status' => 'A'])->result_array(),
+            'worklocation_list' => $this->customlib->getWorkLocationList(),
+
+         ];
+    }
+
+    private function getRailData($Scan_Id, $DocType_Id) {
+        return [
+            'rec' => $this->customlib->getScanData($Scan_Id), 
+            'punch_detail' => $this->db->get_where('punchfile2', ['Scan_Id' => $Scan_Id])->row(), 
+            'temp_punch_detail' => $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_id' => $Scan_Id])->row(), 
+            'document_number' => 'CASH/' . date('y-m') . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), 
+            'tdsJvNo' => 'TDSCASH/' . date('Y-m', strtotime($this->db->select('Created_Date')->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->order_by('Created_Date', 'DESC')->limit(1)->get('punchfile')->row()->Created_Date??date('Y-m'))) . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT),
+            'employee_list' => $this->customlib->getEmployeeList(),
+            'locationlist' => $this->customlib->getWorkLocationList(),
+
+         ];
+    }
+
+    private function getSaleBillData($Scan_Id, $DocType_Id) {
+        return [
+            'rec' => $this->customlib->getScanData($Scan_Id), 
+            'punch_detail' => $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row(), 
+            'temp_punch_detail' => $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_id' => $Scan_Id])->row(), 
+            'document_number' => 'CASH/' . date('y-m') . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), 
+            'tdsJvNo' => 'TDSCASH/' . date('Y-m', strtotime($this->db->select('Created_Date')->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->order_by('Created_Date', 'DESC')->limit(1)->get('punchfile')->row()->Created_Date??date('Y-m'))) . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT),
+            'firm' => $this->db->get_where('master_firm', ['status' => 'A'])->result_array(),
+            'company_list' => $this->customlib->getCompanyList(),
+            'department_list' => $this->customlib->getDepartmentList(),
+            'file_list' => $this->customlib->getFileList(),
+            'worklocation_list' => $this->customlib->getWorkLocationList(),
+            'ledger_list' => $this->customlib->getLedgerList(),
+            'category_list' => $this->customlib->getCategoryList(),
+            'item_list' => $this->customlib->getItemList(),
+            'locationlist' => $this->customlib->getWorkLocationList(),
+         ];
+    }
+
+    private function getTelephoneBillData($Scan_Id, $DocType_Id) {
+        return [
+            'rec' => $this->customlib->getScanData($Scan_Id), 
+            'punch_detail' => $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row(), 
+            'temp_punch_detail' => $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_id' => $Scan_Id])->row(), 
+            'document_number' => 'CASH/' . date('y-m') . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), 
+            'tdsJvNo' => 'TDSCASH/' . date('Y-m', strtotime($this->db->select('Created_Date')->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->order_by('Created_Date', 'DESC')->limit(1)->get('punchfile')->row()->Created_Date??date('Y-m'))) . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT)
+         ];
+    }
+
+    private function getTicketCancellationData($Scan_Id, $DocType_Id) {
+        return [
+            'rec' => $this->customlib->getScanData($Scan_Id), 
+            'punch_detail' => $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row(), 
+            'temp_punch_detail' => $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_id' => $Scan_Id])->row(), 
+            'document_number' => 'CASH/' . date('y-m') . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), 
+            'tdsJvNo' => 'TDSCASH/' . date('Y-m', strtotime($this->db->select('Created_Date')->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->order_by('Created_Date', 'DESC')->limit(1)->get('punchfile')->row()->Created_Date??date('Y-m'))) . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT),
+            'company_list' => $this->customlib->getCompanyList(),
+            'hotel_list' => $this->db->select('hotel_id,hotel_name,address')->get_where('master_hotel', ['status' => 'A', 'is_deleted' => 'N'])->result_array(),
+            'employee_list' => $this->customlib->getEmployeeList(),
+         ];
+    }
+
+    private function getVehicleFuelData($Scan_Id, $DocType_Id) {
+        return [
+            'rec' => $this->customlib->getScanData($Scan_Id), 
+            'punch_detail' => $this->db->get_where('punchfile2', ['Scan_Id' => $Scan_Id])->row(), 
+            'temp_punch_detail' => $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_id' => $Scan_Id])->row(), 
+            'document_number' => 'CASH/' . date('y-m') . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), 
+            'tdsJvNo' => 'TDSCASH/' . date('Y-m', strtotime($this->db->select('Created_Date')->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->order_by('Created_Date', 'DESC')->limit(1)->get('punchfile')->row()->Created_Date??date('Y-m'))) . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT),
+            'company_list' => $this->customlib->getCompanyList(),
+            'vendor_list' => $this->db->get_where('master_firm', ['status' => 'A'])->result_array(),
+            'worklocation_list' => $this->customlib->getWorkLocationList(),
+
+         ];
+    }
+
+    private function getVehicleMaintenanceData($Scan_Id, $DocType_Id) {
+        return [
+            'rec' => $this->customlib->getScanData($Scan_Id), 
+            'punch_detail' => $this->db->get_where('punchfile2', ['Scan_Id' => $Scan_Id])->row(), 
+            'temp_punch_detail' => $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_id' => $Scan_Id])->row(), 
+            'document_number' => 'CASH/' . date('y-m') . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), 
+            'tdsJvNo' => 'TDSCASH/' . date('Y-m', strtotime($this->db->select('Created_Date')->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->order_by('Created_Date', 'DESC')->limit(1)->get('punchfile')->row()->Created_Date??date('Y-m'))) . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT),
+            'company_list' => $this->customlib->getCompanyList(),
+            'vendor_list' => $this->db->get_where('master_firm', ['status' => 'A'])->result_array(),
+            'worklocation_list' => $this->customlib->getWorkLocationList(),
+
+         ];
+    }
+    
     public function my_punched_file($show_all = null) {
         $this->session->set_userdata('top_menu', 'punch_master');
         $this->session->set_userdata('sub_menu', 'my_punched_file');
