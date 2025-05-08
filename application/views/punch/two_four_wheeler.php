@@ -152,9 +152,15 @@
          </div>
       </div>
       <div class="box-footer">
-         <button type="reset" class="btn btn-danger">Reset</button>
-         <button type="submit" class="btn btn-success pull-right">Save</button>
-      </div>
+            <button type="reset" class="btn btn-danger">Reset</button>
+            <?php if (!empty($user_permission) &&  $user_permission == 'N') : ?>
+               <input type="submit" class="btn btn-success pull-right" style="margin-left: 20px;" name="submit" value="Final Submit"></input>
+            <?php endif; ?>
+          
+            <?php if (!empty($user_permission) && ($user_permission == 'Y' || $user_permission == 'N')) : ?>
+            <input type="submit" class="btn btn-info pull-right"  name="save_as_draft" value="Save as Draft"></input>
+            <?php endif; ?>
+         </div>
       <?php
          if ($this->customlib->haveSupportFile($Scan_Id) == 1) {
          	?>
@@ -305,4 +311,19 @@
    
    	$("#Grand_Total").val(total_amount_int);
    }
+   $(document).ready(function () {
+   $("#invoice-tab").click(function () {
+        $("#additional-info").removeClass("active");
+        $("#invoice-details").addClass("active");
+        $(".tabs").removeClass("active-tab");
+        $(this).addClass("active-tab");
+    });
+
+    $("#additional-info-tab").click(function () {
+        $("#invoice-details").removeClass("active");
+        $("#additional-info").addClass("active");
+        $(".tabs").removeClass("active-tab");
+        $(this).addClass("active-tab");
+    });
+});
 </script>

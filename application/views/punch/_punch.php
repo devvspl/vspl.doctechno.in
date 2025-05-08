@@ -47,7 +47,15 @@
                         <?php endif; ?>
                      </div>
                      <div class="col-md-8">
-                     <?php echo $this->session->flashdata('message'); ?>
+               
+                        <?php if ($this->session->flashdata('message')): ?>
+                           <div class="custom-alert alert-<?= $this->session->flashdata('alert_type') ?>">
+                              <?= $this->session->flashdata('message') ?>
+                              <span class="custom-alert-close" onclick="this.parentElement.style.display='none';">&times;</span>
+                           </div>
+                        <?php endif; ?>
+
+
                      <?php if (!empty($user_permission) && $user_permission == 'Y') : ?>
                         <div class="tabs-container">
                            <div class="tabs active-tab" id="invoice-tab">Basic Details</div>

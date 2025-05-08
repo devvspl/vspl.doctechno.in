@@ -24,8 +24,9 @@
             <input type="text" id="business_entity" name="business_entity" class="form-control" placeholder="Select Business Entity" value="<?= isset($main_record) ? $main_record['business_entity_name'] : ''; ?>">
          </div>
          <div class="form-group col-md-12" style="background-color: #ffffff; margin-bottom: 0;padding-bottom: 5px;">
+
             <label for="">Narration <span class="text-danger">*</span></label>
-            <textarea name="narration" id="narration" placeholder="Enter transaction details" class="form-control"><?= isset($main_record) && isset($main_record['narration']) ? $main_record['narration'] : (isset($punch_detail) && isset($punch_detail->narration) ? $punch_detail->narration : ''); ?></textarea>
+            <textarea name="narration" id="narration" placeholder="Enter transaction details" class="form-control"><?= isset($main_record) && isset($main_record['narration']) ? $main_record['narration'] : (isset($punch_detail) && isset($punch_detail->Remark) ? $punch_detail->Remark : ''); ?></textarea>
 
          </div>
          <div class="form-group col-md-12 tds-applicable-group" style="display: flex; gap: 15px; background-color: #ffffff; margin-bottom: 0; padding-bottom: 5px;">
@@ -83,7 +84,7 @@
             <div class="row form-row" id="row_<?= $index + 1 ?>" style="padding: 5px;">
                <div class="form-group col-md-3">
                   <label for="cost_center">Cost Center</label>
-                  <input type="text" name="cost_center_name[]" id="cost_center_<?= $index + 1 ?>" class="form-control autocomplete-cost-center" value="<?= isset($item['cost_center_name']) ? $item['cost_center_name'] : ''; ?>">
+                  <input type="text" name="cost_center_name[]" id="cost_center_<?= $index + 1 ?>" class="form-control autocomplete-cost-center" value="<?= isset($item['name']) ? $item['name'] : ''; ?>">
                   <input type="hidden" name="cost_center_id[]" id="cost_center_id_<?= $index + 1 ?>" value="<?= isset($item['cost_center_id']) ? $item['cost_center_id'] : ''; ?>">
                </div>
                <div class="form-group col-md-3">

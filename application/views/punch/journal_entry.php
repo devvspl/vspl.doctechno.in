@@ -38,7 +38,7 @@
    $states = fetchData('master_state', $this->db);
    $locations = fetchData('master_work_location', $this->db);
    $categories = fetchData('master_crop_category', $this->db);
-   $activities = fetchData('master_activity', $this->db);
+   $activities = fetchData('core_activity', $this->db);
    $crop_list = fetchData('master_crop', $this->db);
    $region_list = fetchData('master_region', $this->db); 
    $journal_entry_items = $this->db->where(['Scan_Id'=>$Scan_Id])->get('journal_entry_items');

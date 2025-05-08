@@ -31,9 +31,9 @@ class Punch extends CI_Controller {
         if (empty($mainRecord)) {
             return null;
         }
-        $this->db->select('aii.*, cc.cost_center_name, d.department_name, bu.business_unit_name, r.region_name, s.state_name, l.city_village_name as location_name, c.category_name, cr.crop_name, a.activity_name, da.account_name as debit_account, pm.payment_term_name as payment_term');
+        $this->db->select('aii.*, cc.name, d.department_name, bu.business_unit_name, r.region_name, s.state_name, l.city_village_name as location_name, c.category_name, cr.crop_name, a.activity_name, da.account_name as debit_account, pm.payment_term_name as payment_term');
         $this->db->from('tbl_additional_information_items aii');
-        $this->db->join('master_cost_center cc', 'cc.cost_center_id = aii.cost_center_id', 'left');
+        $this->db->join('master_cost_center cc', 'cc.id = aii.cost_center_id', 'left');
         $this->db->join('core_department d', 'd.api_id = aii.department_id', 'left');
         $this->db->join('core_business_unit bu', 'bu.api_id = aii.business_unit_id', 'left');
         $this->db->join('core_region r', 'r.api_id = aii.region_id', 'left');
@@ -41,7 +41,7 @@ class Punch extends CI_Controller {
         $this->db->join('core_city_village l', 'l.api_id = aii.location_id', 'left');
         $this->db->join('master_category c', 'c.category_id = aii.category_id', 'left');
         $this->db->join('core_crop cr', 'cr.api_id = aii.crop_id', 'left');
-        $this->db->join('master_activity a', 'a.activity_id = aii.activity_id', 'left');
+        $this->db->join('core_activity a', 'a.api_id = aii.activity_id', 'left');
         $this->db->join('master_account_ledger da', 'da.id = aii.debit_account_id', 'left');
         $this->db->join('payment_term_master pm', 'pm.id = aii.payment_term_id', 'left');
         $this->db->where('aii.scan_id', $scan_id);
@@ -410,7 +410,7 @@ class Punch extends CI_Controller {
     private function getVehicleFuelData($Scan_Id, $DocType_Id) {
         return [
             'rec' => $this->customlib->getScanData($Scan_Id), 
-            'punch_detail' => $this->db->get_where('punchfile2', ['Scan_Id' => $Scan_Id])->row(), 
+            'punch_detail' => $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row(), 
             'temp_punch_detail' => $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_id' => $Scan_Id])->row(), 
             'document_number' => 'CASH/' . date('y-m') . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), 
             'tdsJvNo' => 'TDSCASH/' . date('Y-m', strtotime($this->db->select('Created_Date')->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->order_by('Created_Date', 'DESC')->limit(1)->get('punchfile')->row()->Created_Date??date('Y-m'))) . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT),
@@ -424,7 +424,7 @@ class Punch extends CI_Controller {
     private function getVehicleMaintenanceData($Scan_Id, $DocType_Id) {
         return [
             'rec' => $this->customlib->getScanData($Scan_Id), 
-            'punch_detail' => $this->db->get_where('punchfile2', ['Scan_Id' => $Scan_Id])->row(), 
+            'punch_detail' => $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row(), 
             'temp_punch_detail' => $this->db->get_where("ext_tempdata_{$DocType_Id}", ['scan_id' => $Scan_Id])->row(), 
             'document_number' => 'CASH/' . date('y-m') . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT), 
             'tdsJvNo' => 'TDSCASH/' . date('Y-m', strtotime($this->db->select('Created_Date')->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->order_by('Created_Date', 'DESC')->limit(1)->get('punchfile')->row()->Created_Date??date('Y-m'))) . '/' . str_pad($this->db->where('DocTypeId', 7)->where('MONTH(Created_Date)', date('m'))->where('YEAR(Created_Date)', date('Y'))->count_all_results('punchfile') + 1, 4, '0', STR_PAD_LEFT),

@@ -74,9 +74,12 @@ class Challan_ctrl extends CI_Controller
 
     public function Save_GST_Challan()
     {
+        $submit = $this->input->post('submit'); // Check if action is 'submit' or 'draft'
+    
         $Scan_Id = $this->input->post('Scan_Id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
+    
         $CPIN = $this->input->post('CPIN');
         $Deposit_Date = $this->input->post('Deposit_Date');
         $CIN = $this->input->post('CIN');
@@ -85,9 +88,11 @@ class Challan_ctrl extends CI_Controller
         $GSTIN = $this->input->post('GSTIN');
         $Email = $this->input->post('Email');
         $Mobile = $this->input->post('Mobile');
-       
         $Company = $this->input->post('Company');
         $Address = $this->input->post('Address');
+        $Remark = $this->input->post('Remark');
+        $Amount = $this->input->post('Total_Amount');
+    
         $Particular = $this->input->post('Particular');
         $Tax = $this->input->post('Tax');
         $Interest = $this->input->post('Interest');
@@ -95,9 +100,8 @@ class Challan_ctrl extends CI_Controller
         $Fees = $this->input->post('Fees');
         $Other = $this->input->post('Other');
         $Total = $this->input->post('Total');
-
-        $Amount = $this->input->post('Total_Amount');
-        $Remark = $this->input->post('Remark');
+    
+        // Prepare data for punchfile
         $data = array(
             'Scan_Id' => $Scan_Id,
             'DocType' => $DocType,
@@ -111,7 +115,6 @@ class Challan_ctrl extends CI_Controller
             'Email' => $Email,
             'MobileNo' => $Mobile,
             'Company' => $Company,
-           
             'Related_Address' => $Address,
             'Total_Amount' => $Amount,
             'Remark' => $Remark,
@@ -119,66 +122,77 @@ class Challan_ctrl extends CI_Controller
             'Created_By' => $this->session->userdata('user_id'),
             'Created_Date' => date('Y-m-d H:i:s'),
         );
-
+    
+        // Start transaction
         $this->db->trans_start();
         $this->db->trans_strict(FALSE);
-        if ($this->customlib->check_punchfile($Scan_Id) == true) {
-            //Update
+    
+        if ($this->customlib->check_punchfile($Scan_Id)) {
+            // Update punchfile
             $this->db->where('Scan_Id', $Scan_Id)->update('punchfile', $data);
-
             $FileID = $this->db->where('Scan_Id', $Scan_Id)->get('punchfile')->row()->FileID;
-            $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Amount, 'Comment' => $Remark));
+    
+            // Update sub_punchfile
+            $this->db->where('FileID', $FileID)->update('sub_punchfile', array(
+                'Amount' => '-' . $Amount,
+                'Comment' => $Remark
+            ));
+    
+            // Remove old details and insert new ones
             $this->db->where('Scan_Id', $Scan_Id)->delete('gst_challan_detail');
-            $array = array();
-            for ($i = 0; $i < count($Particular); $i++) {
-                $array[$i] = array(
-                    'Scan_Id' => $Scan_Id,
-                    'Particular' => $Particular[$i],
-                    'Tax' => $Tax[$i],
-                    'Interest' => $Interest[$i],
-                    'Penalty' => $Penalty[$i],
-                    'Fees' => $Fees[$i],
-                    'Other' => $Other[$i],
-                    'Total' => $Total[$i],
-
-                );
-            }
-            $this->db->insert_batch('gst_challan_detail', $array);
-            $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array('Is_Rejected' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N'));
         } else {
-            //Insert
+            // Insert punchfile
             $this->db->insert('punchfile', $data);
             $insert_id = $this->db->insert_id();
-            $this->db->insert('sub_punchfile', array('FileID' => $insert_id, 'Amount' => '-' . $Amount, 'Comment' => $Remark));
-            $array = array();
-            for ($i = 0; $i < count($Particular); $i++) {
-                $array[$i] = array(
-                    'Scan_Id' => $Scan_Id,
-                    'Particular' => $Particular[$i],
-                    'Tax' => $Tax[$i],
-                    'Interest' => $Interest[$i],
-                    'Penalty' => $Penalty[$i],
-                    'Fees' => $Fees[$i],
-                    'Other' => $Other[$i],
-                    'Total' => $Total[$i],
-
-                );
-            }
-            $this->db->insert_batch('gst_challan_detail', $array);
+    
+            // Insert sub_punchfile
+            $this->db->insert('sub_punchfile', array(
+                'FileID' => $insert_id,
+                'Amount' => '-' . $Amount,
+                'Comment' => $Remark
+            ));
         }
-
-
+    
+        // Prepare and insert GST challan details
+        $details = array();
+        for ($i = 0; $i < count($Particular); $i++) {
+            $details[] = array(
+                'Scan_Id' => $Scan_Id,
+                'Particular' => $Particular[$i],
+                'Tax' => $Tax[$i],
+                'Interest' => $Interest[$i],
+                'Penalty' => $Penalty[$i],
+                'Fees' => $Fees[$i],
+                'Other' => $Other[$i],
+                'Total' => $Total[$i]
+            );
+        }
+        $this->db->insert_batch('gst_challan_detail', $details);
+    
+        // Update scan_file for submit/draft
+        $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array(
+            'Is_Rejected' => 'N',
+            'Reject_Date' => NULL,
+            'Edit_Permission' => $submit ? 'N' : 'Y',
+            'finance_punch' => $submit ? 'N' : NULL
+        ));
+    
         $this->customlib->update_file_path($Scan_Id);
+    
+        // Complete transaction
         $this->db->trans_complete();
+    
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
-            $this->session->set_flashdata('message', '<div class="alert alert-success text-left">Something Went Wrong</div>');
+            $this->session->set_flashdata('message', '<div class="alert alert-danger text-left">Something went wrong</div>');
             redirect('punch');
         } else {
-            $this->session->set_flashdata('message', '<div class="alert alert-success text-left">GST Challan added successfully</div>');
-            redirect('punch');
+            $msg = $submit ? 'GST Challan submitted successfully' : 'GST Challan saved as draft';
+            $this->session->set_flashdata('message', '<div class="alert alert-success text-left">' . $msg . '</div>');
+            redirect($submit ? 'punch' : $_SERVER['HTTP_REFERER']);
         }
     }
+    
 
     function getGstItem(){
         $Scan_Id = $this->input->post('Scan_Id');

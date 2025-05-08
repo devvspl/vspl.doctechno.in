@@ -61,7 +61,7 @@
    $states = fetchData('master_state', $this->db);
    $locations = fetchData('master_work_location', $this->db);
    $categories = fetchData('master_crop_category', $this->db);
-   $activities = fetchData('master_activity', $this->db);
+   $activities = fetchData('core_activity', $this->db);
    $crop_list = fetchData('master_crop', $this->db);
    $region_list = fetchData('master_region', $this->db); 
    $cash_payment_new_items = $this->db->where(['Scan_Id'=>$Scan_Id])->get('cash_payment_new_items');
@@ -201,10 +201,10 @@
                               $selected = $entry['cost_center_id'];
                               foreach ($cost_centers as $cost_center): ?>
                            <option 
-                              value="<?= $cost_center['cost_center_id']; ?>" 
-                              <?= ($cost_center['cost_center_id'] == $selected) ? 'selected' : ''; ?>
+                              value="<?= $cost_center['id']; ?>" 
+                              <?= ($cost_center['id'] == $selected) ? 'selected' : ''; ?>
                               >
-                              <?= $cost_center['cost_center_name']; ?>
+                              <?= $cost_center['name']; ?>
                            </option>
                            <?php endforeach; ?>
                         </select>
@@ -414,10 +414,10 @@
                               $selected = isset($punch_detail->cost_center_id) ? $punch_detail->cost_center_id : '';
                               foreach ($cost_centers as $cost_center): ?>
                            <option 
-                              value="<?= $cost_center['cost_center_id']; ?>" 
-                              <?= ($cost_center['cost_center_id'] == $selected) ? 'selected' : ''; ?>
+                              value="<?= $cost_center['id']; ?>" 
+                              <?= ($cost_center['id'] == $selected) ? 'selected' : ''; ?>
                               >
-                              <?= $cost_center['cost_center_name']; ?>
+                              <?= $cost_center['name']; ?>
                            </option>
                            <?php endforeach; ?>
                         </select>

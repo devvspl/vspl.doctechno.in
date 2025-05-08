@@ -11,25 +11,28 @@ class Telephone_ctrl extends CI_Controller
     }
 
 
-    public function Save_Telephone_Bill()
-    {
+    public function Save_Telephone_Bill() {
+        $submit = $this->input->post('submit');  // This will check if the action is 'submit' or 'draft'
+    
         $Scan_Id = $this->input->post('Scan_Id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
-
-        $Bill_Date   = $this->input->post('Bill_Date');
-        $Invoice_No   = $this->input->post('Invoice_No');
-        $BIller_Name   = $this->input->post('BIller_Name');
-        $Phone_No   = $this->input->post('Phone_No');
-        $Period   = $this->input->post('Period');
-        $Taxable_Value   = $this->input->post('Taxable_Value');
-        $CGST   = $this->input->post('CGST');
-        $SGST   = $this->input->post('SGST');
-        $IGST   = $this->input->post('IGST');
-        $Amount_Due   = $this->input->post('Amount_Due');
+    
+        $Bill_Date = $this->input->post('Bill_Date');
+        $Invoice_No = $this->input->post('Invoice_No');
+        $BIller_Name = $this->input->post('BIller_Name');
+        $Phone_No = $this->input->post('Phone_No');
+        $Period = $this->input->post('Period');
+        $Taxable_Value = $this->input->post('Taxable_Value');
+        $CGST = $this->input->post('CGST');
+        $SGST = $this->input->post('SGST');
+        $IGST = $this->input->post('IGST');
+        $Amount_Due = $this->input->post('Amount_Due');
         $Amout_Outstanding = $this->input->post('Amout_Outstanding');
         $Lst_Payment_Date = $this->input->post('Lst_Payment_Date');
         $Remark = $this->input->post('Remark');
+    
+        // Prepare the data to be inserted or updated
         $data = array(
             'Scan_Id' => $Scan_Id,
             'DocType' => $DocType,
@@ -51,35 +54,91 @@ class Telephone_ctrl extends CI_Controller
             'Created_By' => $this->session->userdata('user_id'),
             'Created_Date' => date('Y-m-d H:i:s'),
         );
-
+    
+        // Start the transaction
         $this->db->trans_start();
         $this->db->trans_strict(FALSE);
+    
         if ($this->customlib->check_punchfile($Scan_Id) == true) {
-            //Update Existing Record
+            // Update existing record
             $this->db->where('Scan_Id', $Scan_Id)->update('punchfile', $data);
             $FileID = $this->db->where('Scan_Id', $Scan_Id)->get('punchfile')->row()->FileID;
-
-            $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Amout_Outstanding, 'Comment' => $Remark));
-            $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array('Is_Rejected' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N'));
+    
+            // Update the sub_punchfile record
+            $this->db->where('FileID', $FileID)->update('sub_punchfile', array(
+                'Amount' => '-' . $Amout_Outstanding, 
+                'Comment' => $Remark
+            ));
+    
+            // Handle the 'submit' or 'draft' action
+            if ($submit) {
+                $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array(
+                    'Is_Rejected' => 'N', 
+                    'Reject_Date' => NULL, 
+                    'Edit_Permission' => 'N', 
+                    'finance_punch' => 'N'  // Set finance_punch to 'N' when submitting
+                ));
+            } else {
+                $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array(
+                    'Is_Rejected' => 'N', 
+                    'Reject_Date' => NULL, 
+                    'Edit_Permission' => 'Y',  // Allow editing for draft
+                   
+                ));
+            }
+    
         } else {
-            //Insert New Record
+            // Insert new record
             $this->db->insert('punchfile', $data);
             $insert_id = $this->db->insert_id();
-            $this->db->insert('sub_punchfile', array('FileID' => $insert_id, 'Amount' => '-' . $Amout_Outstanding, 'Comment' => $Remark));
+    
+            // Insert into sub_punchfile
+            $this->db->insert('sub_punchfile', array(
+                'FileID' => $insert_id, 
+                'Amount' => '-' . $Amout_Outstanding, 
+                'Comment' => $Remark
+            ));
+    
+            // Handle the 'submit' or 'draft' action after insertion
+            if ($submit) {
+                $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array(
+                    'Is_Rejected' => 'N', 
+                    'Reject_Date' => NULL, 
+                    'Edit_Permission' => 'N', 
+                    'finance_punch' => 'N'  // Set finance_punch to 'N' when submitting
+                ));
+            } else {
+                $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array(
+                    'Is_Rejected' => 'N', 
+                    'Reject_Date' => NULL, 
+                    'Edit_Permission' => 'Y',  // Allow editing for draft
+                  
+                ));
+            }
         }
-
+    
         $this->customlib->update_file_path($Scan_Id);
-
+    
+        // Complete the transaction
         $this->db->trans_complete();
+    
+        // Handle transaction success or failure
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
-            $this->session->set_flashdata('message', '<div class="alert alert-success text-left">Something Went Wrong</div>');
+            $this->session->set_flashdata('message', '<div class="alert alert-danger text-left">Something Went Wrong</div>');
             redirect('punch');
         } else {
-            $this->session->set_flashdata('message', '<div class="alert alert-success text-left">Telephone Bill added successfully</div>');
-            redirect('punch');
+            if ($submit) {
+                $this->session->set_flashdata('message', '<div class="alert alert-success text-left">Telephone Bill submitted successfully</div>');
+            } else {
+                $this->session->set_flashdata('message', '<div class="alert alert-success text-left">Telephone Bill saved as draft</div>');
+            }
         }
+    
+        // Redirect based on whether it's submitted or saved as a draft
+        redirect($submit ? 'punch' : $_SERVER['HTTP_REFERER']);
     }
+    
     public function save_phone_fax()
     {
         $Scan_Id = $this->input->post('Scan_Id');

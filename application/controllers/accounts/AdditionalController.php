@@ -23,7 +23,7 @@ class AdditionalController extends CI_Controller {
     }
     public function get_cost_centers() {
         $query = $this->input->post('term');
-        $result = $this->AdditionalModel->get_autocomplete_list('master_cost_center', 'cost_center_name', 'cost_center_id', $query);
+        $result = $this->AdditionalModel->get_autocomplete_list('master_cost_center', 'name', 'id', $query);
         echo json_encode($result);
     }
     public function get_departments() {
@@ -63,7 +63,7 @@ class AdditionalController extends CI_Controller {
     }
     public function get_activities() {
         $query = $this->input->post('term');
-        $result = $this->AdditionalModel->get_autocomplete_list('master_activity', 'activity_name', 'activity_id', $query);
+        $result = $this->AdditionalModel->get_autocomplete_list('core_activity', 'activity_name', 'api_id', $query);
         echo json_encode($result);
     }
     public function get_debit_accounts() {
@@ -131,18 +131,38 @@ class AdditionalController extends CI_Controller {
             }
             $this->db->trans_complete();
             if ($this->db->trans_status() === FALSE) {
-                $this->session->set_flashdata('error', 'There was an error saving the data.');
                 $this->db->trans_rollback();
+                $this->session->set_flashdata([
+                    'alert_type' => 'danger',
+                    'message' => 'There was an error saving the data.'
+                ]);
                 redirect($_SERVER['HTTP_REFERER']);
             } else {
-                $this->session->set_flashdata('success', 'Data saved successfully!');
-                redirect('finance/my-punched-file/all');
+                if (isset($post['final_submit'])) {
+                    $this->session->set_flashdata([
+                        'alert_type' => 'success',
+                        'message' => 'File punched successfully!'
+                    ]);
+                    redirect('finance/my-punched-file/all');
+                } else {
+                    $this->session->set_flashdata([
+                        'alert_type' => 'info',
+                        'message' => 'Data saved as draft successfully.'
+                    ]);
+                    redirect($_SERVER['HTTP_REFERER']);
+                }
             }
+            
+            
+            
             
         }
         catch(Exception $e) {
             $this->db->trans_rollback();
-            $this->session->set_flashdata('error', 'There was an error: ' . $e->getMessage());
+            $this->session->set_flashdata([
+                'alert_type' => 'danger',
+                'message' => 'There was an error saving the data.'
+            ]);
             redirect($_SERVER['HTTP_REFERER']);
         }
     }

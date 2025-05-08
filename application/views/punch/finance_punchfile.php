@@ -106,9 +106,7 @@
                                           <i class="fa fa-pencil"></i> Punch
                                        </a>
                                  <?php } ?>
-                                 <a href="javascript:void(0);" class="btn btn-danger btn-xs" id="resend_scan" data-id="<?= $row['Scan_Id'] ?>"> 
-                                       <i class="fa fa-undo"></i> Resend
-                                 </a>
+                                 
                               <?php } ?>
                            </td>
 

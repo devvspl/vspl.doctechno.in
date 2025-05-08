@@ -13,10 +13,14 @@ class Labour_ctrl extends CI_Controller
 
     public function save()
     {
+        $submit = $this->input->post('submit'); // 'submit' or 'draft'
 
+
+    
         $Scan_Id = $this->input->post('Scan_Id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
+    
         $Voucher_No = $this->input->post('Voucher_No');
         $Payment_Date = $this->input->post('Payment_Date');
         $Payee = $this->input->post('Payee');
@@ -30,8 +34,7 @@ class Labour_ctrl extends CI_Controller
         $Amount = $this->input->post('Amount');
         $Remark = $this->input->post('Remark');
     
-
-
+        // Prepare data for punchfile
         $data = array(
             'Scan_Id' => $Scan_Id,
             'Group_Id' => $this->session->userdata('group_id'),
@@ -49,55 +52,73 @@ class Labour_ctrl extends CI_Controller
             'Remark' => $Remark,
             'Created_By' => $this->session->userdata('user_id'),
             'Created_Date' => date('Y-m-d H:i:s'),
-        
         );
+    
+        // Start transaction
         $this->db->trans_start();
         $this->db->trans_strict(FALSE);
-        if ($this->customlib->check_punchfile($Scan_Id) == true) {
-            //Update
+    
+        if ($this->customlib->check_punchfile($Scan_Id)) {
+            // Update punchfile
             $this->db->where('Scan_Id', $Scan_Id)->update('punchfile', $data);
-
             $FileID = $this->db->where('Scan_Id', $Scan_Id)->get('punchfile')->row()->FileID;
-            $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Total_Amount, 'Comment' => $Remark));
+    
+            // Update sub_punchfile
+            $this->db->where('FileID', $FileID)->update('sub_punchfile', array(
+                'Amount' => '-' . $Total_Amount,
+                'Comment' => $Remark
+            ));
+    
+            // Remove old details
             $this->db->where('Scan_Id', $Scan_Id)->delete('labour_payment_detail');
-            $array = array();
-            for ($i = 0; $i < count($Head); $i++) {
-                $array[$i] = array(
-                    'Scan_Id' => $Scan_Id,
-                    'Head' => $Head[$i],
-                    'Amount' => $Amount[$i],
-                );
-            }
-            $this->db->insert_batch('labour_payment_detail', $array);
-            $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array('Is_Rejected' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N'));
         } else {
-            //Insert
+            // Insert punchfile
             $this->db->insert('punchfile', $data);
             $insert_id = $this->db->insert_id();
-            $this->db->insert('sub_punchfile', array('FileID' => $insert_id, 'Amount' => '-' . $Total_Amount, 'Comment' => $Remark));
-            $array = array();
-            for ($i = 0; $i < count($Head); $i++) {
-                $array[$i] = array(
-                    'Scan_Id' => $Scan_Id,
-                    'Head' => $Head[$i],
-                    'Amount' => $Amount[$i],
-                );
-            }
-            $this->db->insert_batch('labour_payment_detail', $array);
+    
+            // Insert sub_punchfile
+            $this->db->insert('sub_punchfile', array(
+                'FileID' => $insert_id,
+                'Amount' => '-' . $Total_Amount,
+                'Comment' => $Remark
+            ));
         }
-
-
+    
+        // Insert labour payment detail
+        $details = array();
+        for ($i = 0; $i < count($Head); $i++) {
+            $details[] = array(
+                'Scan_Id' => $Scan_Id,
+                'Head' => $Head[$i],
+                'Amount' => $Amount[$i]
+            );
+        }
+        $this->db->insert_batch('labour_payment_detail', $details);
+    
+        // Update scan_file for submit/draft
+        $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array(
+            'Is_Rejected' => 'N',
+            'Reject_Date' => NULL,
+            'Edit_Permission' => $submit ? 'N' : 'Y',
+            'finance_punch' => $submit ? 'N' : NULL
+        ));
+    
         $this->customlib->update_file_path($Scan_Id);
+    
+        // Complete transaction
         $this->db->trans_complete();
+    
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
-            $this->session->set_flashdata('message', '<div class="alert alert-success text-left">Something Went Wrong</div>');
+            $this->session->set_flashdata('message', '<div class="alert alert-danger text-left">Something went wrong</div>');
             redirect('punch');
         } else {
-            $this->session->set_flashdata('message', '<div class="alert alert-success text-left">Labour Payment added successfully</div>');
-            redirect('punch');
+            $msg = $submit ? 'Labour Payment submitted successfully' : 'Labour Payment saved as draft';
+            $this->session->set_flashdata('message', '<div class="alert alert-success text-left">' . $msg . '</div>');
+            redirect($submit ? 'punch' : $_SERVER['HTTP_REFERER']);
         }
     }
+    
 
     public function getLabourRecord()
     {

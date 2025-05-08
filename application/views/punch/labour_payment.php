@@ -80,9 +80,16 @@
                <textarea name="Remark" id="Remark" cols="10" rows="3" class="form-control"><?= (isset($punch_detail->Remark)) ? $punch_detail->Remark : ''  ?></textarea>
             </div>
          </div>
+       
          <div class="box-footer">
             <button type="reset" class="btn btn-danger">Reset</button>
-            <button type="submit" class="btn btn-success pull-right">Save</button>
+            <?php if (!empty($user_permission) &&  $user_permission == 'N') : ?>
+               <input type="submit" class="btn btn-success pull-right" style="margin-left: 20px;" name="submit" value="Final Submit"></input>
+            <?php endif; ?>
+          
+            <?php if (!empty($user_permission) && ($user_permission == 'Y' || $user_permission == 'N')) : ?>
+            <input type="submit" class="btn btn-info pull-right"  name="save_as_draft" value="Save as Draft"></input>
+            <?php endif; ?>
          </div>
          <?php
             if ($this->customlib->haveSupportFile($Scan_Id) == 1) {
@@ -205,5 +212,19 @@
    table.style.visibility = 'visible';
    }
    }
-   
+   $(document).ready(function () {
+   $("#invoice-tab").click(function () {
+        $("#additional-info").removeClass("active");
+        $("#invoice-details").addClass("active");
+        $(".tabs").removeClass("active-tab");
+        $(this).addClass("active-tab");
+    });
+
+    $("#additional-info-tab").click(function () {
+        $("#invoice-details").removeClass("active");
+        $("#additional-info").addClass("active");
+        $(".tabs").removeClass("active-tab");
+        $(this).addClass("active-tab");
+    });
+});
 </script>
