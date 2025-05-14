@@ -52,6 +52,7 @@ class Bill_approver_model extends MY_Model
         $this->db->where('status', 'A');
         $this->db->where('is_deleted', 'N');
         $this->db->where('firm_type', 'Company');
+        $this->db->where('firm_id =', 2790);
         $result = $this->db->get()->result_array();
         return $result;
     }
@@ -94,11 +95,13 @@ class Bill_approver_model extends MY_Model
         }
     }
     
-    public function get_departments_by_company_ids($company_ids) {
-        $this->db->where_in('company_id', $company_ids);
-        $query = $this->db->get('master_department');
-        return $query->result_array();
-    }
+   public function get_departments_by_company_ids($company_ids) {
+    $query = $this->db->select('api_id as department_id, department_name')
+                      ->where('is_active', 1)
+                      ->get('core_department');
+    return $query->result_array();
+}
+
     
 
    
