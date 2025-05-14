@@ -58,6 +58,8 @@
                               <li class="<?php echo set_Submenu('firm'); ?>">
                                  <a href="<?= base_url(); ?>firm"><i class="fa fa-angle-double-right"></i>Company / Vendor</a>
                               </li>
+                                 <li class="<?php echo set_Submenu('location'); ?>"><a href="<?= base_url(); ?>location"><i
+                                 class="fa fa-angle-double-right"></i>Location</a></li>
                               <li class="<?php echo set_Submenu('core-apis'); ?>">
                                  <a href="<?= base_url(); ?>core-apis"><i class="fa fa-angle-double-right"></i>Core API's</a>
                               </li>
