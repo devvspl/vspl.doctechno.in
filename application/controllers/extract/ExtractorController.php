@@ -240,4 +240,10 @@ class ExtractorController extends CI_Controller {
         $result = $this->Extract_model->saveFieldMappings($doctype_id, $has_items_feild, $fieldMappings);
         echo json_encode($result);
     }
+
+    public function someFunction()  
+    {
+        $res = $this->Extract_model->moveDataToPunchfile(24, 23);
+        print_r($res);
+    }
 }

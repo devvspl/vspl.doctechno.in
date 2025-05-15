@@ -119,11 +119,6 @@ class Bill_approver extends CI_Controller
 
     public function pending_bill_approve()
     {
-        // $user_location = $this->db->select('location_id')
-        //     ->get_where('users', array('user_id' => $this->session->userdata('user_id')))
-        //     ->row()
-        //     ->location_id;
-        // $user_location_array = explode(',', $user_location);
 
         $bill_list = $this->db->where('Bill_Approved', 'N')
             // ->where_in('Location', $user_location_array)

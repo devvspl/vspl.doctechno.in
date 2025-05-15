@@ -155,7 +155,6 @@ class Extract_model extends CI_Model {
         if (!$this->db->table_exists($tableName)) {
             return false;
         }
-        $nestedKeys = ["Details", "Items", "Employees", "Distance Details", "Head Details", "Perticulars"];
         if (isset($data['Round Off']) && is_array($data['Round Off'])) {
             if (isset($data['Round Off']['Value'])) {
                 $data['Round Off Value'] = $data['Round Off']['Value'];
@@ -176,20 +175,17 @@ class Extract_model extends CI_Model {
         $location = $scanData["Location"];
         $this->db->where("Scan_Id", $scanId);
         if ($this->db->get($tableName)->num_rows() > 0) {
-            $this->db->where("Scan_Id", $scanId);
-            $this->db->delete($tableName);
+            $this->db->where("Scan_Id", $scanId)->delete($tableName);
         }
-        $flatData = $this->flattenArray($data, $nestedKeys);
+        $flatData = $this->flattenArray($data);
         $tableColumns = $this->db->list_fields($tableName);
         $insertData = ["scan_id" => $scanId, "group_id" => $groupId, "location_id" => $location];
         foreach ($flatData as $key => $value) {
-            if (is_array($value)) {
-                continue;
-            }
-            $column = strtolower(str_replace([" ", "/", "-"], " ", $key));
+            if (is_array($value)) continue;
+            $column = strtolower(str_replace([" ", "/", "-"], "_", $key));
             $matchedColumn = $this->getBestMatch($column, $tableColumns);
             if ($matchedColumn) {
-                if (is_string($value) && $this->isValidDate($value)) {
+                if (is_string($value) && $this->isValidDate($value) && stripos($key, 'date') !== false) {
                     $value = date('Y-m-d', strtotime($value));
                 } else {
                     if (!is_null($value) && is_string($value)) {
@@ -200,35 +196,95 @@ class Extract_model extends CI_Model {
                     }
                 }
                 $insertData[$matchedColumn] = $value;
+            } else {
             }
         }
         if ($this->db->insert($tableName, $insertData)) {
-            $docType = $this->customlib->getDocType($typeId);
-            $this->db->where("Scan_Id", $scanId);
-            $this->db->update("scan_file", ["is_extract" => "Y", "Doc_Type" => $docType, "DocType_Id" => $typeId]);
-            foreach ($nestedKeys as $section) {
-                if (isset($data[$section]) && is_array($data[$section])) {
-                    $detailsTable = "ext_tempdata_{$typeId}_details";
-                    if ($this->db->table_exists($detailsTable)) {
-                        $this->db->where("Scan_Id", $scanId)->delete($detailsTable);
-                        $detailsColumns = $this->db->list_fields($detailsTable);
-                        foreach ($data[$section] as $item) {
-                            $detailsData = ["scan_id" => $scanId];
-                            foreach ($item as $key => $value) {
-                                if (is_array($value)) {
-                                    continue;
-                                }
-                                $column = strtolower(str_replace([" ", "/", "-"], "", $key));
-                                $matchedColumn = $this->getBestMatch($column, $detailsColumns);
-                                if ($matchedColumn) {
-                                    $detailsData[$matchedColumn] = $value;
-                                }
-                            }
-                            $this->db->insert($detailsTable, $detailsData);
+            foreach ($flatData as $sectionName => $sectionItems) {
+                if (!is_array($sectionItems) || !isset($sectionItems[0]) || !is_array($sectionItems[0])) {
+                    continue;
+                }
+                $detailsTable = "ext_tempdata_{$typeId}_details";
+                if (!$this->db->table_exists($detailsTable)) {
+                    continue;
+                }
+                $this->db->where("Scan_Id", $scanId)->delete($detailsTable);
+                $detailsColumns = $this->db->list_fields($detailsTable);
+                $mainItems = [];
+                $taxData = ['gst' => null, 'sgst' => null, 'igst' => null, 'cess' => null, 'tax_amount' => 0];
+                foreach ($sectionItems as $item) {
+                    if (!is_array($item)) {
+                        continue;
+                    }
+                    $particular = isset($item['Particular']) ? $item['Particular'] : '';
+                    if (stripos($particular, 'CGST') !== false || stripos($particular, 'SGST') !== false || stripos($particular, 'IGST') !== false) {
+                        if (stripos($particular, 'CGST') !== false && isset($item['GST %'])) {
+                            $taxData['gst'] = $item['GST %'];
+                            $taxData['tax_amount']+= isset($item['Amount']) ? (float)$item['Amount'] : 0;
+                        } elseif (stripos($particular, 'SGST') !== false && isset($item['GST %'])) {
+                            $taxData['sgst'] = $item['GST %'];
+                            $taxData['tax_amount']+= isset($item['Amount']) ? (float)$item['Amount'] : 0;
+                        } elseif (stripos($particular, 'IGST') !== false && isset($item['GST %'])) {
+                            $taxData['igst'] = $item['GST %'];
+                            $taxData['tax_amount']+= isset($item['Amount']) ? (float)$item['Amount'] : 0;
                         }
+                        if (isset($item['Cess %'])) {
+                            $taxData['cess'] = $item['Cess %'];
+                        }
+                    } else {
+                        $mainItems[] = $item;
+                    }
+                }
+                foreach ($mainItems as $item) {
+                    $detailsData = ["scan_id" => $scanId];
+                    foreach ($item as $key => $value) {
+                        if (is_array($value)) {
+                            continue;
+                        }
+                        $column = strtolower(str_replace([" ", "/", "-", "%"], "_", $key));
+                        $matchedColumn = $this->getBestMatch($column, $detailsColumns);
+                        if ($matchedColumn) {
+                            if (in_array($matchedColumn, ['qty', 'mrp', 'discount_in_mrp', 'price', 'amount', 'gst', 'sgst', 'igst', 'cess', 'total_amount']) && !empty($value)) {
+                                $value = (float)preg_replace('/[₹,]/', '', $value);
+                            }
+                            $detailsData[$matchedColumn] = $value;
+                        } else {
+                        }
+                    }
+                    if ($taxData['gst'] !== null) {
+                        $detailsData['gst'] = (float)$taxData['gst'];
+                    }
+                    if ($taxData['sgst'] !== null) {
+                        $detailsData['sgst'] = (float)$taxData['sgst'];
+                    }
+                    if ($taxData['igst'] !== null) {
+                        $detailsData['igst'] = (float)$taxData['igst'];
+                    }
+                    if ($taxData['cess'] !== null) {
+                        $detailsData['cess'] = (float)$taxData['cess'];
+                    }
+                    if (isset($detailsData['amount']) && $taxData['tax_amount'] > 0) {
+                        $detailsData['total_amount'] = (float)$detailsData['amount'] + $taxData['tax_amount'];
+                    } elseif (isset($detailsData['amount'])) {
+                        $detailsData['total_amount'] = (float)$detailsData['amount'];
+                    }
+                    foreach (['particular', 'hsn', 'qty', 'unit', 'price', 'amount'] as $requiredField) {
+                        if (!isset($detailsData[$requiredField])) {
+                            $detailsData[$requiredField] = $requiredField === 'qty' || $requiredField === 'price' || $requiredField === 'amount' ? 0.00 : '';
+                        }
+                    }
+                    if (!empty($detailsData)) {
+                        if (!$this->db->insert($detailsTable, $detailsData)) {
+                            $error = $this->db->error();
+                        } else {
+                        }
+                    } else {
                     }
                 }
             }
+            $docType = $this->customlib->getDocType($typeId);
+            $this->db->where("Scan_Id", $scanId);
+            $this->db->update("scan_file", ["is_extract" => "Y", "Doc_Type" => $docType, "DocType_Id" => $typeId]);
             return $this->moveDataToPunchfile($scanId, $typeId);
         }
         return false;
@@ -270,7 +326,7 @@ class Extract_model extends CI_Model {
         $timestamp = strtotime($date);
         return $timestamp !== false && date('Y-m-d', $timestamp) === date('Y-m-d', $timestamp);
     }
-    private function moveDataToPunchfile($scanId, $docTypeId) {
+    public function moveDataToPunchfile($scanId, $docTypeId) {
         $docType = $this->customlib->getDocType($docTypeId);
         $tableName = "ext_tempdata_" . $docTypeId;
         if (!$this->db->table_exists($tableName)) {
@@ -341,18 +397,65 @@ class Extract_model extends CI_Model {
         return ["status" => "success", "message" => "Data moved successfully."];
     }
     private function getClosestValueMatch($table, $searchColumn, $searchValue, $returnColumn, $addCondition) {
-        if (empty($table) || empty($searchColumn) || empty($returnColumn)) {
+        if (empty($table) || empty($searchColumn) || empty($returnColumn) || empty($searchValue)) {
             return null;
         }
         $searchValue = trim((string)$searchValue);
-        $this->db->select($returnColumn);
+        if (strlen($searchValue) === 0) {
+            return null;
+        }
+        $searchValueCleaned = preg_replace('/\s*\([^)]+\)/', '', $searchValue);
+        $searchParts = array_map('trim', preg_split('/and|&/', $searchValueCleaned, -1, PREG_SPLIT_NO_EMPTY));
+        if (empty($searchParts)) {
+            return null;
+        }
+        $this->db->select("$searchColumn, $returnColumn");
         $this->db->from($table);
-        $this->db->where($searchColumn, $searchValue);
         if (!empty($addCondition)) {
             $this->db->where($addCondition);
         }
-        $result = $this->db->get()->row();
-        return $result ? $result->$returnColumn : null;
+        $query = $this->db->get();
+        $results = $query->result();
+        if (empty($results)) {
+            if ($table === 'master_item') {
+                return $this->insertNewItem($searchValueCleaned);
+            }
+            return null;
+        }
+        $matches = [];
+        $similarityThreshold = 50;
+        $highestPercentOverall = 0;
+        foreach ($results as $row) {
+            $dbValue = trim((string)$row->$searchColumn);
+            if (empty($dbValue)) {
+                continue;
+            }
+            $highestPercent = 0;
+            foreach ($searchParts as $part) {
+                if (empty($part)) continue;
+                $percent = 0;
+                similar_text(strtoupper($part), strtoupper($dbValue), $percent);
+                $percent = round($percent, 2);
+                if ($percent < $similarityThreshold) {
+                    $percent = 0;
+                }
+                $highestPercent = max($highestPercent, $percent);
+            }
+            if ($highestPercent > 0) {
+                $matches[] = ['percent' => $highestPercent, 'return_value' => $row->$returnColumn];
+            }
+            $highestPercentOverall = max($highestPercentOverall, $highestPercent);
+        }
+        if ($table === 'master_item' && ($highestPercentOverall < $similarityThreshold || empty($matches))) {
+            return $this->insertNewItem($searchValueCleaned);
+        }
+        if (empty($matches)) {
+            return null;
+        }
+        usort($matches, function ($a, $b) {
+            return $b['percent']<=>$a['percent'];
+        });
+        return $matches[0]['return_value'];
     }
     public function callExternalApi($endpoint, $fileUrl) {
         $postData = json_encode(["fileUrl" => $fileUrl]);
@@ -365,5 +468,21 @@ class Extract_model extends CI_Model {
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
         return ["statusCode" => $httpCode, "data" => $httpCode === 200 ? json_decode($response, true) : null];
+    }
+    private function insertNewItem($itemName) {
+        $itemName = trim($itemName);
+        if (empty($itemName)) {
+            return null;
+        }
+        $data = ['item_name' => $itemName, 'item_code' => 0];
+        $this->db->insert('master_item', $data);
+        $lastInsertId = $this->db->insert_id();
+        if (!$lastInsertId) {
+            return null;
+        }
+        $itemCode = sprintf('ITEM-%03d', $lastInsertId);
+        $this->db->where('item_id', $lastInsertId);
+        $this->db->update('master_item', ['item_code' => $itemCode]);
+        return $itemCode;
     }
 }

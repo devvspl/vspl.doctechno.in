@@ -1,15 +1,10 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-class Bill_approver_model extends MY_Model
-{
-
-    public function __construct()
-    {
+class Bill_approver_model extends MY_Model {
+    public function __construct() {
         parent::__construct();
     }
-
-    public function create($data)
-    {
+    public function create($data) {
         $this->db->trans_start();
         $this->db->trans_strict(FALSE);
         $this->db->insert('users', $data);
@@ -26,15 +21,12 @@ class Bill_approver_model extends MY_Model
             return TRUE;
         }
     }
-
-    public function get_user_list($id = null)
-    {
+    public function get_user_list($id = null) {
         if ($id != null) {
             $this->db->where('user_id', $id);
             $result = $this->db->get('users')->row_array();
             return $result;
         } else {
-
             $this->db->select('u.*');
             $this->db->from('users u');
             $this->db->where('u.status', 'A');
@@ -44,9 +36,7 @@ class Bill_approver_model extends MY_Model
             return $result;
         }
     }
-
-    public function get_company()
-    {
+    public function get_company() {
         $this->db->select('firm_id, firm_type, firm_name');
         $this->db->from('master_firm');
         $this->db->where('status', 'A');
@@ -56,9 +46,7 @@ class Bill_approver_model extends MY_Model
         $result = $this->db->get()->result_array();
         return $result;
     }
-
-    public function delete($id)
-    {
+    public function delete($id) {
         $this->db->trans_start();
         $this->db->trans_strict(false);
         $this->db->where('user_id', $id);
@@ -75,9 +63,7 @@ class Bill_approver_model extends MY_Model
             return true;
         }
     }
-
-    public function update($data)
-    {
+    public function update($data) {
         $this->db->trans_start();
         $this->db->trans_strict(false);
         $this->db->where('user_id', $data['user_id']);
@@ -94,15 +80,18 @@ class Bill_approver_model extends MY_Model
             return true;
         }
     }
-    
-   public function get_departments_by_company_ids($company_ids) {
-    $query = $this->db->select('api_id as department_id, department_name')
-                      ->where('is_active', 1)
-                      ->get('core_department');
-    return $query->result_array();
-}
-
-    
-
-   
+    public function get_departments_by_company_ids($company_ids) {
+        $query = $this->db->select('api_id as department_id, department_name')->where('is_active', 1)->get('core_department');
+        return $query->result_array();
+    }
+    public function get_bill_detail($scan_id) {
+        $this->db->select(' scan_file.Scan_Id, scan_file.Document_Name, master_work_location.location_name, CONCAT(scanned_by.first_name, " ", scanned_by.last_name) AS scanned_by_name, scan_file.Scan_Date, CONCAT(temp_scanned_by.first_name, " ", temp_scanned_by.last_name) AS temp_scanned_by_name, scan_file.Temp_Scan_Date, scan_file.File_Ext, scan_file.File_Location');
+        $this->db->from('scan_file');
+        $this->db->join('master_work_location', 'scan_file.Location = master_work_location.location_id', 'left');
+        $this->db->join('users AS scanned_by', 'scanned_by.user_id = scan_file.Scan_By', 'left');
+        $this->db->join('users AS temp_scanned_by', 'temp_scanned_by.user_id = scan_file.Temp_Scan_By', 'left');
+        $this->db->where('scan_file.Scan_Id', $scan_id);
+        $query = $this->db->get();
+        return $query->row();
+    }
 }
