@@ -101,6 +101,9 @@
                               <li class="<?php echo set_Submenu('processed'); ?>">
                                  <a href="<?= base_url(); ?>processed"><i class="fa fa-angle-double-right"></i>Processed</a>
                               </li>
+                               <li class="<?php echo set_Submenu('extraction-queue'); ?>">
+                                 <a href="<?= base_url(); ?>extraction-queue"><i class="fa fa-angle-double-right"></i>Extraction Queue</a>
+                              </li>
                               <?php 
                                  if($_SESSION['role'] == 'super_admin')
                                  {
@@ -111,16 +114,7 @@
                               <?php
                                  }
                                  ?>
-                              <?php 
-                                 if ($_SESSION['name'] == 'IT Admin') {
-                                     ?>
-                              <li class="<?php echo set_Submenu('extraction-queue'); ?>">
-                                 <a href="<?= base_url(); ?>extraction-queue"><i class="fa fa-angle-double-right"></i>Extraction Queue</a>
-                              </li>
-                              <?php
-                                 }
-                                 
-                                 ?>
+                        
                            </ul>
                         </li>
                         <li class="treeview <?= set_Topmenu('reports'); ?>">
