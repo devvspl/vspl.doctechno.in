@@ -211,76 +211,83 @@ class Extract_model extends CI_Model {
                 $this->db->where("Scan_Id", $scanId)->delete($detailsTable);
                 $detailsColumns = $this->db->list_fields($detailsTable);
                 $mainItems = [];
-                $taxData = ['gst' => null, 'sgst' => null, 'igst' => null, 'cess' => null, 'tax_amount' => 0];
-                foreach ($sectionItems as $item) {
-                    if (!is_array($item)) {
+             
+            $taxData = ['gst' => null, 'sgst' => null, 'igst' => null, 'cess' => null, 'tax_amount' => 0];
+            foreach ($sectionItems as $item) {
+                if (!is_array($item)) {
+                    continue;
+                }
+                $particular = isset($item['Particular']) ? $item['Particular'] : '';
+                if (stripos($particular, 'CGST') !== false || stripos($particular, 'SGST') !== false || stripos($particular, 'IGST') !== false) {
+                    if (stripos($particular, 'CGST') !== false && isset($item['GST %'])) {
+                        $taxData['gst'] = $item['GST %'];
+                        $taxData['tax_amount'] += isset($item['Amount']) ? (float)$item['Amount'] : 0;
+                    } elseif (stripos($particular, 'SGST') !== false && isset($item['GST %'])) {
+                        $taxData['sgst'] = $item['GST %'];
+                        $taxData['tax_amount'] += isset($item['Amount']) ? (float)$item['Amount'] : 0;
+                    } elseif (stripos($particular, 'IGST') !== false && isset($item['GST %'])) {
+                        $taxData['igst'] = $item['GST %'];
+                        $taxData['tax_amount'] += isset($item['Amount']) ? (float)$item['Amount'] : 0;
+                    }
+                    if (isset($item['Cess %'])) {
+                        $taxData['cess'] = $item['Cess %'];
+                    }
+                } else {
+                    $mainItems[] = $item;
+                }
+            }
+
+            // Insert into details table
+            foreach ($mainItems as $item) {
+                $detailsData = ["scan_id" => $scanId];
+                foreach ($item as $key => $value) {
+                    if (is_array($value)) {
                         continue;
                     }
-                    $particular = isset($item['Particular']) ? $item['Particular'] : '';
-                    if (stripos($particular, 'CGST') !== false || stripos($particular, 'SGST') !== false || stripos($particular, 'IGST') !== false) {
-                        if (stripos($particular, 'CGST') !== false && isset($item['GST %'])) {
-                            $taxData['gst'] = $item['GST %'];
-                            $taxData['tax_amount']+= isset($item['Amount']) ? (float)$item['Amount'] : 0;
-                        } elseif (stripos($particular, 'SGST') !== false && isset($item['GST %'])) {
-                            $taxData['sgst'] = $item['GST %'];
-                            $taxData['tax_amount']+= isset($item['Amount']) ? (float)$item['Amount'] : 0;
-                        } elseif (stripos($particular, 'IGST') !== false && isset($item['GST %'])) {
-                            $taxData['igst'] = $item['GST %'];
-                            $taxData['tax_amount']+= isset($item['Amount']) ? (float)$item['Amount'] : 0;
+                    $column = strtolower(str_replace([" ", "/", "-", "%"], "_", $key));
+                    $matchedColumn = $this->getBestMatch($column, $detailsColumns);
+                    if ($matchedColumn) {
+                        if (in_array($matchedColumn, ['qty', 'mrp', 'discount_in_mrp', 'price', 'amount', 'gst', 'sgst', 'igst', 'cess', 'total_amount']) && !empty($value)) {
+                            $value = (float)preg_replace('/[₹,]/', '', $value);
                         }
-                        if (isset($item['Cess %'])) {
-                            $taxData['cess'] = $item['Cess %'];
-                        }
-                    } else {
-                        $mainItems[] = $item;
+                        $detailsData[$matchedColumn] = $value;
                     }
                 }
-                foreach ($mainItems as $item) {
-                    $detailsData = ["scan_id" => $scanId];
-                    foreach ($item as $key => $value) {
-                        if (is_array($value)) {
-                            continue;
-                        }
-                        $column = strtolower(str_replace([" ", "/", "-", "%"], "_", $key));
-                        $matchedColumn = $this->getBestMatch($column, $detailsColumns);
-                        if ($matchedColumn) {
-                            if (in_array($matchedColumn, ['qty', 'mrp', 'discount_in_mrp', 'price', 'amount', 'gst', 'sgst', 'igst', 'cess', 'total_amount']) && !empty($value)) {
-                                $value = (float)preg_replace('/[₹,]/', '', $value);
-                            }
-                            $detailsData[$matchedColumn] = $value;
-                        } else {
-                        }
-                    }
-                    if ($taxData['gst'] !== null) {
-                        $detailsData['gst'] = (float)$taxData['gst'];
-                    }
-                    if ($taxData['sgst'] !== null) {
-                        $detailsData['sgst'] = (float)$taxData['sgst'];
-                    }
-                    if ($taxData['igst'] !== null) {
-                        $detailsData['igst'] = (float)$taxData['igst'];
-                    }
-                    if ($taxData['cess'] !== null) {
-                        $detailsData['cess'] = (float)$taxData['cess'];
-                    }
-                    if (isset($detailsData['amount']) && $taxData['tax_amount'] > 0) {
-                        $detailsData['total_amount'] = (float)$detailsData['amount'] + $taxData['tax_amount'];
-                    } elseif (isset($detailsData['amount'])) {
-                        $detailsData['total_amount'] = (float)$detailsData['amount'];
-                    }
-                    foreach (['particular', 'hsn', 'qty', 'unit', 'price', 'amount'] as $requiredField) {
-                        if (!isset($detailsData[$requiredField])) {
-                            $detailsData[$requiredField] = $requiredField === 'qty' || $requiredField === 'price' || $requiredField === 'amount' ? 0.00 : '';
-                        }
-                    }
-                    if (!empty($detailsData)) {
-                        if (!$this->db->insert($detailsTable, $detailsData)) {
-                            $error = $this->db->error();
-                        } else {
-                        }
-                    } else {
+
+                // Assign tax data
+                if ($taxData['gst'] !== null) {
+                    $detailsData['gst'] = (float)$taxData['gst'];
+                }
+                if ($taxData['sgst'] !== null) {
+                    $detailsData['sgst'] = (float)$taxData['sgst'];
+                }
+                if ($taxData['igst'] !== null) {
+                    $detailsData['igst'] = (float)$taxData['igst'];
+                }
+                if ($taxData['cess'] !== null) {
+                    $detailsData['cess'] = (float)$taxData['cess'];
+                }
+                if (isset($detailsData['amount']) && $taxData['tax_amount'] > 0) {
+                    $detailsData['total_amount'] = (float)$detailsData['amount'] + $taxData['tax_amount'];
+                } elseif (isset($detailsData['amount'])) {
+                    $detailsData['total_amount'] = (float)$detailsData['amount'];
+                }
+
+                // Ensure required fields, including MRP and Discount
+                foreach (['particular', 'hsn', 'qty', 'unit', 'price', 'amount', 'mrp', 'discount_in_mrp'] as $requiredField) {
+                    if (!isset($detailsData[$requiredField])) {
+                        $detailsData[$requiredField] = in_array($requiredField, ['qty', 'price', 'amount', 'mrp', 'discount_in_mrp']) ? 0.00 : '';
                     }
                 }
+
+                // Insert into details table
+                if (!empty($detailsData)) {
+                    if (!$this->db->insert($detailsTable, $detailsData)) {
+                        $error = $this->db->error();
+                        log_message('error', 'Insert failed: ' . json_encode($error));
+                    }
+                }
+            }
             }
             $docType = $this->customlib->getDocType($typeId);
             $this->db->where("Scan_Id", $scanId);
