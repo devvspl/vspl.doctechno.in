@@ -24,158 +24,40 @@
                value="<?= formatSafeDate($punch_detail->BookingDate ?? '') ?>">
          </div>
       </div>
-      <div class="row" style="margin-bottom: 5px;">
-         <div class="form-group col-md-6">
-            <label for="">Buyer: <span class="text-danger">*</span></label>
-            <small class="text-danger">
+    <div class="row" style="margin-bottom: 5px;">
+    <div class="form-group col-md-6">
+        <label for="">Buyer: <span class="text-danger">*</span></label>
+        <small class="text-danger">
             <?php 
-               echo (isset($temp_punch_detail->buyer) && !is_null($temp_punch_detail->buyer) && $temp_punch_detail->buyer !== '') 
-                   ? htmlspecialchars($temp_punch_detail->buyer) 
-                   : ''; 
-               ?>
-            </small>
-            <select name="From" id="From" class="form-control form-control-sm" required>
-               <option value="">Select</option>
-               <?php
-                  $buyerInput = (isset($temp_punch_detail->buyer) && !is_null($temp_punch_detail->buyer)) ? trim($temp_punch_detail->buyer) : '';
-                  $buyerParts = [];
-                  if (!empty($buyerInput)) {
-                      $buyerInputCleaned = preg_replace('/\s*\([^)]+\)/', '', $buyerInput);
-                      $buyerParts = array_map('trim', preg_split('/and|&/', $buyerInputCleaned, -1, PREG_SPLIT_NO_EMPTY));
-                  }
-                  
-                  
-                  foreach ($company_list as &$company) {
-                      $highestSimilarityPercent = 0;
-                      if (!empty($buyerParts) && !empty($company['firm_name'])) {
-                          foreach ($buyerParts as $part) {
-                              if (empty($part)) continue;
-                              $similarityPercent = 0;
-                              similar_text(
-                                  strtoupper($part),
-                                  strtoupper(trim($company['firm_name'])),
-                                  $similarityPercent
-                              );
-                              $similarityPercent = round($similarityPercent, 2);
-                  
-                              
-                              if ($similarityPercent < 50) {
-                                  $similarityPercent = 0;
-                              }
-                  
-                              $highestSimilarityPercent = max($highestSimilarityPercent, $similarityPercent);
-                          }
-                      }
-                      $company['similarity'] = $highestSimilarityPercent;
-                  }
-                  unset($company); 
-                  
-                  
-                  usort($company_list, function($a, $b) {
-                      return $b['similarity'] <=> $a['similarity'];
-                  });
-                  
-                  
-                  foreach ($company_list as $key => $value) {
-                      $highestSimilarityPercent = $value['similarity'];
-                  
-                      
-                      $optionText = htmlspecialchars($value['firm_name'] ?? '');
-                      if ($highestSimilarityPercent > 0) {
-                          $optionText .= " ($highestSimilarityPercent%)";
-                      }
-                      ?>
-               <option value="<?= htmlspecialchars($value['firm_id'] ?? '') ?>" 
-                  data-address="<?= htmlspecialchars($value['address'] ?? '') ?>" 
-                  <?php if (isset($punch_detail->From_ID) && $value['firm_id'] == $punch_detail->From_ID) {
-                     echo "selected";
-                     } ?>>
-                  <?= $optionText ?>
-               </option>
-               <?php } ?>
-            </select>
-         </div>
+            echo (isset($temp_punch_detail->buyer) && !is_null($temp_punch_detail->buyer) && $temp_punch_detail->buyer !== '') 
+                ? htmlspecialchars($temp_punch_detail->buyer) 
+                : ''; 
+            ?>
+        </small>
+        <select name="From" id="From" class="form-control form-control-sm" required>
+            <option value="">Loading...</option>
+        </select>
+    </div>
          <div class="form-group col-md-6">
             <label for="" style="display: flex; justify-content: space-between;">
-               <div>
-                  <span>Vendor: <span class="text-danger">*</span></span>
-                  <small class="text-danger">
-                  <?php 
-                     echo (isset($temp_punch_detail->vendor) && !is_null($temp_punch_detail->vendor) && $temp_punch_detail->vendor !== '') 
-                         ? htmlspecialchars($temp_punch_detail->vendor) 
-                         : ''; 
-                     ?>
-                  </small>
-               </div>
-               <div id="newVendorOption" style="display: <?php echo isset($punch_detail->To_ID) && $punch_detail->To_ID ? 'none' : 'block'; ?>;">
-                  <a href="javascript:void(0);" class="btn-link" id="addVendorBtn" data-toggle="modal" data-target="#addVendorModal">
-                  Add New Vendor
-                  </a>
-               </div>
+                  <div>
+                     <span>Vendor: <span class="text-danger">*</span></span>
+                     <small class="text-danger">
+                        <?php 
+                        echo (isset($temp_punch_detail->vendor) && !is_null($temp_punch_detail->vendor) && $temp_punch_detail->vendor !== '') 
+                              ? htmlspecialchars($temp_punch_detail->vendor) 
+                              : ''; 
+                        ?>
+                     </small>
+                  </div>
+                  <div id="newVendorOption" style="display: <?php echo isset($punch_detail->To_ID) && $punch_detail->To_ID ? 'none' : 'block'; ?>;">
+                     <a href="javascript:void(0);" class="btn-link" id="addVendorBtn" data-toggle="modal" data-target="#addVendorModal">
+                        Add New Vendor
+                     </a>
+                  </div>
             </label>
             <select name="To" id="To" class="form-control form-control-sm" required>
-               <option value="">Select</option>
-               <?php
-                  $isVendorSelected = false;
-                  
-                  
-                  $vendorInput = (isset($temp_punch_detail->vendor) && !is_null($temp_punch_detail->vendor)) ? trim($temp_punch_detail->vendor) : '';
-                  $vendorParts = [];
-                  if (!empty($vendorInput)) {
-                      $vendorInputCleaned = preg_replace('/\s*\([^)]+\)/', '', $vendorInput);
-                      $vendorParts = array_map('trim', preg_split('/and|&/', $vendorInputCleaned, -1, PREG_SPLIT_NO_EMPTY));
-                  }
-                  
-                  
-                  foreach ($firm as &$firmItem) {
-                      $highestSimilarityPercent = 0;
-                      if (!empty($vendorParts) && !empty($firmItem['firm_name'])) {
-                          foreach ($vendorParts as $part) {
-                              if (empty($part)) continue;
-                              $similarityPercent = 0;
-                              similar_text(
-                                  strtoupper($part),
-                                  strtoupper(trim($firmItem['firm_name'])),
-                                  $similarityPercent
-                              );
-                              $similarityPercent = round($similarityPercent, 2);
-                  
-                              
-                              if ($similarityPercent < 50) {
-                                  $similarityPercent = 0;
-                              }
-                  
-                              $highestSimilarityPercent = max($highestSimilarityPercent, $similarityPercent);
-                          }
-                      }
-                      $firmItem['similarity'] = $highestSimilarityPercent;
-                  }
-                  unset($firmItem); 
-                  
-                  
-                  usort($firm, function($a, $b) {
-                      return $b['similarity'] <=> $a['similarity'];
-                  });
-                  
-                  
-                  foreach ($firm as $key => $value) {
-                      $highestSimilarityPercent = $value['similarity'];
-                  
-                      
-                      $optionText = htmlspecialchars($value['firm_name'] ?? '');
-                      if ($highestSimilarityPercent > 0) {
-                          $optionText .= " ($highestSimilarityPercent%)";
-                      }
-                      ?>
-               <option value="<?= htmlspecialchars($value['firm_id'] ?? '') ?>" 
-                  data-address="<?= htmlspecialchars($value['address'] ?? '') ?>" 
-                  <?php if (isset($punch_detail->To_ID) && $value['firm_id'] == $punch_detail->To_ID) {
-                     $isVendorSelected = true;
-                     echo "selected";
-                     } ?>>
-                  <?= $optionText ?>
-               </option>
-               <?php } ?>
+                  <option value="">Loading...</option>
             </select>
          </div>
       </div>
@@ -391,25 +273,25 @@
       <?php
          if ($this->customlib->haveSupportFile($Scan_Id) == 1) {
             ?>
-      <div class="row" style="margin-top: 20px;">
-         <div class="col-md-12">
-            <label for="">Supporting File:</label>
-            <div class="form-group">
-               <?php
-                  $support_file = $this->customlib->getSupportFile($Scan_Id);
-                  
-                  foreach ($support_file as $row) {
+         <div class="row" style="margin-top: 20px;">
+            <div class="col-md-12">
+               <label for="">Supporting File:</label>
+               <div class="form-group">
+                  <?php
+                     $support_file = $this->customlib->getSupportFile($Scan_Id);
+                     
+                     foreach ($support_file as $row) {
+                        ?>
+                  <div class="col-md-3">
+                     <a href="javascript:void(0);" target="popup"
+                        onclick="window.open('<?= $row['File_Location'] ?>','popup','width=600,height=600');"> <?php echo $row['File'] ?></a>
+                  </div>
+                  <?php
+                     }
                      ?>
-               <div class="col-md-3">
-                  <a href="javascript:void(0);" target="popup"
-                     onclick="window.open('<?= $row['File_Location'] ?>','popup','width=600,height=600');"> <?php echo $row['File'] ?></a>
                </div>
-               <?php
-                  }
-                  ?>
             </div>
          </div>
-      </div>
       <?php } ?>
    </form>
 </div>
@@ -533,6 +415,20 @@
        $(document).on("click", "#add", addItemRow);
        $(document).on("click", ".removeRow", removeItemRow);
        $(document).on("change", ".plus_minus", calculatePlusMinus);
+
+      loadDropdownOptions(
+         'From',
+         '<?= base_url("extract/ExtractorController/get_company_options") ?>',
+         '<?= isset($temp_punch_detail->buyer) && !is_null($temp_punch_detail->buyer) ? addslashes($temp_punch_detail->buyer) : "" ?>',
+         '<?= isset($punch_detail->From_ID) ? $punch_detail->From_ID : "" ?>'
+      );
+
+      loadDropdownOptions(
+         'To',
+         '<?= base_url("extract/ExtractorController/get_vendor_options") ?>',
+         '<?= isset($temp_punch_detail->vendor) && !is_null($temp_punch_detail->vendor) ? addslashes($temp_punch_detail->vendor) : "" ?>',
+         '<?= isset($punch_detail->To_ID) ? $punch_detail->To_ID : "" ?>'
+      );
    
        $("#To").on("change", function () {
            var selectedVendor = $(this).val();
@@ -855,5 +751,27 @@
        $("#Total_Discount").val("0." + decimal);
        $("#Grand_Total").val((total - parseFloat("0." + decimal)).toFixed(2));
    };
-   
-</script>
+   function loadDropdownOptions(dropdownId, url, searchValue, selectedId) {
+    $('#' + dropdownId).html('<option value="">Loading...</option>');
+    $.ajax({
+        url: url,
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            search_value: searchValue,
+            selected_id: selectedId
+        }, // Removed 'type' since it's not needed
+        beforeSend: function() {
+            $('#' + dropdownId).parent().append('<span class="loading-spinner">Loading...</span>');
+        },
+        success: function(response) {
+            $('#' + dropdownId).html(response.options);
+        },
+        error: function() {
+            $('#' + dropdownId).html('<option value="">Error loading options</option>');
+        },
+        complete: function() {
+            $('.loading-spinner').remove();
+        }
+    });
+}</script>

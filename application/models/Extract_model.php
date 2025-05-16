@@ -485,4 +485,45 @@ class Extract_model extends CI_Model {
         $this->db->update('master_item', ['item_code' => $itemCode]);
         return $itemCode;
     }
+    public function get_filtered_list($table, $search_value, $search_column, $return_column, $add_condition = '') {
+        $search_value = trim((string)$search_value);
+        $search_parts = [];
+        if (!empty($search_value)) {
+            $search_value_cleaned = preg_replace('/\s*\([^)]+\)/', '', $search_value);
+            $search_parts = array_map('trim', preg_split('/and|&/', $search_value_cleaned, -1, PREG_SPLIT_NO_EMPTY));
+        }
+        $this->db->select("$search_column, $return_column, address");
+        $this->db->from($table);
+        if (!empty($add_condition)) {
+            $this->db->where($add_condition);
+        }
+        $query = $this->db->get();
+        $results = $query->result_array();
+        if (empty($results)) {
+            return [];
+        }
+        $similarity_threshold = 50;
+        foreach ($results as & $row) {
+            $highest_similarity_percent = 0;
+            $db_value = trim((string)$row[$search_column]);
+            if (!empty($search_parts) && !empty($db_value)) {
+                foreach ($search_parts as $part) {
+                    if (empty($part)) continue;
+                    $similarity_percent = 0;
+                    similar_text(strtoupper($part), strtoupper($db_value), $similarity_percent);
+                    $similarity_percent = round($similarity_percent, 2);
+                    if ($similarity_percent < $similarity_threshold) {
+                        $similarity_percent = 0;
+                    }
+                    $highest_similarity_percent = max($highest_similarity_percent, $similarity_percent);
+                }
+            }
+            $row['similarity'] = $highest_similarity_percent;
+        }
+        unset($row);
+        usort($results, function ($a, $b) {
+            return $b['similarity']<=>$a['similarity'];
+        });
+        return $results;
+    }
 }
