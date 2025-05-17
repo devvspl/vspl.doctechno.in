@@ -6,7 +6,7 @@
          <div class="form-group col-md-3">
             <label for="">Mode:</label>
             <small class="text-danger">
-            <?php echo $temp_punch_detail->mode; ?>
+                <?php echo isset($temp_punch_detail) ? $temp_punch_detail->mode : ''; ?>
             </small>
             <select name="Travel_Mode" id="Travel_Mode" class="form-control" required>
                <option value="">Select</option>
@@ -23,23 +23,19 @@
          <div class="col-md-3">
             <label for="">Location :</label>
             <small class="text-danger">
-            <?php echo $temp_punch_detail->location; ?>
+
+            <?php echo isset($temp_punch_detail) ? $temp_punch_detail->location : ''; ?>
             </small>
             <select name="Location" id="Location" class="form-control">
                <option value="">Select Location</option>
-               <?php foreach ($locationlist as $key => $value) { ?>
-               <option value="<?= $value['location_name'] ?>" <?php if (isset($punch_detail->Loc_Name)) {
-                  if ($value['location_name'] == $punch_detail->Loc_Name) {
-                  	echo "selected";
-                  }
-                  }  ?>><?= $value['location_name'] ?></option>
-               <?php } ?>
+              
             </select>
          </div>
          <div class="form-group col-md-3">
             <label for="">Employee Name:</label>
             <small class="text-danger">
-            <?php echo $temp_punch_detail->employee_name; ?>
+
+            <?php echo isset($temp_punch_detail) ? $temp_punch_detail->employee_name : ''; ?>
             </small>
             <select name="Employee" id="Employee" class="form-control" required data-parsley-errors-container="#EmpError">
                <option value="">Select</option>
@@ -68,7 +64,7 @@
          <div class="form-group col-md-3">
             <label for="" id="">Month:</label> <span class="text-danger">*</span>
             <small class="text-danger">
-            <?php echo $temp_punch_detail->month; ?>
+             <?php echo isset($temp_punch_detail) ? $temp_punch_detail->month : ''; ?>
             </small>
             <select name="Month" id="Month" class="form-control" required>
                <option value="">Select</option>
@@ -174,6 +170,11 @@
    	timepicker: false,
    	format: 'Y-m-d',
    });
+
+   $("#Location").select2();
+   $("#Travel_Mode").select2();
+   $("#Month").select2();
+   $("#cal_by").select2();
    
    var Count = 1;
    getMultiRecord();
@@ -323,5 +324,16 @@
         $(".tabs").removeClass("active-tab");
         $(this).addClass("active-tab");
     });
+<?php 
+$cleanedlocation = cleanSearchValue(
+        isset($temp_punch_detail->location) && !is_null($temp_punch_detail->location) ? $temp_punch_detail->location : ""
+    );
+?>
+      loadDropdownOptions(
+        'Location',
+        '<?= base_url("extract/ExtractorController/get_location_options") ?>',
+        <?= json_encode($cleanedlocation) ?>,
+        '<?= isset($punch_detail->Loc_Name) ? $punch_detail->Loc_Name : "" ?>'
+    );
 });
 </script>

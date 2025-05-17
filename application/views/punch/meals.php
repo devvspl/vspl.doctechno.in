@@ -4,10 +4,15 @@
          <input type="hidden" name="Scan_Id" id="Scan_Id" value="<?= $Scan_Id ?>">
          <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">
          <div class="row">
-            <div class="col-md-4 form-group">
+            <div class="form-group col-md-4">
                <label for="">Hotel Name:</label>
-               <input type="text" name="Hotel" id="Hotel" class="form-control"
-                  value="<?= (isset($punch_detail->Hotel_Name)) ? $punch_detail->Hotel_Name : '' ?>">
+               <small class="text-danger">
+               <?php echo isset($temp_punch_detail) ? $temp_punch_detail->hotel_name : ''; ?>
+               </small>
+               <select name="Hotel" id="Hotel" class="form-control">
+                  <option value="">Select</option>
+               
+               </select>
             </div>
             <div class="col-md-4 form-group">
                <label for="">Bill No:</label>
@@ -27,7 +32,8 @@
             <div class="form-group col-md-6">
                <label for="">Employee Name:</label>
                <small class="text-danger">
-               <?php  echo $temp_punch_detail->employee_name; ?>
+
+               <?php echo isset($temp_punch_detail) ? $temp_punch_detail->employee_name : ''; ?>
                </small>
                <select name="Employee" id="Employee" class="form-control">
                   <option value="">Select</option>
@@ -56,17 +62,11 @@
             <div class="col-md-4">
                <label for="">Location :</label>
                <small class="text-danger">
-               <?php  echo $temp_punch_detail->location; ?>
+               <?php echo isset($temp_punch_detail) ? $temp_punch_detail->location : ''; ?>
                </small>
                <select name="Location" id="Location" class="form-control">
                   <option value="">Select Location</option>
-                  <?php foreach ($locationlist as $key => $value) { ?>
-                  <option value="<?= $value['location_name'] ?>" <?php if (isset($punch_detail->Loc_Name)) {
-                     if ($value['location_name'] == $punch_detail->Loc_Name) {
-                     	echo "selected";
-                     }
-                     }  ?>><?= $value['location_name'] ?></option>
-                  <?php } ?>
+                 
                </select>
             </div>
             <div class="form-group col-md-8">
@@ -120,6 +120,7 @@
 </div>
 <script>
    $("#Location").select2();
+   $("#Hotel").select2();
    $(document).on('change', '#Type', function () {
    	var type = $(this).val();
    	if (type == 'Cash Deposit') {
@@ -152,5 +153,37 @@
         $(".tabs").removeClass("active-tab");
         $(this).addClass("active-tab");
     });
+
+       $(document).on("change", "#Hotel", function () {
+   	var address = $(this).find(':selected').data('address');
+   	$("#Hotel_Address").val(address);
+   });
+
+    <?php 
+      $cleanedlocation = cleanSearchValue(
+         isset($temp_punch_detail->location) && !is_null($temp_punch_detail->location) ? $temp_punch_detail->location : ""
+      );
+        $cleanedHotel = cleanSearchValue(
+            isset($temp_punch_detail->hotel_name) && !is_null($temp_punch_detail->hotel_name) ? $temp_punch_detail->hotel_name : ""
+         );
+   ?>
+
+      loadDropdownOptions(
+         'Location',
+         '<?= base_url("extract/ExtractorController/get_location_options") ?>',
+         '<?= $cleanedlocation ?>',
+         '<?= $punch_detail->Loc_Name?>'
+      );
+
+      loadDropdownOptions(
+         'Hotel',
+         '<?= base_url("extract/ExtractorController/get_hotel_options") ?>',
+         '<?= $cleanedHotel ?>',
+         '<?= $punch_detail->Hotel_Name?>'
+      );
+
+
+
+    
 });
 </script>

@@ -50,7 +50,7 @@
                         ?>
                      </small>
                   </div>
-                  <div id="newVendorOption" style="display: <?php echo isset($punch_detail->To_ID) && $punch_detail->To_ID ? 'none' : 'block'; ?>;">
+                  <div id="newVendorOption">
                      <a href="javascript:void(0);" class="btn-link" id="addVendorBtn" data-toggle="modal" data-target="#addVendorModal">
                         Add New Vendor
                      </a>
@@ -400,233 +400,250 @@
    </div>
 </div>
 <script>
-   $(document).ready(function () {
-       initUI();
-   
-       let unitList = "";
-       let itemList = "";
-       let count = 1;
-       loadUnitList();
-       loadItemList();
-       getMultiRecord();
-   
-       $(document).on("change", "#From", updateBuyerAddress);
-       $(document).on("change", "#To", updateVendorAddress);
-       $(document).on("click", "#add", addItemRow);
-       $(document).on("click", ".removeRow", removeItemRow);
-       $(document).on("change", ".plus_minus", calculatePlusMinus);
+$(document).ready(function () {
+   initUI();
 
-      loadDropdownOptions(
-         'From',
-         '<?= base_url("extract/ExtractorController/get_company_options") ?>',
-         '<?= isset($temp_punch_detail->buyer) && !is_null($temp_punch_detail->buyer) ? addslashes($temp_punch_detail->buyer) : "" ?>',
-         '<?= isset($punch_detail->From_ID) ? $punch_detail->From_ID : "" ?>'
-      );
+   let unitList = "";
+   let itemList = "";
+   let count = 1;
+   loadUnitList();
+   loadItemList();
+   getMultiRecord();
 
-      loadDropdownOptions(
-         'To',
-         '<?= base_url("extract/ExtractorController/get_vendor_options") ?>',
-         '<?= isset($temp_punch_detail->vendor) && !is_null($temp_punch_detail->vendor) ? addslashes($temp_punch_detail->vendor) : "" ?>',
-         '<?= isset($punch_detail->To_ID) ? $punch_detail->To_ID : "" ?>'
-      );
-   
-       $("#To").on("change", function () {
-           var selectedVendor = $(this).val();
-           if (selectedVendor === "") {
-               $("#newVendorOption").show();
-           } else {
-               $("#newVendorOption").hide();
-           }
-       });
-   
-       $("#addVendorBtn").click(function () {
-           getCountry();
-       });
-   
-       $("#country_id").on("change", function () {
-           let countryId = $(this).val();
-           if (countryId) {
-               getState(countryId);
-           } else {
-               $("#state_id").html('<option value="">-- Select State --</option>');
-           }
-       });
-   
-       $("#addVendorForm").on("submit", function (e) {
-           e.preventDefault();
-   
-           $("#formMessage").hide().removeClass("alert-success alert-danger").html("");
-   
-           $.ajax({
-               url: '<?= base_url("new-vendor-request") ?>',
-               type: "POST",
-               data: $(this).serialize(),
-               dataType: "json",
-               success: function (response) {
-                   if (response.status === true) {
-                       $("#formMessage").addClass("alert alert-success").html(response.message).slideDown();
-   
-                       $("#addVendorForm")[0].reset();
-                       setTimeout(function () {
-                           $("#addVendorModal").modal("hide");
-                       }, 1000);
-                   } else {
-                       $("#formMessage").addClass("alert alert-danger").html(response.message).slideDown();
-                   }
-               },
-               error: function () {
-                   $("#formMessage").addClass("alert alert-danger").html("Something went wrong! Please try again.").slideDown();
-               },
-           });
-       });
-   
-       $("#invoice-tab").click(function () {
-           $("#additional-info").removeClass("active");
-           $("#invoice-details").addClass("active");
-           $(".tabs").removeClass("active-tab");
-           $(this).addClass("active-tab");
-       });
-   
-       $("#additional-info-tab").click(function () {
-           $("#invoice-details").removeClass("active");
-           $("#additional-info").addClass("active");
-           $(".tabs").removeClass("active-tab");
-           $(this).addClass("active-tab");
-       });
+   $(document).on("change", "#From", updateBuyerAddress);
+   $(document).on("change", "#To", updateVendorAddress);
+   $(document).on("click", "#add", addItemRow);
+   $(document).on("click", ".removeRow", removeItemRow);
+   $(document).on("change", ".plus_minus", calculatePlusMinus);
+
+<?php
+    $cleanedBuyer = cleanSearchValue(
+        isset($temp_punch_detail->buyer) && !is_null($temp_punch_detail->buyer) ? $temp_punch_detail->buyer : ""
+    );
+    $cleanedVendor = cleanSearchValue(
+        isset($temp_punch_detail->vendor) && !is_null($temp_punch_detail->vendor) ? $temp_punch_detail->vendor : ""
+    );
+    ?>
+
+
+    loadDropdownOptions(
+        'From',
+        '<?= base_url("extract/ExtractorController/get_company_options") ?>',
+        <?= json_encode($cleanedBuyer) ?>,
+        '<?= isset($punch_detail->From_ID) ? $punch_detail->From_ID : "" ?>'
+    );
+
+
+    loadDropdownOptions(
+        'To',
+        '<?= base_url("extract/ExtractorController/get_vendor_options") ?>',
+        <?= json_encode($cleanedVendor) ?>,
+        '<?= isset($punch_detail->To_ID) ? $punch_detail->To_ID : "" ?>'
+    );
+
+   $("#To").on("change", function () {
+      var selectedVendor = $(this).val();
+      if (selectedVendor === "") {
+         $("#newVendorOption").show();
+      } else {
+         $("#newVendorOption").hide();
+      }
    });
-   
-   function getCountry() {
-       $.ajax({
-           url: '<?= base_url("get-country") ?>',
-           type: "GET",
-           dataType: "json",
-           success: function (response) {
-               let options = '<option value="">-- Select Country --</option>';
-               $.each(response, function (index, country) {
-                   options += `<option value="${country.api_id}">${country.country_name} (${country.country_code})</option>`;
+
+   $("#addVendorBtn").click(function () {
+      getCountry();
+   });
+
+   $("#country_id").on("change", function () {
+      let countryId = $(this).val();
+      if (countryId) {
+         getState(countryId);
+      } else {
+         $("#state_id").html('<option value="">-- Select State --</option>');
+      }
+   });
+
+   $("#addVendorForm").on("submit", function (e) {
+      e.preventDefault();
+
+      $("#formMessage").hide().removeClass("alert-success alert-danger").html("");
+
+      $.ajax({
+         url: '<?= base_url("new-vendor-request") ?>',
+         type: "POST",
+         data: $(this).serialize(),
+         dataType: "json",
+         success: function (response) {
+            if (response.status === true) {
+               $("#formMessage").addClass("alert alert-success").html(response.message).slideDown();
+
+               $("#addVendorForm")[0].reset();
+               setTimeout(function () {
+                  $("#addVendorModal").modal("hide");
+               }, 1000);
+            } else {
+               $("#formMessage").addClass("alert alert-danger").html(response.message).slideDown();
+            }
+         },
+         error: function () {
+            $("#formMessage").addClass("alert alert-danger").html("Something went wrong! Please try again.").slideDown();
+         },
+      });
+   });
+
+   $("#invoice-tab").click(function () {
+      $("#additional-info").removeClass("active");
+      $("#invoice-details").addClass("active");
+      $(".tabs").removeClass("active-tab");
+      $(this).addClass("active-tab");
+   });
+
+   $("#additional-info-tab").click(function () {
+      $("#invoice-details").removeClass("active");
+      $("#additional-info").addClass("active");
+      $(".tabs").removeClass("active-tab");
+      $(this).addClass("active-tab");
+   });
+});
+
+function getCountry() {
+   $.ajax({
+      url: '<?= base_url("get-country") ?>',
+      type: "GET",
+      dataType: "json",
+      success: function (response) {
+         let options = '<option value="">-- Select Country --</option>';
+         $.each(response, function (index, country) {
+            options += `<option value="${country.api_id}">${country.country_name} (${country.country_code})</option>`;
+         });
+         $("#country_id").html(options);
+      },
+   });
+}
+
+function getState(countryId) {
+   $.ajax({
+      url: '<?= base_url("get-state") ?>',
+      type: "POST",
+      data: {
+         country_id: countryId
+      },
+      dataType: "json",
+      success: function (response) {
+         let options = '<option value="">-- Select State --</option>';
+         $.each(response, function (index, state) {
+            options += `<option value="${state.api_id}">${state.state_name} (${state.short_code})</option>`;
+         });
+         $("#state_id").html(options);
+      },
+   });
+}
+
+function initUI() {
+   $("#From, #To").select2();
+   $(".datepicker").datetimepicker({
+      timepicker: false,
+      format: "Y-m-d"
+   });
+   $(".particular").select2({
+      allowClear: true,
+      escapeMarkup: (m) => m,
+      placeholder: "Select Item/Particular",
+      language: {
+         noResults: () => "<button class='btn btn-primary btn-block' data-target='#myModal' data-toggle='modal'>Add Item</button>",
+      },
+   });
+}
+
+function updateBuyerAddress() {
+   const address = $(this).find(":selected").data("address");
+   $("#Buyer_Address").val(address);
+}
+
+function updateVendorAddress() {
+   const address = $(this).find(":selected").data("address");
+   $("#Vendor_Address").val(address);
+}
+
+function toggleLoader(show, tableId) {
+   const loader = $("#loader");
+   const loaderText = $("#loader-text");
+   const table = $("#" + tableId);
+
+   loader.css("marginTop", show ? "230px" : "0");
+   loader.toggle(show);
+   loaderText.toggle(show);
+   table.css("visibility", show ? "hidden" : "visible");
+}
+
+function loadUnitList() {
+   $.post(
+      "<?= base_url() ?>master/UnitController/get_unit_list",
+      (response) => {
+         if (response.status === 200) {
+            unitList = `<option value="">Select Unit</option>` + response.unit_list.map((v) => `<option value="${v.unit_id}">${v.unit_name}</option>`).join("");
+         }
+      },
+      "json"
+   );
+}
+
+function loadItemList() {
+   $.post(
+      "<?= base_url() ?>master/ItemController/get_item_list",
+      (response) => {
+         if (response.status === 200) {
+            itemList = `<option value="">Select Item/Particular</option>` + response.item_list.map((v) => `<option value="${v.item_name}">${v.item_name}</option>`).join("");
+         }
+      },
+      "json"
+   );
+}
+
+function getMultiRecord() {
+   const scanId = $("#Scan_Id").val();
+   toggleLoader(true, "contnetBody");
+
+   $.post(
+         "<?= base_url() ?>form/InvoiceController/getInvoiceItem", {
+            Scan_Id: scanId
+         },
+         (response) => {
+            if (response.status === 200) {
+               count = response.data.length;
+               response.data.forEach((item, index) => {
+                  if (index > 0) addItemRow();
+                  populateRow(index + 1, item);
                });
-               $("#country_id").html(options);
-           },
-       });
-   }
-   
-   function getState(countryId) {
-       $.ajax({
-           url: '<?= base_url("get-state") ?>',
-           type: "POST",
-           data: { country_id: countryId },
-           dataType: "json",
-           success: function (response) {
-               let options = '<option value="">-- Select State --</option>';
-               $.each(response, function (index, state) {
-                   options += `<option value="${state.api_id}">${state.state_name} (${state.short_code})</option>`;
-               });
-               $("#state_id").html(options);
-           },
-       });
-   }
-   
-   function initUI() {
-       $("#From, #To").select2();
-       $(".datepicker").datetimepicker({ timepicker: false, format: "Y-m-d" });
-       $(".particular").select2({
-           allowClear: true,
-           escapeMarkup: (m) => m,
-           placeholder: "Select Item/Particular",
-           language: {
-               noResults: () => "<button class='btn btn-primary btn-block' data-target='#myModal' data-toggle='modal'>Add Item</button>",
-           },
-       });
-   }
-   
-   function updateBuyerAddress() {
-       const address = $(this).find(":selected").data("address");
-       $("#Buyer_Address").val(address);
-   }
-   
-   function updateVendorAddress() {
-       const address = $(this).find(":selected").data("address");
-       $("#Vendor_Address").val(address);
-   }
-   
-   function toggleLoader(show, tableId) {
-       const loader = $("#loader");
-       const loaderText = $("#loader-text");
-       const table = $("#" + tableId);
-   
-       loader.css("marginTop", show ? "230px" : "0");
-       loader.toggle(show);
-       loaderText.toggle(show);
-       table.css("visibility", show ? "hidden" : "visible");
-   }
-   
-   function loadUnitList() {
-       $.post(
-           "<?= base_url() ?>master/UnitController/get_unit_list",
-           (response) => {
-               if (response.status === 200) {
-                   unitList = `<option value="">Select Unit</option>` + response.unit_list.map((v) => `<option value="${v.unit_id}">${v.unit_name}</option>`).join("");
-               }
-           },
-           "json"
-       );
-   }
-   
-   function loadItemList() {
-       $.post(
-           "<?= base_url() ?>master/ItemController/get_item_list",
-           (response) => {
-               if (response.status === 200) {
-                   itemList = `<option value="">Select Item/Particular</option>` + response.item_list.map((v) => `<option value="${v.item_name}">${v.item_name}</option>`).join("");
-               }
-           },
-           "json"
-       );
-   }
-   
-   function getMultiRecord() {
-       const scanId = $("#Scan_Id").val();
-       toggleLoader(true, "contnetBody");
-   
-       $.post(
-           "<?= base_url() ?>form/InvoiceController/getInvoiceItem",
-           { Scan_Id: scanId },
-           (response) => {
-               if (response.status === 200) {
-                   count = response.data.length;
-                   response.data.forEach((item, index) => {
-                       if (index > 0) addItemRow();
-                       populateRow(index + 1, item);
-                   });
-               }
-           },
-           "json"
-       )
-           .always(() => toggleLoader(false, "contnetBody"))
-           .fail(() => alert("Error fetching data."));
-   }
-   
-   function populateRow(index, item) {
-       $(`#Particular${index}`).val(item.Particular).trigger("change");
-       $(`#HSN${index}`).val(item.HSN);
-       $(`#Qty${index}`).val(item.Qty);
-       $(`#Unit${index}`).val(item.Unit);
-       $(`#MRP${index}`).val(item.MRP);
-       $(`#Discount${index}`).val(item.Discount);
-       $(`#GST${index}`).val(item.GST);
-       $(`#SGST${index}`).val(item.SGST);
-       $(`#IGST${index}`).val(item.IGST);
-       $(`#Cess${index}`).val(item.Cess);
-       $(`#Price${index}`).val(item.Price);
-       $(`#Amount${index}`).val(item.Amount);
-       $(`#TAmount${index}`).val(item.Total_Amount);
-   }
-   
-   function addItemRow() {
-       let currentRows = $("#multi_record tr").length;
-       let serialNo = currentRows + 1;
-   
-       let html = `
+            }
+         },
+         "json"
+      )
+      .always(() => toggleLoader(false, "contnetBody"))
+      .fail(() => alert("Error fetching data."));
+}
+
+function populateRow(index, item) {
+   $(`#Particular${index}`).val(item.Particular).trigger("change");
+   $(`#HSN${index}`).val(item.HSN);
+   $(`#Qty${index}`).val(item.Qty);
+   $(`#Unit${index}`).val(item.Unit);
+   $(`#MRP${index}`).val(item.MRP);
+   $(`#Discount${index}`).val(item.Discount);
+   $(`#GST${index}`).val(item.GST);
+   $(`#SGST${index}`).val(item.SGST);
+   $(`#IGST${index}`).val(item.IGST);
+   $(`#Cess${index}`).val(item.Cess);
+   $(`#Price${index}`).val(item.Price);
+   $(`#Amount${index}`).val(item.Amount);
+   $(`#TAmount${index}`).val(item.Total_Amount);
+}
+
+function addItemRow() {
+   let currentRows = $("#multi_record tr").length;
+   let serialNo = currentRows + 1;
+
+   let html = `
               <tr>
                  <td>${serialNo}</td>
                  <td><select name="Particular[]" id="Particular${serialNo}" class="form-control form-control-sm particular">${itemList}</select></td>
@@ -644,134 +661,111 @@
                  <td><input type="text" name="TAmount[]" id="TAmount${serialNo}" class="form-control form-control-sm TAmount" readonly></td>
                  <td><button type="button" name="remove" class="btn btn-danger btn-xs removeRow"><i class="fa fa-minus"></i></button></td>
               </tr>`;
-   
-       $("#multi_record").append(html);
-   
-       $("#Qty" + serialNo + ", #MRP" + serialNo + ", #Discount" + serialNo + ", #GST" + serialNo + ", #IGST" + serialNo + ", #Cess" + serialNo)
-           .on("keypress", function (e) {
-               return isNumberKey(e);
-           })
-           .on("change", function () {
-               calculate(serialNo);
-           });
-   
-       initUI();
+
+   $("#multi_record").append(html);
+
+   $("#Qty" + serialNo + ", #MRP" + serialNo + ", #Discount" + serialNo + ", #GST" + serialNo + ", #IGST" + serialNo + ", #Cess" + serialNo)
+      .on("keypress", function (e) {
+         return isNumberKey(e);
+      })
+      .on("change", function () {
+         calculate(serialNo);
+      });
+
+   initUI();
+}
+
+function removeItemRow() {
+   $(this).closest("tr").remove();
+   calculate(count);
+   updateSerialNumbers();
+}
+
+function updateSerialNumbers() {
+   $("#multi_record tr").each(function (index) {
+      $(this)
+         .find("td:first")
+         .text(index + 1);
+   });
+}
+
+function isNumberKey(evt) {
+   const charCode = evt.which || evt.keyCode;
+   return !(charCode !== 46 && charCode > 31 && (charCode < 48 || charCode > 57));
+}
+
+function calculate(num) {
+   let qty = parseFloat($("#Qty" + num).val()) || 0;
+   let mrp = parseFloat($("#MRP" + num).val()) || 0;
+   let discount = parseFloat($("#Discount" + num).val()) || 0;
+   let gst = parseFloat($("#GST" + num).val()) || 0;
+   let igst = parseFloat($("#IGST" + num).val()) || 0;
+   let cess = parseFloat($("#Cess" + num).val()) || 0;
+
+   let price = mrp - (mrp * discount) / 100;
+   let amount = qty * price;
+   let totalGst = (amount * gst) / 100;
+   let totalIgst = (amount * igst) / 100;
+   let totalCess = (amount * cess) / 100;
+   let totalAmount = amount + totalGst + totalIgst + totalCess;
+
+   let sgst = igst == 0 ? gst / 2 : 0;
+   let totalSgst = (amount * sgst) / 100;
+
+   if (igst == 0) {
+      totalAmount += totalSgst;
+      $("#SGST" + num).val(sgst.toFixed(2));
+   } else {
+      $("#SGST" + num).val("0.00");
    }
-   
-   function removeItemRow() {
-       $(this).closest("tr").remove();
-       calculate(count);
-       updateSerialNumbers();
+
+   $("#Price" + num).val(price.toFixed(2));
+   $("#Amount" + num).val(amount.toFixed(2));
+   $("#TAmount" + num).val(totalAmount.toFixed(2));
+
+   let subTotal = 0;
+   let grandTotal = 0;
+
+   $("[id^='Amount']").each(function () {
+      let val = parseFloat($(this).val()) || 0;
+      subTotal += val;
+   });
+
+   $("[id^='TAmount']").each(function () {
+      let val = parseFloat($(this).val()) || 0;
+      grandTotal += val;
+   });
+
+   $("#Sub_Total").val(subTotal.toFixed(2));
+   $("#Total").val(grandTotal.toFixed(2));
+
+   let tcsRate = parseFloat($("#TCS").val()) || 0;
+   let tcsAmount = (grandTotal * tcsRate) / 100;
+   let finalGrandTotal = grandTotal + tcsAmount;
+
+   $("#Grand_Total").val(finalGrandTotal.toFixed(2));
+}
+
+function calculatePlusMinus() {
+   const discount = parseFloat($("#Total_Discount").val()) || 0;
+   let total = parseFloat($("#Total").val()) || 0;
+   if ($(this).attr("id") === "plus") {
+      total += discount;
+   } else {
+      total -= discount;
    }
-   
-   function updateSerialNumbers() {
-       $("#multi_record tr").each(function (index) {
-           $(this)
-               .find("td:first")
-               .text(index + 1);
-       });
-   }
-   
-   function isNumberKey(evt) {
-       const charCode = evt.which || evt.keyCode;
-       return !(charCode !== 46 && charCode > 31 && (charCode < 48 || charCode > 57));
-   }
-   
-   function calculate(num) {
-       let qty = parseFloat($("#Qty" + num).val()) || 0;
-       let mrp = parseFloat($("#MRP" + num).val()) || 0;
-       let discount = parseFloat($("#Discount" + num).val()) || 0;
-       let gst = parseFloat($("#GST" + num).val()) || 0;
-       let igst = parseFloat($("#IGST" + num).val()) || 0;
-       let cess = parseFloat($("#Cess" + num).val()) || 0;
-   
-       let price = mrp - (mrp * discount) / 100;
-       let amount = qty * price;
-       let totalGst = (amount * gst) / 100;
-       let totalIgst = (amount * igst) / 100;
-       let totalCess = (amount * cess) / 100;
-       let totalAmount = amount + totalGst + totalIgst + totalCess;
-   
-       let sgst = igst == 0 ? gst / 2 : 0;
-       let totalSgst = (amount * sgst) / 100;
-   
-       if (igst == 0) {
-           totalAmount += totalSgst;
-           $("#SGST" + num).val(sgst.toFixed(2));
-       } else {
-           $("#SGST" + num).val("0.00");
-       }
-   
-       $("#Price" + num).val(price.toFixed(2));
-       $("#Amount" + num).val(amount.toFixed(2));
-       $("#TAmount" + num).val(totalAmount.toFixed(2));
-   
-       let subTotal = 0;
-       let grandTotal = 0;
-   
-       $("[id^='Amount']").each(function () {
-           let val = parseFloat($(this).val()) || 0;
-           subTotal += val;
-       });
-   
-       $("[id^='TAmount']").each(function () {
-           let val = parseFloat($(this).val()) || 0;
-           grandTotal += val;
-       });
-   
-       $("#Sub_Total").val(subTotal.toFixed(2));
-       $("#Total").val(grandTotal.toFixed(2));
-   
-       let tcsRate = parseFloat($("#TCS").val()) || 0;
-       let tcsAmount = (grandTotal * tcsRate) / 100;
-       let finalGrandTotal = grandTotal + tcsAmount;
-   
-       $("#Grand_Total").val(finalGrandTotal.toFixed(2));
-   }
-   
-   function calculatePlusMinus() {
-       const discount = parseFloat($("#Total_Discount").val()) || 0;
-       let total = parseFloat($("#Total").val()) || 0;
-       if ($(this).attr("id") === "plus") {
-           total += discount;
-       } else {
-           total -= discount;
-       }
-       $("#Grand_Total").val(total.toFixed(2));
-   }
-   
-   window.cal_tax = function () {
-       let tcs = parseFloat($("#TCS").val()) || 0;
-       let subTotal = parseFloat($("#Sub_Total").val()) || 0;
-       let tcsAmount = (tcs / 100) * subTotal;
-       let total = subTotal + tcsAmount;
-   
-       const decimal = (total % 1).toFixed(2).split(".")[1] || "00";
-       $("#Total").val(total.toFixed(2));
-       $("#Total_Discount").val("0." + decimal);
-       $("#Grand_Total").val((total - parseFloat("0." + decimal)).toFixed(2));
-   };
-   function loadDropdownOptions(dropdownId, url, searchValue, selectedId) {
-    $('#' + dropdownId).html('<option value="">Loading...</option>');
-    $.ajax({
-        url: url,
-        type: 'POST',
-        dataType: 'json',
-        data: {
-            search_value: searchValue,
-            selected_id: selectedId
-        }, // Removed 'type' since it's not needed
-        beforeSend: function() {
-            $('#' + dropdownId).parent().append('<span class="loading-spinner">Loading...</span>');
-        },
-        success: function(response) {
-            $('#' + dropdownId).html(response.options);
-        },
-        error: function() {
-            $('#' + dropdownId).html('<option value="">Error loading options</option>');
-        },
-        complete: function() {
-            $('.loading-spinner').remove();
-        }
-    });
-}</script>
+   $("#Grand_Total").val(total.toFixed(2));
+}
+
+window.cal_tax = function () {
+   let tcs = parseFloat($("#TCS").val()) || 0;
+   let subTotal = parseFloat($("#Sub_Total").val()) || 0;
+   let tcsAmount = (tcs / 100) * subTotal;
+   let total = subTotal + tcsAmount;
+
+   const decimal = (total % 1).toFixed(2).split(".")[1] || "00";
+   $("#Total").val(total.toFixed(2));
+   $("#Total_Discount").val("0." + decimal);
+   $("#Grand_Total").val((total - parseFloat("0." + decimal)).toFixed(2));
+};
+</script>

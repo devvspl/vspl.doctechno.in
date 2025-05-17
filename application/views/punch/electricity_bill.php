@@ -6,17 +6,11 @@
             <div class="form-group col-md-7">
                <label for="">Location :</label>
                <small class="text-danger">
-               <?php echo $temp_punch_detail->location; ?>
+                 <?php echo isset($temp_punch_detail) ? $temp_punch_detail->location : ''; ?>
                </small>
                <select name="Location" id="Location" class="form-control">
                   <option value="">Select Location</option>
-                  <?php foreach ($locationlist as $key => $value) { ?>
-                  <option value="<?= $value['location_name'] ?>" <?php if (isset($punch_detail->Loc_Name)) {
-                     if ($value['location_name'] == $punch_detail->Loc_Name) {
-                     	echo "selected";
-                     }
-                     }  ?>><?= $value['location_name'] ?></option>
-                  <?php } ?>
+                
                </select>
             </div>
             <div class="form-group col-md-3">
@@ -72,7 +66,7 @@
             <div class="col-md-3 form-group">
                <label for="">Payment Mode:</label>
                <small class="text-danger">
-               <?php echo $temp_punch_detail->payment_mode; ?>
+                 <?php echo isset($temp_punch_detail) ? $temp_punch_detail->payment_mode : ''; ?>
                </small>
                <select name="Payment_Mode" id="Payment_Mode" class="form-control">
                   <option value="">Select</option>
@@ -140,6 +134,9 @@
    	timepicker: false,
    	format: 'Y-m-d'
    });
+   $("#Location").select2();
+   $("#CompanyID").select2();
+   $("#Payment_Mode").select2();
    $(document).ready(function () {
    $("#invoice-tab").click(function () {
         $("#additional-info").removeClass("active");
@@ -154,5 +151,16 @@
         $(".tabs").removeClass("active-tab");
         $(this).addClass("active-tab");
     });
+  <?php
+    $cleanedlocation = cleanSearchValue(
+        isset($temp_punch_detail->location) && !is_null($temp_punch_detail->location) ? $temp_punch_detail->location : ""
+    );
+    ?>
+     loadDropdownOptions(
+        'Location',
+        '<?= base_url("extract/ExtractorController/get_location_options") ?>',
+        <?= json_encode($cleanedlocation) ?>,
+        '<?= isset($punch_detail->Loc_Name) ? $punch_detail->Loc_Name : "" ?>'
+    );
 });
 </script>

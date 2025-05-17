@@ -8,7 +8,7 @@
             <div class="col-md-3 form-group">
                <label for="">Type</label>
                <small class="text-danger">
-               <?php echo $temp_punch_detail->type; ?>
+                 <?php echo isset($temp_punch_detail) ? $temp_punch_detail->type : ''; ?>
                </small>
                <select name="Type" id="Type" class="form-control">
                   <option value="">Select</option>

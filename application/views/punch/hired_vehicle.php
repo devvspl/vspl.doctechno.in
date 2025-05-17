@@ -7,20 +7,12 @@
             <div class="form-group col-md-5">
                <label for="">Agency Name:</label> <span class="text-danger">*</span>
                <small class="text-danger">
-               <?php echo $temp_punch_detail->agency_name; ?>
+                 <?php echo isset($temp_punch_detail) ? $temp_punch_detail->agency_name : ''; ?>
                </small>
                <select name="Agency_Name" id="Agency_Name" class="form-control" required
                   data-parsley-errors-container="#AgencyError">
                   <option value="">Select</option>
-                  <?php
-                     foreach ($vendor_list as $key => $value) {
-                     	$selected = '';
-                     	if (isset($punch_detail->From_ID) && $punch_detail->From_ID == $value['firm_id']) {
-                     		$selected = 'selected';
-                     	}
-                     	echo '<option value="' . $value['firm_id'] . '" ' . $selected . ' data-address="' . $value['address'] . '">' . $value['firm_name'] . '</option>';
-                     }
-                     ?>
+                 
                </select>
                <div id="AgencyError"></div>
             </div>
@@ -35,20 +27,12 @@
             <div class="form-group col-md-5">
                <label for="">Billing Name:</label> <span class="text-danger">*</span>
                <small class="text-danger">
-               <?php echo $temp_punch_detail->billing_name; ?>
+                 <?php echo isset($temp_punch_detail) ? $temp_punch_detail->billing_name : ''; ?>
                </small>
                <select name="Billing_Name" id="Billing_Name" class="form-control" required
                   data-parsley-errors-container="#BillingNameError" >
                   <option value="">Select</option>
-                  <?php
-                     foreach ($company_list as $key1 => $value1) {
-                     	$selected = '';
-                     	if (isset($punch_detail->To_ID) && $punch_detail->To_ID == $value1['firm_id']) {
-                     		$selected = 'selected';
-                     	}
-                     	echo '<option value="' . $value1['firm_id'] . '" ' . $selected . ' data-address="' . $value1['address'] . '">' . $value1['firm_name'] . '</option>';
-                     }
-                     ?>
+                 
                </select>
                <div id="BillingNameError"></div>
             </div>
@@ -61,7 +45,7 @@
             <div class="form-group col-md-4">
                <label for="">Employee Name:</label>
                <small class="text-danger">
-               <?php echo $temp_punch_detail->employee_name; ?>
+                 <?php echo isset($temp_punch_detail) ? $temp_punch_detail->employee_name : ''; ?>
                </small>
                <select name="Employee" id="Employee" class="form-control">
                   <option value="">Select</option>
@@ -90,17 +74,11 @@
             <div class="col-md-3">
                <label for="">Location :</label>
                <small class="text-danger">
-               <?php echo $temp_punch_detail->location; ?>
+                 <?php echo isset($temp_punch_detail) ? $temp_punch_detail->location : ''; ?>
                </small>
                <select name="Location" id="Location" class="form-control">
                   <option value="">Select Location</option>
-                  <?php foreach ($locationlist as $key => $value) { ?>
-                  <option value="<?= $value['location_name'] ?>" <?php if (isset($punch_detail->Loc_Name)) {
-                     if ($value['location_name'] == $punch_detail->Loc_Name) {
-                     	echo "selected";
-                     }
-                     }  ?>><?= $value['location_name'] ?></option>
-                  <?php } ?>
+                
                </select>
             </div>
             <div class="form-group col-md-3">
@@ -207,6 +185,7 @@
    $("#Agency_Name").select2();
    $("#Billing_Name").select2();
    $("#Employee").select2();
+   $("#Location").select2();
    
    $(document).on("change", "#Agency_Name", function () {
    	var address = $(this).find(':selected').data('address');
@@ -268,5 +247,42 @@
         $(".tabs").removeClass("active-tab");
         $(this).addClass("active-tab");
     });
+    
+<?php
+    $cleanedBuyer = cleanSearchValue(
+        isset($temp_punch_detail->buyer) && !is_null($temp_punch_detail->buyer) ? $temp_punch_detail->buyer : ""
+    );
+    $cleanedVendor = cleanSearchValue(
+        isset($temp_punch_detail->vendor) && !is_null($temp_punch_detail->vendor) ? $temp_punch_detail->vendor : ""
+    );
+     $cleanedlocation = cleanSearchValue(
+        isset($temp_punch_detail->location) && !is_null($temp_punch_detail->location) ? $temp_punch_detail->location : ""
+    );
+    ?>
+
+
+    loadDropdownOptions(
+        'Billing_Name',
+        '<?= base_url("extract/ExtractorController/get_company_options") ?>',
+        <?= json_encode($cleanedBuyer) ?>,
+        '<?= isset($punch_detail->From_ID) ? $punch_detail->From_ID : "" ?>'
+    );
+
+
+    loadDropdownOptions(
+        'Agency_Name',
+        '<?= base_url("extract/ExtractorController/get_vendor_options") ?>',
+        <?= json_encode($cleanedVendor) ?>,
+        '<?= isset($punch_detail->To_ID) ? $punch_detail->To_ID : "" ?>'
+    );
+
+     loadDropdownOptions(
+        'Location',
+        '<?= base_url("extract/ExtractorController/get_location_options") ?>',
+        <?= json_encode($cleanedlocation) ?>,
+        '<?= isset($punch_detail->Loc_Name) ? $punch_detail->Loc_Name : "" ?>'
+    );
+
+
 });
 </script>

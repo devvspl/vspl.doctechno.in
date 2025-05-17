@@ -10,27 +10,22 @@
             <div class="form-group col-md-3">
                <label for="">Company:</label>
                <small class="text-danger">
-               <?php echo $temp_punch_detail->company; ?>
+                
+                     <?php echo isset($temp_punch_detail) ? $temp_punch_detail->company : ''; ?>
                </small>
                <select name="Company" id="Company" class="form-control">
                   <option value="">Select</option>
-                  <?php foreach ($company_list as $key => $value) { ?>
-                  <option value="<?= $value['firm_id'] ?>" <?php if (isset($punch_detail->CompanyID)) {
-                     if ($value['firm_id'] == $punch_detail->CompanyID) {
-                         echo "selected";
-                     }
-                     }  ?>><?= $value['firm_name'] ?></option>
-                  <?php } ?>
+                
                </select>
             </div>
             <div class="form-group col-md-3">
                <label for="">Nature of Payment:</label>
                <small class="text-danger">
-               <?php echo $temp_punch_detail->nature_of_payment; ?>
+          
+                <?php echo isset($temp_punch_detail) ? $temp_punch_detail->nature_of_payment : ''; ?>
+               
                </small>
-               <small class="text-danger">
-               <?php if(empty($punch_detail->NatureOfPayment)) echo $temp_punch_detail->nature_of_payment; ?>
-               </small>
+
                <select name="Payment_Nature" id="Payment_Nature" class="form-control">
                   <?php
                      $payment_nature = array('Income Tax' => 'Income Tax', 'TDS' => 'TDS', 'Advance Tax' => 'Advance Tax', 'Demand Challan' => 'Demand Challan');
@@ -48,11 +43,10 @@
             <div class="form-group col-md-3">
                <label for="">Assessment Year:</label>
                <small class="text-danger">
-               <?php echo $temp_punch_detail->assessment_year; ?>
+                     <?php echo isset($temp_punch_detail) ? $temp_punch_detail->assessment_year : ''; ?>
+       
                </small>
-               <small class="text-danger">
-               <?php if(empty($punch_detail->Financial_Year)) echo $temp_punch_detail->assessment_year; ?>
-               </small>
+            
                <select name="Assessment_Year" id="Assessment_Year" class="form-control">
                   <?php
                      foreach ($fin_year as $row) {
@@ -141,7 +135,12 @@
        timepicker: false,
        format: "Y-m-d",
    });
+   $("#Company").select2();
+   $("#Payment_Nature").select2();
+   $("#Assessment_Year").select2();
+
    $(document).ready(function () {
+      
    $("#invoice-tab").click(function () {
         $("#additional-info").removeClass("active");
         $("#invoice-details").addClass("active");
@@ -155,5 +154,18 @@
         $(".tabs").removeClass("active-tab");
         $(this).addClass("active-tab");
     });
+
+    <?php 
+     $cleanedCompany = cleanSearchValue(
+        isset($temp_punch_detail->company) && !is_null($temp_punch_detail->company) ? $temp_punch_detail->company : ""
+    );
+    
+    ?>
+    loadDropdownOptions(
+        'Company',
+        '<?= base_url("extract/ExtractorController/get_company_options") ?>',
+        <?= json_encode($cleanedCompany) ?>,
+        '<?= isset($punch_detail->From_ID) ? $punch_detail->From_ID : "" ?>'
+    );
 });
 </script>

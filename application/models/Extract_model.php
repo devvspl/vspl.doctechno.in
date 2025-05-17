@@ -492,14 +492,14 @@ class Extract_model extends CI_Model {
         $this->db->update('master_item', ['item_code' => $itemCode]);
         return $itemCode;
     }
-    public function get_filtered_list($table, $search_value, $search_column, $return_column, $add_condition = '') {
+    public function get_filtered_list($table, $search_value, $search_column, $return_column, $select_column, $add_condition = '') {
         $search_value = trim((string)$search_value);
         $search_parts = [];
         if (!empty($search_value)) {
             $search_value_cleaned = preg_replace('/\s*\([^)]+\)/', '', $search_value);
             $search_parts = array_map('trim', preg_split('/and|&/', $search_value_cleaned, -1, PREG_SPLIT_NO_EMPTY));
         }
-        $this->db->select("$search_column, $return_column, address");
+        $this->db->select($select_column);
         $this->db->from($table);
         if (!empty($add_condition)) {
             $this->db->where($add_condition);

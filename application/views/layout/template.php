@@ -44,6 +44,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 	<script type="text/javascript" src="<?= base_url(); ?>assets/js/jquery.datetimepicker.full.js"></script>
 	<script src="<?= base_url(); ?>assets/js/jquery.verySimpleImageViewer.js"></script>
+	<script src="<?= base_url(); ?>assets/js/custom.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 	<style>
 		.parsley-errors-list {

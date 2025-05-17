@@ -6,20 +6,11 @@
          <div class="form-group col-md-4">
             <label for="">Company Name:</label> <span class="text-danger">*</span>
             <small class="text-danger">
-            <?php echo $temp_punch_detail->company_name; ?>
+              <?php echo isset($temp_punch_detail) ? $temp_punch_detail->company_name : ''; ?>
             </small>
             <select name="CompanyID" id="CompanyID" class="form-control" required
                data-parsley-errors-container="#CompanyError">
                <option value="">Select</option>
-               <?php
-                  foreach ($company_list as $key => $value) {
-                  	$selected = '';
-                  	if (isset($punch_detail->CompanyID) && $punch_detail->CompanyID == $value['firm_id']) {
-                  		$selected = 'selected';
-                  	}
-                  	echo '<option value="' . $value['firm_id'] . '" ' . $selected . ' data-address="' . $value['address'] . '">' . $value['firm_name'] . '</option>';
-                  }
-                  ?>
             </select>
             <div id="CompanyError"></div>
          </div>
@@ -34,7 +25,7 @@
          <div class="col-md-4 form-group">
             <label for="">Location:</label>
             <small class="text-danger">
-            <?php echo $temp_punch_detail->location; ?>
+              <?php echo isset($temp_punch_detail) ? $temp_punch_detail->location : ''; ?>
             </small>
             <select name="Location" id="Location" class="form-control">
                <option value="">Select</option>
@@ -102,9 +93,41 @@
 </div>
 <script>
    $(".datepicker").datetimepicker({
-   	timepicker: false,
-   	format: 'Y-m-d',
-   	input: false
+      timepicker: false,
+      format: 'Y-m-d',
+      input: false
    });
-      $('#Location').select2();
+
+   $('#Location').select2();
+   $('#CompanyID').select2();
+
+   $(document).ready(function() {
+      <?php
+      $cleanedBuyer = cleanSearchValue(
+         isset($temp_punch_detail->company_name) && !is_null($temp_punch_detail->company_name) 
+            ? $temp_punch_detail->company_name 
+            : ""
+      );
+
+      $cleanedLocation = cleanSearchValue(
+         isset($temp_punch_detail->location) && !is_null($temp_punch_detail->location) 
+            ? $temp_punch_detail->location 
+            : ""
+      );
+      ?>
+
+      loadDropdownOptions(
+         'CompanyID',
+         '<?= base_url("extract/ExtractorController/get_company_options") ?>',
+         <?= json_encode($cleanedBuyer) ?>,
+         '<?= isset($punch_detail->From_ID) ? $punch_detail->From_ID : "" ?>'
+      );
+
+      loadDropdownOptions(
+         'Location',
+         '<?= base_url("extract/ExtractorController/get_location_options") ?>',
+         <?= json_encode($cleanedLocation) ?>,
+         '<?= isset($punch_detail->Loc_Name) ? $punch_detail->Loc_Name : "" ?>'
+      );
+   });
 </script>
