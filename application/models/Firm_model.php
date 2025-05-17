@@ -15,10 +15,10 @@ class Firm_model extends CI_Model {
             $result = $this->db->get('master_firm')->row_array();
             return $result;
         } else {
-            $this->db->select('master_firm.*,master_country.country_name,master_state.state_code');
+            $this->db->select('master_firm.*,core_country.country_name,core_state.short_code');
             $this->db->from('master_firm');
-            $this->db->join('master_country', 'master_country.country_id = master_firm.country_id', 'left');
-            $this->db->join('master_state', 'master_state.state_id = master_firm.state_id', 'left');
+            $this->db->join('core_country', 'core_country.id = master_firm.country_id', 'left');
+            $this->db->join('core_state', 'core_state.id = master_firm.state_id', 'left');
             $this->db->where('master_firm.is_deleted', 'N');
             $this->db->order_by('firm_type', 'asc');
             $result = $this->db->get()->result_array();

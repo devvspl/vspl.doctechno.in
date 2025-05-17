@@ -158,7 +158,7 @@
                                  <?php echo $row['country_name'] ?>
                               </td>
                               <td class="mailbox-name">
-                                 <?php echo $row['state_code'] ?>
+                                 <?php echo $row['short_code'] ?>
                               </td>
                               <td class="mailbox-name">
                                  <?php echo $row['city_name'] ?>
@@ -170,10 +170,10 @@
                                  <?php echo ($row['status'] == 'A') ? 'Active' : 'Deactive' ?>
                               </td>
                               <td class="mailbox-date pull-right no-print">
-                                 <a href="<?= base_url(); ?>firm/edit/<?php echo $row['firm_id'] ?>" class="btn btn-default btn-xs">
+                                 <a href="<?= base_url(); ?>master/FirmController/edit/<?php echo $row['firm_id'] ?>" class="btn btn-default btn-xs">
                                  <i class="fa fa-pencil"></i>
                                  </a>
-                                 <a href="<?= base_url(); ?>firm/delete/<?php echo $row['firm_id'] ?>" class="btn btn-default btn-xs" onclick="return confirm('Are you sure to delete');">
+                                 <a href="<?= base_url(); ?>master/FirmController/delete/<?php echo $row['firm_id'] ?>" class="btn btn-default btn-xs" onclick="return confirm('Are you sure to delete');">
                                  <i class="fa fa-remove"></i>
                                  </a>
                               </td>
