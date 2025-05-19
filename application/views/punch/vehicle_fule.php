@@ -7,40 +7,24 @@
             <div class="form-group col-md-6">
                <label for="">Vendor Name:</label> <span class="text-danger">*</span>
                <small class="text-danger">
-               <?php echo $temp_punch_detail->vendor_name; ?>
+               <?php echo isset($temp_punch_detail) ? $temp_punch_detail->vendor_name: ''; ?>
                </small>
                <select name="Vendor_Name" id="Vendor_Name" class="form-control" required
                   data-parsley-errors-container="#VendorError">
                   <option value="">Select</option>
-                  <?php
-                     foreach ($vendor_list as $key => $value) {
-                     	$selected = '';
-                     	if (isset($punch_detail->From_ID) && $punch_detail->From_ID == $value['firm_id']) {
-                     		$selected = 'selected';
-                     	}
-                     	echo '<option value="' . $value['firm_id'] . '" ' . $selected . ' data-address="' . $value['address'] . '">' . $value['firm_name'] . '</option>';
-                     }
-                     ?>
+                 
                </select>
                <div id="VendorError"></div>
             </div>
             <div class="form-group col-md-6">
                <label for="">Billing To:</label> <span class="text-danger">*</span>
                <small class="text-danger">
-               <?php  echo $temp_punch_detail->billing_to; ?>
+                <?php echo isset($temp_punch_detail) ? $temp_punch_detail->billing_to: ''; ?>
                </small>
                <select name="Billing_To" id="Billing_To" class="form-control" required
                   data-parsley-errors-container="#Billing_ToError">
                   <option value="">Select</option>
-                  <?php
-                     foreach ($company_list as $key => $value) {
-                     	$selected = '';
-                     	if (isset($punch_detail->To_ID) && $punch_detail->To_ID == $value['firm_id']) {
-                     		$selected = 'selected';
-                     	}
-                     	echo '<option value="' . $value['firm_id'] . '" ' . $selected . ' data-address="' . $value['address'] . '">' . $value['firm_name'] . '</option>';
-                     }
-                     ?>
+                  
                </select>
                <div id="Billing_ToError"></div>
             </div>
@@ -67,17 +51,11 @@
             <div class="col-md-6 form-group">
                <label for="">Location:</label>
                <small class="text-danger">
-               <?php  echo $temp_punch_detail->location; ?>
+                <?php echo isset($temp_punch_detail) ? $temp_punch_detail->location: ''; ?>
                </small>
                <select name="Work_Location" id="Work_Location" class="form-control form-control-sm" required data-parsley-errors-container="#LocationError">
                   <option value="">Select</option>
-                  <?php foreach ($worklocation_list as $key => $value) { ?>
-                  <option value="<?= $value['location_name'] ?>" <?php if (isset($punch_detail->Loc_Name)) {
-                     if ($value['location_name'] == $punch_detail->Loc_Name) {
-                     	echo "selected";
-                     }
-                     }  ?>><?= $value['location_name'] ?></option>
-                  <?php } ?>
+
                </select>
                <div id="LocationError"></div>
             </div>
@@ -250,6 +228,41 @@
         $(".tabs").removeClass("active-tab");
         $(this).addClass("active-tab");
     });
+
+    <?php
+    $cleanedBuyer = cleanSearchValue(
+        isset($temp_punch_detail->billing_to) && !is_null($temp_punch_detail->billing_to) ? $temp_punch_detail->billing_to : ""
+    );
+    $cleanedVendor = cleanSearchValue(
+        isset($temp_punch_detail->vendor_name) && !is_null($temp_punch_detail->vendor_name) ? $temp_punch_detail->vendor_name : ""
+    );
+     $cleanedlocation = cleanSearchValue(
+        isset($temp_punch_detail->location) && !is_null($temp_punch_detail->location) ? $temp_punch_detail->location : ""
+    );
+    ?>
+
+
+    loadDropdownOptions(
+        'Billing_To',
+        '<?= base_url("extract/ExtractorController/get_company_options") ?>',
+        <?= json_encode($cleanedBuyer) ?>,
+        '<?= isset($punch_detail->To_ID) ? $punch_detail->To_ID : "" ?>'
+    );
+
+
+    loadDropdownOptions(
+        'Vendor_Name',
+        '<?= base_url("extract/ExtractorController/get_vendor_options") ?>',
+        <?= json_encode($cleanedVendor) ?>,
+        '<?= isset($punch_detail->From_ID) ? $punch_detail->From_ID : "" ?>'
+    );
+
+     loadDropdownOptions(
+        'Work_Location',
+        '<?= base_url("extract/ExtractorController/get_location_options") ?>',
+        <?= json_encode($cleanedlocation) ?>,
+        '<?= isset($punch_detail->Loc_Name) ? $punch_detail->Loc_Name : "" ?>'
+    );
 });
    
 </script>

@@ -7,20 +7,12 @@
             <div class="form-group col-md-5">
                <label for="">Company Name:</label> <span class="text-danger">*</span>
                <small class="text-danger">
-               <?php echo $temp_punch_detail->company_name; ?>
+                <?php echo isset($temp_punch_detail) ? $temp_punch_detail->company_name: ''; ?>
                </small>
                <select name="CompanyID" id="CompanyID" class="form-control" required
                   data-parsley-errors-container="#CompanyError">
                   <option value="">Select</option>
-                  <?php
-                     foreach ($company_list as $key1 => $value1) {
-                     	$selected = '';
-                     	if (isset($punch_detail->CompanyID) && $punch_detail->CompanyID == $value1['firm_id']) {
-                     		$selected = 'selected';
-                     	}
-                     	echo '<option value="' . $value1['firm_id'] . '" ' . $selected . ' data-address="' . $value1['address'] . '">' . $value1['firm_name'] . '</option>';
-                     }
-                     ?>
+                 
                </select>
                <div id="CompanyError"></div>
             </div>
@@ -35,20 +27,12 @@
             <div class="form-group col-md-5">
                <label for="">Vendor Name:</label> <span class="text-danger">*</span>
                <small class="text-danger">
-               <?php echo $temp_punch_detail->vendor_name; ?>
+               <?php echo isset($temp_punch_detail) ? $temp_punch_detail->vendor_name: ''; ?>
                </small>
                <select name="To_ID" id="To_ID" class="form-control" required
                   data-parsley-errors-container="#VendorError">
                   <option value="">Select</option>
-                  <?php
-                     foreach ($vendor_list as $key => $value) {
-                     	$selected = '';
-                     	if (isset($punch_detail->To_ID) && $punch_detail->To_ID == $value['firm_id']) {
-                     		$selected = 'selected';
-                     	}
-                     	echo '<option value="' . $value['firm_id'] . '" ' . $selected . ' data-address="' . $value['address'] . '">' . $value['firm_name'] . '</option>';
-                     }
-                     ?>
+                 
                </select>
                <div id="VendorError"></div>
             </div>
@@ -68,7 +52,7 @@
             <div class="form-group col-md-3">
                <label for="Vehicle_Type">Vehicle Type:</label>
                <small class="text-danger">
-               <?php echo $temp_punch_detail->vehicle_type; ?>
+                <?php echo isset($temp_punch_detail) ? $temp_punch_detail->vehicle_type : ''; ?>
                </small>
                <select name="Vehicle_Type" id="Vehicle_Type" class="form-control form-select form-select-sm">
                   <option value="">Select</option>
@@ -85,7 +69,7 @@
             <div class="col-md-3 form-group">
                <label for="">Location:</label>
                <small class="text-danger">
-               <?php echo $temp_punch_detail->location; ?>
+                <?php echo isset($temp_punch_detail) ? $temp_punch_detail->location : ''; ?>
                </small>
                <select name="Location" id="Location" class="form-control form-control-sm">
                   <option value="">Select</option>
@@ -145,9 +129,15 @@
                   class="form-control"><?= (isset($punch_detail->Remark)) ? $punch_detail->Remark : '' ?></textarea>
             </div>
          </div>
-         <div class="box-footer">
+          <div class="box-footer">
             <button type="reset" class="btn btn-danger">Reset</button>
-            <button type="submit" class="btn btn-success pull-right">Save</button>
+            <?php if (!empty($user_permission) &&  $user_permission == 'N') : ?>
+               <input type="submit" class="btn btn-success pull-right" style="margin-left: 20px;" name="submit" value="Final Submit"></input>
+            <?php endif; ?>
+          
+            <?php if (!empty($user_permission) && ($user_permission == 'Y' || $user_permission == 'N')) : ?>
+            <input type="submit" class="btn btn-info pull-right"  name="save_as_draft" value="Save as Draft"></input>
+            <?php endif; ?>
          </div>
          <?php
             if ($this->customlib->haveSupportFile($Scan_Id) == 1) {
@@ -177,7 +167,8 @@
 </div>
 <script>
    $("#CompanyID").select2();
-   $("#Vendor_Name").select2();
+   $("#To_ID").select2();
+   $("#Location").select2();
    $(document).on("change", "#CompanyID", function () {
    	var address = $(this).find(':selected').data('address');
    	$("#Related_Address").val(address);
@@ -205,4 +196,56 @@
    
    	$("#Total_Amount").val(parseFloat(total).toFixed(2));
    }
+
+     $(document).ready(function () {
+   $("#invoice-tab").click(function () {
+        $("#additional-info").removeClass("active");
+        $("#invoice-details").addClass("active");
+        $(".tabs").removeClass("active-tab");
+        $(this).addClass("active-tab");
+    });
+
+    $("#additional-info-tab").click(function () {
+        $("#invoice-details").removeClass("active");
+        $("#additional-info").addClass("active");
+        $(".tabs").removeClass("active-tab");
+        $(this).addClass("active-tab");
+    });
+
+    <?php
+    $cleanedBuyer = cleanSearchValue(
+        isset($temp_punch_detail->company_name) && !is_null($temp_punch_detail->company) ? $temp_punch_detail->company : ""
+    );
+    $cleanedVendor = cleanSearchValue(
+        isset($temp_punch_detail->vendor_name) && !is_null($temp_punch_detail->vendor_name) ? $temp_punch_detail->vendor_name : ""
+    );
+     $cleanedlocation = cleanSearchValue(
+        isset($temp_punch_detail->location) && !is_null($temp_punch_detail->location) ? $temp_punch_detail->location : ""
+    );
+    ?>
+
+
+    loadDropdownOptions(
+        'CompanyID',
+        '<?= base_url("extract/ExtractorController/get_company_options") ?>',
+        <?= json_encode($cleanedBuyer) ?>,
+        '<?= isset($punch_detail->CompanyID) ? $punch_detail->CompanyID : "" ?>'
+    );
+
+
+    loadDropdownOptions(
+        'To_ID',
+        '<?= base_url("extract/ExtractorController/get_vendor_options") ?>',
+        <?= json_encode($cleanedVendor) ?>,
+        '<?= isset($punch_detail->To_ID) ? $punch_detail->To_ID : "" ?>'
+    );
+
+     loadDropdownOptions(
+        'Location',
+        '<?= base_url("extract/ExtractorController/get_location_options") ?>',
+        <?= json_encode($cleanedlocation) ?>,
+        '<?= isset($punch_detail->Loc_Name) ? $punch_detail->Loc_Name : "" ?>'
+    );
+
+});
 </script>

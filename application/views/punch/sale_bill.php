@@ -17,7 +17,7 @@
             <div class="form-group col-md-3">
                <label for="">Mode of Payment:</label>
                <small class="text-danger">
-               <?php echo $temp_punch_detail->mode_of_payment; ?>
+                <?php echo isset($temp_punch_detail) ? $temp_punch_detail->mode_of_payment : ''; ?>
                </small>
                <select name="Payment_Mode" id="Payment_Mode"
                   class="form-control form-control-sm form-select form-select-sm">
@@ -44,7 +44,7 @@
             <div class="form-group col-md-6">
                <label for="">Vendor:</label>
                <small class="text-danger">
-               <?php echo $temp_punch_detail->vendor; ?>
+                <?php echo isset($temp_punch_detail) ? $temp_punch_detail->vendor : ''; ?>
                </small>
                <select name="From" id="From" class="form-control form-control-sm"
                   onchange="getFile();getDepartment();">
@@ -63,7 +63,8 @@
             <div class="form-group col-md-6">
                <label for="">Buyer:</label>
                <small class="text-danger">
-               <?php echo $temp_punch_detail->buyer; ?>
+
+               <?php echo isset($temp_punch_detail) ? $temp_punch_detail->buyer : ''; ?>
                </small>
                <select name="To" id="To" class="form-control form-control-sm">
                   <option value="">Select</option>
@@ -122,7 +123,7 @@
             <div class="col-md-3 form-group">
                <label for="">Department:</label>
                <small class="text-danger">
-               <?php echo $temp_punch_detail->department; ?>
+                <?php echo isset($temp_punch_detail) ? $temp_punch_detail->department : ''; ?>
                </small>
                <select name="Department" id="Department" class="form-control form-control-sm">
                   <?php foreach ($department_list as $key => $value) { ?>
@@ -137,7 +138,7 @@
             <div class="col-md-3 form-group">
                <label for="">Voucher Type/Category:</label>
                <small class="text-danger">
-               <?php echo $temp_punch_detail->voucher_type; ?>
+               <?php echo isset($temp_punch_detail) ? $temp_punch_detail->voucher_type : ''; ?>
                </small>
                <select name="Category" id="Category" class="form-control form-control-sm">
                   <option value="">Select</option>
@@ -153,7 +154,7 @@
             <div class="col-md-3 form-group">
                <label for="">Ledger:</label>
                <small class="text-danger">
-               <?php echo $temp_punch_detail->ledger; ?>
+               <?php echo isset($temp_punch_detail) ? $temp_punch_detail->ledger : ''; ?>
                </small>
                <select name="Ledger" id="Ledger" class="form-control form-control-sm">
                   <option value="">Select</option>
@@ -169,7 +170,7 @@
             <div class="col-md-3 form-group">
                <label for="">File:</label>
                <small class="text-danger">
-               <?php echo $temp_punch_detail->file; ?>
+               <?php echo isset($temp_punch_detail) ? $temp_punch_detail->file : ''; ?>
                </small>
                <select name="File" id="File" class="form-control form-control-sm">
                   <option value="">Select</option>

@@ -16,7 +16,7 @@
          <div class="form-group col-md-6">
             <label for="">Vendor:</label>
             <small class="text-danger">
-            <?php  echo $temp_punch_detail->vendor; ?>
+             <?php echo isset($temp_punch_detail) ? $temp_punch_detail->vendor: ''; ?>
             </small>
             <select name="To" id="To" class="form-control form-control-sm">
                <option value="">Select</option>
@@ -178,7 +178,7 @@
          <div class="col-md-3 form-group">
             <label for="">Location:</label>
             <small class="text-danger">
-            <?php  echo $temp_punch_detail->location; ?>
+             <?php echo isset($temp_punch_detail) ? $temp_punch_detail->location: ''; ?>
             </small>
             <select name="Location" id="Location" class="form-control form-control-sm">
                <option value="">Select</option>

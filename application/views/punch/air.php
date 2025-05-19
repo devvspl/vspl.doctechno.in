@@ -50,7 +50,7 @@
             <div class="form-group col-md-3">
                <label for="Travel_Class">Travel Class:</label>
                <small class="text-danger">
-               <?php echo $temp_punch_detail->travel_class; ?>
+                <?php echo isset($temp_punch_detail) ? $temp_punch_detail->travel_class : ''; ?>
                </small>
                <select name="Travel_Class" id="Travel_Class" class="form-control form-select form-select-sm">
                   <option value="">Select</option>
@@ -67,17 +67,11 @@
             <div class="col-md-3">
                <label for="">Location :</label>
                <small class="text-danger">
-               <?php echo $temp_punch_detail->location; ?>
+                <?php echo isset($temp_punch_detail) ? $temp_punch_detail->location : ''; ?>
                </small>
                <select name="Location" id="Location" class="form-control">
                   <option value="">Select Location</option>
-                  <?php foreach ($locationlist as $key => $value) { ?>
-                  <option value="<?= $value['location_name'] ?>" <?php if (isset($punch_detail->Loc_Name)) {
-                     if ($value['location_name'] == $punch_detail->Loc_Name) {
-                     	echo "selected";
-                     }
-                     }  ?>><?= $value['location_name'] ?></option>
-                  <?php } ?>
+                
                </select>
             </div>
          </div>
@@ -175,7 +169,13 @@
          </div>
          <div class="box-footer">
             <button type="reset" class="btn btn-danger">Reset</button>
-            <button type="submit" class="btn btn-success pull-right">Save</button>
+            <?php if (!empty($user_permission) &&  $user_permission == 'N') : ?>
+               <input type="submit" class="btn btn-success pull-right" style="margin-left: 20px;" name="submit" value="Final Submit"></input>
+            <?php endif; ?>
+          
+            <?php if (!empty($user_permission) && ($user_permission == 'Y' || $user_permission == 'N')) : ?>
+            <input type="submit" class="btn btn-info pull-right"  name="save_as_draft" value="Save as Draft"></input>
+            <?php endif; ?>
          </div>
          <?php
             if ($this->customlib->haveSupportFile($Scan_Id) == 1) {
@@ -267,6 +267,7 @@
    }
    
    $(".select2").select2();
+   $("#Location").select2();
    $('.datepicker').datetimepicker({
    	timepicker: false,
    	format: 'Y-m-d',
@@ -303,4 +304,38 @@
    
    	$("#Total_Amount").val((total).toFixed(2));
    }
+
+  $(document).ready(function () {
+   $("#invoice-tab").click(function () {
+        $("#additional-info").removeClass("active");
+        $("#invoice-details").addClass("active");
+        $(".tabs").removeClass("active-tab");
+        $(this).addClass("active-tab");
+    });
+
+    $("#additional-info-tab").click(function () {
+        $("#invoice-details").removeClass("active");
+        $("#additional-info").addClass("active");
+        $(".tabs").removeClass("active-tab");
+        $(this).addClass("active-tab");
+    });
+
+    <?php
+
+     $cleanedlocation = cleanSearchValue(
+        isset($temp_punch_detail->location) && !is_null($temp_punch_detail->location) ? $temp_punch_detail->location : ""
+    );
+    ?>
+
+
+
+     loadDropdownOptions(
+        'Location',
+        '<?= base_url("extract/ExtractorController/get_location_options") ?>',
+        <?= json_encode($cleanedlocation) ?>,
+        '<?= isset($punch_detail->Loc_Name) ? $punch_detail->Loc_Name : "" ?>'
+    );
+
+});
+
 </script>

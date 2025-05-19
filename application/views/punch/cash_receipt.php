@@ -6,20 +6,12 @@
             <div class="form-group col-md-4">
                <label for="">Company Name:</label> <span class="text-danger">*</span>
                <small class="text-danger">
-               <?php echo $temp_punch_detail->company_name; ?>
+                <?php echo isset($temp_punch_detail) ? $temp_punch_detail->company_name: ''; ?>
                </small>
                <select name="CompanyID" id="CompanyID" class="form-control" required
                   data-parsley-errors-container="#CompanyError">
                   <option value="">Select</option>
-                  <?php
-                     foreach ($company_list as $key => $value) {
-                     	$selected = '';
-                     	if (isset($punch_detail->CompanyID) && $punch_detail->CompanyID == $value['firm_id']) {
-                     		$selected = 'selected';
-                     	}
-                     	echo '<option value="' . $value['firm_id'] . '" ' . $selected . ' data-address="' . $value['address'] . '">' . $value['firm_name'] . '</option>';
-                     }
-                     ?>
+                 
                </select>
                <div id="CompanyError"></div>
             </div>
@@ -34,17 +26,11 @@
             <div class="col-md-4 form-group">
                <label for="">Location:</label>
                <small class="text-danger">
-               <?php echo $temp_punch_detail->location; ?>
+                <?php echo isset($temp_punch_detail) ? $temp_punch_detail->location : ''; ?>
                </small>
                <select name="Location" id="Location" class="form-control">
                   <option value="">Select</option>
-                  <?php foreach ($locationlist as $key => $value) { ?>
-                  <option value="<?= $value['location_name'] ?>" <?php if (isset($punch_detail->Loc_Name)) {
-                     if ($value['location_name'] == $punch_detail->Loc_Name) {
-                     	echo "selected";
-                     }
-                     }  ?>><?= $value['location_name'] ?></option>
-                  <?php } ?>
+                 
                </select>
             </div>
             <div class="form-group col-md-4">
@@ -74,7 +60,13 @@
          </div>
          <div class="box-footer">
             <button type="reset" class="btn btn-danger">Reset</button>
-            <button type="submit" class="btn btn-success pull-right">Save</button>
+            <?php if (!empty($user_permission) &&  $user_permission == 'N') : ?>
+               <input type="submit" class="btn btn-success pull-right" style="margin-left: 20px;" name="submit" value="Final Submit"></input>
+            <?php endif; ?>
+          
+            <?php if (!empty($user_permission) && ($user_permission == 'Y' || $user_permission == 'N')) : ?>
+            <input type="submit" class="btn btn-info pull-right"  name="save_as_draft" value="Save as Draft"></input>
+            <?php endif; ?>
          </div>
          <?php
             if ($this->customlib->haveSupportFile($Scan_Id) == 1) {
@@ -107,4 +99,46 @@
    	input: false
    });
    $('#Location').select2();
+     $('#CompanyID').select2();
+    $(document).ready(function () {
+   $("#invoice-tab").click(function () {
+        $("#additional-info").removeClass("active");
+        $("#invoice-details").addClass("active");
+        $(".tabs").removeClass("active-tab");
+        $(this).addClass("active-tab");
+    });
+
+    $("#additional-info-tab").click(function () {
+        $("#invoice-details").removeClass("active");
+        $("#additional-info").addClass("active");
+        $(".tabs").removeClass("active-tab");
+        $(this).addClass("active-tab");
+    });
+
+    <?php
+    $cleanedBuyer = cleanSearchValue(
+        isset($temp_punch_detail->company_name) && !is_null($temp_punch_detail->company_name) ? $temp_punch_detail->company_name : ""
+    );
+     $cleanedlocation = cleanSearchValue(
+        isset($temp_punch_detail->location) && !is_null($temp_punch_detail->location) ? $temp_punch_detail->location : ""
+    );
+    ?>
+
+
+    loadDropdownOptions(
+        'CompanyID',
+        '<?= base_url("extract/ExtractorController/get_company_options") ?>',
+        <?= json_encode($cleanedBuyer) ?>,
+        '<?= isset($punch_detail->CompanyID) ? $punch_detail->CompanyID : "" ?>'
+    );
+
+
+     loadDropdownOptions(
+        'Location',
+        '<?= base_url("extract/ExtractorController/get_location_options") ?>',
+        <?= json_encode($cleanedlocation) ?>,
+        '<?= isset($punch_detail->Loc_Name) ? $punch_detail->Loc_Name : "" ?>'
+    );
+
+});
 </script>
