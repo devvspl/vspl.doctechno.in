@@ -18,7 +18,7 @@
                         <div class="row mb-3">
                            <div class="col-md-4">
                               <label>Location:</label>
-                              <select name="location_id" class="form-control">
+                              <select name="location_id" id="location_id" class="form-control">
                                  <option value="">All Locations</option>
                                  <?php foreach ($locations as $location): ?>
                                  <option value="<?= $location->location_id; ?>" 
@@ -97,6 +97,7 @@
 </div>
 <script>
 $(document).ready(function () {
+    $("#location_id").select2();
     $(".view-details").on("click", function () {
         let scanId = $(this).data("scan-id");
         $("#documentDetailsModal").modal("show");

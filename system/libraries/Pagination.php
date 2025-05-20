@@ -523,15 +523,17 @@ class CI_Pagination {
 		}
 
 		// If something isn't quite right, back to the default base page.
-		if ( ! ctype_digit($this->cur_page) OR ($this->use_page_numbers && (int) $this->cur_page === 0))
-		{
-			$this->cur_page = $base_page;
-		}
-		else
-		{
-			// Make sure we're using integers for comparisons later.
-			$this->cur_page = (int) $this->cur_page;
-		}
+if (
+    ! is_string($this->cur_page) || 
+    ! ctype_digit($this->cur_page) || 
+    ($this->use_page_numbers && (int) $this->cur_page === 0)
+) {
+    $this->cur_page = $base_page;
+} else {
+    // Make sure we're using integers for comparisons later.
+    $this->cur_page = (int) $this->cur_page;
+}
+
 
 		// Is the page number beyond the result range?
 		// If so, we show the last page.

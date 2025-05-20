@@ -336,15 +336,24 @@ class Customlib
         return $result;
     }
 
-    function dateDiff($date1, $date2)
-    {
-        $date1 = strtotime($date1);
-        $date2 = strtotime($date2);
-
-        $datediff = $date1 - $date2;
-
-        return round($datediff / (60 * 60 * 24));
+   function dateDiff($date1, $date2)
+{
+    if (empty($date1) || empty($date2)) {
+        return null; // or return 0, or handle the error as appropriate
     }
+
+    $date1 = strtotime($date1);
+    $date2 = strtotime($date2);
+
+    if ($date1 === false || $date2 === false) {
+        return null; // handle invalid date strings
+    }
+
+    $datediff = $date1 - $date2;
+
+    return round($datediff / (60 * 60 * 24));
+}
+
 
     function getMonthName($month)
     {

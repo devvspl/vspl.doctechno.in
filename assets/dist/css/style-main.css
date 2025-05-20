@@ -10803,3 +10803,20 @@ textarea.form-control {
 .ui-menu-item:hover {
     background-color: #f0f0f0;
 }
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #1b98ae !important;
+    color: white;
+}
+.select2-container--default .select2-results__option[aria-selected="true"], .select2-container--default .select2-results__option[aria-selected="true"]:hover {
+    color: #fff !important;
+}
+#toolbar {
+    align-items: center;
+    background-color: rgb(27 152 174) !important;
+    color: rgb(255, 255, 255);
+    display: flex
+;
+    height: var(--viewer-pdf-toolbar-height);
+    padding: 0px 16px;
+}
