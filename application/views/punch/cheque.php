@@ -14,7 +14,7 @@ $punch_detail = $this->db->get_where('punchfile2', ['Scan_Id' => $Scan_Id])->row
                 <object data="<?= $rec->File_Location ?>" type="" height="490px" width="100%;"></object>
             <?php } else { ?>
                 <input type="hidden" name="image" id="image" value="<?= $rec->File_Location ?>">
-                <div id="imageViewerContainer" style=" width: 450px; height:490px; border:2px solid #3a495e;"></div>
+                <div id="imageViewerContainer" style=" width: 450px; height:490px; border:2px solid #1b98ae;"></div>
                 <script>
                     var curect_file_path = $('#image').val();
                     $("#imageViewerContainer").verySimpleImageViewer({

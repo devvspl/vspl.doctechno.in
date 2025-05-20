@@ -20,7 +20,7 @@
    </script>
    <div class="wrapper">
       <header class="main-header" id="alert">
-         <a href="#" class="logo" style="background-color: #dce7f7;">
+         <a href="#" class="logo" style="background-color: #ffff;">
          <span class="logo-mini">
          <img style="width: 27px;" src="<?= base_url(); ?>assets/images/logo_small.png" alt="SnapDoc" />
          </span>

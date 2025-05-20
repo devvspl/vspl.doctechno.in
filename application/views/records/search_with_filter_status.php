@@ -3,7 +3,7 @@
    margin-right: 40px;
    }
    .box-header.with-border {
-   border-bottom: 2px solid #3a495e;
+   border-bottom: 2px solid #1b98ae;
    box-shadow: 0 1px 3px rgb(0 0 0 / 12%), 0 1px 2px rgb(0 0 0 / 24%);
    }
    .d-none {

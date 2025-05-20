@@ -94,12 +94,12 @@
    cursor: pointer;
    padding: 10px;
    display: inline-block;
-   background-color: #425458a6;
+   background-color: #1b98aea6;
    border: 1px solid #ccc;
    color: #fff;
    }
    .tabs.active-tab {
-   background-color: #3a495e; 
+   background-color: #1b98ae; 
    }
 </style>
 <?php

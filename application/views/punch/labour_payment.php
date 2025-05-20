@@ -2,7 +2,7 @@
    <form action="<?= base_url(); ?>form/Labour_ctrl/save" id="labour_form" name="labour_form" method="post" accept-charset="utf-8">
       <div style="display: flex; flex-direction: column; align-items: center;">
          <div class="loader" id="loader" style="display: none;"></div>
-         <span id="loader-text" style="display: none; margin-top: 10px; font-size: 14px; color: #3a495e;">Please Wait...</span>
+         <span id="loader-text" style="display: none; margin-top: 10px; font-size: 14px; color: #1b98ae;">Please Wait...</span>
       </div>
       <div class="col-md-12" id="contnetBody">
          <input type="hidden" name="Scan_Id" id="Scan_Id" value="<?= $Scan_Id ?>">

@@ -10776,7 +10776,7 @@ textarea.form-control {
     height: 50px !important;
 }
 .slimScrollDiv .sidebar {
-    height: 50px !important;
+    /* height: 50px !important; */
 }
 .treeview-menu.menu-open {
     position: fixed;
