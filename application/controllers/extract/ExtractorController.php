@@ -197,24 +197,45 @@ class ExtractorController extends CI_Controller {
         $selected_id = $this->input->post('selected_id') ??'';
         $table = 'master_firm';
         $add_condition = "firm_type='Company'";
-        $get_columns = [
-            'firm_name',
-            'firm_id',
-            'address'
-        ];
+        $get_columns = ['firm_name', 'firm_id', 'address'];
         $items = $this->Extract_model->get_filtered_list($table, $search_value, 'firm_name', 'firm_id', $get_columns, $add_condition);
         $options = '<option value="">Select</option>';
+        $highest_similarity = 0;
+        $highest_similarity_firm_id = '';
+        $has_selected = false;
         foreach ($items as $item) {
             $firm_name = htmlspecialchars($item['firm_name']??'');
             $firm_id = htmlspecialchars($item['firm_id']??'');
             $address = htmlspecialchars($item['address']??'');
-            $similarity = $item['similarity'];
+            $similarity = $item['similarity']??0;
             $option_text = $firm_name;
             if ($similarity > 0) {
                 $option_text.= " ($similarity%)";
             }
-            $selected = ($firm_id == $selected_id) ? 'selected' : '';
+            if ($similarity > $highest_similarity) {
+                $highest_similarity = $similarity;
+                $highest_similarity_firm_id = $firm_id;
+            }
+            $selected = ($firm_id == $selected_id && !empty($selected_id)) ? 'selected' : '';
+            if ($selected) {
+                $has_selected = true;
+            }
             $options.= "<option value=\"$firm_id\" data-address=\"$address\" $selected>$option_text</option>";
+        }
+        if (!$has_selected && $highest_similarity_firm_id) {
+            $options = '<option value="">Select</option>';
+            foreach ($items as $item) {
+                $firm_name = htmlspecialchars($item['firm_name']??'');
+                $firm_id = htmlspecialchars($item['firm_id']??'');
+                $address = htmlspecialchars($item['address']??'');
+                $similarity = $item['similarity']??0;
+                $option_text = $firm_name;
+                if ($similarity > 0) {
+                    $option_text.= " ($similarity%)";
+                }
+                $selected = ($firm_id == $highest_similarity_firm_id) ? 'selected' : '';
+                $options.= "<option value=\"$firm_id\" data-address=\"$address\" $selected>$option_text</option>";
+            }
         }
         echo json_encode(['options' => $options]);
     }
@@ -223,51 +244,92 @@ class ExtractorController extends CI_Controller {
         $selected_id = $this->input->post('selected_id') ??'';
         $table = 'master_firm';
         $add_condition = "firm_type='Vendor'";
-        $get_columns = [
-            'firm_name',
-            'firm_id',
-            'address'
-        ];
+        $get_columns = ['firm_name', 'firm_id', 'address'];
         $items = $this->Extract_model->get_filtered_list($table, $search_value, 'firm_name', 'firm_id', $get_columns, $add_condition);
         $options = '<option value="">Select</option>';
+        $highest_similarity = 0;
+        $highest_similarity_firm_id = '';
+        $has_selected = false;
         foreach ($items as $item) {
             $firm_name = htmlspecialchars($item['firm_name']??'');
             $firm_id = htmlspecialchars($item['firm_id']??'');
             $address = htmlspecialchars($item['address']??'');
-            $similarity = $item['similarity'];
+            $similarity = $item['similarity']??0;
             $option_text = $firm_name;
             if ($similarity > 0) {
                 $option_text.= " ($similarity%)";
             }
-            $selected = ($firm_id == $selected_id) ? 'selected' : '';
+            if ($similarity > $highest_similarity) {
+                $highest_similarity = $similarity;
+                $highest_similarity_firm_id = $firm_id;
+            }
+            $selected = ($firm_id == $selected_id && !empty($selected_id)) ? 'selected' : '';
+            if ($selected) {
+                $has_selected = true;
+            }
             $options.= "<option value=\"$firm_id\" data-address=\"$address\" $selected>$option_text</option>";
         }
+        if (!$has_selected && $highest_similarity_firm_id) {
+            $options = '<option value="">Select</option>';
+            foreach ($items as $item) {
+                $firm_name = htmlspecialchars($item['firm_name']??'');
+                $firm_id = htmlspecialchars($item['firm_id']??'');
+                $address = htmlspecialchars($item['address']??'');
+                $similarity = $item['similarity']??0;
+                $option_text = $firm_name;
+                if ($similarity > 0) {
+                    $option_text.= " ($similarity%)";
+                }
+                $selected = ($firm_id == $highest_similarity_firm_id) ? 'selected' : '';
+                $options.= "<option value=\"$firm_id\" data-address=\"$address\" $selected>$option_text</option>";
+            }
+        }
         echo json_encode(['options' => $options]);
-        
     }
     public function get_vendor_options() {
         $search_value = $this->input->post('search_value') ??'';
         $selected_id = $this->input->post('selected_id') ??'';
         $table = 'master_firm';
         $add_condition = "firm_type='Vendor'";
-        $get_columns = [
-            'firm_name',
-            'firm_id',
-            'address'
-        ];
+        $get_columns = ['firm_name', 'firm_id', 'address'];
         $items = $this->Extract_model->get_filtered_list($table, $search_value, 'firm_name', 'firm_id', $get_columns, $add_condition);
         $options = '<option value="">Select</option>';
+        $highest_similarity = 0;
+        $highest_similarity_firm_id = '';
+        $has_selected = false;
         foreach ($items as $item) {
             $firm_name = htmlspecialchars($item['firm_name']??'');
             $firm_id = htmlspecialchars($item['firm_id']??'');
             $address = htmlspecialchars($item['address']??'');
-            $similarity = $item['similarity'];
+            $similarity = $item['similarity']??0;
             $option_text = $firm_name;
             if ($similarity > 0) {
                 $option_text.= " ($similarity%)";
             }
-            $selected = ($firm_id == $selected_id) ? 'selected' : '';
+            if ($similarity > $highest_similarity) {
+                $highest_similarity = $similarity;
+                $highest_similarity_firm_id = $firm_id;
+            }
+            $selected = ($firm_id == $selected_id && !empty($selected_id)) ? 'selected' : '';
+            if ($selected) {
+                $has_selected = true;
+            }
             $options.= "<option value=\"$firm_id\" data-address=\"$address\" $selected>$option_text</option>";
+        }
+        if (!$has_selected && $highest_similarity_firm_id) {
+            $options = '<option value="">Select</option>';
+            foreach ($items as $item) {
+                $firm_name = htmlspecialchars($item['firm_name']??'');
+                $firm_id = htmlspecialchars($item['firm_id']??'');
+                $address = htmlspecialchars($item['address']??'');
+                $similarity = $item['similarity']??0;
+                $option_text = $firm_name;
+                if ($similarity > 0) {
+                    $option_text.= " ($similarity%)";
+                }
+                $selected = ($firm_id == $highest_similarity_firm_id) ? 'selected' : '';
+                $options.= "<option value=\"$firm_id\" data-address=\"$address\" $selected>$option_text</option>";
+            }
         }
         echo json_encode(['options' => $options]);
     }
@@ -276,21 +338,41 @@ class ExtractorController extends CI_Controller {
         $selected_id = $this->input->post('selected_id') ??'';
         $table = 'master_work_location';
         $add_condition = "status='A' AND is_deleted='N'";
-        $get_columns = [
-            'location_name',
-            'location_id'
-        ];
+        $get_columns = ['location_name', 'location_id'];
         $items = $this->Extract_model->get_filtered_list($table, $search_value, 'location_name', 'location_name', $get_columns, $add_condition);
         $options = '<option value="">Select</option>';
+        $highest_similarity = 0;
+        $highest_similarity_location_name = '';
+        $has_selected = false;
         foreach ($items as $item) {
             $location_name = htmlspecialchars($item['location_name']??'');
-            $similarity = $item['similarity'];
+            $similarity = $item['similarity']??0;
             $option_text = $location_name;
             if ($similarity > 0) {
                 $option_text.= " ($similarity%)";
             }
-            $selected = ($location_name == $selected_id) ? 'selected' : '';
-            $options.= "<option value=\"$location_name\"  $selected>$option_text</option>";
+            if ($similarity > $highest_similarity) {
+                $highest_similarity = $similarity;
+                $highest_similarity_location_name = $location_name;
+            }
+            $selected = ($location_name == $selected_id && !empty($selected_id)) ? 'selected' : '';
+            if ($selected) {
+                $has_selected = true;
+            }
+            $options.= "<option value=\"$location_name\" $selected>$option_text</option>";
+        }
+        if (!$has_selected && $highest_similarity_location_name) {
+            $options = '<option value="">Select</option>';
+            foreach ($items as $item) {
+                $location_name = htmlspecialchars($item['location_name']??'');
+                $similarity = $item['similarity']??0;
+                $option_text = $location_name;
+                if ($similarity > 0) {
+                    $option_text.= " ($similarity%)";
+                }
+                $selected = ($location_name == $highest_similarity_location_name) ? 'selected' : '';
+                $options.= "<option value=\"$location_name\" $selected>$option_text</option>";
+            }
         }
         echo json_encode(['options' => $options]);
     }
