@@ -23,7 +23,7 @@
 .removehover{color: #333 !important}
 .removehover:hover{color: #333 !important}
  
-.modal-header {background: linear-gradient(40deg,#3b495e,#42677a); color: #fff;}
+.modal-header {background: #1b98ae; color: #fff;}
 
 /*.close:focus, .close:hover {
     color: #bac0ca;
