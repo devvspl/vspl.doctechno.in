@@ -205,35 +205,7 @@
                   <h3 class="box-title">Company Wise Report</h3>
                </div>
                <div class="box-body">
-                  <!-- <div class="row">
-                     <div class="col-sm-2">
-                     	<div class="form-group">
-                     		<label>From Date</label>
-                     		<input type="date" name="from_date_overall" id="from_date_overall" class="form-control" value="<?php if (set_value('from_date_overall') != '') {
-                        echo set_value('from_date_overall');
-                        }   ?>">
-                     		<span class="text-danger" id="error_from_date_overall"></span>
-                     	</div>
-                     </div>
-                     <div class="col-sm-2">
-                     	<div class="form-group">
-                     		<label>To Date</label>
-                     		<input type="date" name="to_date_overall" id="to_date_overall" class="form-control" value="<?php if (set_value('to_date_overall') != '') {
-                        echo set_value('to_date_overall');
-                        }
-                        ?>">
-                     		<span class="text-danger" id="error_to_date_overall"></span>
-                     	</div>
-                     </div>
-                     
-                     <div class="col-sm-2" style="margin-top: 22px;">
-                     	<div class="form-group">
-                     		<button type="reset" class="btn btn-danger btn-sm pull-right" style="margin-left: 5px;" id="reset_btn"><i class="fa fa-undo"></i> Reset</button>
-                     		<button type="button" id="search_overall" class="btn btn-success btn-sm pull-right checkbox-toggle"><i class="fa fa-search"></i> Search</button>
-                     	</div>
-                     </div>
-                     
-                     </div> -->
+
                   <div class="download_label">Company Wise Report</div>
                   <table class="table table-striped table-bordered table-hover" id="approveDetails">
                      <thead>

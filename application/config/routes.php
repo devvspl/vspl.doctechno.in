@@ -80,6 +80,8 @@ $route['store-additional-detail'] = 'accounts/AdditionalController/store_update'
 $route['finance/bill-approval/(:any)'] = 'punch/my_finance_bill_approval_file/$1';
 $route['approve_file/(:num)'] = 'punch/approve_file/$1';
 $route['reject_file/(:num)'] = 'punch/reject_file/$1';
+// ===========================Temp Scanner===========================
+$route['temp-supporting/(:any)'] = 'Scan/temp_upload_supporting/$1';
 //--------------Scan File-------------------
 $route['scan'] = 'Scan';
 $route['myscannedfiles'] = 'Scan/myscannedfiles';

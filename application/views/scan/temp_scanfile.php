@@ -87,7 +87,7 @@
                                  <?php if ($this->customlib->haveSupportFile($row['scan_id']) == 1) { ?>
                                  <a data-toggle="collapse" href="#detail<?= $row['scan_id'] ?>" data-parent="#mytable" style="cursor: pointer;" class="btn btn-default btn-xs"> <i class="fa fa-eye"></i></a>
                                  <?php } ?>
-                                 <a href="<?php echo base_url(); ?>Scan/temp_upload_supporting/<?php echo $row['scan_id']; ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="Edit">
+                                 <a href="<?php echo base_url('temp-supporting/'.$row['scan_id']); ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="Edit">
                                  <i class="fa fa-pencil"></i>
                                  <a href="javascript:void(0);" data-scan_id="<?= $row['scan_id']; ?>" class="btn btn-default btn-xs" id="delete_all">
                                  <i class="fa fa-remove"></i>

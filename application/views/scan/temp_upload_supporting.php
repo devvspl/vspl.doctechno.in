@@ -1,6 +1,3 @@
-<?php
-   $Scan_Id = $this->uri->segment(3);
-   ?>
 <div class="content-wrapper" style="min-height: 946px;">
    <section class="content">
       <div class="row">
@@ -15,7 +12,7 @@
                      <?php echo $this->session->flashdata('message') ?>
                      <?php } ?>
                      <div class="form-group">
-                        <input type="hidden" name="scan_id" id="scan_id" value="<?= $Scan_Id; ?>">
+                        <input type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id; ?>">
                         <input class="filestyle form-control" type='file' name='support_file' id="support_file" accept="image/*,application/pdf">
                      </div>
                   </div>
@@ -28,45 +25,69 @@
          <div class="col-md-7">
             <div class="box box-primary">
                <div class="box-header with-border">
-                  <h3 class="box-title"><?= $this->customlib->getDocumentName($Scan_Id); ?>
+                  <h3 class="box-title"><?= $this->customlib->getDocumentName($scan_id); ?>
                   </h3>
                   <div class="box-tools pull-right">
-                     <a href="<?= base_url(); ?>scan" class="btn btn-primary btn-sm"><i class="fa fa-long-arrow-left"></i> Back</a>
+                     <?php 
+                        if ($this->customlib->has_permission('Temporary Scan')) {
+                        ?>
+                     <a href="<?= base_url(); ?>temp_scan" class="btn btn-primary btn-sm">
+                     <i class="fa fa-long-arrow-left"></i> Back
+                     </a>
+                     <?php 
+                        } else {
+                        ?>
+                     <a href="<?= base_url(); ?>scan" class="btn btn-primary btn-sm">
+                     <i class="fa fa-long-arrow-left"></i> Back
+                     </a>
+                     <?php 
+                        }
+                        ?>
                   </div>
                </div>
                <div class="bx-body">
                   <div class="table-responsive">
                      <table class="table">
                         <thead>
-                           <th>S.No</th>
-                           <th>File</th>
-                           <th>File Type</th>
-                           <th>Delete</th>
+                           <tr>
+                              <th>S.No</th>
+                              <th>File</th>
+                              <th>File Type</th>
+                              <th>Delete</th>
+                           </tr>
                         </thead>
                         <tbody>
-                           <?php
-                              $main_file = $this->db->query("SELECT * FROM y{$this->session->userdata('year_id')}_scan_file WHERE Scan_Id = $Scan_Id")->row();
-                              ?>
+                           <?php if (!empty($main_file)): ?>
                            <tr>
                               <td>1</td>
-                              <td><a href="javascript:void(0);" target="popup" onclick="window.open('<?= $main_file->file_path; ?>','popup','width=600,height=600');"><?= $main_file->file_name; ?></a></td>
+                              <td>
+                                 <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $main_file->file_path; ?>','popup','width=600,height=600');">
+                                 <?= $main_file->file_name; ?>
+                                 </a>
+                              </td>
                               <td><?= ($main_file->is_main_file == 'Y') ? 'Main File' : 'Support File'; ?></td>
+                              <td></td>
                            </tr>
+                           <?php endif; ?>
                            <?php
-                              $supporting_files = $this->db->query("SELECT * FROM support_file WHERE Scan_Id = $Scan_Id")->result();
                               $i = 2;
-                              foreach ($supporting_files as $supporting_file) {
+                              foreach ($supporting_files as $supporting_file):
                               ?>
                            <tr>
-                              <td><?= $i; ?></td>
-                              <td><a href="javascript:void(0);" target="popup" onclick="window.open('<?= $supporting_file->file_path; ?>','popup','width=600,height=600');"><?= $supporting_file->file_name; ?></a></td>
+                              <td><?= $i++; ?></td>
+                              <td>
+                                 <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $supporting_file->file_path; ?>','popup','width=600,height=600');">
+                                 <?= $supporting_file->file_name; ?>
+                                 </a>
+                              </td>
                               <td><?= ($supporting_file->is_main_file == 'Y') ? 'Main File' : 'Support File'; ?></td>
-                              <td><a href="javascript:void(0);" class="btn btn-danger btn-xs" onclick="delete_file(<?= $supporting_file->Support_Id ?>)"><i class="fa fa-trash"></a></td>
+                              <td>
+                                 <a href="javascript:void(0);" class="btn btn-danger btn-xs" onclick="delete_file(<?= $supporting_file->Support_Id ?>)">
+                                 <i class="fa fa-trash"></i>
+                                 </a>
+                              </td>
                            </tr>
-                           <?php
-                              $i++;
-                              }
-                              ?>
+                           <?php endforeach; ?>
                         </tbody>
                      </table>
                   </div>
@@ -101,28 +122,28 @@
            }
        });
    
-   $(document).on('click', '#final_submit', function() {
-           var scan_id = $('#scan_id').val();
-           var url = '<?= base_url() ?>Super_scan/final_submit';
-           if (confirm('Are you sure to final submit ?')) {
-               $.ajax({
-                   url: url,
-                   type: 'POST',
-                   data: {
-                       'scan_id': scan_id
-                   },
-                   dataType: 'json',
-                   success: function(data) {
-                       if (data.status == 200) {
-                           window.location.href = '<?= base_url() ?>Scan';
-                       }
-                   }
-               });
-           }
-       });
-   });
+      $(document).on('click', '#final_submit', function() {
+            var scan_id = $('#scan_id').val();
+            var url = '<?= base_url() ?>Super_scan/final_submit';
+            if (confirm('Are you sure to final submit ?')) {
+                  $.ajax({
+                     url: url,
+                     type: 'POST',
+                     data: {
+                        'scan_id': scan_id
+                     },
+                     dataType: 'json',
+                     success: function(data) {
+                        if (data.status == 200) {
+                              window.location.href = '<?= base_url() ?>Scan';
+                        }
+                     }
+                  });
+            }
+         });
+      });
    
-   function delete_file(id) {
+      function delete_file(id) {
        var url = '<?= base_url() ?>Scan/delete_file';
        if (confirm('Are you sure to delete ?')) {
            $.ajax({
@@ -134,7 +155,7 @@
                dataType: 'json',
                success: function(data) {
                    if (data.status == 200) {
-                       window.location.href = '<?= base_url() ?>Scan/upload_supporting/<?= $Scan_Id; ?>';
+                       window.location.href = '<?= base_url() ?>Scan/upload_supporting/<?= $scan_id; ?>';
                    }
                }
            });
