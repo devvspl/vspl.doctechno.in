@@ -107,18 +107,18 @@ class Dashboard extends CI_Controller {
         $To_Date = $this->input->post('To_Date');
         if ($From_Date != '' && $To_Date != '') {
             $this->db->select('CONCAT(users.first_name, " ", users.last_name) AS bill_approver,
-                   SUM(IF(y{$this->year_id}_scan_file.Bill_Approved = "Y", 1, 0)) AS approved,
-                   SUM(IF(y{$this->year_id}_scan_file.Bill_Approved = "R", 1, 0)) AS rejected,
-                   SUM(IF(y{$this->year_id}_scan_file.Bill_Approved = "N", 1, 0)) AS pending');
+                   SUM(IF(y{$this->year_id}_scan_file.bill_approval_status = "Y", 1, 0)) AS approved,
+                   SUM(IF(y{$this->year_id}_scan_file.bill_approval_status = "R", 1, 0)) AS rejected,
+                   SUM(IF(y{$this->year_id}_scan_file.bill_approval_status = "N", 1, 0)) AS pending');
             $this->db->from("y{$this->year_id}_scan_file");
             $this->db->join('users', 'users.user_id = y{$this->year_id}_scan_file.bill_approver_id', 'left');
             $this->db->where('y{$this->year_id}_scan_file.location_id IS NOT NULL');
             $this->db->group_by('y{$this->year_id}_scan_file.bill_approver_id');
         } else {
             $this->db->select('CONCAT(users.first_name, " ", users.last_name) AS bill_approver,
-                   SUM(IF(y{$this->year_id}_scan_file.Bill_Approved = "Y", 1, 0)) AS approved,
-                   SUM(IF(y{$this->year_id}_scan_file.Bill_Approved = "R", 1, 0)) AS rejected,
-                   SUM(IF(y{$this->year_id}_scan_file.Bill_Approved = "N", 1, 0)) AS pending');
+                   SUM(IF(y{$this->year_id}_scan_file.bill_approval_status = "Y", 1, 0)) AS approved,
+                   SUM(IF(y{$this->year_id}_scan_file.bill_approval_status = "R", 1, 0)) AS rejected,
+                   SUM(IF(y{$this->year_id}_scan_file.bill_approval_status = "N", 1, 0)) AS pending');
             $this->db->from("y{$this->year_id}_scan_file");
             $this->db->join('users', 'users.user_id = y{$this->year_id}_scan_file.bill_approver_id', 'left');
             $this->db->where('y{$this->year_id}_scan_file.location_id IS NOT NULL');

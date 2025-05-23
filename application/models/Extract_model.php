@@ -31,7 +31,7 @@ class Extract_model extends CI_Model {
         $this->db->join("users sbb", "sbb.user_id = s.scanned_by", "left");
         $this->db->where("s.document_name  !=", "");
         $this->db->where("s.extract_status", "N");
-        $this->db->where("s.Bill_Approved", "Y");
+        $this->db->where("s.bill_approval_status", "Y");
         if (!empty($queuedScanIds)) {
             $this->db->where_not_in("s.scan_id", $queuedScanIds);
         }
@@ -55,7 +55,7 @@ class Extract_model extends CI_Model {
         $this->db->join("users sbb", "sbb.user_id = s.scanned_by", "left");
         $this->db->where("s.document_name  !=", "");
         $this->db->where_in("s.extract_status", ["Y", "C"]);
-        $this->db->where("s.Bill_Approved", "Y");
+        $this->db->where("s.bill_approval_status", "Y");
         if (!empty($group_id)) {
             $this->db->where("s.Group_Id", $group_id);
         }
@@ -76,7 +76,7 @@ class Extract_model extends CI_Model {
         $this->db->join("users sbb", "sbb.user_id = s.scanned_by", "left");
         $this->db->where("s.document_name  !=", "");
         $this->db->where_in("s.extract_status", ["C"]);
-        $this->db->where("s.Bill_Approved", "Y");
+        $this->db->where("s.bill_approval_status", "Y");
         if (!empty($group_id)) {
             $this->db->where("s.Group_Id", $group_id);
         }
