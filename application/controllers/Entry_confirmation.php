@@ -30,7 +30,7 @@ class Entry_confirmation extends CI_Controller
 	function file_entry_confirm($scanId)
 	{
 		$this->db->where('scan_id', $scanId)
-			->update('y{$this->year_id}_scan_file', array('is_entry_confirmed' => 'Y', 'confirmed_date' => date('Y-m-d H:i:s')));
+			->update("y{$this->year_id}_scan_file", array('is_entry_confirmed' => 'Y', 'confirmed_date' => date('Y-m-d H:i:s')));
 
 		if ($this->db->affected_rows() > 0) {
 			$this->session->set_flashdata('message', '<p class="text-success text-center">File Entry Confirmed Successfully.</p>');

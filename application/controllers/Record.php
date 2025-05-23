@@ -73,7 +73,7 @@ class Record extends CI_Controller {
 	}
 	function give_edit_permission($Scan_Id) {
 		$this->db->where('scan_id', $Scan_Id);
-		$result = $this->db->update('y{$this->year_id}_scan_file', array('has_edit_permission' => 'Y'));
+		$result = $this->db->update("y{$this->year_id}_scan_file", array('has_edit_permission' => 'Y'));
 		if ($result) {
 			echo json_encode(array('status' => '200'));
 		} else {
@@ -84,11 +84,11 @@ class Record extends CI_Controller {
 		$this->session->set_userdata('top_menu', 'report');
 		$user_list = $this->Record_model->get_user();
 		$this->data['user_list'] = $user_list;
-		$Scan_By = $this->input->post('scanned_by');
+		$scanned_by = $this->input->post('scanned_by');
 		$Punch_By = $this->input->post('punched_by');
 		$Approve_By = $this->input->post('approved_by');
-		if ($Scan_By != '' || $Punch_By != '' || $Approve_By != '') {
-			$record_list = $this->Record_model->get_filter_record($Scan_By, $Punch_By, $Approve_By);
+		if ($scanned_by != '' || $Punch_By != '' || $Approve_By != '') {
+			$record_list = $this->Record_model->get_filter_record($scanned_by, $Punch_By, $Approve_By);
 		} else {
 			$record_list = $this->Record_model->get_record_list();
 		}
@@ -100,7 +100,7 @@ class Record extends CI_Controller {
 	}
 	function reject_approved_file($Scan_Id) {
 		$this->db->where('scan_id', $Scan_Id);
-		$result = $this->db->update('y{$this->year_id}_scan_file', array('is_file_approved' => 'N', 'approved_date' => NULL, 'approved_by' => NULL));
+		$result = $this->db->update("y{$this->year_id}_scan_file", array('is_file_approved' => 'N', 'approved_date' => NULL, 'approved_by' => NULL));
 		if ($result) {
 			echo json_encode(array('status' => '200'));
 		} else {
@@ -123,7 +123,7 @@ class Record extends CI_Controller {
 		$toDate = $this->input->post('to_date');
 		$last_day = $this->input->post('last_day');
 		$this->db->select('*');
-		$this->db->from('y{$this->year_id}_scan_file');
+		$this->db->from("y{$this->year_id}_scan_file");
 		$this->db->where('Location is not null', NULL, FALSE);
 		$this->db->where('is_deleted', 'N');
 		if (!empty($location)) {
@@ -171,12 +171,12 @@ class Record extends CI_Controller {
 			$toDate = $this->input->get('to_date');
 			$last_day = $this->input->get('last_day');
 			$this->db->select(['tcb.first_name as scan_by_name', 'ba.first_name as bill_approver_name', 'master_work_location.location_name', 'location_id', 'document_name', 'file_name', 'file_path', 'is_temp_scan', 'temp_scan_by', 'temp_scan_date', 'scanned_by', 'scan_date', 'bill_approval_status', 'bill_approver_id', 'bill_approved_date', 'bill_approver_remark']);
-			$this->db->from('y{$this->year_id}_scan_file');
+			$this->db->from("y{$this->year_id}_scan_file");
 			$this->db->join('master_work_location', 'y{$this->year_id}_scan_file.location_id = master_work_location.location_id');
 			$this->db->join('users tcb', 'y{$this->year_id}_scan_file.Temp_Scan_By = tcb.user_id');
 			$this->db->join('users ba', 'y{$this->year_id}_scan_file.Bill_Approver = ba.user_id');
 			$this->db->where('Location is not null', NULL, FALSE);
-			$this->db->where('y{$this->year_id}_scan_file.Is_Deleted', 'N');
+			$this->db->where('y{$this->year_id}_scan_file.is_deleted', 'N');
 			if (!empty($location)) {
 				$this->db->where('location_id', $location);
 			}

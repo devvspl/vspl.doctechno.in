@@ -36,7 +36,7 @@ class InvoiceController extends CI_Controller {
             $this->db->insert_batch('invoice_detail', $invoice_details);
         }
         if ($is_update) {
-            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', ['is_rejected' => 'N', 'finance_punch_action_status' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N', ]);
+            $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", ['is_rejected' => 'N', 'finance_punch_action_status' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N', ]);
         }
         $this->db->trans_complete();
         if ($post['submit']) {
@@ -132,7 +132,7 @@ class InvoiceController extends CI_Controller {
                 $array[$i] = array('scan_id' => $Scan_Id, 'Particular' => $Particular[$i], 'HSN' => $HSN[$i], 'Qty' => $Qty[$i], 'Unit' => $Unit[$i], 'MRP' => $MRP[$i], 'Discount' => $Discount[$i], 'Price' => $Price[$i], 'Amount' => $Amount[$i], 'GST' => $GST[$i], 'SGST' => $SGST[$i], 'IGST' => $IGST[$i], 'Cess' => $Cess[$i], 'Total_Amount' => $TAmount[$i],);
             }
             $this->db->insert_batch('invoice_detail', $array);
-            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
+            $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
         } else {
             $this->db->insert('punchfile', $data);
             $insert_id = $this->db->insert_id();

@@ -111,7 +111,7 @@ class FixedAsset_ctrl extends CI_Controller
                 );
             }
             $this->db->insert_batch('invoice_detail', $array);
-            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
+            $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
         } else {
             //Insert
             $this->db->insert('punchfile', $data);

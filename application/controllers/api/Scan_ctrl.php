@@ -67,7 +67,7 @@ class Scan_ctrl extends REST_Controller
             $error = array('error' => $this->upload->display_errors());
             $this->response($error, 400);
         } else {
-            $query = $this->db->insert('y{$this->year_id}_scan_file', array(
+            $query = $this->db->insert("y{$this->year_id}_scan_file", array(
                 'group_id' => $this->customlib->getGroupID($user_id),
                 'scanned_by' => $user_id,
                 'Document_name' => $document_name,
@@ -129,7 +129,7 @@ class Scan_ctrl extends REST_Controller
     {
 
         $Scan_Id = $this->post('scan_id');
-        $query = $this->db->update('y{$this->year_id}_scan_file', array(
+        $query = $this->db->update("y{$this->year_id}_scan_file", array(
             'is_final_submitted' => 'Y',
         ), array(
             'scan_id' => $Scan_Id,
@@ -160,7 +160,7 @@ class Scan_ctrl extends REST_Controller
         $query = $this->db->delete('support_file', array(
             'scan_id' => $Scan_Id,
         ));
-        $query = $this->db->delete('y{$this->year_id}_scan_file', array(
+        $query = $this->db->delete("y{$this->year_id}_scan_file", array(
             'scan_id' => $Scan_Id,
         ));
         if ($query) {

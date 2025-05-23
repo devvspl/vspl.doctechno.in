@@ -51,7 +51,7 @@ class Scan extends CI_Controller {
         if ($this->input->post('document_name') != '' || $this->input->post('document_name') != null) {
             $document_name = $this->input->post('document_name');
         }
-        $Scan_By = $this->session->userdata('user_id');
+        $scanned_by = $this->session->userdata('user_id');
         $document_name = $document_name;
         $location = $this->input->post('location');
         $bill_approver = $this->input->post('bill_approver');
@@ -69,7 +69,7 @@ class Scan extends CI_Controller {
             $this->session->set_flashdata('message', '<div class="alert alert-danger">' . $error['error'] . '</div>');
             redirect('scan');
         } else {
-            $this->db->insert('y{$this->year_id}_scan_file', ['group_id' => $this->session->userdata('group_id'), 'scanned_by' => $Scan_By, 'Document_name' => $document_name, 'location_id' => $location, 'bill_approver_id' => $bill_approver, 'file_name' => $var_temp_name, 'file_extension' => $file_ext, 'file_path' => base_url() . 'uploads/temp/' . $var_temp_name, 'secondary_file_path' => 'uploads/temp/' . $var_temp_name, 'year' => $year, 'scan_date' => date('Y-m-d H:i:s'), ]);
+            $this->db->insert("y{$this->year_id}_scan_file", ['group_id' => $this->session->userdata('group_id'), 'scanned_by' => $scanned_by, 'Document_name' => $document_name, 'location_id' => $location, 'bill_approver_id' => $bill_approver, 'file_name' => $var_temp_name, 'file_extension' => $file_ext, 'file_path' => base_url() . 'uploads/temp/' . $var_temp_name, 'secondary_file_path' => 'uploads/temp/' . $var_temp_name, 'year' => $year, 'scan_date' => date('Y-m-d H:i:s'), ]);
             $this->session->set_flashdata('message', '<div class="alert alert-success">File Uploaded Successfully</div>');
             redirect('scan/upload_supporting/' . $this->db->insert_id());
         }
@@ -100,14 +100,14 @@ class Scan extends CI_Controller {
                 redirect('temp_scan');
             } else {
                 $data = ['group_id' => $this->session->userdata('group_id'), 'location_id' => $location, 'bill_approver_id' => $bill_approver, 'temp_scan_by' => $Temp_Scan_By, 'is_temp_scan' => 'Y', 'is_scan_complete' => 'N', 'file_name' => $var_temp_name, 'file_extension' => $file_ext, 'file_path' => base_url() . 'uploads/temp/' . $var_temp_name, 'secondary_file_path' => 'uploads/temp/' . $var_temp_name, 'year' => $year, 'temp_scan_date' => date('Y-m-d H:i:s'), ];
-                $query = $this->db->insert('y{$this->year_id}_scan_file', $data);
+                $query = $this->db->insert("y{$this->year_id}_scan_file", $data);
                 $insert_id = $this->db->insert_id();
                 $file_org_name = preg_replace('/[^A-Za-z0-9\s\-]/', '', pathinfo($file, PATHINFO_FILENAME));
                 $file_org_name = str_replace(' ', '_', $file_org_name);
                 $formatted_date = date('d_My_His');
                 $document_name = $insert_id . '_' . ucfirst($file_org_name) . '_' . $formatted_date;
                 $this->db->where('scan_id', $insert_id);
-                $this->db->update('y{$this->year_id}_scan_file', ['document_name' => $document_name]);
+                $this->db->update("y{$this->year_id}_scan_file", ['document_name' => $document_name]);
                 $this->session->set_flashdata('message', '<div class="alert alert-success">File Uploaded Successfully</div>');
                 redirect('scan/temp_upload_supporting/' . $insert_id);
             }
@@ -183,7 +183,7 @@ class Scan extends CI_Controller {
         $this->db->trans_strict(false);
         $scan_id = $this->input->post('scan_id');
         $this->db->delete('support_file', ['scan_id' => $scan_id]);
-        $this->db->delete('y{$this->year_id}_scan_file', ['scan_id' => $scan_id]);
+        $this->db->delete("y{$this->year_id}_scan_file", ['scan_id' => $scan_id]);
         $this->db->trans_complete();
         if ($this->db->trans_status() === false) {
             $this->db->trans_rollback();
@@ -210,7 +210,7 @@ class Scan extends CI_Controller {
         $this->db->trans_start();
         $this->db->trans_strict(false);
         $this->db->where('scan_id', $scan_id);
-        $this->db->update('y{$this->year_id}_scan_file', ['is_final_submitted' => 'Y']);
+        $this->db->update("y{$this->year_id}_scan_file", ['is_final_submitted' => 'Y']);
         $this->db->trans_complete();
         if ($this->db->trans_status() === false) {
             $this->db->trans_rollback();
@@ -225,7 +225,7 @@ class Scan extends CI_Controller {
         $this->db->trans_start();
         $this->db->trans_strict(false);
         $this->db->where('scan_id', $scan_id);
-        $this->db->update('y{$this->year_id}_scan_file', ['is_scan_resend' => 'N']);
+        $this->db->update("y{$this->year_id}_scan_file", ['is_scan_resend' => 'N']);
         $this->db->trans_complete();
         if ($this->db->trans_status() === false) {
             $this->db->trans_rollback();
@@ -258,7 +258,7 @@ class Scan extends CI_Controller {
         if (!$this->upload->do_upload('image')) {
             echo json_encode(['status' => 400, 'error' => $this->upload->display_errors() ]);
         } else {
-            $query = $this->db->where('scan_id', $scan_id)->update('y{$this->year_id}_scan_file', ['file_name' => $var_temp_name, 'file_extension' => $file_ext, 'file_path' => base_url() . 'uploads/temp/' . $var_temp_name, 'secondary_file_path' => 'uploads/temp/' . $var_temp_name]);
+            $query = $this->db->where('scan_id', $scan_id)->update("y{$this->year_id}_scan_file", ['file_name' => $var_temp_name, 'file_extension' => $file_ext, 'file_path' => base_url() . 'uploads/temp/' . $var_temp_name, 'secondary_file_path' => 'uploads/temp/' . $var_temp_name]);
             if ($query) {
                 echo json_encode(['status' => 200]);
             } else {
@@ -277,8 +277,8 @@ class Scan extends CI_Controller {
         $this->data['doctypeList'] = $this->db->where(['status' => 'A', 'is_deleted' => 'N'])->get('master_temp_doctype')->result_array();
         $this->data['firmList'] = $this->Scan_model->get_firm_list();
         $this->data['departmentList'] = $this->Scan_model->get_department_list();
-        $group_id = $this->db->where('scan_id', $id)->get('y{$this->year_id}_scan_file')->row()->group_id??null;
-        $bill_approver_id = $this->db->where('scan_id', $id)->get('y{$this->year_id}_scan_file')->row()->bill_approver_id??null;
+        $group_id = $this->db->where('scan_id', $id)->get("y{$this->year_id}_scan_file")->row()->group_id??null;
+        $bill_approver_id = $this->db->where('scan_id', $id)->get("y{$this->year_id}_scan_file")->row()->bill_approver_id??null;
         $this->data['group_id'] = $group_id;
         $allApprovers = $this->customlib->getBillApproverList();
         $approversByLocation = [];
@@ -348,7 +348,7 @@ class Scan extends CI_Controller {
         $bill_voucher_date = $this->reformat_date($bill_voucher_date_1);
         $bill_no_voucher_no = $this->input->post('bill_no_voucher_no');
         $data = ['scanned_by' => $user_id, 'is_scan_complete' => 'Y', 'document_name' => $Document_Name, 'scan_date' => date('Y-m-d H:i:s'), 'is_final_submitted' => 'Y', 'location_id' => $location, 'scan_doctype_id' => $scan_doctype_id, 'department_id' => $department_id, 'firm_id' => $firm_id, 'bill_voucher_date' => $bill_voucher_date, 'bill_no_voucher_no' => $bill_no_voucher_no, ];
-        $result = $this->db->where('scan_id', $id)->update('y{$this->year_id}_scan_file', $data);
+        $result = $this->db->where('scan_id', $id)->update("y{$this->year_id}_scan_file", $data);
         if ($result) {
             $this->session->set_flashdata('message', '<div class="alert alert-success">Save Successfully</div>');
             redirect('super_scan_naming_list/' . $group_id);
@@ -361,7 +361,7 @@ class Scan extends CI_Controller {
         $user_id = $this->session->userdata('user_id');
         $remark = $this->input->post('remark');
         $this->db->where('scan_id', $id);
-        $result = $this->db->update('y{$this->year_id}_scan_file', ['is_temp_scan_rejected' => 'Y', 'temp_scan_reject_remark' => $remark, 'temp_scan_reject_date' => date('Y-m-d'), 'temp_scan_rejected_by' => $user_id]);
+        $result = $this->db->update("y{$this->year_id}_scan_file", ['is_temp_scan_rejected' => 'Y', 'temp_scan_reject_remark' => $remark, 'temp_scan_reject_date' => date('Y-m-d'), 'temp_scan_rejected_by' => $user_id]);
         if ($result) {
             echo json_encode(['status' => '200']);
         } else {
@@ -378,7 +378,7 @@ class Scan extends CI_Controller {
         $Scan_Id = $this->input->post('scan_id');
         $Bill_Approver = $this->input->post('bill_approver_id');
         $this->db->where('scan_id', $Scan_Id);
-        $query = $this->db->update('y{$this->year_id}_scan_file', ['bill_approver_id' => $Bill_Approver]);
+        $query = $this->db->update("y{$this->year_id}_scan_file", ['bill_approver_id' => $Bill_Approver]);
         if ($query) {
             echo json_encode(['status' => 200]);
         } else {
@@ -406,7 +406,7 @@ class Scan extends CI_Controller {
     public function resend_scan_bill() {
         $Scan_Id = $this->input->post('scan_id');
         $this->db->where('scan_id', $Scan_Id);
-        $query = $this->db->update('y{$this->year_id}_scan_file', ['bill_approval_status' => 'N', 'bill_approved_date' => null]);
+        $query = $this->db->update("y{$this->year_id}_scan_file", ['bill_approval_status' => 'N', 'bill_approved_date' => null]);
         if ($query) {
             echo json_encode(['status' => 200]);
         } else {
@@ -421,14 +421,14 @@ class Scan extends CI_Controller {
         }
         $this->db->where('scan_id', $Scan_Id);
         $this->db->select('scan_id');
-        $query = $this->db->get('y{$this->year_id}_scan_file');
+        $query = $this->db->get("y{$this->year_id}_scan_file");
         if ($query->num_rows() == 0) {
             echo json_encode(['status' => 404, 'message' => 'Scan not found']);
             return;
         }
         $data = ['is_deleted' => 'Y', 'deleted_date' => date('Y-m-d H:i:s'), 'deleted_by' => $this->session->userdata('user_id') ];
         $this->db->where('scan_id', $Scan_Id);
-        $query = $this->db->update('y{$this->year_id}_scan_file', $data);
+        $query = $this->db->update("y{$this->year_id}_scan_file", $data);
         if ($query) {
             echo json_encode(['status' => 200, 'message' => 'Scan trashed successfully']);
         } else {

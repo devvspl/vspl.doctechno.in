@@ -1,10 +1,16 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 class Approve_model extends MY_Model {
+    protected $year_id;
+    public function __construct() {
+
+        parent::__construct();
+        $this->year_id = $this->session->userdata('year_id');
+    }
     function pending_for_approval() {
         $group_id = $this->session->userdata('group_id');
         $this->db->select('*');
-        $this->db->from('y{$this->year_id}_scan_file');
+        $this->db->from("y{$this->year_id}_scan_file");
         $this->db->where('is_file_punched', 'Y');
         $this->db->where('is_file_approved', 'N');
         $this->db->where('is_rejected', 'N');
@@ -18,7 +24,7 @@ class Approve_model extends MY_Model {
     public function get_my_approved_file($limit, $start, $group = '', $Doctype = '', $search = '', $from_date = '', $to_date = '') {
         $user_id = $this->session->userdata('user_id');
         $this->db->select('*');
-        $this->db->from('y{$this->year_id}_scan_file');
+        $this->db->from("y{$this->year_id}_scan_file");
         $this->db->join('master_group', 'master_group.group_id = y{$this->year_id}_scan_file.Group_Id', 'left');
         $this->db->where('is_file_approved', 'Y');
         $this->db->where('approved_by', $user_id);
@@ -48,7 +54,7 @@ class Approve_model extends MY_Model {
     }
     public function count_filtered_records($search = '', $from_date = '', $to_date = '', $group = '', $Doctype = '') {
         $user_id = $this->session->userdata('user_id');
-        $this->db->from('y{$this->year_id}_scan_file');
+        $this->db->from("y{$this->year_id}_scan_file");
         $this->db->join('master_group', 'master_group.group_id = y{$this->year_id}_scan_file.Group_Id', 'left');
         $this->db->where('is_file_approved', 'Y');
         $this->db->where('approved_by', $user_id);
@@ -75,7 +81,7 @@ class Approve_model extends MY_Model {
     function get_my_approved_file_all() {
         $user_id = $this->session->userdata('user_id');
         $this->db->select('*');
-        $this->db->from('y{$this->year_id}_scan_file');
+        $this->db->from("y{$this->year_id}_scan_file");
         $this->db->join('master_group', 'master_group.group_id = y{$this->year_id}_scan_file.Group_Id', 'left');
         $this->db->where('is_file_approved', 'Y');
         $this->db->where('approved_by', $user_id);
@@ -86,7 +92,7 @@ class Approve_model extends MY_Model {
     function search_approved_file($from_date, $to_date) {
         $user_id = $this->session->userdata('user_id');
         $this->db->select('*');
-        $this->db->from('y{$this->year_id}_scan_file');
+        $this->db->from("y{$this->year_id}_scan_file");
         $this->db->join('master_group', 'master_group.group_id = y{$this->year_id}_scan_file.Group_Id', 'left');
         $this->db->where('is_file_punched', 'Y');
         $this->db->where('is_file_approved', 'Y');
@@ -101,7 +107,7 @@ class Approve_model extends MY_Model {
         $user_id = $this->session->userdata('user_id');
         $this->db->where('approved_by', $user_id);
         $this->db->where('is_file_approved', 'Y');
-        $query = $this->db->get('y{$this->year_id}_scan_file');
+        $query = $this->db->get("y{$this->year_id}_scan_file");
         return $query->num_rows();
     }
     function get_rejected_by_me() {
@@ -109,13 +115,13 @@ class Approve_model extends MY_Model {
         $this->db->where('approved_by', $user_id);
         $this->db->where('is_file_approved', 'N');
         $this->db->where('is_rejected', 'Y');
-        $query = $this->db->get('y{$this->year_id}_scan_file');
+        $query = $this->db->get("y{$this->year_id}_scan_file");
         return $query->num_rows();
     }
     function get_pending_for_approval_count() {
         $group_id = $this->session->userdata('group_id');
         $this->db->select('*');
-        $this->db->from('y{$this->year_id}_scan_file');
+        $this->db->from("y{$this->year_id}_scan_file");
         $this->db->where('is_file_punched', 'Y');
         $this->db->where('is_file_approved', 'N');
         $this->db->where('is_rejected', 'N');
@@ -128,7 +134,7 @@ class Approve_model extends MY_Model {
     function get_total_rejected() {
         $group_id = $this->session->userdata('group_id');
         $this->db->select('*');
-        $this->db->from('y{$this->year_id}_scan_file');
+        $this->db->from("y{$this->year_id}_scan_file");
         $this->db->where('is_file_punched', 'Y');
         $this->db->where('is_file_approved', 'N');
         $this->db->where('is_rejected', 'Y');
@@ -139,7 +145,7 @@ class Approve_model extends MY_Model {
     function rejected_by_me() {
         $user_id = $this->session->userdata('user_id');
         $this->db->select('*');
-        $this->db->from('y{$this->year_id}_scan_file');
+        $this->db->from("y{$this->year_id}_scan_file");
         $this->db->where('is_file_approved', 'N');
         $this->db->where('is_rejected', 'Y');
         $this->db->where('approved_by', $user_id);

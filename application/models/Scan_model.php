@@ -27,7 +27,6 @@ class Scan_model extends MY_Model {
     }
     function get_my_lastest_temp_scan() {
         $user_id = $this->session->userdata('user_id');
-        
         $this->db->select('*');
         $this->db->from("y{$this->year_id}_scan_file");
         $this->db->join('master_work_location', "master_work_location.location_id = y{$this->year_id}_scan_file.location_id", 'left');
@@ -167,7 +166,7 @@ class Scan_model extends MY_Model {
         $this->db->from("y{$this->year_id}_scan_file");
         $this->db->where('bill_approval_status', 'R');
         $this->db->where('is_deleted', 'N');
-        $this->db->where("((Temp_Scan = 'Y' AND Temp_Scan_By = $user_id) OR (Temp_Scan IS NULL AND Scan_By = $user_id))");
+        $this->db->where("((is_temp_scan = 'Y' AND Temp_Scan_By = $user_id) OR (is_temp_scan IS NULL AND scanned_by = $user_id))");
         $query = $this->db->get();
         return $query->num_rows();
     }
@@ -191,7 +190,7 @@ class Scan_model extends MY_Model {
         $this->db->from("y{$this->year_id}_scan_file");
         $this->db->where('scanned_by', $user_id);
         $this->db->or_where('temp_scan_by', $user_id);
-        $this->db->where('Location IS NOT NULL');
+        $this->db->where('location_id IS NOT NULL');
         $this->db->where('bill_approval_status', 'N');
         $this->db->order_by('scan_id', 'desc');
         $result = $this->db->get()->result_array();
@@ -204,7 +203,7 @@ class Scan_model extends MY_Model {
         $this->db->from("y{$this->year_id}_scan_file");
         $this->db->where('bill_approval_status', 'R');
         $this->db->where('is_deleted', 'N');
-        $this->db->where("((Temp_Scan = 'Y' AND Temp_Scan_By = $user_id) OR (Temp_Scan IS NULL AND Scan_By = $user_id))");
+        $this->db->where("((is_temp_scan = 'Y' AND Temp_Scan_By = $user_id) OR (is_temp_scan IS NULL AND scanned_by = $user_id))");
         $result = $this->db->get()->result_array();
         return $result;
     }
@@ -215,7 +214,7 @@ class Scan_model extends MY_Model {
         $this->db->from("y{$this->year_id}_scan_file");
         $this->db->where('bill_approval_status', 'R');
         $this->db->where('is_deleted', 'Y');
-        $this->db->where("((Temp_Scan = 'Y' AND Temp_Scan_By = $user_id) OR (Temp_Scan IS NULL AND Scan_By = $user_id))");
+        $this->db->where("((is_temp_scan = 'Y' AND Temp_Scan_By = $user_id) OR (is_temp_scan IS NULL AND scanned_by = $user_id))");
         $result = $this->db->get()->result_array();
         return $result;
     }
@@ -224,7 +223,7 @@ class Scan_model extends MY_Model {
         $this->db->select('sf.*, CONCAT(u.first_name, " ", u.last_name) AS deleted_by_name');
         $this->db->from("y{$this->year_id}_scan_file sf");
         $this->db->join('users u', 'sf.Deleted_By = u.user_id', 'inner');
-        $this->db->where('sf.Is_Deleted', 'Y');
+        $this->db->where('sf.is_deleted', 'Y');
         $query = $this->db->get();
         return $query->result_array();
     }

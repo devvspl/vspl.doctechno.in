@@ -124,7 +124,7 @@ class Bill_approver extends CI_Controller
             // ->where_in('location_id', $user_location_array)
            ->join('master_work_location', 'master_work_location.location_id = y{$this->year_id}_scan_file.location_id', 'left')
 			->where('bill_approver_id',$this->session->userdata('user_id'))
-            ->get('y{$this->year_id}_scan_file')
+            ->get("y{$this->year_id}_scan_file")
             ->result_array();
 
         $this->data['bill_list'] = $bill_list;
@@ -136,7 +136,7 @@ class Bill_approver extends CI_Controller
     {
         $bill_list = $this->db->where('bill_approval_status', 'Y')->where('bill_approver_id', $this->session->userdata('user_id'))
             ->join('master_work_location', 'master_work_location.location_id = y{$this->year_id}_scan_file.location_id', 'left')
-            ->get('y{$this->year_id}_scan_file')
+            ->get("y{$this->year_id}_scan_file")
             ->result_array();
         $this->data['bill_list'] = $bill_list;
         $this->data['main'] = 'bill_approver/approved_bill_list';
@@ -148,7 +148,7 @@ class Bill_approver extends CI_Controller
         $bill_list = $this->db->where('bill_approval_status', 'R')
             ->where('bill_approver_id', $this->session->userdata('user_id'))
             ->join('master_work_location', 'master_work_location.location_id = y{$this->year_id}_scan_file.location_id', 'left')
-            ->get('y{$this->year_id}_scan_file')
+            ->get("y{$this->year_id}_scan_file")
             ->result_array();
         $this->data['bill_list'] = $bill_list;
         $this->data['main'] = 'bill_approver/rejected_bill_list';
@@ -160,7 +160,7 @@ class Bill_approver extends CI_Controller
         $user_id = $this->session->userdata('user_id');
         $Reject_Remark = $this->input->post('Remark');
         $this->db->where('scan_id', $Scan_Id);
-        $result = $this->db->update('y{$this->year_id}_scan_file', array('bill_approval_status' => 'R', 'bill_approver_id' => $user_id, 'bill_approver_remark' => $Reject_Remark, 'bill_approved_date' => date('Y-m-d')));
+        $result = $this->db->update("y{$this->year_id}_scan_file", array('bill_approval_status' => 'R', 'bill_approver_id' => $user_id, 'bill_approver_remark' => $Reject_Remark, 'bill_approved_date' => date('Y-m-d')));
         if ($result) {
             echo json_encode(array('status' => '200', 'message' => 'Bill Rejected Successfully.'));
         } else {
@@ -172,7 +172,7 @@ class Bill_approver extends CI_Controller
     {
         $user_id = $this->session->userdata('user_id');
         $this->db->where('scan_id', $Scan_Id);
-        $result = $this->db->update('y{$this->year_id}_scan_file', array('bill_approval_status' => 'Y', 'bill_approver_id' => $user_id, 'bill_approved_date' => date('Y-m-d')));
+        $result = $this->db->update("y{$this->year_id}_scan_file", array('bill_approval_status' => 'Y', 'bill_approver_id' => $user_id, 'bill_approved_date' => date('Y-m-d')));
         if ($result) {
             $this->session->set_flashdata('message', '<p class="text-success text-center">Bill Approved Successfully.</p>');
             redirect('pending_bill_approve');

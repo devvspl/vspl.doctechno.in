@@ -11,7 +11,7 @@
                             <div class="col-sm-2 col-md-2">
                                 <div class="form-group">
                                     <label> Scan By:</label>
-                                    <select name="Scan_By" id="Scan_By" class="form-control form-control-sm">
+                                    <select name="scanned_by" id="scanned_by" class="form-control form-control-sm">
                                         <option value="">Select</option>
                                         <?php foreach ($user_list as $key => $value) { ?>
                                             <option value="<?= $value['user_id']; ?>" <?php if (set_value('scanned_by') == $value['user_id']) {

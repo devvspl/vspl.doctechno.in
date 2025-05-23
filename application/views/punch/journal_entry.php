@@ -8,7 +8,7 @@
    if ($punch_detail) {
    
    } else {
-   $punch_detail = $this->db->get_where('y{$this->year_id}_scan_file', ['scan_id' => $Scan_Id])->row();
+   $punch_detail = $this->db->get_where("y{$this->year_id}_scan_file", ['scan_id' => $Scan_Id])->row();
    }
    } 
    $firm = $this->db->get_where('master_firm', ['status' => 'A'])->result_array();

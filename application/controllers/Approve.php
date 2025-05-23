@@ -67,7 +67,7 @@ class Approve extends CI_Controller {
         } else {
             $data['approved_by'] = $user_id;
         }
-        $result = $this->db->update('y{$this->year_id}_scan_file', $data);
+        $result = $this->db->update("y{$this->year_id}_scan_file", $data);
         if ($result) {
             $this->customlib->send_for_accounting($Scan_Id);
             $this->session->set_flashdata('message', '<p class="text-success text-center">File Approved Successfully.</p>');
@@ -81,7 +81,7 @@ class Approve extends CI_Controller {
         $user_id = $this->session->userdata('user_id');
         $Reject_Remark = $this->input->post('Remark');
         $this->db->where('scan_id', $Scan_Id);
-        $result = $this->db->update('y{$this->year_id}_scan_file', array('is_rejected' => 'Y', 'approved_by' => $user_id, 'reject_remark' => $Reject_Remark, 'reject_date' => date('Y-m-d')));
+        $result = $this->db->update("y{$this->year_id}_scan_file", array('is_rejected' => 'Y', 'approved_by' => $user_id, 'reject_remark' => $Reject_Remark, 'reject_date' => date('Y-m-d')));
         if ($result) {
             echo json_encode(array('status' => '200', 'message' => 'File Rejected Successfully.'));
         } else {
@@ -92,7 +92,7 @@ class Approve extends CI_Controller {
         $user_id = $this->session->userdata('user_id');
         $this->db->where('scan_id', $Scan_Id);
         $data = array('is_file_approved' => 'Y', 'approved_by' => $user_id, 'approved_date' => date('Y-m-d H:i:s'));
-        $result = $this->db->update('y{$this->year_id}_scan_file', $data);
+        $result = $this->db->update("y{$this->year_id}_scan_file", $data);
         if ($result) {
             $this->customlib->send_for_accounting($Scan_Id);
             echo json_encode(array('status' => '200', 'message' => 'File Approved Successfully.'));
@@ -111,7 +111,7 @@ class Approve extends CI_Controller {
         $user_id = $this->session->userdata('user_id');
         $this->db->where('scan_id', $Scan_Id);
         $data = array('is_deleted' => 'Y', 'deleted_date' => date('Y-m-d H:i:s'), 'deleted_by' => $user_id);
-        $result = $this->db->update('y{$this->year_id}_scan_file', $data);
+        $result = $this->db->update("y{$this->year_id}_scan_file", $data);
         $this->db->where('scan_id', $Scan_Id)->delete('punchfile');
         $this->db->where('scan_id', $Scan_Id)->delete('punchfile2');
         if ($result) {
@@ -129,7 +129,7 @@ class Approve extends CI_Controller {
         $group_name = $this->customlib->get_GroupName($group_id);
     
         $this->db->select('y{$this->year_id}_scan_file.*, CONCAT(users.first_name, " ", users.last_name) as full_name', false);
-        $this->db->from('y{$this->year_id}_scan_file');
+        $this->db->from("y{$this->year_id}_scan_file");
         $this->db->join('users', 'y{$this->year_id}_scan_file.punch_by = users.user_id', 'left');
         $this->db->where('is_file_punched', 'Y');
         $this->db->where('is_file_approved', 'N');
@@ -156,7 +156,7 @@ class Approve extends CI_Controller {
     
     function reject_list_company($id) {
         $group_id = $id;
-        $query = $this->db->select('*')->from('y{$this->year_id}_scan_file')->where(array('group_id' => $group_id, 'is_rejected' => 'Y', 'has_edit_permission' => 'N'))->where('is_deleted', 'N')->order_by('scan_id', 'desc')->get()->result_array();
+        $query = $this->db->select('*')->from("y{$this->year_id}_scan_file")->where(array('group_id' => $group_id, 'is_rejected' => 'Y', 'has_edit_permission' => 'N'))->where('is_deleted', 'N')->order_by('scan_id', 'desc')->get()->result_array();
         $this->data['rejected_list'] = $query;
         $this->data['main'] = 'records/super_rejected_list';
         $this->load->view('layout/template', $this->data);

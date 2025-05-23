@@ -16,7 +16,7 @@ class Agrisoft_ctrl extends CI_Controller
 		$secondaryDb = $this->load->database('secondary', TRUE);
 
          $query = $secondaryDb->select('Scan_Id, Group_Id, Doc_Type, DocType_Id, Document_Name, File_Location,Punch_Date,Missing_Data')
-        ->from('y{$this->year_id}_scan_file')
+        ->from("y{$this->year_id}_scan_file")
         ->where('Import_Flag', '0')
         ->get();
          $list = $query->result_array();
@@ -29,7 +29,7 @@ class Agrisoft_ctrl extends CI_Controller
 	{
 		$secondaryDb = $this->load->database('secondary', TRUE);
 		$scan_ids = $secondaryDb->select('scan_id')
-			->from('y{$this->year_id}_scan_file')
+			->from("y{$this->year_id}_scan_file")
 			->where('import_flag', 0)
 			->get()
 			->result_array();
@@ -48,7 +48,7 @@ class Agrisoft_ctrl extends CI_Controller
 	{
 		$secondaryDb = $this->load->database('secondary', TRUE);
 		$scan_ids = $secondaryDb->select('scan_id')
-			->from('y{$this->year_id}_scan_file')
+			->from("y{$this->year_id}_scan_file")
 			->where('import_flag', 0)
 			->get()
 			->result_array();
@@ -65,7 +65,7 @@ class Agrisoft_ctrl extends CI_Controller
 	{
 		$secondaryDb = $this->load->database('secondary', TRUE);
 		$scan_ids = $secondaryDb->select('scan_id')
-			->from('y{$this->year_id}_scan_file')
+			->from("y{$this->year_id}_scan_file")
 			->where('import_flag', 0)
 			->get()
 			->result_array();
@@ -78,7 +78,7 @@ class Agrisoft_ctrl extends CI_Controller
 	{
 		$secondaryDb = $this->load->database('secondary', TRUE);
 		$scan_ids = $secondaryDb->select('scan_id')
-			->from('y{$this->year_id}_scan_file')
+			->from("y{$this->year_id}_scan_file")
 			->where('import_flag', 0)
 			->get()
 			->result_array();
@@ -91,7 +91,7 @@ class Agrisoft_ctrl extends CI_Controller
 	{
 		$secondaryDb = $this->load->database('secondary', TRUE);
 		$scan_ids = $secondaryDb->select('scan_id')
-			->from('y{$this->year_id}_scan_file')
+			->from("y{$this->year_id}_scan_file")
 			->where('import_flag', 0)
 			->get()
 			->result_array();
@@ -104,7 +104,7 @@ class Agrisoft_ctrl extends CI_Controller
 	{
 		$secondaryDb = $this->load->database('secondary', TRUE);
 		$scan_ids = $secondaryDb->select('scan_id')
-			->from('y{$this->year_id}_scan_file')
+			->from("y{$this->year_id}_scan_file")
 			->where('import_flag', 0)
 			->get()
 			->result_array();
@@ -180,7 +180,7 @@ class Agrisoft_ctrl extends CI_Controller
         foreach ($data['scan_files'] as $scanFile) {
             $scanId = $scanFile['scan_id'];
             $secondaryDb = $this->load->database('secondary', TRUE);
-            $secondaryDb->update('y{$this->year_id}_scan_file', array('Import_Flag' => 1), array('scan_id' =>$scanId));
+            $secondaryDb->update("y{$this->year_id}_scan_file", array('Import_Flag' => 1), array('scan_id' =>$scanId));
         }
         
         foreach($data['firm_files'] as $row){
@@ -200,7 +200,7 @@ class Agrisoft_ctrl extends CI_Controller
 	public function get_punch_date()
 	{
 
-		$scan_detail = $this->db->select('Scan_Id,Punch_Date')->from('y{$this->year_id}_scan_file')->where('is_file_approved', 'Y')->get()->result_array();
+		$scan_detail = $this->db->select('Scan_Id,Punch_Date')->from("y{$this->year_id}_scan_file")->where('is_file_approved', 'Y')->get()->result_array();
      	echo json_encode(array('scan_detail' => $scan_detail));
 		
 	}

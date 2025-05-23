@@ -24,7 +24,7 @@ class Bank_ctrl extends CI_Controller {
         if ($this->customlib->check_punchfile2($Scan_Id) == true) {
             //Update Existing Record
             $this->db->where('scan_id', $Scan_Id)->update('punchfile2', $data);
-            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
+            $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
         } else {
             //Insert New Record
             $this->db->insert('punchfile2', $data);
@@ -64,7 +64,7 @@ class Bank_ctrl extends CI_Controller {
             $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
             $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Sanction_Amount, 'Comment' => $Remark));
-            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
+            $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
         } else {
             //Insert New Record
             $this->db->insert('punchfile', $data);
@@ -126,7 +126,7 @@ class Bank_ctrl extends CI_Controller {
             ));
     
             if ($submit) {
-                $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+                $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
                     'is_rejected' => 'N',
                     'reject_date' => NULL,
                     'has_edit_permission' => 'N',
@@ -143,7 +143,7 @@ class Bank_ctrl extends CI_Controller {
             ));
     
             if ($submit) {
-                $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+                $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
                     'is_rejected' => 'N',
                     'reject_date' => NULL,
                     'has_edit_permission' => 'N',
@@ -189,7 +189,7 @@ class Bank_ctrl extends CI_Controller {
             $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
             $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Amount, 'Comment' => $Remark));
-            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
+            $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
         } else {
             //Insert New Record
             $this->db->insert('punchfile', $data);
@@ -247,7 +247,7 @@ class Bank_ctrl extends CI_Controller {
     //         $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
     //         $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
     //         $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Amount, 'Comment' => $Remark));
-    //         $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
+    //         $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
     //     } else {
     //         //Insert New Record
     //         $this->db->insert('punchfile', $data);
@@ -285,7 +285,7 @@ class Bank_ctrl extends CI_Controller {
                 $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
                 $FileID = $this->db->select('FileID')->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
                 $this->db->where('FileID', $FileID)->update('sub_punchfile', ['Amount' => '-' . $Amount, 'Comment' => $Remark]);
-                $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', ['is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N']);
+                $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", ['is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N']);
                 $query = $this->db->where("Scan_Id", $Scan_Id)->update("y{$this->year_id}_scan_file", ['finance_punch_action_status' => 'N', 'punched_by' => $this->session->userdata("user_id"), 'punched_date' => date('Y-m-d H:i:s') ]);
             } else {
                 $this->db->insert('punchfile', $data);
@@ -307,7 +307,7 @@ class Bank_ctrl extends CI_Controller {
                 $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
                 $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
                 $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Amount, 'Comment' => $Remark));
-                $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
+                $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
             } else {
                 //Insert New Record
                 $this->db->insert('punchfile', $data);
@@ -347,7 +347,7 @@ class Bank_ctrl extends CI_Controller {
             $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
             $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Amount, 'Comment' => $Remark));
-            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
+            $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
         } else {
             //Insert New Record
             $this->db->insert('punchfile', $data);
@@ -386,7 +386,7 @@ class Bank_ctrl extends CI_Controller {
             $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
             $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Deposit_Amount, 'Comment' => $Remark));
-            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
+            $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
         } else {
             //Insert New Record
             $this->db->insert('punchfile', $data);
@@ -426,7 +426,7 @@ class Bank_ctrl extends CI_Controller {
             $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
             $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Amount, 'Comment' => $Remark));
-            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
+            $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
         } else {
             //Insert New Record
             $this->db->insert('punchfile', $data);

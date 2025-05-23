@@ -55,14 +55,14 @@ class Miscellaneous_ctrl extends CI_Controller {
     
             // Handle the 'submit' or 'draft' action
             if ($submit) {
-                $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+                $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
                     'is_rejected' => 'N', 
                     'reject_date' => NULL, 
                     'has_edit_permission' => 'N', 
                     'finance_punch_action_status' => 'N'  // Set finance_punch to 'N' when submitting
                 ));
             } else {
-                $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+                $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
                     'is_rejected' => 'N', 
                     'reject_date' => NULL, 
                     'has_edit_permission' => 'Y',  // Allow editing for draft
@@ -76,14 +76,14 @@ class Miscellaneous_ctrl extends CI_Controller {
             
             // Handle the 'submit' or 'draft' action after insertion
             if ($submit) {
-                $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+                $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
                     'is_rejected' => 'N', 
                     'reject_date' => NULL, 
                     'has_edit_permission' => 'N', 
                     'finance_punch_action_status' => 'N'  // Set finance_punch to 'N' when submitting
                 ));
             } else {
-                $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+                $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
                     'is_rejected' => 'N', 
                     'reject_date' => NULL, 
                     'has_edit_permission' => 'Y',  // Allow editing for draft
@@ -134,7 +134,7 @@ class Miscellaneous_ctrl extends CI_Controller {
             $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
             $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Amount, 'Comment' => $Remark));
-            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
+            $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
         } else {
             $this->db->insert('punchfile', $data);
             $insert_id = $this->db->insert_id();
@@ -171,7 +171,7 @@ class Miscellaneous_ctrl extends CI_Controller {
             $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
             $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Weight_Charged, 'Comment' => $Remark));
-            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
+            $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
         } else {
             $this->db->insert('punchfile', $data);
             $insert_id = $this->db->insert_id();
@@ -238,14 +238,14 @@ class Miscellaneous_ctrl extends CI_Controller {
             
             // Update scan file status based on submit or draft
             if ($submit) {
-                $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+                $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
                     'is_rejected' => 'N', 
                     'reject_date' => NULL, 
                     'has_edit_permission' => 'N', 
                     'finance_punch_action_status' => 'N'  // Set finance_punch to 'N' when submitting
                 ));
             } else {
-                $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+                $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
                     'is_rejected' => 'N', 
                     'reject_date' => NULL, 
                     'has_edit_permission' => 'Y',  // Allow editing for draft
@@ -261,14 +261,14 @@ class Miscellaneous_ctrl extends CI_Controller {
             
             // Set scan file status based on submit or draft
             if ($submit) {
-                $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+                $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
                     'is_rejected' => 'N', 
                     'reject_date' => NULL, 
                     'has_edit_permission' => 'N', 
                     'finance_punch_action_status' => 'N'  // Set finance_punch to 'N' when submitting
                 ));
             } else {
-                $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+                $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
                     'is_rejected' => 'N', 
                     'reject_date' => NULL, 
                     'has_edit_permission' => 'Y',  // Allow editing for draft
@@ -312,9 +312,9 @@ class Miscellaneous_ctrl extends CI_Controller {
             }
             $this->db->insert_batch('lodging_employee', $array);
             if ($submit) {
-                $this->db->where('scan_id', $data['scan_id'])->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N', 'finance_punch_action_status' => 'N'));
+                $this->db->where('scan_id', $data['scan_id'])->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N', 'finance_punch_action_status' => 'N'));
             } else {
-                $this->db->where('scan_id', $data['scan_id'])->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'Y'));
+                $this->db->where('scan_id', $data['scan_id'])->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'Y'));
             }
         } else {
             $this->db->insert('punchfile', $data);
@@ -326,9 +326,9 @@ class Miscellaneous_ctrl extends CI_Controller {
             }
             $this->db->insert_batch('lodging_employee', $array);
             if ($submit) {
-                $this->db->where('scan_id', $data['scan_id'])->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N', 'finance_punch_action_status' => 'N'));
+                $this->db->where('scan_id', $data['scan_id'])->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N', 'finance_punch_action_status' => 'N'));
             } else {
-                $this->db->where('scan_id', $data['scan_id'])->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'Y'));
+                $this->db->where('scan_id', $data['scan_id'])->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'Y'));
             }
         }
         $this->customlib->update_file_path($data['scan_id']);
@@ -366,7 +366,7 @@ class Miscellaneous_ctrl extends CI_Controller {
             $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
             $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Amount, 'Comment' => $Remark));
-            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
+            $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
         } else {
             $this->db->insert('punchfile', $data);
             $insert_id = $this->db->insert_id();
@@ -398,14 +398,14 @@ class Miscellaneous_ctrl extends CI_Controller {
             $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Amount, 'Comment' => $Remark));
             if ($submit) {
-                $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N', 'finance_punch_action_status' => 'N'));
+                $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N', 'finance_punch_action_status' => 'N'));
             }
         } else {
             $this->db->insert('punchfile', $data);
             $insert_id = $this->db->insert_id();
             $this->db->insert('sub_punchfile', array('FileID' => $insert_id, 'Amount' => '-' . $Amount, 'Comment' => $Remark));
             if ($submit) {
-                $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N', 'finance_punch_action_status' => 'N'));
+                $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N', 'finance_punch_action_status' => 'N'));
             }
         }
         $this->customlib->update_file_path($Scan_Id);
@@ -442,7 +442,7 @@ class Miscellaneous_ctrl extends CI_Controller {
             $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
             $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Amount, 'Comment' => $Remark));
-            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
+            $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
         } else {
             $this->db->insert('punchfile', $data);
             $insert_id = $this->db->insert_id();

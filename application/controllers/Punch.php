@@ -504,7 +504,7 @@ class Punch extends CI_Controller {
         $user_id = $this->session->userdata('user_id');
         $Reject_Remark = $this->input->post('Remark');
         $this->db->where('scan_id', $Scan_Id);
-        $result = $this->db->update('y{$this->year_id}_scan_file', ['is_scan_resend' => 'Y', 'scan_resend_by' => $user_id, 'scan_resend_remark' => $Reject_Remark, 'scan_resend_date' => date('Y-m-d') ]);
+        $result = $this->db->update("y{$this->year_id}_scan_file", ['is_scan_resend' => 'Y', 'scan_resend_by' => $user_id, 'scan_resend_remark' => $Reject_Remark, 'scan_resend_date' => date('Y-m-d') ]);
         if ($result) {
             echo json_encode(['status' => '200', 'message' => 'File Resend Successfully.']);
         } else {
@@ -515,7 +515,7 @@ class Punch extends CI_Controller {
         $user_id = $this->session->userdata('user_id');
         $Reject_Remark = $this->input->post('Remark');
         $this->db->where('scan_id', $Scan_Id);
-        $result = $this->db->update('y{$this->year_id}_scan_file', ['finance_punch_action_status' => 'Y', 'Finance_Resend_By' => $user_id, 'Finance_Resend_Remark' => $Reject_Remark, 'finance_punch_action_status' => 'P', 'Finance_Resend_Date' => date('Y-m-d') ]);
+        $result = $this->db->update("y{$this->year_id}_scan_file", ['finance_punch_action_status' => 'Y', 'Finance_Resend_By' => $user_id, 'Finance_Resend_Remark' => $Reject_Remark, 'finance_punch_action_status' => 'P', 'Finance_Resend_Date' => date('Y-m-d') ]);
         if ($result) {
             echo json_encode(['status' => '200', 'message' => 'File Resend Successfully.']);
         } else {
@@ -527,7 +527,7 @@ class Punch extends CI_Controller {
         $DocType_Id = $this->input->post('doc_type_id');
         $Doc_Type = $this->customlib->getDocType($DocType_Id);
         $this->db->where('scan_id', $Scan_Id);
-        $query = $this->db->update('y{$this->year_id}_scan_file', ['doc_type_id' => $DocType_Id, 'doc_type' => $Doc_Type]);
+        $query = $this->db->update("y{$this->year_id}_scan_file", ['doc_type_id' => $DocType_Id, 'doc_type' => $Doc_Type]);
         if ($query) {
             echo json_encode(['status' => 200]);
         } else {
@@ -573,7 +573,7 @@ class Punch extends CI_Controller {
         $Scan_Id = $this->input->post('scan_id');
         $DocName = $this->input->post('DocName');
         $this->db->where('scan_id', $Scan_Id);
-        $query = $this->db->update('y{$this->year_id}_scan_file', ['document_name' => $DocName]);
+        $query = $this->db->update("y{$this->year_id}_scan_file", ['document_name' => $DocName]);
         if ($query) {
             echo json_encode(['status' => '200', 'message' => 'File Name Update Successfully.']);
         } else {
@@ -605,7 +605,7 @@ class Punch extends CI_Controller {
         if ($scan_id) {
             $data = array('finance_punch_action_status' => 'Y', 'finance_punch_action_by' => $this->session->userdata('user_id'), 'finance_punch_action_date' => date('Y-m-d H:i:s'));
             $this->db->where('scan_id', $scan_id);
-            $this->db->update('y{$this->year_id}_scan_file', $data);
+            $this->db->update("y{$this->year_id}_scan_file", $data);
             $this->session->set_flashdata('success', 'File has been approved successfully.');
             redirect('finance/bill-approval/N');
         } else {
@@ -618,7 +618,7 @@ class Punch extends CI_Controller {
             $punch_reject_remark = $this->input->post('punch_reject_remark');
             $data = array('finance_punch_action_status' => 'R', 'finance_punch_action_by' => $this->session->userdata('user_id'), 'finance_punch_action_date' => date('Y-m-d H:i:s'), 'punch_reject_remark' => $punch_reject_remark);
             $this->db->where('scan_id', $scan_id);
-            $this->db->update('y{$this->year_id}_scan_file', $data);
+            $this->db->update("y{$this->year_id}_scan_file", $data);
             $this->session->set_flashdata('success', 'File has been rejected with your remark.');
             redirect('finance/bill-approval/N');
         } else {

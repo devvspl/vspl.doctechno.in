@@ -54,7 +54,7 @@ class Ticket_ctrl extends CI_Controller
 				);
 			}
 			$this->db->insert_batch('ticket_cancellation', $array);
-			$this->db->where('scan_id', $data['scan_id'])->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
+			$this->db->where('scan_id', $data['scan_id'])->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
 		} else {
 			//Insert New Record
 			$this->db->insert('punchfile', $data);

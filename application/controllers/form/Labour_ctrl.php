@@ -96,7 +96,7 @@ class Labour_ctrl extends CI_Controller
         $this->db->insert_batch('labour_payment_detail', $details);
     
         // Update y{$this->year_id}_scan_file for submit/draft
-        $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+        $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
             'is_rejected' => 'N',
             'reject_date' => NULL,
             'has_edit_permission' => $submit ? 'N' : 'Y',

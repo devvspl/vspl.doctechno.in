@@ -48,7 +48,7 @@ class ImportExport_ctrl extends CI_Controller
         if ($this->customlib->check_punchfile2($Scan_Id) == true) {
             //Update Existing Record
             $this->db->where('scan_id', $Scan_Id)->update('punchfile2', $data);
-            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N','reject_date'=>NULL,'has_edit_permission'=>'N'));
+            $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N','reject_date'=>NULL,'has_edit_permission'=>'N'));
         } else {
             //Insert New Record
             $this->db->insert('punchfile2', $data);

@@ -76,7 +76,7 @@ class Super_scan extends CI_Controller
     //     if ($this->input->post('document_name') != '' || $this->input->post('document_name') != null) {
     //         $document_name = $this->input->post('document_name');
     //     }
-    //     $Scan_By = $this->session->userdata('user_id');
+    //     $scanned_by = $this->session->userdata('user_id');
     //     $document_name = $document_name;
     //     $group_id = $this->input->post('group_id');
     //     $location = $this->input->post('location');
@@ -97,9 +97,9 @@ class Super_scan extends CI_Controller
     //         $this->session->set_flashdata('message', '<div class="alert alert-danger">' . $error['error'] . '</div>');
     //         redirect('super_scan/' . $group_id);
     //     } else {
-    //         $this->db->insert('y{$this->year_id}_scan_file', [
+    //         $this->db->insert("y{$this->year_id}_scan_file", [
     //             'group_id' => $group_id,
-    //             'scanned_by' => $Scan_By,
+    //             'scanned_by' => $scanned_by,
     //             'Document_name' => $document_name,
     //             'location_id' => $location,
     //             'bill_approver_id' => $bill_approver,
@@ -167,7 +167,7 @@ class Super_scan extends CI_Controller
                 'year' => $year,
                 'scan_date' => date('Y-m-d H:i:s'),
             ];
-            $this->db->insert('y{$this->year_id}_scan_file', $data);
+            $this->db->insert("y{$this->year_id}_scan_file", $data);
 			$inserted_id = $this->db->insert_id();
             $this->session->set_flashdata('message', '<div class="alert alert-success">File Uploaded Successfully</div>');
             redirect('Scan/upload_supporting/' . $inserted_id);
@@ -177,7 +177,7 @@ class Super_scan extends CI_Controller
     public function super_scan_rejected_list($id)
     {
         $this->db->select('*');
-        $this->db->from('y{$this->year_id}_scan_file');
+        $this->db->from("y{$this->year_id}_scan_file");
         $this->db->where('group_id', $id);
         $this->db->where('is_scan_resend', 'Y');
         $this->db->order_by('scan_id', 'desc');
@@ -190,7 +190,7 @@ class Super_scan extends CI_Controller
     {
         $group_id = $id;
         $this->db->select('*');
-        $this->db->from('y{$this->year_id}_scan_file');
+        $this->db->from("y{$this->year_id}_scan_file");
         $this->db->join('master_work_location', 'master_work_location.location_id = y{$this->year_id}_scan_file.location_id', 'left');
         $this->db->where('group_id', $group_id);
         $this->db->where('is_temp_scan', 'Y');
@@ -206,7 +206,7 @@ class Super_scan extends CI_Controller
     {
         $group_id = $id;
         $this->db->select('*');
-        $this->db->from('y{$this->year_id}_scan_file');
+        $this->db->from("y{$this->year_id}_scan_file");
         $this->db->where('group_id', $group_id);
         $this->db->where('is_temp_scan', 'Y');
         $this->db->where('is_scan_complete', 'Y');
@@ -222,7 +222,7 @@ class Super_scan extends CI_Controller
         $Scan_Id = $this->input->post('scan_id');
         $user_id = $this->session->userdata('user_id');
         $this->db->where('scan_id', $Scan_Id);
-        $query = $this->db->update('y{$this->year_id}_scan_file', ['is_document_verified' => 'Y', 'verified_by' => $user_id, 'verified_date' => date('Y-m-d')]);
+        $query = $this->db->update("y{$this->year_id}_scan_file", ['is_document_verified' => 'Y', 'verified_by' => $user_id, 'verified_date' => date('Y-m-d')]);
         if ($query) {
             echo json_encode(['status' => 200]);
         } else {
@@ -237,7 +237,7 @@ class Super_scan extends CI_Controller
         $fromDate = $this->input->post('from_date');
         $toDate = $this->input->post('to_date');
         $this->db->select('*');
-        $this->db->from('y{$this->year_id}_scan_file');
+        $this->db->from("y{$this->year_id}_scan_file");
         $this->db->where('is_temp_scan', 'Y');
         $this->db->where('is_scan_complete', 'Y');
         $this->db->where('is_temp_scan_rejected', 'N');
@@ -271,7 +271,7 @@ class Super_scan extends CI_Controller
 		$this->db->trans_start();
 		$this->db->trans_strict(FALSE);
 		$this->db->where('scan_id', $scan_id);
-		$this->db->update('y{$this->year_id}_scan_file', array('is_final_submitted' => 'Y'));
+		$this->db->update("y{$this->year_id}_scan_file", array('is_final_submitted' => 'Y'));
 
 		$this->db->trans_complete();
 		if ($this->db->trans_status() === FALSE) {

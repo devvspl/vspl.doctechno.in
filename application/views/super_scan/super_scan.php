@@ -7,7 +7,7 @@
 <?php
 $user_id = $this->session->userdata('user_id');
 $this->db->select('*');
-$this->db->from('y{$this->year_id}_scan_file');
+$this->db->from("y{$this->year_id}_scan_file");
 $this->db->join('master_work_location', 'master_work_location.location_id = y{$this->year_id}_scan_file.location_id', 'left');
 $this->db->where('scanned_by', $user_id);
 $this->db->where('is_file_punched', 'N');
@@ -19,7 +19,7 @@ $my_lastest_scan = $this->db->get()->result_array();
 
 
 $this->db->select('*');
-$this->db->from('y{$this->year_id}_scan_file');
+$this->db->from("y{$this->year_id}_scan_file");
 $this->db->where('group_id', $group_id);
 $this->db->where('is_scan_resend', 'Y');
 $query = $this->db->get();
@@ -27,7 +27,7 @@ $scan_rejected =  $query->num_rows();
 
 
 $this->db->select('*');
-$this->db->from('y{$this->year_id}_scan_file');
+$this->db->from("y{$this->year_id}_scan_file");
 $this->db->where('group_id', $group_id);
 $this->db->where('is_temp_scan', 'Y');
 $this->db->where('is_scan_complete', 'N');
@@ -36,7 +36,7 @@ $result = $this->db->get();
 $scan_pending_name = $result->num_rows();
 
 $this->db->select('*');
-$this->db->from('y{$this->year_id}_scan_file');
+$this->db->from("y{$this->year_id}_scan_file");
 $this->db->where('group_id', $group_id);
 $this->db->where('is_temp_scan', 'Y');
 $this->db->where('is_scan_complete', 'Y');

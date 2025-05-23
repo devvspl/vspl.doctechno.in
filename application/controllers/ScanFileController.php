@@ -12,7 +12,7 @@ class ScanFileController extends CI_Controller {
     public function getScanFileList() {
         $fileName = $this->input->get('file');
         $this->db->select('scan_id');
-        $this->db->from('y{$this->year_id}_scan_file');
+        $this->db->from("y{$this->year_id}_scan_file");
         $this->db->like('file_name', $fileName);
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
@@ -20,7 +20,7 @@ class ScanFileController extends CI_Controller {
         } else {
             $scanIds = [];
         }
-        $tables = ['cash_voucher_items', 'gst_challan_detail', 'invoice_detail', 'labour_payment_detail', 'lodging_employee', 'punchfile', 'punchfile2', 'support_file', 'ticket_cancellation', 'vehicle_traveling', 'y{$this->year_id}_scan_file'];
+        $tables = ['cash_voucher_items', 'gst_challan_detail', 'invoice_detail', 'labour_payment_detail', 'lodging_employee', 'punchfile', 'punchfile2', 'support_file', 'ticket_cancellation', 'vehicle_traveling', "y{$this->year_id}_scan_file"];
         $results = [];
         foreach ($tables as $table) {
             if (!empty($scanIds)) {

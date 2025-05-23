@@ -81,7 +81,7 @@ class Search extends CI_Controller {
     }
     public function filecheck() {
         $this->db->select('File_Location,Scan_Id');
-        $this->db->from('y{$this->year_id}_scan_file');
+        $this->db->from("y{$this->year_id}_scan_file");
         $this->db->where_in('scan_id', array(10680, 10682, 10725, 10727, 10804, 10816, 10818, 11107, 11109, 1115));
         $result = $this->db->get()->result_array();
         foreach ($result as $row) {

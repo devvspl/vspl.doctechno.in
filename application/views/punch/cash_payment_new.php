@@ -29,7 +29,7 @@
    if ($punch_detail) {
    
    } else {
-   $punch_detail = $this->db->get_where('y{$this->year_id}_scan_file', ['scan_id' => $Scan_Id])->row();
+   $punch_detail = $this->db->get_where("y{$this->year_id}_scan_file", ['scan_id' => $Scan_Id])->row();
    }
    } 
    $firm = $this->db->get_where('master_firm', ['status' => 'A'])->result_array();
@@ -41,8 +41,8 @@
    $category_list = $this->customlib->getCategoryList();
    $item_list = $this->customlib->getItemList();
    $locationlist = $this->customlib->getWorkLocationList();
-   $document_number = 'CASH' . date('y-m') . '/' . str_pad($this->db->where('scan_doctype_id', 57)->where('MONTH(Scan_Date)', date('m'))->where('YEAR(Scan_Date)', date('Y'))->count_all_results('y{$this->year_id}_scan_file') + 1, 4, '0', STR_PAD_LEFT);
-   $tdsJvNo = 'TDSCASH/' . date('Y-m', strtotime($this->db->select('scan_date')->where('scan_doctype_id', 57)->where('MONTH(Scan_Date)', date('m'))->where('YEAR(Scan_Date)', date('Y'))->order_by('scan_date', 'DESC')->limit(1)->get('y{$this->year_id}_scan_file')->row()->scan_date ?? date('Y-m'))) . '/' . str_pad($this->db->where('scan_doctype_id', 57)->where('MONTH(Scan_Date)', date('m'))->where('YEAR(Scan_Date)', date('Y'))->count_all_results('y{$this->year_id}_scan_file') + 1, 4, '0', STR_PAD_LEFT);
+   $document_number = 'CASH' . date('y-m') . '/' . str_pad($this->db->where('scan_doctype_id', 57)->where('MONTH(Scan_Date)', date('m'))->where('YEAR(Scan_Date)', date('Y'))->count_all_results("y{$this->year_id}_scan_file") + 1, 4, '0', STR_PAD_LEFT);
+   $tdsJvNo = 'TDSCASH/' . date('Y-m', strtotime($this->db->select('scan_date')->where('scan_doctype_id', 57)->where('MONTH(Scan_Date)', date('m'))->where('YEAR(Scan_Date)', date('Y'))->order_by('scan_date', 'DESC')->limit(1)->get("y{$this->year_id}_scan_file")->row()->scan_date ?? date('Y-m'))) . '/' . str_pad($this->db->where('scan_doctype_id', 57)->where('MONTH(Scan_Date)', date('m'))->where('YEAR(Scan_Date)', date('Y'))->count_all_results("y{$this->year_id}_scan_file") + 1, 4, '0', STR_PAD_LEFT);
    $business_entity = $this->db->where(['status'=>'A', 'is_deleted'=> 'N'])->get('master_business_entity')->result_array();
    function fetchData($tableName, $db) {
    return $db->where('status', 'A')

@@ -51,7 +51,7 @@ class Challan_ctrl extends CI_Controller
             $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
 
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Amount, 'Comment' => $Remark));
-            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
+            $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
         } else {
             //Insert New Record
             $this->db->insert('punchfile', $data);
@@ -170,7 +170,7 @@ class Challan_ctrl extends CI_Controller
         $this->db->insert_batch('gst_challan_detail', $details);
     
         // Update y{$this->year_id}_scan_file for submit/draft
-        $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+        $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
             'is_rejected' => 'N',
             'reject_date' => NULL,
             'has_edit_permission' => $submit ? 'N' : 'Y',

@@ -50,7 +50,7 @@ class Vehicle_ctrl extends CI_Controller
 		if ($this->customlib->check_punchfile2($Scan_Id) == true) {
 			//Update Existing Record
 			$this->db->where('scan_id', $Scan_Id)->update('punchfile2', $data);
-			$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
+			$this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
 		} else {
 			//Insert New Record
 			$this->db->insert('punchfile2', $data);
@@ -145,7 +145,7 @@ class Vehicle_ctrl extends CI_Controller
 	
 		// If it's a submission, update y{$this->year_id}_scan_file to finalize
 		if ($submit) {
-			$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+			$this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
 				'is_rejected' => 'N',
 				'reject_date' => NULL,
 				'has_edit_permission' => 'N',
@@ -229,7 +229,7 @@ class Vehicle_ctrl extends CI_Controller
 			$FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
 
 			$this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Amount, 'Comment' => $Remark));
-			$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
+			$this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
 		} else {
 			//Insert New Record
 			$this->db->insert('punchfile', $data);
@@ -324,14 +324,14 @@ class Vehicle_ctrl extends CI_Controller
 	
 			// Handle the 'submit' or 'draft' action
 			if ($submit) {
-				$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+				$this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
 					'is_rejected' => 'N',
 					'reject_date' => NULL,
 					'has_edit_permission' => 'N',  // Disable edit on submit
 					'finance_punch_action_status' => 'N'  // Set finance_punch to 'N' when submitting
 				));
 			} else {
-				$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+				$this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
 					'is_rejected' => 'N',
 					'reject_date' => NULL,
 					'has_edit_permission' => 'Y',  // Allow editing for draft
@@ -352,14 +352,14 @@ class Vehicle_ctrl extends CI_Controller
 	
 			// Handle the 'submit' or 'draft' action after insertion
 			if ($submit) {
-				$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+				$this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
 					'is_rejected' => 'N',
 					'reject_date' => NULL,
 					'has_edit_permission' => 'N',  // Disable edit on submit
 					'finance_punch_action_status' => 'N'  // Set finance_punch to 'N' when submitting
 				));
 			} else {
-				$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+				$this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
 					'is_rejected' => 'N',
 					'reject_date' => NULL,
 					'has_edit_permission' => 'Y',  // Allow editing for draft
@@ -472,14 +472,14 @@ class Vehicle_ctrl extends CI_Controller
 	
 			// Handle the 'submit' or 'draft' action
 			if ($submit) {
-				$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+				$this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
 					'is_rejected' => 'N', 
 					'reject_date' => NULL, 
 					'has_edit_permission' => 'N', 
 					'finance_punch_action_status' => 'N'  // Set finance_punch to 'N' when submitting
 				));
 			} else {
-				$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+				$this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
 					'is_rejected' => 'N', 
 					'reject_date' => NULL, 
 					'has_edit_permission' => 'Y',  // Allow editing for draft
@@ -501,14 +501,14 @@ class Vehicle_ctrl extends CI_Controller
 	
 			// Handle the 'submit' or 'draft' action after insertion
 			if ($submit) {
-				$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+				$this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
 					'is_rejected' => 'N', 
 					'reject_date' => NULL, 
 					'has_edit_permission' => 'N', 
 					'finance_punch_action_status' => 'N'  // Set finance_punch to 'N' when submitting
 				));
 			} else {
-				$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+				$this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
 					'is_rejected' => 'N', 
 					'reject_date' => NULL, 
 					'has_edit_permission' => 'Y',  // Allow editing for draft
@@ -605,7 +605,7 @@ class Vehicle_ctrl extends CI_Controller
 			));
 	
 			if ($submit) {
-				$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+				$this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
 					'is_rejected' => 'N',
 					'reject_date' => NULL,
 					'has_edit_permission' => 'N',
@@ -626,7 +626,7 @@ class Vehicle_ctrl extends CI_Controller
 			));
 	
 			if ($submit) {
-				$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+				$this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
 					'is_rejected' => 'N',
 					'reject_date' => NULL,
 					'has_edit_permission' => 'N',
@@ -704,7 +704,7 @@ class Vehicle_ctrl extends CI_Controller
 			$FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
 
 			$this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Amount, 'Comment' => $Remark));
-			$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
+			$this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
 		} else {
 			//Insert New Record
 			$this->db->insert('punchfile', $data);
@@ -791,7 +791,7 @@ class Vehicle_ctrl extends CI_Controller
         ));
 
         if ($submit) {
-            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+            $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
                 'is_rejected' => 'N',
                 'reject_date' => NULL,
                 'has_edit_permission' => 'N',
@@ -809,7 +809,7 @@ class Vehicle_ctrl extends CI_Controller
         ));
 
         if ($submit) {
-            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+            $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
                 'is_rejected' => 'N',
                 'reject_date' => NULL,
                 'has_edit_permission' => 'N',
@@ -891,7 +891,7 @@ class Vehicle_ctrl extends CI_Controller
 			$FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
 
 			$this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Total_Amount, 'Comment' => $Remark));
-			$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
+			$this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
 		} else {
 			//Insert New Record
 			$this->db->insert('punchfile', $data);
@@ -991,7 +991,7 @@ class Vehicle_ctrl extends CI_Controller
 				);
 			}
 			$this->db->insert_batch('lodging_employee', $array);
-			$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
+			$this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
 		} else {
 			//Insert New Record
 			$this->db->insert('punchfile', $data);
@@ -1102,7 +1102,7 @@ class Vehicle_ctrl extends CI_Controller
 				);
 			}
 			$this->db->insert_batch('lodging_employee', $array);
-			$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
+			$this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
 		} else {
 			//Insert New Record
 			$this->db->insert('punchfile', $data);
@@ -1172,7 +1172,7 @@ class Vehicle_ctrl extends CI_Controller
 			$fileID = $this->db->where('scan_id', $data['scan_id'])->get('punchfile')->row()->FileID;
 
 			$this->db->where('FileID', $fileID)->update('sub_punchfile', ['Amount' => '-' . $data['Total_Amount'], 'Comment' => $data['Remark']]);
-			$this->db->where('scan_id', $data['scan_id'])->update('y{$this->year_id}_scan_file', ['is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N']);
+			$this->db->where('scan_id', $data['scan_id'])->update("y{$this->year_id}_scan_file", ['is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N']);
 		} else {
 			$this->db->insert('punchfile', $data);
 			$insert_id = $this->db->insert_id();
