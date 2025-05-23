@@ -88,8 +88,8 @@ class Ticket_ctrl extends CI_Controller
 
 
 	function get_ticket_cancel_employee_list(){
-		$Scan_Id = $this->input->post('scan_id');
-		$result = $this->db->select('*')->from('ticket_cancellation')->where('scan_id', $Scan_Id)->get()->result_array();
+		$scan_id = $this->input->post('scan_id');
+		$result = $this->db->select('*')->from('ticket_cancellation')->where('scan_id', $scan_id)->get()->result_array();
 		if (!empty($result)) {
 			echo json_encode(array('status' => 200, 'data' => $result));
 		} else {

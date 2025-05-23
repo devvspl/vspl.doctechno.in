@@ -12,10 +12,10 @@ class JournalEntry_ctrl extends CI_Controller
     {
         if ($this->customlib->has_permission('Finance') == 1) {
             if ($this->input->post("submit")) {
-                $Scan_Id = $this->input->post("Scan_Id");
-                $this->db->where(['scan_id' => $Scan_Id]);
+                $scan_id = $this->input->post("scan_id");
+                $this->db->where(['scan_id' => $scan_id]);
                 $query = $this->db->update("y{$this->year_id}_scan_file", ['finance_punch_action_status' => 'Y', 'finance_punched_date' => date('Y-m-d'), 'finance_punched_by' => $this->session->userdata("user_id")]);
-                $this->customlib->update_file_path($Scan_Id);
+                $this->customlib->update_file_path($scan_id);
                 $this->db->trans_complete();
                 if ($this->db->trans_status() === false) {
                     $this->db->trans_rollback();
@@ -27,7 +27,7 @@ class JournalEntry_ctrl extends CI_Controller
                 redirect("finance_punch");
             } else {
                 $document_number = $this->input->post("document_number");
-                $Scan_Id = $this->input->post("Scan_Id");
+                $scan_id = $this->input->post("scan_id");
                 $group_id = $this->session->userdata("group_id");
                 $DocTypeId = $this->input->post("DocTypeId");
                 $punch_date = date('Y-m-d');
@@ -58,34 +58,34 @@ class JournalEntry_ctrl extends CI_Controller
                 $this->db->trans_start();
                 $this->db->trans_strict(false);
                 $data = ["finance_punch_date" => $punch_date, "business_entity_id" => $business_entity_id, "narration" => $narration, "document_number" => $document_number, "finance_total_Amount" => $finance_total_Amount, "tdsApplicable" => $tdsApplicable, "TDS_JV_no" => $TDS_JV_no, "TDS_section" => $TDS_section, "TDS_percentage" => $TDS_percentage, "TDS_amount" => $TDS_amount, "finance_punched_by" => $this->session->userdata("user_id"),];
-                $this->db->where(['scan_id' => $Scan_Id]);
+                $this->db->where(['scan_id' => $scan_id]);
                 $query = $this->db->update('punchfile', $data);
                 if ($query) {
-                    $this->db->where('scan_id', $Scan_Id);
+                    $this->db->where('scan_id', $scan_id);
                     $existing = $this->db->get('journal_entry_items')->result();
                     if (!empty($existing)) {
-                        $this->db->where('scan_id', $Scan_Id);
+                        $this->db->where('scan_id', $scan_id);
                         $this->db->delete('journal_entry_items');
                     }
                     for ($i = 0; $i < count($DepartmentID); $i++) {
-                        $json_data = ['scan_id' => $Scan_Id, 'DepartmentID' => isset($DepartmentID[$i]) ? $DepartmentID[$i] : null, 'business_unit_id' => isset($business_unit_id[$i]) ? $business_unit_id[$i] : null, 'state_id' => isset($state_id[$i]) ? $state_id[$i] : null, 'region_id' => isset($region_id[$i]) ? $region_id[$i] : null, 'location_id' => isset($location_id[$i]) ? $location_id[$i] : null, 'category_id' => isset($category_id[$i]) ? $category_id[$i] : null, 'crop_id' => isset($crop_id[$i]) ? $crop_id[$i] : null, 'activity_id' => isset($activity_id[$i]) ? $activity_id[$i] : null, 'subledger' => isset($subledger[$i]) ? $subledger[$i] : null, 'debit_ac' => isset($debit_ac[$i]) ? $debit_ac[$i] : null, 'credit_ac' => isset($credit_ac[$i]) ? $credit_ac[$i] : null, 'debit_ac_id' => isset($debit_ac_id[$i]) ? $debit_ac_id[$i] : null, 'credit_ac_id' => isset($credit_ac_id[$i]) ? $credit_ac_id[$i] : null, 'Total_Amount' => isset($Total_Amount[$i]) ? $Total_Amount[$i] : null, 'ReferenceNo' => isset($ReferenceNo[$i]) ? $ReferenceNo[$i] : null, 'Remark' => isset($Remark[$i]) ? $Remark[$i] : null, "Created_By" => $this->session->userdata("user_id"),];
+                        $json_data = ['scan_id' => $scan_id, 'DepartmentID' => isset($DepartmentID[$i]) ? $DepartmentID[$i] : null, 'business_unit_id' => isset($business_unit_id[$i]) ? $business_unit_id[$i] : null, 'state_id' => isset($state_id[$i]) ? $state_id[$i] : null, 'region_id' => isset($region_id[$i]) ? $region_id[$i] : null, 'location_id' => isset($location_id[$i]) ? $location_id[$i] : null, 'category_id' => isset($category_id[$i]) ? $category_id[$i] : null, 'crop_id' => isset($crop_id[$i]) ? $crop_id[$i] : null, 'activity_id' => isset($activity_id[$i]) ? $activity_id[$i] : null, 'subledger' => isset($subledger[$i]) ? $subledger[$i] : null, 'debit_ac' => isset($debit_ac[$i]) ? $debit_ac[$i] : null, 'credit_ac' => isset($credit_ac[$i]) ? $credit_ac[$i] : null, 'debit_ac_id' => isset($debit_ac_id[$i]) ? $debit_ac_id[$i] : null, 'credit_ac_id' => isset($credit_ac_id[$i]) ? $credit_ac_id[$i] : null, 'Total_Amount' => isset($Total_Amount[$i]) ? $Total_Amount[$i] : null, 'ReferenceNo' => isset($ReferenceNo[$i]) ? $ReferenceNo[$i] : null, 'Remark' => isset($Remark[$i]) ? $Remark[$i] : null, "Created_By" => $this->session->userdata("user_id"),];
                         $this->db->insert('journal_entry_items', $json_data);
                     }
                     $this->db->trans_complete();
                     if ($this->db->trans_status() === false) {
                         $this->db->trans_rollback();
                         $this->session->set_flashdata("message", '<div class="alert alert-success text-left">Invoice Detail Saved Successfully.</div>');
-                        redirect('file_entry/' . $Scan_Id . '/' . $DocTypeId);
+                        redirect('file_entry/' . $scan_id . '/' . $DocTypeId);
                     }
                 } else {
                     $this->session->set_flashdata("message", '<div class="alert alert-danger text-left">Failed to update punchfile.</div>');
                 }
-                redirect('file_entry/' . $Scan_Id . '/' . $DocTypeId);
+                redirect('file_entry/' . $scan_id . '/' . $DocTypeId);
             }
         } else {
             set_time_limit(0);
             ini_set("max_execution_time", 0);
-            $Scan_Id = $this->input->post("Scan_Id");
+            $scan_id = $this->input->post("scan_id");
             $DocTypeId = $this->input->post("DocTypeId");
             $DocType = $this->customlib->getDocType($DocTypeId);
             $Bill_Date = $this->input->post("Bill_Date");
@@ -130,33 +130,33 @@ class JournalEntry_ctrl extends CI_Controller
             $Amount = $this->input->post("Amount");
             $TAmount = $this->input->post("TAmount");
             $Remark = $this->input->post("Remark");
-            $data = ["Scan_Id" => $Scan_Id, "Group_Id" => $this->session->userdata("group_id"), "DocType" => $DocType, "DocTypeId" => $DocTypeId, "BillDate" => $Bill_Date, "File_No" => $Bill_No, "NatureOfPayment" => $Payment_Mode, "ReferenceNo" => $Supplier_Ref, "From_ID" => $From, "FromName" => $FromName, "To_ID" => $To, "ToName" => $ToName, "Loc_Add" => $Buyer_Address, "AgencyAddress" => $Vendor_Address, "ServiceNo" => $Buyer_Order, "BookingDate" => $Buyer_Order_Date, "Particular" => $Dispatch_Trough, "DueDate" => $Delivery_Note_Date, "Department" => $Department, "DepartmentID" => $DepartmentId, "Category" => $Category, "Ledger" => $Ledger, "FileName" => $File, "FDRNo" => $LR_Number, "File_Date" => $LR_Date, "RegNo" => $Cartoon_Number, "SubTotal" => $Sub_Total, "Total_Amount" => $Total, "Grand_Total" => $Grand_Total, "Total_Discount" => $Total_Discount, "TCS" => $TCS, "Loc_Name" => $Location, "Remark" => $Remark, "Created_By" => $this->session->userdata("user_id"), "Created_Date" => date("Y-m-d H:i:s"),];
+            $data = ["scan_id" => $scan_id, "Group_Id" => $this->session->userdata("group_id"), "DocType" => $DocType, "DocTypeId" => $DocTypeId, "BillDate" => $Bill_Date, "File_No" => $Bill_No, "NatureOfPayment" => $Payment_Mode, "ReferenceNo" => $Supplier_Ref, "From_ID" => $From, "FromName" => $FromName, "To_ID" => $To, "ToName" => $ToName, "Loc_Add" => $Buyer_Address, "AgencyAddress" => $Vendor_Address, "ServiceNo" => $Buyer_Order, "BookingDate" => $Buyer_Order_Date, "Particular" => $Dispatch_Trough, "DueDate" => $Delivery_Note_Date, "Department" => $Department, "DepartmentID" => $DepartmentId, "Category" => $Category, "Ledger" => $Ledger, "FileName" => $File, "FDRNo" => $LR_Number, "File_Date" => $LR_Date, "RegNo" => $Cartoon_Number, "SubTotal" => $Sub_Total, "Total_Amount" => $Total, "Grand_Total" => $Grand_Total, "Total_Discount" => $Total_Discount, "TCS" => $TCS, "Loc_Name" => $Location, "Remark" => $Remark, "Created_By" => $this->session->userdata("user_id"), "Created_Date" => date("Y-m-d H:i:s"),];
             $this->db->trans_start();
             $this->db->trans_strict(FALSE);
-            if ($this->customlib->check_punchfile($Scan_Id) == true) {
-                $this->db->where("Scan_Id", $Scan_Id)->update("punchfile", $data);
-                $FileID = $this->db->where("Scan_Id", $Scan_Id)->get("punchfile")->row()->FileID;
+            if ($this->customlib->check_punchfile($scan_id) == true) {
+                $this->db->where("scan_id", $scan_id)->update("punchfile", $data);
+                $FileID = $this->db->where("scan_id", $scan_id)->get("punchfile")->row()->FileID;
                 $this->db->where("FileID", $FileID)->update("sub_punchfile", ["Amount" => "-" . $Grand_Total, "Comment" => $Remark,]);
-                $this->db->where("Scan_Id", $Scan_Id)->delete("invoice_detail");
+                $this->db->where("scan_id", $scan_id)->delete("invoice_detail");
                 $array = [];
                 for ($i = 0; $i < count($Particular); $i++) {
-                    $array[] = ["Scan_Id" => $Scan_Id, "Particular" => $Particular[$i], "HSN" => $HSN[$i], "Qty" => $Qty[$i], "Unit" => $Unit[$i], "MRP" => $MRP[$i], "Discount" => $Discount[$i], "Price" => $Price[$i], "Amount" => $Amount[$i], "GST" => $GST[$i], "SGST" => $SGST[$i], "IGST" => $IGST[$i], "Cess" => $Cess[$i], "Total_Amount" => $TAmount[$i],];
+                    $array[] = ["scan_id" => $scan_id, "Particular" => $Particular[$i], "HSN" => $HSN[$i], "Qty" => $Qty[$i], "Unit" => $Unit[$i], "MRP" => $MRP[$i], "Discount" => $Discount[$i], "Price" => $Price[$i], "Amount" => $Amount[$i], "GST" => $GST[$i], "SGST" => $SGST[$i], "IGST" => $IGST[$i], "Cess" => $Cess[$i], "Total_Amount" => $TAmount[$i],];
                 }
                 $this->db->insert_batch("invoice_detail", $array);
-                $this->db->where("Scan_Id", $Scan_Id)->update("y{$this->year_id}_scan_file", ["Is_Rejected" => "N", "Reject_Date" => null, "Edit_Permission" => "N",]);
+                $this->db->where("scan_id", $scan_id)->update("y{$this->year_id}_scan_file", ["Is_Rejected" => "N", "Reject_Date" => null, "Edit_Permission" => "N",]);
             } else {
                 $this->db->insert("punchfile", $data);
                 $insert_id = $this->db->insert_id();
                 $this->db->insert("sub_punchfile", ["FileID" => $insert_id, "Amount" => "-" . $Grand_Total, "Comment" => $Remark,]);
                 $array = [];
                 for ($i = 0; $i < count($Particular); $i++) {
-                    $array[] = ["Scan_Id" => $Scan_Id, "Particular" => $Particular[$i], "HSN" => $HSN[$i], "Qty" => $Qty[$i], "Unit" => $Unit[$i], "MRP" => $MRP[$i], "Discount" => $Discount[$i], "Price" => $Price[$i], "Amount" => $Amount[$i], "GST" => $GST[$i], "SGST" => $SGST[$i], "IGST" => $IGST[$i], "Cess" => $Cess[$i], "Total_Amount" => $TAmount[$i],];
+                    $array[] = ["scan_id" => $scan_id, "Particular" => $Particular[$i], "HSN" => $HSN[$i], "Qty" => $Qty[$i], "Unit" => $Unit[$i], "MRP" => $MRP[$i], "Discount" => $Discount[$i], "Price" => $Price[$i], "Amount" => $Amount[$i], "GST" => $GST[$i], "SGST" => $SGST[$i], "IGST" => $IGST[$i], "Cess" => $Cess[$i], "Total_Amount" => $TAmount[$i],];
                 }
                 $this->db->insert_batch("invoice_detail", $array);
             }
             if ($this->input->post("submit_punch")) {
-                $Scan_Id = (int)$this->input->post('scan_id');
-                $query = $this->db->where("Scan_Id", $Scan_Id)->update("y{$this->year_id}_scan_file", ["finance_punch" => "N", 'punched_by' => $this->session->userdata("user_id"), 'punched_date' => date('Y-m-d H:i:s')]);
+                $scan_id = (int)$this->input->post('scan_id');
+                $query = $this->db->where("scan_id", $scan_id)->update("y{$this->year_id}_scan_file", ["finance_punch" => "N", 'punched_by' => $this->session->userdata("user_id"), 'punched_date' => date('Y-m-d H:i:s')]);
                 $this->db->trans_complete();
                 if ($this->db->trans_status() === false) {
                     $this->db->trans_rollback();
@@ -167,7 +167,7 @@ class JournalEntry_ctrl extends CI_Controller
                 }
                 redirect("punch");
             } elseif ($this->input->post("submit")) {
-                $this->customlib->update_file_path($Scan_Id);
+                $this->customlib->update_file_path($scan_id);
                 $this->db->trans_complete();
                 if ($this->db->trans_status() === false) {
                     $this->db->trans_rollback();
@@ -186,8 +186,8 @@ class JournalEntry_ctrl extends CI_Controller
     }
     function getInvoiceItem()
     {
-        $Scan_Id = $this->input->post("Scan_Id");
-        $result = $this->db->select("*")->from("invoice_detail")->where("Scan_Id", $Scan_Id)->get()->result_array();
+        $scan_id = $this->input->post("scan_id");
+        $result = $this->db->select("*")->from("invoice_detail")->where("scan_id", $scan_id)->get()->result_array();
         if (!empty($result)) {
             echo json_encode(["status" => 200, "data" => $result]);
         } else {
@@ -208,7 +208,7 @@ class JournalEntry_ctrl extends CI_Controller
     }
     public function sale_bill_save()
     {
-        $Scan_Id = $this->input->post("Scan_Id");
+        $scan_id = $this->input->post("scan_id");
         $DocTypeId = $this->input->post("DocTypeId");
         $DocType = $this->customlib->getDocType($DocTypeId);
         $Bill_Date = $this->input->post("Bill_Date");
@@ -253,31 +253,31 @@ class JournalEntry_ctrl extends CI_Controller
         $Amount = $this->input->post("Amount");
         $TAmount = $this->input->post("TAmount");
         $Remark = $this->input->post("Remark");
-        $data = ["Scan_Id" => $Scan_Id, "Group_Id" => $this->session->userdata("group_id"), "DocType" => $DocType, "DocTypeId" => $DocTypeId, "BillDate" => $Bill_Date, "File_No" => $Bill_No, "NatureOfPayment" => $Payment_Mode, "ReferenceNo" => $Supplier_Ref, "From_ID" => $From, "FromName" => $FromName, "To_ID" => $To, "ToName" => $ToNmae, "Loc_Add" => $Buyer_Address, "AgencyAddress" => $Vendor_Address, "ServiceNo" => $Buyer_Order, "BookingDate" => $Buyer_Order_Date, "Particular" => $Dispatch_Trough, "DueDate" => $Delivery_Note_Date, "Department" => $Department, "DepartmentID" => $DepartmentId, "Category" => $Category, "Ledger" => $Ledger, "FileName" => $File, "FDRNo" => $LR_Number, "File_Date" => $LR_Date, "RegNo" => $Cartoon_Number, "AgentName" => $Consignee_Name, "SubTotal" => $Sub_Total, "Total_Amount" => $Total, "Grand_Total" => $Grand_Total, "Total_Discount" => $Total_Discount, "TCS" => $TCS, "Remark" => $Remark, "Created_By" => $this->session->userdata("user_id"), "Created_Date" => date("Y-m-d H:i:s"),];
+        $data = ["scan_id" => $scan_id, "Group_Id" => $this->session->userdata("group_id"), "DocType" => $DocType, "DocTypeId" => $DocTypeId, "BillDate" => $Bill_Date, "File_No" => $Bill_No, "NatureOfPayment" => $Payment_Mode, "ReferenceNo" => $Supplier_Ref, "From_ID" => $From, "FromName" => $FromName, "To_ID" => $To, "ToName" => $ToNmae, "Loc_Add" => $Buyer_Address, "AgencyAddress" => $Vendor_Address, "ServiceNo" => $Buyer_Order, "BookingDate" => $Buyer_Order_Date, "Particular" => $Dispatch_Trough, "DueDate" => $Delivery_Note_Date, "Department" => $Department, "DepartmentID" => $DepartmentId, "Category" => $Category, "Ledger" => $Ledger, "FileName" => $File, "FDRNo" => $LR_Number, "File_Date" => $LR_Date, "RegNo" => $Cartoon_Number, "AgentName" => $Consignee_Name, "SubTotal" => $Sub_Total, "Total_Amount" => $Total, "Grand_Total" => $Grand_Total, "Total_Discount" => $Total_Discount, "TCS" => $TCS, "Remark" => $Remark, "Created_By" => $this->session->userdata("user_id"), "Created_Date" => date("Y-m-d H:i:s"),];
         $this->db->trans_start();
         $this->db->trans_strict(false);
-        if ($this->customlib->check_punchfile($Scan_Id) == true) {
-            $this->db->where("Scan_Id", $Scan_Id)->update("punchfile", $data);
-            $FileID = $this->db->where("Scan_Id", $Scan_Id)->get("punchfile")->row()->FileID;
+        if ($this->customlib->check_punchfile($scan_id) == true) {
+            $this->db->where("scan_id", $scan_id)->update("punchfile", $data);
+            $FileID = $this->db->where("scan_id", $scan_id)->get("punchfile")->row()->FileID;
             $this->db->where("FileID", $FileID)->update("sub_punchfile", ["Amount" => "-" . $Grand_Total, "Comment" => $Remark,]);
-            $this->db->where("Scan_Id", $Scan_Id)->delete("invoice_detail");
+            $this->db->where("scan_id", $scan_id)->delete("invoice_detail");
             $array = [];
             for ($i = 0; $i < count($Particular); $i++) {
-                $array[$i] = ["Scan_Id" => $Scan_Id, "Particular" => $Particular[$i], "HSN" => $HSN[$i], "Qty" => $Qty[$i], "Unit" => $Unit[$i], "MRP" => $MRP[$i], "Discount" => $Discount[$i], "Price" => $Price[$i], "Amount" => $Amount[$i], "GST" => $GST[$i], "SGST" => $SGST[$i], "IGST" => $IGST[$i], "Cess" => $Cess[$i], "Total_Amount" => $TAmount[$i],];
+                $array[$i] = ["scan_id" => $scan_id, "Particular" => $Particular[$i], "HSN" => $HSN[$i], "Qty" => $Qty[$i], "Unit" => $Unit[$i], "MRP" => $MRP[$i], "Discount" => $Discount[$i], "Price" => $Price[$i], "Amount" => $Amount[$i], "GST" => $GST[$i], "SGST" => $SGST[$i], "IGST" => $IGST[$i], "Cess" => $Cess[$i], "Total_Amount" => $TAmount[$i],];
             }
             $this->db->insert_batch("invoice_detail", $array);
-            $this->db->where("Scan_Id", $Scan_Id)->update("y{$this->year_id}_scan_file", ["Is_Rejected" => "N", "Reject_Date" => null, "Edit_Permission" => "N",]);
+            $this->db->where("scan_id", $scan_id)->update("y{$this->year_id}_scan_file", ["Is_Rejected" => "N", "Reject_Date" => null, "Edit_Permission" => "N",]);
         } else {
             $this->db->insert("punchfile", $data);
             $insert_id = $this->db->insert_id();
             $this->db->insert("sub_punchfile", ["FileID" => $insert_id, "Amount" => "-" . $Grand_Total, "Comment" => $Remark,]);
             $array = [];
             for ($i = 0; $i < count($Particular); $i++) {
-                $array[$i] = ["Scan_Id" => $Scan_Id, "Scan_Id" => $Scan_Id, "Particular" => $Particular[$i], "HSN" => $HSN[$i], "Qty" => $Qty[$i], "Unit" => $Unit[$i], "MRP" => $MRP[$i], "Discount" => $Discount[$i], "Price" => $Price[$i], "Amount" => $Amount[$i], "GST" => $GST[$i], "SGST" => $SGST[$i], "IGST" => $IGST[$i], "Cess" => $Cess[$i], "Total_Amount" => $TAmount[$i],];
+                $array[$i] = ["scan_id" => $scan_id, "scan_id" => $scan_id, "Particular" => $Particular[$i], "HSN" => $HSN[$i], "Qty" => $Qty[$i], "Unit" => $Unit[$i], "MRP" => $MRP[$i], "Discount" => $Discount[$i], "Price" => $Price[$i], "Amount" => $Amount[$i], "GST" => $GST[$i], "SGST" => $SGST[$i], "IGST" => $IGST[$i], "Cess" => $Cess[$i], "Total_Amount" => $TAmount[$i],];
             }
             $this->db->insert_batch("invoice_detail", $array);
         }
-        $this->customlib->update_file_path($Scan_Id);
+        $this->customlib->update_file_path($scan_id);
         $this->db->trans_complete();
         if ($this->db->trans_status() === false) {
             $this->db->trans_rollback();

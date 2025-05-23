@@ -1,6 +1,6 @@
 <?php
-   $Scan_Id = $this->uri->segment(2);
-   $rec = $this->customlib->getScanData($Scan_Id);
+   $scan_id = $this->uri->segment(2);
+   $rec = $this->customlib->getScanData($scan_id);
    $group_id = $rec->group_id;
    $Bill_Approver = $rec->bill_approver_id;
    
@@ -11,7 +11,7 @@
       <div class="box-body">
          <div class="row">
             <div class="col-md-8">
-               <input type="hidden" name="Scan_Id" id="Scan_Id" value="<?= $Scan_Id; ?>">
+               <input type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id; ?>">
                <?php if ($rec->file_extension == 'pdf') { ?>
                <object data="<?= $rec->file_path ?>" type="" height="490px" width="100%;"></object>
                <?php } else { ?>
@@ -169,17 +169,17 @@
 </div>
 <script>
    $(document).on('click', '#save', function() {
-   	var Scan_Id = $("#Scan_Id").val();
-   	var Document_Name = $("#document_name").val();
-   	if (Document_Name == null || Document_Name == '') {
+   	var scan_id = $("#scan_id").val();
+   	var document_name  = $("#document_name").val();
+   	if (document_name  == null || document_name  == '') {
    		alert("Please Enter Document Name");
    		return false;
    	} else {
    		$.ajax({
-   			url: '<?php echo base_url(); ?>update_document_name/' + Scan_Id,
+   			url: '<?php echo base_url(); ?>update_document_name/' + scan_id,
    			type: 'POST',
    			data: {
-   				Document_Name: Document_Name
+   				document_name : document_name 
    			},
    			dataType: 'json',
    			success: function(response) {
@@ -197,12 +197,12 @@
    });
    
    $(document).on('click', '#reject', function() {
-    var Scan_Id = $("#Scan_Id").val();
+    var scan_id = $("#scan_id").val();
     var remark = prompt("Please enter reject remark");
    
     if (remark !== null && remark !== '') {
       $.ajax({
-        url: '<?php echo base_url(); ?>reject_temp_scan/' + Scan_Id,
+        url: '<?php echo base_url(); ?>reject_temp_scan/' + scan_id,
         type: 'POST',
         data: { remark: remark },
         dataType: 'json',

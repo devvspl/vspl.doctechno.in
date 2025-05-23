@@ -1,10 +1,10 @@
 <?php
-$Scan_Id = $this->uri->segment(2);
+$scan_id = $this->uri->segment(2);
 $DocType_Id = $this->uri->segment(3);
-$rec = $this->customlib->getScanData($Scan_Id);
+$rec = $this->customlib->getScanData($scan_id);
 $fin_year = $this->customlib->getFinancial_year();
 $company_list = $this->customlib->getCompanyList();
-$punch_detail = $this->db->get_where('punchfile2', ['scan_id' => $Scan_Id])->row();
+$punch_detail = $this->db->get_where('punchfile2', ['scan_id' => $scan_id])->row();
 
 ?>
 <div class="box-body">
@@ -32,7 +32,7 @@ $punch_detail = $this->db->get_where('punchfile2', ['scan_id' => $Scan_Id])->row
         </div>
         <form action="<?= base_url(); ?>form/Bank_ctrl/save_cheque" id="chequeform" name="chequeform" method="post" accept-charset="utf-8">
             <div class="col-md-6">
-                <input type="hidden" name="Scan_Id" id="Scan_Id" value="<?= $Scan_Id ?>">
+                <input type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id ?>">
                 <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">
                 <div class="row">
                     <div class="form-group col-md-4">
@@ -88,7 +88,7 @@ $punch_detail = $this->db->get_where('punchfile2', ['scan_id' => $Scan_Id])->row
                     <button type="submit" class="btn btn-success pull-right">Save</button>
                 </div>
                 <?php
-                if ($this->customlib->haveSupportFile($Scan_Id) == 1) {
+                if ($this->customlib->haveSupportFile($scan_id) == 1) {
                 ?>
                     <div class="row" style="margin-top: 20px;">
                         <div class="col-md-12">
@@ -96,7 +96,7 @@ $punch_detail = $this->db->get_where('punchfile2', ['scan_id' => $Scan_Id])->row
                             <div class="form-group">
 
                                 <?php
-                                $support_file = $this->customlib->getSupportFile($Scan_Id);
+                                $support_file = $this->customlib->getSupportFile($scan_id);
 
                                 foreach ($support_file as $row) {
                                 ?>

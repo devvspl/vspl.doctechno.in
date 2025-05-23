@@ -121,7 +121,7 @@ $rj_list = $this->customlib->getRejectReason();
 			<div class="scroll-area">
 				<div class="modal-body ">
 					<div class="form-group">
-						<input type="hidden" name="Scan_Id" id="Scan_Id">
+						<input type="hidden" name="scan_id" id="scan_id">
 						<label for="Reject_Remark">Rejection Reason :</label> <span class="text-danger">*</span>
 						<select name="Reject_Remark" id="Reject_Remark" class="form-control form-select select2">
 							<option value="">Select</option>
@@ -159,12 +159,12 @@ $rj_list = $this->customlib->getRejectReason();
 	</div>
 </div>
 <script>
-	function getSupportFile(Scan_Id) {
+	function getSupportFile(scan_id) {
 		$.ajax({
 			url: '<?php echo base_url(); ?>Punch/getSupportFile',
 			type: 'POST',
 			data: {
-				Scan_Id: Scan_Id
+				scan_id: scan_id
 			},
 			dataType: 'json',
 			success: function(response) {
@@ -174,7 +174,7 @@ $rj_list = $this->customlib->getRejectReason();
 					var x = '';
 					$.each(response.data, function(index, value) {
 
-						x += '<object data="' + value.File_Location + '" type="application/pdf" width="100%" height="500px"></object>';
+						x += '<object data="' + value.file_path + '" type="application/pdf" width="100%" height="500px"></object>';
 
 					});
 					$('#detail').html(x);
@@ -188,8 +188,8 @@ $rj_list = $this->customlib->getRejectReason();
 
 
 	$(document).on("click", "#reject_record", function() {
-		var Scan_Id = $(this).data('id');
-		$("#Scan_Id").val(Scan_Id);
+		var scan_id = $(this).data('id');
+		$("#scan_id").val(scan_id);
 		$("#rejectModal").modal("show");
 		$("#Reject_Remark").select2({
 			dropdownParent: $('#rejectModal'),
@@ -238,7 +238,7 @@ $rj_list = $this->customlib->getRejectReason();
 	});
 
 	$(document).on('click', "#reject_btn", function() {
-		var Scan_Id = $("#Scan_Id").val();
+		var scan_id = $("#scan_id").val();
 		var Reject_Remark = $("#Reject_Remark").val();
 		if (Reject_Remark == '' || Reject_Remark == null) {
 			$("#Reject_Remark").focus();
@@ -247,7 +247,7 @@ $rj_list = $this->customlib->getRejectReason();
 		}
 		$.ajax({
 			type: 'POST',
-			url: '<?php echo base_url(); ?>reject_record/' + Scan_Id,
+			url: '<?php echo base_url(); ?>reject_record/' + scan_id,
 			data: {
 				Remark: Reject_Remark,
 			},

@@ -139,7 +139,7 @@
 
 														<tbody>
 															<?php
-															$sql = "SELECT * FROM support_file WHERE Scan_Id = '" . $row['scan_id'] . "'";
+															$sql = "SELECT * FROM support_file WHERE scan_id = '" . $row['scan_id'] . "'";
 															$query = $this->db->query($sql);
 															$result = $query->result_array();
 															foreach ($result as $rec) {

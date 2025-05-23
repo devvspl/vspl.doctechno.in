@@ -70,7 +70,7 @@
       <div class="modal-content">
          <button type="button" class="close" data-dismiss="modal">&times;</button>
          <div class="modal-body">
-            <input type="hidden" name="Scan_Id" id="rejectScanId">
+            <input type="hidden" name="scan_id" id="rejectScanId">
             <div class="form-group">
                <label for="Reject_Remark">Rejection Reason <span class="text-danger">*</span></label>
                <input type="text" name="Reject_Remark" id="Reject_Remark" class="form-control">

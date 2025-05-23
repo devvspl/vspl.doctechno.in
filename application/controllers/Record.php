@@ -42,24 +42,24 @@ class Record extends CI_Controller {
         return $mainRecord;
     }
 
-	public function index($Scan_Id, $DocTypeId) {
+	public function index($scan_id, $DocTypeId) {
 		$this->session->set_userdata('top_menu', 'punch_master');
 		$this->session->set_userdata('sub_menu', 'punch');
 		$doc_type_list = array(4, 5, 8, 10, 11, 18, 19, 30, 31, 32, 35, 36, 37, 41, 45);
 		if (in_array($DocTypeId, $doc_type_list)) {
-			$this->data['file_detail'] = $this->Record_model->getRecordFile($Scan_Id);
+			$this->data['file_detail'] = $this->Record_model->getRecordFile($scan_id);
 		} else {
-			$this->data['file_detail'] = $this->Record_model->getRecordFile_Accounting($Scan_Id);
+			$this->data['file_detail'] = $this->Record_model->getRecordFile_Accounting($scan_id);
 		}
 		$this->data['main'] = 'records/_record';
 		$this->load->view('layout/template', $this->data);
 	}
-	public function vspl_index($Scan_Id, $DocTypeId) {
+	public function vspl_index($scan_id, $DocTypeId) {
 		$this->session->set_userdata('top_menu', 'punch_master');
 		$this->session->set_userdata('sub_menu', 'punch');
 	
-		$this->data['file_detail'] = $this->Record_model->vspl_getRecordFile_Accounting($Scan_Id);
-		$mainRecord = $this->get_additional_information_by_scan_id($Scan_Id);
+		$this->data['file_detail'] = $this->Record_model->vspl_getRecordFile_Accounting($scan_id);
+		$mainRecord = $this->get_additional_information_by_scan_id($scan_id);
 		$this->data['main_record'] = $mainRecord ? $mainRecord : null;
 	
 		$this->data['main'] = 'records/_vspl_record';
@@ -71,8 +71,8 @@ class Record extends CI_Controller {
 		$this->data['main'] = 'records/admin_rejected_list';
 		$this->load->view('layout/template', $this->data);
 	}
-	function give_edit_permission($Scan_Id) {
-		$this->db->where('scan_id', $Scan_Id);
+	function give_edit_permission($scan_id) {
+		$this->db->where('scan_id', $scan_id);
 		$result = $this->db->update("y{$this->year_id}_scan_file", array('has_edit_permission' => 'Y'));
 		if ($result) {
 			echo json_encode(array('status' => '200'));
@@ -98,8 +98,8 @@ class Record extends CI_Controller {
 	}
 	function all_record() {
 	}
-	function reject_approved_file($Scan_Id) {
-		$this->db->where('scan_id', $Scan_Id);
+	function reject_approved_file($scan_id) {
+		$this->db->where('scan_id', $scan_id);
 		$result = $this->db->update("y{$this->year_id}_scan_file", array('is_file_approved' => 'N', 'approved_date' => NULL, 'approved_by' => NULL));
 		if ($result) {
 			echo json_encode(array('status' => '200'));

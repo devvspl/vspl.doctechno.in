@@ -1,8 +1,10 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 class Bill_approver_model extends MY_Model {
+    protected $year_id;
     public function __construct() {
         parent::__construct();
+        $this->year_id = $this->session->userdata('year_id');
     }
     public function create($data) {
         $this->db->trans_start();
@@ -85,12 +87,12 @@ class Bill_approver_model extends MY_Model {
         return $query->result_array();
     }
     public function get_bill_detail($scan_id) {
-        $this->db->select(' y{$this->year_id}_scan_file.Scan_Id, y{$this->year_id}_scan_file.Document_Name, master_work_location.location_name, CONCAT(scanned_by.first_name, " ", scanned_by.last_name) AS scanned_by_name, y{$this->year_id}_scan_file.Scan_Date, CONCAT(temp_scanned_by.first_name, " ", temp_scanned_by.last_name) AS temp_scanned_by_name, y{$this->year_id}_scan_file.Temp_Scan_Date, y{$this->year_id}_scan_file.File_Ext, y{$this->year_id}_scan_file.File_Location');
-        $this->db->from("y{$this->year_id}_scan_file");
-        $this->db->join('master_work_location', 'y{$this->year_id}_scan_file.location_id = master_work_location.location_id', 'left');
-        $this->db->join('users AS scanned_by', 'scanned_by.user_id = y{$this->year_id}_scan_file.scanned_by', 'left');
-        $this->db->join('users AS temp_scanned_by', 'temp_scanned_by.user_id = y{$this->year_id}_scan_file.Temp_Scan_By', 'left');
-        $this->db->where('y{$this->year_id}_scan_file.Scan_Id', $scan_id);
+        $this->db->select(" sf.scan_id, sf.document_name, mwl.location_name, CONCAT(scanned_by.first_name, ' ', scanned_by.last_name) AS scanned_by_name, sf.Scan_Date, CONCAT(temp_scanned_by.first_name, ' ', temp_scanned_by.last_name) AS temp_scanned_by_name, sf.Temp_Scan_Date, sf.file_extension, sf.file_path");
+        $this->db->from("y{$this->year_id}_scan_file AS sf");
+        $this->db->join('master_work_location AS mwl', 'sf.location_id = mwl.location_id', 'left');
+        $this->db->join('users AS scanned_by', 'scanned_by.user_id = sf.scanned_by', 'left');
+        $this->db->join('users AS temp_scanned_by', 'temp_scanned_by.user_id = sf.Temp_Scan_By', 'left');
+        $this->db->where('sf.scan_id', (int)$scan_id);
         $query = $this->db->get();
         return $query->row();
     }

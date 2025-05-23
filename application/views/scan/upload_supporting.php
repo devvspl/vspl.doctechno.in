@@ -1,5 +1,5 @@
 <?php
-$Scan_Id = $this->uri->segment(3);
+$scan_id = $this->uri->segment(3);
 ?>
 
 <div class="content-wrapper" style="min-height: 946px;">
@@ -16,7 +16,7 @@ $Scan_Id = $this->uri->segment(3);
                                 <?php echo $this->session->flashdata('message') ?>
                             <?php } ?>
                             <div class="form-group">
-                                <input type="hidden" name="scan_id" id="scan_id" value="<?= $Scan_Id; ?>">
+                                <input type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id; ?>">
                                 <input class="filestyle form-control" type='file' name='support_file' id="support_file" accept="image/*,application/pdf">
                             </div>
                         </div>
@@ -29,7 +29,7 @@ $Scan_Id = $this->uri->segment(3);
             <div class="col-md-7">
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title"><?= $this->customlib->getDocumentName($Scan_Id); ?>
+                        <h3 class="box-title"><?= $this->customlib->getDocumentName($scan_id); ?>
                         </h3>
                         <div class="box-tools pull-right">
                             <a href="<?= base_url(); ?>scan" class="btn btn-primary btn-sm"><i class="fa fa-long-arrow-left"></i> Back</a>
@@ -46,7 +46,7 @@ $Scan_Id = $this->uri->segment(3);
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $main_file = $this->db->query("SELECT * FROM y{$this->year_id}_scan_file WHERE Scan_Id = $Scan_Id")->row();
+                                    $main_file = $this->db->query("SELECT * FROM y{$this->year_id}_scan_file WHERE scan_id = $scan_id")->row();
                                     ?>
                                     <tr>
                                         <td>1</td>
@@ -55,7 +55,7 @@ $Scan_Id = $this->uri->segment(3);
                                     </tr>
 
                                     <?php
-                                    $supporting_files = $this->db->query("SELECT * FROM support_file WHERE Scan_Id = $Scan_Id")->result();
+                                    $supporting_files = $this->db->query("SELECT * FROM support_file WHERE scan_id = $scan_id")->result();
                                     $i = 2;
                                     foreach ($supporting_files as $supporting_file) {
                                     ?>
@@ -75,7 +75,7 @@ $Scan_Id = $this->uri->segment(3);
                     </div>
                     <div class="box-footer">
                         <button type="submit" id="final_submit" class="btn btn-success pull-right">Final Submit</button>
-                        <!-- <button type="submit" id="delete_all" class="btn btn-danger ">Delete All</button> -->
+                     
                     </div>
                 </div>
             </div>
@@ -138,7 +138,7 @@ $Scan_Id = $this->uri->segment(3);
                 dataType: 'json',
                 success: function(data) {
                     if (data.status == 200) {
-                        window.location.href = '<?= base_url() ?>Scan/upload_supporting/<?= $Scan_Id; ?>';
+                        window.location.href = '<?= base_url() ?>Scan/upload_supporting/<?= $scan_id; ?>';
                     }
                 }
             });

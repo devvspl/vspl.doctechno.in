@@ -138,19 +138,19 @@
    </div>
 </div>
 <script>
-   function getSupportFile(Scan_Id) {
+   function getSupportFile(scan_id) {
        $.ajax({
            url: "<?php echo base_url(); ?>Punch/getSupportFile",
            type: "POST",
            data: {
-               Scan_Id: Scan_Id,
+               scan_id: scan_id,
            },
            dataType: "json",
            success: function (response) {
                if (response.status == 200) {
                    var x = "";
                    $.each(response.data, function (index, value) {
-                       x += '<object data="' + value.File_Location + '" type="application/pdf" width="100%" height="500px"></object>';
+                       x += '<object data="' + value.file_path + '" type="application/pdf" width="100%" height="500px"></object>';
                    });
                    $("#detail").html(x);
                    $("#SupportFileView").modal("show");
@@ -159,13 +159,13 @@
        });
    }
    $(document).on('click', '#resend_scan', function() {
-        var Scan_Id = $(this).data('id');
+        var scan_id = $(this).data('id');
         var Remark = prompt("Please enter remark to resend this file");
         if (Remark == null) {
             window.location.reload();
         } else {
             $.ajax({
-                url: '<?php echo base_url(); ?>finance_resend_scan/' + Scan_Id,
+                url: '<?php echo base_url(); ?>finance_resend_scan/' + scan_id,
                 type: 'POST',
                 data: {
                     Remark: Remark

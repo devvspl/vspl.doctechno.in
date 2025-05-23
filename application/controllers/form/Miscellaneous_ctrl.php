@@ -9,7 +9,7 @@ class Miscellaneous_ctrl extends CI_Controller {
     public function create() {
         $submit = $this->input->post('submit');  // This will check if the action is 'submit' or 'draft'
     
-        $Scan_Id = $this->input->post('scan_id');
+        $scan_id = $this->input->post('scan_id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
         $File_Date = $this->input->post('File_Date');
@@ -26,7 +26,7 @@ class Miscellaneous_ctrl extends CI_Controller {
         
         // Prepare the data to be inserted or updated
         $data = array(
-            'scan_id' => $Scan_Id,
+            'scan_id' => $scan_id,
             'DocType' => $DocType,
             'DocTypeId' => $DocTypeId,
             'File_Date' => $File_Date,
@@ -49,20 +49,20 @@ class Miscellaneous_ctrl extends CI_Controller {
         $this->db->trans_start();
         $this->db->trans_strict(FALSE);
     
-        if ($this->customlib->check_punchfile2($Scan_Id) == true) {
+        if ($this->customlib->check_punchfile2($scan_id) == true) {
             // Update the existing record
-            $this->db->where('scan_id', $Scan_Id)->update('punchfile2', $data);
+            $this->db->where('scan_id', $scan_id)->update('punchfile2', $data);
     
             // Handle the 'submit' or 'draft' action
             if ($submit) {
-                $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
+                $this->db->where('scan_id', $scan_id)->update("y{$this->year_id}_scan_file", array(
                     'is_rejected' => 'N', 
                     'reject_date' => NULL, 
                     'has_edit_permission' => 'N', 
                     'finance_punch_action_status' => 'N'  // Set finance_punch to 'N' when submitting
                 ));
             } else {
-                $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
+                $this->db->where('scan_id', $scan_id)->update("y{$this->year_id}_scan_file", array(
                     'is_rejected' => 'N', 
                     'reject_date' => NULL, 
                     'has_edit_permission' => 'Y',  // Allow editing for draft
@@ -76,14 +76,14 @@ class Miscellaneous_ctrl extends CI_Controller {
             
             // Handle the 'submit' or 'draft' action after insertion
             if ($submit) {
-                $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
+                $this->db->where('scan_id', $scan_id)->update("y{$this->year_id}_scan_file", array(
                     'is_rejected' => 'N', 
                     'reject_date' => NULL, 
                     'has_edit_permission' => 'N', 
                     'finance_punch_action_status' => 'N'  // Set finance_punch to 'N' when submitting
                 ));
             } else {
-                $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
+                $this->db->where('scan_id', $scan_id)->update("y{$this->year_id}_scan_file", array(
                     'is_rejected' => 'N', 
                     'reject_date' => NULL, 
                     'has_edit_permission' => 'Y',  // Allow editing for draft
@@ -92,7 +92,7 @@ class Miscellaneous_ctrl extends CI_Controller {
             }
         }
     
-        $this->customlib->update_file_path($Scan_Id);
+        $this->customlib->update_file_path($scan_id);
     
         // Complete the transaction
         $this->db->trans_complete();
@@ -115,7 +115,7 @@ class Miscellaneous_ctrl extends CI_Controller {
     }
     
     public function save_rst_ofd() {
-        $Scan_Id = $this->input->post('scan_id');
+        $scan_id = $this->input->post('scan_id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
         $Crop = $this->input->post('Crop');
@@ -127,20 +127,20 @@ class Miscellaneous_ctrl extends CI_Controller {
         $Miscellaneous_Amount = $this->input->post('Miscellaneous_Amount');
         $Amount = $this->input->post('Total_Amount');
         $Remark = $this->input->post('Remark');
-        $data = array('scan_id' => $Scan_Id, 'DocType' => $DocType, 'DocTypeId' => $DocTypeId, 'File_Type' => $Crop, 'BillDate' => $Date, 'CropDetails' => $Crop_Detail, 'MealsAmount' => $Trial_Op_Exp_Amount, 'HallTent_Amount' => $Fertilizer_Amount, 'Gift_Amount' => $Consumable_Amount, 'OthCharge_Amount' => $Miscellaneous_Amount, 'Total_Amount' => $Amount, 'Remark' => $Remark, 'group_id' => $this->session->userdata('group_id'), 'Created_By' => $this->session->userdata('user_id'), 'Created_Date' => date('Y-m-d H:i:s'),);
+        $data = array('scan_id' => $scan_id, 'DocType' => $DocType, 'DocTypeId' => $DocTypeId, 'File_Type' => $Crop, 'BillDate' => $Date, 'CropDetails' => $Crop_Detail, 'MealsAmount' => $Trial_Op_Exp_Amount, 'HallTent_Amount' => $Fertilizer_Amount, 'Gift_Amount' => $Consumable_Amount, 'OthCharge_Amount' => $Miscellaneous_Amount, 'Total_Amount' => $Amount, 'Remark' => $Remark, 'group_id' => $this->session->userdata('group_id'), 'Created_By' => $this->session->userdata('user_id'), 'Created_Date' => date('Y-m-d H:i:s'),);
         $this->db->trans_start();
         $this->db->trans_strict(FALSE);
-        if ($this->customlib->check_punchfile($Scan_Id) == true) {
-            $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
-            $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
+        if ($this->customlib->check_punchfile($scan_id) == true) {
+            $this->db->where('scan_id', $scan_id)->update('punchfile', $data);
+            $FileID = $this->db->where('scan_id', $scan_id)->get('punchfile')->row()->FileID;
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Amount, 'Comment' => $Remark));
-            $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
+            $this->db->where('scan_id', $scan_id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
         } else {
             $this->db->insert('punchfile', $data);
             $insert_id = $this->db->insert_id();
             $this->db->insert('sub_punchfile', array('FileID' => $insert_id, 'Amount' => '-' . $Amount, 'Comment' => $Remark));
         }
-        $this->customlib->update_file_path($Scan_Id);
+        $this->customlib->update_file_path($scan_id);
         $this->db->trans_complete();
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
@@ -152,7 +152,7 @@ class Miscellaneous_ctrl extends CI_Controller {
         }
     }
     public function save_postage_courier() {
-        $Scan_Id = $this->input->post('scan_id');
+        $scan_id = $this->input->post('scan_id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
         $Booking_Date = $this->input->post('Booking_Date');
@@ -164,20 +164,20 @@ class Miscellaneous_ctrl extends CI_Controller {
         $Sender_Address = $this->input->post('Sender_Address');
         $Receiver_Address = $this->input->post('Receiver_Address');
         $Remark = $this->input->post('Remark');
-        $data = array('scan_id' => $Scan_Id, 'DocType' => $DocType, 'DocTypeId' => $DocTypeId, 'BillDate' => $Booking_Date, 'File_No' => $Docket_No, 'AgentName' => $Provider_Name, 'FromName' => $Sender_Name, 'ToName' => $Receiver_Name, 'Loc_Add' => $Sender_Address, 'Related_Address' => $Receiver_Address, 'Total_Amount' => $Weight_Charged, 'Remark' => $Remark, 'group_id' => $this->session->userdata('group_id'), 'Created_By' => $this->session->userdata('user_id'), 'Created_Date' => date('Y-m-d H:i:s'),);
+        $data = array('scan_id' => $scan_id, 'DocType' => $DocType, 'DocTypeId' => $DocTypeId, 'BillDate' => $Booking_Date, 'File_No' => $Docket_No, 'AgentName' => $Provider_Name, 'FromName' => $Sender_Name, 'ToName' => $Receiver_Name, 'Loc_Add' => $Sender_Address, 'Related_Address' => $Receiver_Address, 'Total_Amount' => $Weight_Charged, 'Remark' => $Remark, 'group_id' => $this->session->userdata('group_id'), 'Created_By' => $this->session->userdata('user_id'), 'Created_Date' => date('Y-m-d H:i:s'),);
         $this->db->trans_start();
         $this->db->trans_strict(FALSE);
-        if ($this->customlib->check_punchfile($Scan_Id) == true) {
-            $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
-            $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
+        if ($this->customlib->check_punchfile($scan_id) == true) {
+            $this->db->where('scan_id', $scan_id)->update('punchfile', $data);
+            $FileID = $this->db->where('scan_id', $scan_id)->get('punchfile')->row()->FileID;
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Weight_Charged, 'Comment' => $Remark));
-            $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
+            $this->db->where('scan_id', $scan_id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
         } else {
             $this->db->insert('punchfile', $data);
             $insert_id = $this->db->insert_id();
             $this->db->insert('sub_punchfile', array('FileID' => $insert_id, 'Amount' => '-' . $Weight_Charged, 'Comment' => $Remark));
         }
-        $this->customlib->update_file_path($Scan_Id);
+        $this->customlib->update_file_path($scan_id);
         $this->db->trans_complete();
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
@@ -191,7 +191,7 @@ class Miscellaneous_ctrl extends CI_Controller {
     public function Save_Meals() {
         $submit = $this->input->post('submit');  // This will check if the action is 'submit' or 'draft'
     
-        $Scan_Id = $this->input->post('scan_id');
+        $scan_id = $this->input->post('scan_id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
         $EmployeeID = $this->input->post('Employee');
@@ -207,7 +207,7 @@ class Miscellaneous_ctrl extends CI_Controller {
         $Location = $this->input->post('location_id');
         
         $data = array(
-            'scan_id' => $Scan_Id,
+            'scan_id' => $scan_id,
             'DocType' => $DocType,
             'DocTypeId' => $DocTypeId,
             'File_No' => $InvoiceNo,
@@ -229,23 +229,23 @@ class Miscellaneous_ctrl extends CI_Controller {
         $this->db->trans_start();
         $this->db->trans_strict(FALSE);
     
-        if ($this->customlib->check_punchfile($Scan_Id) == true) {
+        if ($this->customlib->check_punchfile($scan_id) == true) {
             // Update Existing Record
-            $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
-            $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
+            $this->db->where('scan_id', $scan_id)->update('punchfile', $data);
+            $FileID = $this->db->where('scan_id', $scan_id)->get('punchfile')->row()->FileID;
     
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Amount, 'Comment' => $Remark));
             
             // Update scan file status based on submit or draft
             if ($submit) {
-                $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
+                $this->db->where('scan_id', $scan_id)->update("y{$this->year_id}_scan_file", array(
                     'is_rejected' => 'N', 
                     'reject_date' => NULL, 
                     'has_edit_permission' => 'N', 
                     'finance_punch_action_status' => 'N'  // Set finance_punch to 'N' when submitting
                 ));
             } else {
-                $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
+                $this->db->where('scan_id', $scan_id)->update("y{$this->year_id}_scan_file", array(
                     'is_rejected' => 'N', 
                     'reject_date' => NULL, 
                     'has_edit_permission' => 'Y',  // Allow editing for draft
@@ -261,14 +261,14 @@ class Miscellaneous_ctrl extends CI_Controller {
             
             // Set scan file status based on submit or draft
             if ($submit) {
-                $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
+                $this->db->where('scan_id', $scan_id)->update("y{$this->year_id}_scan_file", array(
                     'is_rejected' => 'N', 
                     'reject_date' => NULL, 
                     'has_edit_permission' => 'N', 
                     'finance_punch_action_status' => 'N'  // Set finance_punch to 'N' when submitting
                 ));
             } else {
-                $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
+                $this->db->where('scan_id', $scan_id)->update("y{$this->year_id}_scan_file", array(
                     'is_rejected' => 'N', 
                     'reject_date' => NULL, 
                     'has_edit_permission' => 'Y',  // Allow editing for draft
@@ -277,7 +277,7 @@ class Miscellaneous_ctrl extends CI_Controller {
             }
         }
     
-        $this->customlib->update_file_path($Scan_Id);
+        $this->customlib->update_file_path($scan_id);
         $this->db->trans_complete();
     
         if ($this->db->trans_status() === FALSE) {
@@ -346,7 +346,7 @@ class Miscellaneous_ctrl extends CI_Controller {
         redirect($submit ? 'punch' : $_SERVER['HTTP_REFERER']);
     }
     public function Save_Dealer_Meeting() {
-        $Scan_Id = $this->input->post('scan_id');
+        $scan_id = $this->input->post('scan_id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
         $Bill_Date = $this->input->post('Bill_Date');
@@ -359,20 +359,20 @@ class Miscellaneous_ctrl extends CI_Controller {
         $Other = $this->input->post('Other');
         $Amount = $this->input->post('Total_Amount');
         $Remark = $this->input->post('Remark');
-        $data = array('scan_id' => $Scan_Id, 'DocType' => $DocType, 'DocTypeId' => $DocTypeId, 'BillDate' => $Bill_Date, 'File_Type' => $Crop, 'CropDetails' => $Crop_Detail, 'MealsAmount' => $Meals, 'HallTent_Amount' => $Tent, 'Gift_Amount' => $Gift, 'AVTent_Amount' => $AV, 'OthCharge_Amount' => $Other, 'Total_Amount' => $Amount, 'Remark' => $Remark, 'group_id' => $this->session->userdata('group_id'), 'Created_By' => $this->session->userdata('user_id'), 'Created_Date' => date('Y-m-d H:i:s'),);
+        $data = array('scan_id' => $scan_id, 'DocType' => $DocType, 'DocTypeId' => $DocTypeId, 'BillDate' => $Bill_Date, 'File_Type' => $Crop, 'CropDetails' => $Crop_Detail, 'MealsAmount' => $Meals, 'HallTent_Amount' => $Tent, 'Gift_Amount' => $Gift, 'AVTent_Amount' => $AV, 'OthCharge_Amount' => $Other, 'Total_Amount' => $Amount, 'Remark' => $Remark, 'group_id' => $this->session->userdata('group_id'), 'Created_By' => $this->session->userdata('user_id'), 'Created_Date' => date('Y-m-d H:i:s'),);
         $this->db->trans_start();
         $this->db->trans_strict(FALSE);
-        if ($this->customlib->check_punchfile($Scan_Id) == true) {
-            $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
-            $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
+        if ($this->customlib->check_punchfile($scan_id) == true) {
+            $this->db->where('scan_id', $scan_id)->update('punchfile', $data);
+            $FileID = $this->db->where('scan_id', $scan_id)->get('punchfile')->row()->FileID;
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Amount, 'Comment' => $Remark));
-            $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
+            $this->db->where('scan_id', $scan_id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
         } else {
             $this->db->insert('punchfile', $data);
             $insert_id = $this->db->insert_id();
             $this->db->insert('sub_punchfile', array('FileID' => $insert_id, 'Amount' => '-' . $Amount, 'Comment' => $Remark));
         }
-        $this->customlib->update_file_path($Scan_Id);
+        $this->customlib->update_file_path($scan_id);
         $this->db->trans_complete();
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
@@ -384,31 +384,31 @@ class Miscellaneous_ctrl extends CI_Controller {
         }
     }
     public function Save_Electricity() {
-        $Scan_Id = $this->input->post('scan_id');
+        $scan_id = $this->input->post('scan_id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
         $submit = $this->input->post('submit');
-        $data = array('scan_id' => $Scan_Id, 'DocType' => $DocType, 'DocTypeId' => $DocTypeId, 'Related_Person' => $this->input->post('Biller_Name'), 'ReferenceNo' => $this->input->post('BP_No'), 'Period' => $this->input->post('Period'), 'MeterNumber' => $this->input->post('Meter_No'), 'BillDate' => $this->input->post('Bill_Date'), 'File_No' => $this->input->post('Bill_No'), 'LastDateOfPayment' => $this->input->post('Last_Date'), 'PreviousReading' => $this->input->post('Previous_Reading'), 'CurrentReading' => $this->input->post('Current_Reading'), 'UnitsConsumed' => $this->input->post('Unit_Consumed'), 'NatureOfPayment' => $this->input->post('Payment_Mode'), 'Total_Amount' => $this->input->post('Bill_Amount'), 'Payment_Amount' => $this->input->post('Payment_Amount'), 'Remark' => $this->input->post('Remark'), 'group_id' => $this->session->userdata('group_id'), 'Created_By' => $this->session->userdata('user_id'), 'Created_Date' => date('Y-m-d H:i:s'), 'Loc_Name' => $this->input->post('location_id'), 'PremiumDate' => $this->input->post('PaymentDate'),);
+        $data = array('scan_id' => $scan_id, 'DocType' => $DocType, 'DocTypeId' => $DocTypeId, 'Related_Person' => $this->input->post('Biller_Name'), 'ReferenceNo' => $this->input->post('BP_No'), 'Period' => $this->input->post('Period'), 'MeterNumber' => $this->input->post('Meter_No'), 'BillDate' => $this->input->post('Bill_Date'), 'File_No' => $this->input->post('Bill_No'), 'LastDateOfPayment' => $this->input->post('Last_Date'), 'PreviousReading' => $this->input->post('Previous_Reading'), 'CurrentReading' => $this->input->post('Current_Reading'), 'UnitsConsumed' => $this->input->post('Unit_Consumed'), 'NatureOfPayment' => $this->input->post('Payment_Mode'), 'Total_Amount' => $this->input->post('Bill_Amount'), 'Payment_Amount' => $this->input->post('Payment_Amount'), 'Remark' => $this->input->post('Remark'), 'group_id' => $this->session->userdata('group_id'), 'Created_By' => $this->session->userdata('user_id'), 'Created_Date' => date('Y-m-d H:i:s'), 'Loc_Name' => $this->input->post('location_id'), 'PremiumDate' => $this->input->post('PaymentDate'),);
         $Amount = $data['Total_Amount'];
         $Remark = $data['Remark'];
         $this->db->trans_start();
         $this->db->trans_strict(FALSE);
-        if ($this->customlib->check_punchfile($Scan_Id)) {
-            $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
-            $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
+        if ($this->customlib->check_punchfile($scan_id)) {
+            $this->db->where('scan_id', $scan_id)->update('punchfile', $data);
+            $FileID = $this->db->where('scan_id', $scan_id)->get('punchfile')->row()->FileID;
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Amount, 'Comment' => $Remark));
             if ($submit) {
-                $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N', 'finance_punch_action_status' => 'N'));
+                $this->db->where('scan_id', $scan_id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N', 'finance_punch_action_status' => 'N'));
             }
         } else {
             $this->db->insert('punchfile', $data);
             $insert_id = $this->db->insert_id();
             $this->db->insert('sub_punchfile', array('FileID' => $insert_id, 'Amount' => '-' . $Amount, 'Comment' => $Remark));
             if ($submit) {
-                $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N', 'finance_punch_action_status' => 'N'));
+                $this->db->where('scan_id', $scan_id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N', 'finance_punch_action_status' => 'N'));
             }
         }
-        $this->customlib->update_file_path($Scan_Id);
+        $this->customlib->update_file_path($scan_id);
         $this->db->trans_complete();
         if ($this->db->trans_status() === FALSE) {
             $this->session->set_flashdata('message', '<div class="alert alert-danger text-left">Something Went Wrong</div>');
@@ -422,7 +422,7 @@ class Miscellaneous_ctrl extends CI_Controller {
         redirect($submit ? 'punch' : $_SERVER['HTTP_REFERER']);
     }
     public function Save_FD_FV() {
-        $Scan_Id = $this->input->post('scan_id');
+        $scan_id = $this->input->post('scan_id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
         $Bill_Date = $this->input->post('Bill_Date');
@@ -435,20 +435,20 @@ class Miscellaneous_ctrl extends CI_Controller {
         $Other = $this->input->post('Other');
         $Amount = $this->input->post('Total_Amount');
         $Remark = $this->input->post('Remark');
-        $data = array('scan_id' => $Scan_Id, 'DocType' => $DocType, 'DocTypeId' => $DocTypeId, 'BillDate' => $Bill_Date, 'File_Type' => $Vegetable, 'NoOfFarmers' => $No_Farmer, 'Dealers_TradePartners' => $DTP, 'HiredVehicle_Amount' => $HVC, 'AVTent_Amount' => $AVT, 'Snacks_Amount' => $SNK, 'OthCharge_Amount' => $Other, 'Total_Amount' => $Amount, 'Remark' => $Remark, 'group_id' => $this->session->userdata('group_id'), 'Created_By' => $this->session->userdata('user_id'), 'Created_Date' => date('Y-m-d H:i:s'),);
+        $data = array('scan_id' => $scan_id, 'DocType' => $DocType, 'DocTypeId' => $DocTypeId, 'BillDate' => $Bill_Date, 'File_Type' => $Vegetable, 'NoOfFarmers' => $No_Farmer, 'Dealers_TradePartners' => $DTP, 'HiredVehicle_Amount' => $HVC, 'AVTent_Amount' => $AVT, 'Snacks_Amount' => $SNK, 'OthCharge_Amount' => $Other, 'Total_Amount' => $Amount, 'Remark' => $Remark, 'group_id' => $this->session->userdata('group_id'), 'Created_By' => $this->session->userdata('user_id'), 'Created_Date' => date('Y-m-d H:i:s'),);
         $this->db->trans_start();
         $this->db->trans_strict(FALSE);
-        if ($this->customlib->check_punchfile($Scan_Id) == true) {
-            $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
-            $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
+        if ($this->customlib->check_punchfile($scan_id) == true) {
+            $this->db->where('scan_id', $scan_id)->update('punchfile', $data);
+            $FileID = $this->db->where('scan_id', $scan_id)->get('punchfile')->row()->FileID;
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Amount, 'Comment' => $Remark));
-            $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
+            $this->db->where('scan_id', $scan_id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
         } else {
             $this->db->insert('punchfile', $data);
             $insert_id = $this->db->insert_id();
             $this->db->insert('sub_punchfile', array('FileID' => $insert_id, 'Amount' => '-' . $Amount, 'Comment' => $Remark));
         }
-        $this->customlib->update_file_path($Scan_Id);
+        $this->customlib->update_file_path($scan_id);
         $this->db->trans_complete();
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
@@ -460,8 +460,8 @@ class Miscellaneous_ctrl extends CI_Controller {
         }
     }
     function getLodgingEmployee() {
-        $Scan_Id = $this->input->post('scan_id');
-        $result = $this->db->select('*')->from('lodging_employee')->where('scan_id', $Scan_Id)->get()->result_array();
+        $scan_id = $this->input->post('scan_id');
+        $result = $this->db->select('*')->from('lodging_employee')->where('scan_id', $scan_id)->get()->result_array();
         if (!empty($result)) {
             echo json_encode(array('status' => 200, 'data' => $result));
         } else {

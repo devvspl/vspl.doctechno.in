@@ -1,6 +1,6 @@
 <div id="additional-info" class="tab-content">
    <form action="<?= base_url('store-additional-detail'); ?>"  method="post">
-      <input type="hidden" name="scan_id" id="scan_id" value="<?= $Scan_Id ?>">
+      <input type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id ?>">
       <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">
       <div class="row" style="background-color: #fff;">
          <div class="form-group col-md-4" style="background-color: #ffffff;     margin-bottom: 0;padding-bottom: 5px;">

@@ -92,7 +92,7 @@ class Scan_ctrl extends REST_Controller
     function upload_support_post()
     {
         $user_id = $this->jwt->decode($this->header['Token'])->user_id;
-        $Scan_Id = $this->post('scan_id');
+        $scan_id = $this->post('scan_id');
         $file = $_FILES['support_file']['name'];
         $file_ext = pathinfo($file, PATHINFO_EXTENSION);
         $config['upload_path'] = './uploads/temp/';
@@ -108,7 +108,7 @@ class Scan_ctrl extends REST_Controller
         } else {
             $query = $this->db->insert('support_file', array(
 
-                'scan_id' => $Scan_Id,
+                'scan_id' => $scan_id,
                 'file_name' => $var_temp_name,
                 'file_extension' => $file_ext,
                 'file_path' => base_url() . 'uploads/temp/' . $var_temp_name,
@@ -128,11 +128,11 @@ class Scan_ctrl extends REST_Controller
     function final_submit_post()
     {
 
-        $Scan_Id = $this->post('scan_id');
+        $scan_id = $this->post('scan_id');
         $query = $this->db->update("y{$this->year_id}_scan_file", array(
             'is_final_submitted' => 'Y',
         ), array(
-            'scan_id' => $Scan_Id,
+            'scan_id' => $scan_id,
         ));
         if ($query) {
             $this->response(array('msg' => 'File Submitted successfully.', 'status' => 200), 200);
@@ -156,12 +156,12 @@ class Scan_ctrl extends REST_Controller
 
     function delete_all_post()
     {
-        $Scan_Id = $this->post('scan_id');
+        $scan_id = $this->post('scan_id');
         $query = $this->db->delete('support_file', array(
-            'scan_id' => $Scan_Id,
+            'scan_id' => $scan_id,
         ));
         $query = $this->db->delete("y{$this->year_id}_scan_file", array(
-            'scan_id' => $Scan_Id,
+            'scan_id' => $scan_id,
         ));
         if ($query) {
             $this->response(array('msg' => 'File Deleted successfully.', 'status' => 200), 200);
@@ -172,8 +172,8 @@ class Scan_ctrl extends REST_Controller
 
     function support_file_list_post()
     {
-        $Scan_Id = $this->post('scan_id');
-        $result['support_file'] = $this->Scan_model->get_support_file($Scan_Id);
+        $scan_id = $this->post('scan_id');
+        $result['support_file'] = $this->Scan_model->get_support_file($scan_id);
 
         if (!empty($result)) {
             $this->response(array('data' => $result, 'status' => 200), 200);

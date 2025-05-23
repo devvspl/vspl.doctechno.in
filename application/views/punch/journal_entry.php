@@ -1,14 +1,14 @@
 <?php
-   $Scan_Id = $this->uri->segment(2);
+   $scan_id = $this->uri->segment(2);
    $DocType_Id = $this->uri->segment(3);
-   $rec = $this->customlib->getScanData($Scan_Id);
+   $rec = $this->customlib->getScanData($scan_id);
    $punch_detail = null;
-   if (!empty($Scan_Id)) {
-   $punch_detail = $this->db->get_where('punchfile', ['scan_id' => $Scan_Id])->row();
+   if (!empty($scan_id)) {
+   $punch_detail = $this->db->get_where('punchfile', ['scan_id' => $scan_id])->row();
    if ($punch_detail) {
    
    } else {
-   $punch_detail = $this->db->get_where("y{$this->year_id}_scan_file", ['scan_id' => $Scan_Id])->row();
+   $punch_detail = $this->db->get_where("y{$this->year_id}_scan_file", ['scan_id' => $scan_id])->row();
    }
    } 
    $firm = $this->db->get_where('master_firm', ['status' => 'A'])->result_array();
@@ -41,7 +41,7 @@
    $activities = fetchData('core_activity', $this->db);
    $crop_list = fetchData('master_crop', $this->db);
    $region_list = fetchData('master_region', $this->db); 
-   $journal_entry_items = $this->db->where(['scan_id'=>$Scan_Id])->get('journal_entry_items');
+   $journal_entry_items = $this->db->where(['scan_id'=>$scan_id])->get('journal_entry_items');
    $groupedActivities = [];
    
    
@@ -103,10 +103,10 @@
    }
 </style>
 <?php
-   $Scan_Id = $this->uri->segment(2);
+   $scan_id = $this->uri->segment(2);
    $DocType_Id = $this->uri->segment(3);
-   $rec = $this->customlib->getScanData($Scan_Id);
-   $punch_detail = $this->db->get_where('punchfile', ['scan_id' => $Scan_Id])->row();
+   $rec = $this->customlib->getScanData($scan_id);
+   $punch_detail = $this->db->get_where('punchfile', ['scan_id' => $scan_id])->row();
    $firm = $this->db->get_where('master_firm', ['status' => 'A'])->result_array();
    $company_list = $this->customlib->getCompanyList();
    $department_list = $this->customlib->getDepartmentList();
@@ -168,7 +168,7 @@
       </div>
       <div id="invoice-details" class="tab-content active">
          <div class="col-md-7">
-            <input type="hidden" readonly name="Scan_Id" id="Scan_Id" value="<?= $Scan_Id ?>">
+            <input type="hidden" readonly name="scan_id" id="scan_id" value="<?= $scan_id ?>">
             <input type="hidden" readonly name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">
             <div class="row" style="margin-bottom: 5px;">
                <div class="form-group col-md-3">
@@ -516,14 +516,14 @@
                <input type="submit" class="btn btn-success pull-right" readonly name="submit_punch" value="Final Submit"></input>
             </div>
             <?php
-               if ($this->customlib->haveSupportFile($Scan_Id) == 1) {
+               if ($this->customlib->haveSupportFile($scan_id) == 1) {
                	?>
             <div class="row" style="margin-top: 20px;">
                <div class="col-md-12">
                   <label for="">Supporting File:</label>
                   <div class="form-group">
                      <?php
-                        $support_file = $this->customlib->getSupportFile($Scan_Id);
+                        $support_file = $this->customlib->getSupportFile($scan_id);
                         
                         foreach ($support_file as $row) {
                         	?>
@@ -542,7 +542,7 @@
       </div>
       <div id="additional-info" class="tab-content">
          <div class="col-md-7">
-            <input   type="hidden" name="Scan_Id" id="Scan_Id" value="<?= $Scan_Id ?>">
+            <input   type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id ?>">
             <input   type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">
             <div class="row" style="background-color: #fff;">
                <div class="form-group col-md-4" style="background-color: #ffffff;     margin-bottom: 0;padding-bottom: 5px;">
@@ -682,7 +682,7 @@
                </div>
                <div id="rows_container">
                <?php foreach ($journal_entry_items->result_array() as $entry): ?>
-                  <?php if ($entry['scan_id'] == $Scan_Id):  ?>
+                  <?php if ($entry['scan_id'] == $scan_id):  ?>
                   <div class="row form-row" id="row_1" style="padding: 5px;">
                      <div class="form-group col-md-4">
                         <label for="department">Department</label>
@@ -1074,7 +1074,7 @@
             ?>
          <div id="invoice-details" class="tab-content active">
             <div class="col-md-7">
-               <input type="hidden" name="Scan_Id" id="Scan_Id" value="<?= $Scan_Id ?>">
+               <input type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id ?>">
                <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">
                <div class="row" style="margin-bottom: 5px;">
                   <div class="form-group col-md-3">
@@ -1422,14 +1422,14 @@
                   <input type="submit" class="btn btn-success pull-right" name="submit_punch" value="Final Submit"></input>
                </div>
                <?php
-                  if ($this->customlib->haveSupportFile($Scan_Id) == 1) {
+                  if ($this->customlib->haveSupportFile($scan_id) == 1) {
                   	?>
                <div class="row" style="margin-top: 20px;">
                   <div class="col-md-12">
                      <label for="">Supporting File:</label>
                      <div class="form-group">
                         <?php
-                           $support_file = $this->customlib->getSupportFile($Scan_Id);
+                           $support_file = $this->customlib->getSupportFile($scan_id);
                            
                            foreach ($support_file as $row) {
                            	?>
@@ -1604,12 +1604,12 @@
    	getMultiRecord();
    
    	function getMultiRecord() {
-   		var Scan_Id = $('#Scan_Id').val();
+   		var scan_id = $('#scan_id').val();
    		$.ajax({
    			url: '<?= base_url() ?>form/InvoiceController/getInvoiceItem',
    			type: 'POST',
    			data: {
-   				Scan_Id: Scan_Id
+   				scan_id: scan_id
    			},
    			dataType: 'json',
    			success: function (response) {

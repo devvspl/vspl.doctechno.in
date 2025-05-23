@@ -12,7 +12,7 @@ class Cashpayment_New_ctrl extends CI_Controller
 	{
 		// Collect input data
 		$document_number = $this->input->post("document_number");
-		$Scan_Id = $this->input->post("Scan_Id");
+		$scan_id = $this->input->post("scan_id");
 		$DocTypeId = $this->input->post("DocTypeId");
 		$BillDate = $this->input->post("BillDate");
 		$File_No = $this->input->post("bill_no");
@@ -53,7 +53,7 @@ class Cashpayment_New_ctrl extends CI_Controller
 	
 		// Data to be inserted or updated in `punchfile`
 		$data = [
-			"Scan_Id" => $Scan_Id,
+			"scan_id" => $scan_id,
 			"DocTypeId" => $DocTypeId,
 			"DocType" => $DocType,
 			"BillDate" => $BillDate,
@@ -81,10 +81,10 @@ class Cashpayment_New_ctrl extends CI_Controller
 		$this->db->trans_start();
 		$this->db->trans_strict(false);
 	
-		if ($this->customlib->check_punchfile($Scan_Id)) {
+		if ($this->customlib->check_punchfile($scan_id)) {
 			// Update Existing Record in `punchfile`
-			$this->db->where("Scan_Id", $Scan_Id)->update("punchfile", $data);
-			$FileID = $this->db->where("Scan_Id", $Scan_Id)->get("punchfile")->row()->FileID;
+			$this->db->where("scan_id", $scan_id)->update("punchfile", $data);
+			$FileID = $this->db->where("scan_id", $scan_id)->get("punchfile")->row()->FileID;
 	
 			$this->db->where("FileID", $FileID)->update("sub_punchfile", [
 				"Amount" => "-" . $Total_Amount_main,
@@ -92,12 +92,12 @@ class Cashpayment_New_ctrl extends CI_Controller
 			]);
 	
 			// Clear previous entries for the journal
-			$this->db->where("Scan_Id", $Scan_Id)->delete("cash_payment_new_items");
+			$this->db->where("scan_id", $scan_id)->delete("cash_payment_new_items");
 	
 			// Insert updated journal entries
 			for ($i = 0; $i < count($DepartmentID); $i++) {
 				$json_data = [
-					'scan_id' => $Scan_Id,
+					'scan_id' => $scan_id,
 					'cost_center_id' => $cost_center_id[$i],
 					'location_id' => $location_id[$i],
 					'category_id' => $category_id[$i],
@@ -119,7 +119,7 @@ class Cashpayment_New_ctrl extends CI_Controller
 				$this->db->insert('cash_payment_new_items', $json_data);
 			}
 	
-			$this->db->where("Scan_Id", $Scan_Id)->update("y{$this->year_id}_scan_file", [
+			$this->db->where("scan_id", $scan_id)->update("y{$this->year_id}_scan_file", [
 				"Is_Rejected" => "N",
 				"Reject_Date" => null,
 				"Edit_Permission" => "N",
@@ -139,7 +139,7 @@ class Cashpayment_New_ctrl extends CI_Controller
 			// Insert journal entries
 			for ($i = 0; $i < count($DepartmentID); $i++) {
 				$json_data = [
-					'scan_id' => $Scan_Id,
+					'scan_id' => $scan_id,
 					'cost_center_id' => $cost_center_id[$i],
 					'location_id' => $location_id[$i],
 					'category_id' => $category_id[$i],
@@ -162,7 +162,7 @@ class Cashpayment_New_ctrl extends CI_Controller
 			}
 		}
 	
-		$this->customlib->update_file_path($Scan_Id);
+		$this->customlib->update_file_path($scan_id);
 		$this->db->trans_complete();
 	
 		if ($this->db->trans_status() === false) {

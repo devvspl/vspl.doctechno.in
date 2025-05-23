@@ -119,7 +119,7 @@
 			<div class="scroll-area">
 				<div class="modal-body ">
 					<div class="form-group">
-						<input type="hidden" name="Scan_Id" id="Scan_Id">
+						<input type="hidden" name="scan_id" id="scan_id">
 						<label for="Reject_Remark">Rejection Reason :</label> <span class="text-danger">*</span>
 						<input type="text" name="Reject_Remark" id="Reject_Remark" class="form-control">
 					</div>
@@ -133,12 +133,12 @@
 </div>
 
 <script>
-	function getSupportFile(Scan_Id) {
+	function getSupportFile(scan_id) {
 		$.ajax({
 			url: '<?php echo base_url(); ?>Punch/getSupportFile',
 			type: 'POST',
 			data: {
-				Scan_Id: Scan_Id
+				scan_id: scan_id
 			},
 			dataType: 'json',
 			success: function(response) {
@@ -147,7 +147,7 @@
 					var x = '';
 					$.each(response.data, function(index, value) {
 
-						x += '<object data="' + value.File_Location + '" type="application/pdf" width="100%" height="500px"></object>';
+						x += '<object data="' + value.file_path + '" type="application/pdf" width="100%" height="500px"></object>';
 
 					});
 					$('#detail').html(x);

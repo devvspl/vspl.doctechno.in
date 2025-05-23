@@ -187,12 +187,12 @@
     </div>
 </div>
 <script>
-    function getSupportFile(Scan_Id) {
+    function getSupportFile(scan_id) {
         $.ajax({
             url: '<?php echo base_url(); ?>Punch/getSupportFile',
             type: 'POST',
             data: {
-                Scan_Id: Scan_Id
+                scan_id: scan_id
             },
             dataType: 'json',
             success: function(response) {
@@ -203,10 +203,10 @@
                     $.each(response.data, function(index, value) {
                         /*  x += '<div class="col-md-4">';
                          x += '<div class="form-group">';
-                         x += '<a href="javascript:void(0);" target="popup" onclick="window.open(\'' + value.File_Location + '\',\'popup\',\'width=600,height=600\');">' + value.File + '</a>';
+                         x += '<a href="javascript:void(0);" target="popup" onclick="window.open(\'' + value.file_path + '\',\'popup\',\'width=600,height=600\');">' + value.File + '</a>';
                          x += '</div>';
                          x += '</div>'; */
-                        x += '<object data="' + value.File_Location + '" type="application/pdf" width="100%" height="500px"></object>';
+                        x += '<object data="' + value.file_path + '" type="application/pdf" width="100%" height="500px"></object>';
 
                     });
                     $('#detail').html(x);
@@ -223,10 +223,10 @@
     }
     
     $(document).on('click', '#reject', function() {
-        var Scan_Id = $(this).data('id');
+        var scan_id = $(this).data('id');
         if (confirm('Are you sure you want to reject this file?')) {
             $.ajax({
-                url: '<?php echo base_url(); ?>reject_approved_file/' + Scan_Id,
+                url: '<?php echo base_url(); ?>reject_approved_file/' + scan_id,
                 type: 'POST',
                 dataType: 'json',
                 success: function(response) {

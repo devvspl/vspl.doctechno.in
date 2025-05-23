@@ -24,10 +24,10 @@
 
 </style>
 <?php
-$Scan_Id = $this->uri->segment(2);
+$scan_id = $this->uri->segment(2);
 $DocType_Id = $this->uri->segment(3);
-$rec = $this->customlib->getScanData($Scan_Id);
-$punch_detail = $this->db->get_where('punchfile', ['scan_id' => $Scan_Id])->row();
+$rec = $this->customlib->getScanData($scan_id);
+$punch_detail = $this->db->get_where('punchfile', ['scan_id' => $scan_id])->row();
 $firm = $this->db->get_where('master_firm', ['status' => 'A'])->result_array();
 $company_list = $this->customlib->getCompanyList();
 $department_list = $this->customlib->getDepartmentList();
@@ -64,7 +64,7 @@ $ledger_list = $this->customlib->getLedgerList();
 		<form action="<?= base_url(); ?>form/FixedAsset_ctrl/create" id="fixed_asset_form" name="fixed_asset_form"
 			method="post" accept-charset="utf-8">
 			<div class="col-md-7">
-				<input type="hidden" name="Scan_Id" id="Scan_Id" value="<?= $Scan_Id ?>">
+				<input type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id ?>">
 				<input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">
 				<div class="row">
 					<div class="form-group col-md-3">
@@ -360,7 +360,7 @@ $ledger_list = $this->customlib->getLedgerList();
 					<button type="submit" class="btn btn-success pull-right">Save</button>
 				</div>
 				<?php
-                if ($this->customlib->haveSupportFile($Scan_Id) == 1) {
+                if ($this->customlib->haveSupportFile($scan_id) == 1) {
                 ?>
 				<div class="row" style="margin-top: 20px;">
 					<div class="col-md-12">
@@ -368,7 +368,7 @@ $ledger_list = $this->customlib->getLedgerList();
 						<div class="form-group">
 
 							<?php
-                                $support_file = $this->customlib->getSupportFile($Scan_Id);
+                                $support_file = $this->customlib->getSupportFile($scan_id);
 
                                 foreach ($support_file as $row) {
                                 ?>
@@ -437,12 +437,12 @@ $ledger_list = $this->customlib->getLedgerList();
 		getMultiRecord();
 
 		function getMultiRecord() {
-			var Scan_Id = $('#Scan_Id').val();
+			var scan_id = $('#scan_id').val();
 			$.ajax({
 				url: '<?= base_url() ?>form/InvoiceController/getInvoiceItem',
 				type: 'POST',
 				data: {
-					Scan_Id: Scan_Id
+					scan_id: scan_id
 				},
 				dataType: 'json',
 				success: function (response) {

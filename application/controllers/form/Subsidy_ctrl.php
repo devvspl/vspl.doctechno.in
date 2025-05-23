@@ -13,7 +13,7 @@ class Subsidy_ctrl extends CI_Controller
 
     public function create()
     {
-        $Scan_Id = $this->input->post('scan_id');
+        $scan_id = $this->input->post('scan_id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
 
@@ -30,7 +30,7 @@ class Subsidy_ctrl extends CI_Controller
         $Amount  = $this->input->post('Amount');
         $Remark = $this->input->post('Remark');
         $data = array(
-            'scan_id' => $Scan_Id,
+            'scan_id' => $scan_id,
             'DocType' => $DocType,
             'DocTypeId' => $DocTypeId,
             'FromDateTime' => $Application_Date,
@@ -52,13 +52,13 @@ class Subsidy_ctrl extends CI_Controller
 
         $this->db->trans_start();
         $this->db->trans_strict(FALSE);
-        if ($this->customlib->check_punchfile($Scan_Id) == true) {
+        if ($this->customlib->check_punchfile($scan_id) == true) {
             //Update Existing Record
-            $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
-            $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
+            $this->db->where('scan_id', $scan_id)->update('punchfile', $data);
+            $FileID = $this->db->where('scan_id', $scan_id)->get('punchfile')->row()->FileID;
 
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Amount, 'Comment' => $Remark));
-            $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
+            $this->db->where('scan_id', $scan_id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
         } else {
             //Insert New Record
             $this->db->insert('punchfile', $data);
@@ -66,7 +66,7 @@ class Subsidy_ctrl extends CI_Controller
             $this->db->insert('sub_punchfile', array('FileID' => $insert_id, 'Amount' => '-' . $Amount, 'Comment' => $Remark));
         }
 
-        $this->customlib->update_file_path($Scan_Id);
+        $this->customlib->update_file_path($scan_id);
 
         $this->db->trans_complete();
         if ($this->db->trans_status() === FALSE) {

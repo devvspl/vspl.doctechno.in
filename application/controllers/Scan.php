@@ -392,7 +392,7 @@ class Scan extends CI_Controller
     public function update_document_name($id)
     {
         $user_id = $this->session->userdata('user_id');
-        $Document_Name = $this->input->post('document_name');
+        $document_name  = $this->input->post('document_name');
         $group_id = $this->input->post('group_id');
         $location = $this->input->post('location');
         $scan_doctype_id = $this->input->post('doctype_id');
@@ -401,7 +401,7 @@ class Scan extends CI_Controller
         $bill_voucher_date_1 = $this->input->post('bill_voucher_date');
         $bill_voucher_date = $this->reformat_date($bill_voucher_date_1);
         $bill_no_voucher_no = $this->input->post('bill_no_voucher_no');
-        $data = ['scanned_by' => $user_id, 'is_scan_complete' => 'Y', 'document_name' => $Document_Name, 'scan_date' => date('Y-m-d H:i:s'), 'is_final_submitted' => 'Y', 'location_id' => $location, 'scan_doctype_id' => $scan_doctype_id, 'department_id' => $department_id, 'firm_id' => $firm_id, 'bill_voucher_date' => $bill_voucher_date, 'bill_no_voucher_no' => $bill_no_voucher_no,];
+        $data = ['scanned_by' => $user_id, 'is_scan_complete' => 'Y', 'document_name' => $document_name , 'scan_date' => date('Y-m-d H:i:s'), 'is_final_submitted' => 'Y', 'location_id' => $location, 'scan_doctype_id' => $scan_doctype_id, 'department_id' => $department_id, 'firm_id' => $firm_id, 'bill_voucher_date' => $bill_voucher_date, 'bill_no_voucher_no' => $bill_no_voucher_no,];
         $result = $this->db->where('scan_id', $id)->update("y{$this->year_id}_scan_file", $data);
         if ($result) {
             $this->session->set_flashdata('message', '<div class="alert alert-success">Save Successfully</div>');
@@ -521,4 +521,5 @@ class Scan extends CI_Controller
             }
         }
     }
+
 }

@@ -100,12 +100,12 @@
     </div>
 </div>
 <script>
-    function getSupportFile(Scan_Id) {
+    function getSupportFile(scan_id) {
         $.ajax({
             url: '<?php echo base_url(); ?>Punch/getSupportFile',
             type: 'POST',
             data: {
-                Scan_Id: Scan_Id
+                scan_id: scan_id
             },
             dataType: 'json',
             success: function(response) {
@@ -115,7 +115,7 @@
                     var x = '';
                     $.each(response.data, function(index, value) {
 
-                        x += '<object data="' + value.File_Location + '" type="application/pdf" width="100%" height="500px"></object>';
+                        x += '<object data="' + value.file_path + '" type="application/pdf" width="100%" height="500px"></object>';
 
                     });
                     $('#detail').html(x);
@@ -128,10 +128,10 @@
     }
 
     $(document).on('click', '#give_edit_permission', function() {
-        var Scan_Id = $(this).data('id');
+        var scan_id = $(this).data('id');
         if(confirm('Are you sure you want to give permission to edit this file?')){
             $.ajax({
-            url: '<?php echo base_url(); ?>give_edit_permission/' + Scan_Id,
+            url: '<?php echo base_url(); ?>give_edit_permission/' + scan_id,
             type: 'POST',
             dataType: 'json',
             success: function(response) {

@@ -1,7 +1,7 @@
 <?php
-   $Scan_Id = $this->uri->segment(2);
+   $scan_id = $this->uri->segment(2);
    $DocType_Id = $this->uri->segment(3);
-   $rec = $this->customlib->getScanData($Scan_Id);
+   $rec = $this->customlib->getScanData($scan_id);
    $fin_year = $this->customlib->getFinancial_year();
    $company_list = $this->customlib->getCompanyList();
    $rj_list = $this->customlib->getRejectReason();
@@ -590,7 +590,7 @@
                            <tbody>
                               <?php
                                  if ($DocType_Id == 1) {
-                                    $get_travel_detail = $this->db->query("select * from vehicle_traveling where Scan_Id='$Scan_Id'")->result();
+                                    $get_travel_detail = $this->db->query("select * from vehicle_traveling where scan_id='$scan_id'")->result();
                                     foreach ($get_travel_detail as $key => $value) {
                                  ?>
                               <tr>
@@ -852,7 +852,7 @@
                   <tbody>
                      <?php
                         if ($DocType_Id == 23) {
-                           $get_invoice_detail = $this->db->query("select invoice_detail.*,master_unit.unit_name from invoice_detail left join master_unit on master_unit.unit_id = invoice_detail.Unit where Scan_Id='$Scan_Id'")->result();
+                           $get_invoice_detail = $this->db->query("select invoice_detail.*,master_unit.unit_name from invoice_detail left join master_unit on master_unit.unit_id = invoice_detail.Unit where scan_id='$scan_id'")->result();
                            foreach ($get_invoice_detail as $key => $value) {
                         ?>
                      <tr>
@@ -1003,7 +1003,7 @@
                   <tbody>
                      <?php
                         if ($DocType_Id == 54) {
-                           $get_invoice_detail = $this->db->query("select invoice_detail.*,master_unit.unit_name from invoice_detail left join master_unit on master_unit.unit_id = invoice_detail.Unit where Scan_Id='$Scan_Id'")->result();
+                           $get_invoice_detail = $this->db->query("select invoice_detail.*,master_unit.unit_name from invoice_detail left join master_unit on master_unit.unit_id = invoice_detail.Unit where scan_id='$scan_id'")->result();
                            foreach ($get_invoice_detail as $key => $value) {
                         ?>
                      <tr>
@@ -1111,7 +1111,7 @@
                   <tbody>
                      <?php
                         if ($DocType_Id == 44) {
-                           $get_invoice_detail = $this->db->query("select invoice_detail.*,master_unit.unit_name from invoice_detail left join master_unit on master_unit.unit_id = invoice_detail.Unit where Scan_Id='$Scan_Id'")->result();
+                           $get_invoice_detail = $this->db->query("select invoice_detail.*,master_unit.unit_name from invoice_detail left join master_unit on master_unit.unit_id = invoice_detail.Unit where scan_id='$scan_id'")->result();
                            foreach ($get_invoice_detail as $key => $value) {
                         ?>
                      <tr>
@@ -1626,7 +1626,7 @@
                <tbody>
                   <?php
                      if ($DocType_Id == 28) {
-                        $emp_detail = $this->db->query("select * from lodging_employee  where Scan_Id='$Scan_Id'")->result();
+                        $emp_detail = $this->db->query("select * from lodging_employee  where scan_id='$scan_id'")->result();
                         foreach ($emp_detail as $key => $value) {
                      ?>
                   <tr>
@@ -1690,7 +1690,7 @@
                   <tbody>
                      <?php
                         if ($DocType_Id == 27) {
-                           $get_detail = $this->db->query("select * from vehicle_traveling  where Scan_Id='$Scan_Id'")->result();
+                           $get_detail = $this->db->query("select * from vehicle_traveling  where scan_id='$scan_id'")->result();
                            foreach ($get_detail as $key => $value) {
                         ?>
                      <tr>
@@ -2434,7 +2434,7 @@
                   <tbody>
                      <?php
                         if ($DocType_Id == 46) {
-                           $get_gst_challan_detail = $this->db->query("select * from gst_challan_detail where Scan_Id='$Scan_Id'")->result();
+                           $get_gst_challan_detail = $this->db->query("select * from gst_challan_detail where scan_id='$scan_id'")->result();
                         
                            foreach ($get_gst_challan_detail as $key => $value) {
                         ?>
@@ -2507,7 +2507,7 @@
                   <tbody>
                      <?php
                         if ($DocType_Id == 47) {
-                           $labour_payment_detail = $this->db->query("select * from labour_payment_detail where Scan_Id='$Scan_Id'")->result();
+                           $labour_payment_detail = $this->db->query("select * from labour_payment_detail where scan_id='$scan_id'")->result();
                         
                            foreach ($labour_payment_detail as $key => $value) {
                         ?>
@@ -2620,7 +2620,7 @@
                   <tbody>
                      <?php
                         if ($DocType_Id == 49) {
-                           $get_invoice_detail = $this->db->query("select invoice_detail.*,master_unit.unit_name from invoice_detail left join master_unit on master_unit.unit_id = invoice_detail.Unit where Scan_Id='$Scan_Id'")->result();
+                           $get_invoice_detail = $this->db->query("select invoice_detail.*,master_unit.unit_name from invoice_detail left join master_unit on master_unit.unit_id = invoice_detail.Unit where scan_id='$scan_id'")->result();
                            foreach ($get_invoice_detail as $key => $value) {
                         ?>
                      <tr>
@@ -2834,7 +2834,7 @@
                <tbody>
                   <?php
                      if ($DocType_Id == 51) {
-                        $emp_detail = $this->db->query("select * from lodging_employee  where Scan_Id='$Scan_Id'")->result();
+                        $emp_detail = $this->db->query("select * from lodging_employee  where scan_id='$scan_id'")->result();
                         foreach ($emp_detail as $key => $value) {
                      ?>
                   <tr>
@@ -2936,7 +2936,7 @@
                <tbody>
                   <?php
                      if ($DocType_Id == 52) {
-                        $emp_detail = $this->db->query("select * from lodging_employee  where Scan_Id='$Scan_Id'")->result();
+                        $emp_detail = $this->db->query("select * from lodging_employee  where scan_id='$scan_id'")->result();
                         foreach ($emp_detail as $key => $value) {
                      ?>
                   <tr>
@@ -3047,7 +3047,7 @@
                <tbody>
                   <?php
                      if ($DocType_Id == 55) {
-                        $ticket_detail = $this->db->query("select * from ticket_cancellation where Scan_Id='$Scan_Id'")->result();
+                        $ticket_detail = $this->db->query("select * from ticket_cancellation where scan_id='$scan_id'")->result();
                         foreach ($ticket_detail as $key => $value) {
                      ?>
                   <tr>
@@ -3175,7 +3175,7 @@
                   <tbody>
                      <?php
                         if ($DocType_Id == 56) {
-                           $get_invoice_detail = $this->db->query("select invoice_detail.*,master_unit.unit_name from invoice_detail left join master_unit on master_unit.unit_id = invoice_detail.Unit where Scan_Id='$Scan_Id'")->result();
+                           $get_invoice_detail = $this->db->query("select invoice_detail.*,master_unit.unit_name from invoice_detail left join master_unit on master_unit.unit_id = invoice_detail.Unit where scan_id='$scan_id'")->result();
                            foreach ($get_invoice_detail as $key => $value) {
                         ?>
                      <tr>
@@ -3244,12 +3244,12 @@
             </div>
             <?php }
                ?>
-            <?php if ($this->customlib->haveSupportFile($Scan_Id) == 1) { ?>
+            <?php if ($this->customlib->haveSupportFile($scan_id) == 1) { ?>
             <div class="row" style="margin-top: 20px;">
                <div class="col-md-12">
                   <label for="">Supporting File:</label>
                   <div class="form-group">
-                     <?php $support_file = $this->customlib->getSupportFile($Scan_Id);
+                     <?php $support_file = $this->customlib->getSupportFile($scan_id);
                         foreach ($support_file as $row) { ?>
                      <div class="col-md-3">
                         <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['file_path'] ?>','popup','width=600,height=600');">
@@ -3264,7 +3264,7 @@
       </div>
       <div id="additional-info" class="tab-content">
          <div class="col-md-8">
-            <input type="hidden" name="scan_id" id="scan_id" value="<?= $Scan_Id ?>">
+            <input type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id ?>">
             <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">
             <div class="row" style="background-color: #fff;">
                <div class="form-group col-md-4" style="background-color: #ffffff;     margin-bottom: 0;padding-bottom: 5px;">

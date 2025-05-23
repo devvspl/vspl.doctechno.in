@@ -155,11 +155,11 @@ class Bill_approver extends CI_Controller
         $this->load->view('layout/template', $this->data);
     }
 
-    public function reject_bill($Scan_Id)
+    public function reject_bill($scan_id)
     {
         $user_id = $this->session->userdata('user_id');
         $Reject_Remark = $this->input->post('Remark');
-        $this->db->where('scan_id', $Scan_Id);
+        $this->db->where('scan_id', $scan_id);
         $result = $this->db->update("y{$this->year_id}_scan_file", array('bill_approval_status' => 'R', 'bill_approver_id' => $user_id, 'bill_approver_remark' => $Reject_Remark, 'bill_approved_date' => date('Y-m-d')));
         if ($result) {
             echo json_encode(array('status' => '200', 'message' => 'Bill Rejected Successfully.'));
@@ -168,10 +168,10 @@ class Bill_approver extends CI_Controller
         }
     }
 
-    public function approve_bill($Scan_Id)
+    public function approve_bill($scan_id)
     {
         $user_id = $this->session->userdata('user_id');
-        $this->db->where('scan_id', $Scan_Id);
+        $this->db->where('scan_id', $scan_id);
         $result = $this->db->update("y{$this->year_id}_scan_file", array('bill_approval_status' => 'Y', 'bill_approver_id' => $user_id, 'bill_approved_date' => date('Y-m-d')));
         if ($result) {
             $this->session->set_flashdata('message', '<p class="text-success text-center">Bill Approved Successfully.</p>');

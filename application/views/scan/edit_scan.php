@@ -1,5 +1,5 @@
 <?php
-$Scan_Id = $this->uri->segment(3);
+$scan_id = $this->uri->segment(3);
 $group_id = $this->uri->segment(4);
 
 ?>
@@ -18,7 +18,7 @@ $group_id = $this->uri->segment(4);
 								<?php echo $this->session->flashdata('message') ?>
 							<?php } ?>
 							<div class="form-group">
-								<input type="hidden" name="scan_id" id="scan_id" value="<?= $Scan_Id; ?>">
+								<input type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id; ?>">
 								<input type="hidden" name="group_id" id="group_id" value="<?= $group_id; ?>">
 								<input class="filestyle form-control" type='file' name='support_file' id="support_file" accept="image/*,application/pdf">
 							</div>
@@ -32,7 +32,7 @@ $group_id = $this->uri->segment(4);
 			<div class="col-md-7">
 				<div class="box box-primary">
 					<div class="box-header with-border">
-						<h3 class="box-title"><?= $this->customlib->getDocumentName($Scan_Id); ?>
+						<h3 class="box-title"><?= $this->customlib->getDocumentName($scan_id); ?>
 						</h3>
 						<div class="box-tools pull-right">
 							<a href="<?= base_url(); ?>scan_rejected_list" class="btn btn-primary btn-sm"><i class="fa fa-long-arrow-left"></i> Back</a>
@@ -49,7 +49,7 @@ $group_id = $this->uri->segment(4);
 								</thead>
 								<tbody>
 									<?php
-									$main_file = $this->db->query("SELECT * FROM y{$this->year_id}_scan_file WHERE Scan_Id = $Scan_Id")->row();
+									$main_file = $this->db->query("SELECT * FROM y{$this->year_id}_scan_file WHERE scan_id = $scan_id")->row();
 									?>
 									<tr>
 										<td>1</td>
@@ -61,7 +61,7 @@ $group_id = $this->uri->segment(4);
 									</tr>
 
 									<?php
-									$supporting_files = $this->db->query("SELECT * FROM support_file WHERE Scan_Id = $Scan_Id")->result();
+									$supporting_files = $this->db->query("SELECT * FROM support_file WHERE scan_id = $scan_id")->result();
 									$i = 2;
 									foreach ($supporting_files as $supporting_file) {
 									?>
@@ -156,9 +156,9 @@ $group_id = $this->uri->segment(4);
 				success: function(data) {
 					if (data.status == 200) {
 						if (group_id != '') {
-							window.location.href = '<?= base_url() ?>Scan/upload_supporting/<?= $Scan_Id; ?>/' + group_id;
+							window.location.href = '<?= base_url() ?>Scan/upload_supporting/<?= $scan_id; ?>/' + group_id;
 						} else {
-							window.location.href = '<?= base_url() ?>Scan/upload_supporting/<?= $Scan_Id; ?>';
+							window.location.href = '<?= base_url() ?>Scan/upload_supporting/<?= $scan_id; ?>';
 						}
 
 					}
@@ -190,9 +190,9 @@ $group_id = $this->uri->segment(4);
 			success: function(data) {
 				if (data.status == 200) {
 					if (group_id != '') {
-						window.location.href = '<?= base_url() ?>Scan/edit_scan/<?= $Scan_Id; ?>/' + group_id;
+						window.location.href = '<?= base_url() ?>Scan/edit_scan/<?= $scan_id; ?>/' + group_id;
 					} else {
-						window.location.href = '<?= base_url() ?>Scan/edit_scan/<?= $Scan_Id; ?>';
+						window.location.href = '<?= base_url() ?>Scan/edit_scan/<?= $scan_id; ?>';
 					}
 
 				} else {

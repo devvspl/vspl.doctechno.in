@@ -90,12 +90,12 @@
 	</div>
 </div>
 <script>
-	function getSupportFile(Scan_Id) {
+	function getSupportFile(scan_id) {
 		$.ajax({
 			url: '<?php echo base_url(); ?>Punch/getSupportFile',
 			type: 'POST',
 			data: {
-				Scan_Id: Scan_Id
+				scan_id: scan_id
 			},
 			dataType: 'json',
 			success: function(response) {
@@ -105,7 +105,7 @@
 					var x = '';
 					$.each(response.data, function(index, value) {
 
-						x += '<object data="' + value.File_Location +
+						x += '<object data="' + value.file_path +
 							'" type="application/pdf" width="100%" height="500px"></object>';
 
 					});
@@ -118,13 +118,13 @@
 		});
 	}
 
-	function document_verify(Scan_Id) {
+	function document_verify(scan_id) {
 		if (confirm("Are you sure to verified this document")) {
 			$.ajax({
 				url: '<?php echo base_url(); ?>Super_scan/verify_document',
 				type: 'POST',
 				data: {
-					Scan_Id: Scan_Id
+					scan_id: scan_id
 				},
 				dataType: 'json',
 				success: function(response) {

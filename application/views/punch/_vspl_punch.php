@@ -1,6 +1,6 @@
 <?php
 
-$Scan_Id = $this->uri->segment(2);
+$scan_id = $this->uri->segment(2);
 $DocType_Id = $this->uri->segment(3);
 ?>
 <style>
@@ -64,7 +64,7 @@ $DocType_Id = $this->uri->segment(3);
 					<div class="box-header with-border">
 						<h3 class="box-title">Punch File - <?php echo $this->customlib->getDocType($DocType_Id); ?>
 							<?php
-							$document_name = $this->customlib->getDocumentName($Scan_Id);
+							$document_name = $this->customlib->getDocumentName($scan_id);
 							if (!empty($document_name) || $document_name != null) {
 								echo " - (" . $document_name . ")";
 							}

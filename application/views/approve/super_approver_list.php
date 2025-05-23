@@ -115,7 +115,7 @@ $doctype_list = $this->db->select('type_id,file_type')->from('master_doctype')->
 			<div class="scroll-area">
 				<div class="modal-body ">
 					<div class="form-group">
-						<input type="hidden" name="Scan_Id" id="Scan_Id">
+						<input type="hidden" name="scan_id" id="scan_id">
 						<label for="Reject_Remark">Rejection Reason :</label> <span class="text-danger">*</span>
 						<select name="Reject_Remark" id="Reject_Remark" class="form-control form-select select2">
 							<option value="">Select</option>
@@ -177,14 +177,14 @@ $doctype_list = $this->db->select('type_id,file_type')->from('master_doctype')->
 				// Add the new data to the DataTable
 				$.each(res.data, function(key, value) {
 					// Create the hyperlink HTML
-					var fileLink = '<a href="javascript:void(0);" target="popup" onclick="window.open(\'' + value.File_Location + '\', \'popup\', \'width=600,height=600\');">' + value.File + '</a>';
+					var fileLink = '<a href="javascript:void(0);" target="popup" onclick="window.open(\'' + value.file_path + '\', \'popup\', \'width=600,height=600\');">' + value.File + '</a>';
 					// Create the hyperlink HTML for viewing file details
-					var viewFileLink = '<a href="' + '<?= base_url() ?>file_detail/' + value.Scan_Id + '/' + value.DocType_Id + '" class="btn btn-info btn-xs" target="_blank"><i class="fa fa-eye"></i></a>';
+					var viewFileLink = '<a href="' + '<?= base_url() ?>file_detail/' + value.scan_id + '/' + value.DocType_Id + '" class="btn btn-info btn-xs" target="_blank"><i class="fa fa-eye"></i></a>';
 					// Create the "Approve" and "Reject" buttons
-					var button = '<a href="javascript:void(0)" class="btn btn-success btn-xs" onclick="approveRecord(' + value.Scan_Id + ');">Approve</a> <a href="javascript:void(0);" class="btn btn-danger btn-xs" data-id="' + value.Scan_Id + '" onclick="rejectRecord(' + value.Scan_Id + ');">Reject</a>';
+					var button = '<a href="javascript:void(0)" class="btn btn-success btn-xs" onclick="approveRecord(' + value.scan_id + ');">Approve</a> <a href="javascript:void(0);" class="btn btn-danger btn-xs" data-id="' + value.scan_id + '" onclick="rejectRecord(' + value.scan_id + ');">Reject</a>';
 					table.row.add([
 						sNo++,
-						value.Document_Name,
+						value.document_name ,
 						value.Doc_Type,
 						fileLink, // Add the hyperlink HTML to the table cell
 						value.full_name,
@@ -211,10 +211,10 @@ $doctype_list = $this->db->select('type_id,file_type')->from('master_doctype')->
 		getPendingRecords(group_id, doctype);
 	});
 
-	function rejectRecord(Scan_Id) {
+	function rejectRecord(scan_id) {
 
 
-		$("#Scan_Id").val(Scan_Id);
+		$("#scan_id").val(scan_id);
 		$("#rejectModal").modal("show");
 		$("#Reject_Remark").select2({
 			dropdownParent: $('#rejectModal'),
@@ -263,7 +263,7 @@ $doctype_list = $this->db->select('type_id,file_type')->from('master_doctype')->
 	});
 
 	$(document).on('click', "#reject_btn", function() {
-		var Scan_Id = $("#Scan_Id").val();
+		var scan_id = $("#scan_id").val();
 		var group_id = $("#group_id").val();
 		var doctype = $("#document_type").val();
 
@@ -275,7 +275,7 @@ $doctype_list = $this->db->select('type_id,file_type')->from('master_doctype')->
 		}
 		$.ajax({
 			type: 'POST',
-			url: '<?php echo base_url(); ?>reject_record/' + Scan_Id,
+			url: '<?php echo base_url(); ?>reject_record/' + scan_id,
 			data: {
 				Remark: Reject_Remark,
 			},
@@ -294,14 +294,14 @@ $doctype_list = $this->db->select('type_id,file_type')->from('master_doctype')->
 		});
 	});
 
-	function approveRecord(Scan_Id) {
+	function approveRecord(scan_id) {
 		var group_id = $("#group_id").val();
 		var doctype = $("#document_type").val();
 
 		if (confirm("Are you sure to approve this file")) {
 			$.ajax({
 				type: 'POST',
-				url: '<?php echo base_url(); ?>approve_record_by_super_approver/' + Scan_Id,
+				url: '<?php echo base_url(); ?>approve_record_by_super_approver/' + scan_id,
 				async: false,
 				dataType: 'json',
 				success: function(response) {

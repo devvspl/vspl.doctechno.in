@@ -61,6 +61,7 @@
                               <th>Location</th>
                               <th>File</th>
                               <th>Scan Date</th>
+                              <th>Final Submit</th>
                               <th class="text-right no-print">Action</th>
                            </tr>
                         </thead>
@@ -72,7 +73,7 @@
                                   $count = 1;
                                   foreach ($my_lastest_scan as $row) {
                                   ?>
-                           <tr>
+                           <tr class="text-center">
                               <td><?php echo $count++; ?></td>
                               <td class="mailbox-name">
                                  <?php echo $row['location_name']; ?>
@@ -83,13 +84,36 @@
                               <td class="mailbox-name">
                                  <?= date('d-m-Y',strtotime($row['temp_scan_date']));?>
                               </td>
-                              <td class="mailbox-date pull-right no-print">
-                                 <?php if ($this->customlib->haveSupportFile($row['scan_id']) == 1) { ?>
-                                 <a data-toggle="collapse" href="#detail<?= $row['scan_id'] ?>" data-parent="#mytable" style="cursor: pointer;" class="btn btn-default btn-xs"> <i class="fa fa-eye"></i></a>
+                              <td class="mailbox-name">
+                                 <?php if ($row['is_final_submitted'] == 'Y') { ?>
+                                 <span class="label label-success">Yes</span>
+                                 <?php } else { ?>
+                                 <span class="label label-danger">No</span>
                                  <?php } ?>
-                                 <a href="<?php echo base_url('temp-supporting/'.$row['scan_id']); ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="Edit">
+                              </td>
+                              <td class="mailbox-date pull-right no-print">
+                                 <?php if ($this->customlib->haveSupportFile($row['scan_id']) == 1): ?>
+                                 <a data-toggle="collapse" 
+                                    href="#detail<?= $row['scan_id'] ?>" 
+                                    data-parent="#mytable" 
+                                    class="btn btn-info btn-xs" 
+                                    style="cursor: pointer;" 
+                                    title="View Support Files">
+                                 <i class="fa fa-eye"></i>
+                                 </a>
+                                 <?php endif; ?>
+                                 <a href="<?= base_url('temp-supporting/' . $row['scan_id']); ?>" 
+                                    class="btn btn-warning btn-xs" 
+                                    data-toggle="tooltip" 
+                                    title="Edit">
                                  <i class="fa fa-pencil"></i>
-                                 <a href="javascript:void(0);" data-scan_id="<?= $row['scan_id']; ?>" class="btn btn-default btn-xs" id="delete_all">
+                                 </a>
+                                 <a href="javascript:void(0);" 
+                                    data-scan_id="<?= $row['scan_id']; ?>" 
+                                    class="btn btn-danger btn-xs" 
+                                    id="delete_all" 
+                                    data-toggle="tooltip" 
+                                    title="Delete">
                                  <i class="fa fa-remove"></i>
                                  </a>
                               </td>
@@ -99,7 +123,7 @@
                                  <table class="table table-bordered mytable1" id="subtable<?= $row['scan_id'] ?>" style="background-color:#FEF9E7;margin-bottom:0px;">
                                     <tbody>
                                        <?php
-                                          $sql = "SELECT * FROM support_file WHERE Scan_Id = '" . $row['scan_id'] . "'";
+                                          $sql = "SELECT * FROM support_file WHERE scan_id = '" . $row['scan_id'] . "'";
                                           $query = $this->db->query($sql);
                                           $result = $query->result_array();
                                           foreach ($result as $rec) {
@@ -168,9 +192,7 @@
        });
    $('#location').change(function() {
            var location_id = $(this).val(); 
-   
            if (location_id !== '') {
-   
                $.ajax({
                    url: '<?= site_url('Scan/get_bill_approvers') ?>', 
                    method: 'POST',
@@ -196,7 +218,5 @@
                $('#bill_approver').append('<option value="">Select Approver</option>');
            }
        });
-   
-   
    });
 </script>

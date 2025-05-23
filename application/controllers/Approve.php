@@ -56,10 +56,10 @@ class Approve extends CI_Controller {
         $this->data['main'] = 'approve/my_approved_file';
         $this->load->view('layout/template', $this->data);
     }
-    function approve_record($Scan_Id) {
+    function approve_record($scan_id) {
         $role = $this->session->userdata('role');
         $user_id = $this->session->userdata('user_id');
-        $this->db->where('scan_id', $Scan_Id);
+        $this->db->where('scan_id', $scan_id);
         $data = array('is_file_approved' => 'Y', 'approved_date' => date('Y-m-d H:i:s'));
         if ($role == 'admin') {
             $data['is_admin_approved'] = 'Y';
@@ -69,7 +69,7 @@ class Approve extends CI_Controller {
         }
         $result = $this->db->update("y{$this->year_id}_scan_file", $data);
         if ($result) {
-            $this->customlib->send_for_accounting($Scan_Id);
+            $this->customlib->send_for_accounting($scan_id);
             $this->session->set_flashdata('message', '<p class="text-success text-center">File Approved Successfully.</p>');
             redirect($role == 'admin' ? 'admin_rejected_list' : 'approve');
         } else {
@@ -77,10 +77,10 @@ class Approve extends CI_Controller {
             redirect($role == 'admin' ? 'admin_rejected_list' : 'approve');
         }
     }
-    function reject_record($Scan_Id) {
+    function reject_record($scan_id) {
         $user_id = $this->session->userdata('user_id');
         $Reject_Remark = $this->input->post('Remark');
-        $this->db->where('scan_id', $Scan_Id);
+        $this->db->where('scan_id', $scan_id);
         $result = $this->db->update("y{$this->year_id}_scan_file", array('is_rejected' => 'Y', 'approved_by' => $user_id, 'reject_remark' => $Reject_Remark, 'reject_date' => date('Y-m-d')));
         if ($result) {
             echo json_encode(array('status' => '200', 'message' => 'File Rejected Successfully.'));
@@ -88,13 +88,13 @@ class Approve extends CI_Controller {
             echo json_encode(array('status' => '400', 'message' => 'Something went wrong. Please try again.'));
         }
     }
-    function approve_record_by_super_approver($Scan_Id) {
+    function approve_record_by_super_approver($scan_id) {
         $user_id = $this->session->userdata('user_id');
-        $this->db->where('scan_id', $Scan_Id);
+        $this->db->where('scan_id', $scan_id);
         $data = array('is_file_approved' => 'Y', 'approved_by' => $user_id, 'approved_date' => date('Y-m-d H:i:s'));
         $result = $this->db->update("y{$this->year_id}_scan_file", $data);
         if ($result) {
-            $this->customlib->send_for_accounting($Scan_Id);
+            $this->customlib->send_for_accounting($scan_id);
             echo json_encode(array('status' => '200', 'message' => 'File Approved Successfully.'));
         } else {
             echo json_encode(array('status' => '400', 'message' => 'Something went wrong. Please try again.'));
@@ -107,13 +107,13 @@ class Approve extends CI_Controller {
         $this->data['main'] = 'approve/rejected_by_me';
         $this->load->view('layout/template', $this->data);
     }
-    function delete_record($Scan_Id) {
+    function delete_record($scan_id) {
         $user_id = $this->session->userdata('user_id');
-        $this->db->where('scan_id', $Scan_Id);
+        $this->db->where('scan_id', $scan_id);
         $data = array('is_deleted' => 'Y', 'deleted_date' => date('Y-m-d H:i:s'), 'deleted_by' => $user_id);
         $result = $this->db->update("y{$this->year_id}_scan_file", $data);
-        $this->db->where('scan_id', $Scan_Id)->delete('punchfile');
-        $this->db->where('scan_id', $Scan_Id)->delete('punchfile2');
+        $this->db->where('scan_id', $scan_id)->delete('punchfile');
+        $this->db->where('scan_id', $scan_id)->delete('punchfile2');
         if ($result) {
             $this->session->set_flashdata('message', '<p class="text-success text-center">File Deleted Successfully.</p>');
             redirect($_SERVER['HTTP_REFERER']);

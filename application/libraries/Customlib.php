@@ -28,12 +28,12 @@ class Customlib
         }
     }
 
-    function haveSupportFile($Scan_Id)
+    function haveSupportFile($scan_id)
     {
         $chk = $this->CI->db
             ->select('*')
             ->from('support_file')
-            ->where('scan_id', $Scan_Id)
+            ->where('scan_id', $scan_id)
             ->get()
             ->num_rows();
 
@@ -44,9 +44,9 @@ class Customlib
         }
     }
 
-    function getSupportFile($Scan_Id)
+    function getSupportFile($scan_id)
     {
-        $result = $this->CI->db->select('*')->get_where('support_file', ['scan_id' => $Scan_Id]);
+        $result = $this->CI->db->select('*')->get_where('support_file', ['scan_id' => $scan_id]);
         return $result->result_array();
     }
 
@@ -98,9 +98,9 @@ class Customlib
         }
     }
 
-    public function getDocumentName($Scan_Id)
+    public function getDocumentName($scan_id)
     {
-        $result = $this->CI->db->get_where("y{$this->year_id}_scan_file", ['scan_id' => $Scan_Id])->result_array();
+        $result = $this->CI->db->get_where("y{$this->year_id}_scan_file", ['scan_id' => $scan_id])->result_array();
         return $result[0]['document_name'];
     }
 
@@ -132,12 +132,12 @@ class Customlib
         return array_column($result->result_array(), 'user_id');
     }
 
-    public function getScanData($Scan_Id)
+    public function getScanData($scan_id)
     {
         $result = $this->CI->db
             ->select('*')
             ->from('y{ $this->year_id}_scan_file')
-            ->where('scan_id', $Scan_Id)
+            ->where('scan_id', $scan_id)
             ->get()
             ->row();
         return $result;
@@ -241,9 +241,9 @@ class Customlib
         return $result[0]['department_name'];
     }
 
-    public function update_file_path($Scan_Id)
+    public function update_file_path($scan_id)
     {
-        $Get_Scan_Detail = $this->getScanData($Scan_Id);
+        $Get_Scan_Detail = $this->getScanData($scan_id);
         $DocType = $Get_Scan_Detail->doc_type;
         $ScanBY = $Get_Scan_Detail->scanned_by;
         $File = $Get_Scan_Detail->file_name;
@@ -257,10 +257,10 @@ class Customlib
         $file_location = base_url() . $upload_dir . '/' . $File;
         $file_location1 = $upload_dir . '/' . $File;
         $this->CI->db
-            ->where('scan_id', $Scan_Id)
+            ->where('scan_id', $scan_id)
             ->update('y{ $this->year_id}_scan_file', ['file_path' => $file_location, 'secondary_file_path' => $file_location1, 'is_file_punched' => 'Y', 'punched_by' => $this->CI->session->userdata('user_id'), 'punched_date' => date('Y-m-d H:i:s')]);
-        if ($this->haveSupportFile($Scan_Id) == true) {
-            $support_file = $this->getSupportFile($Scan_Id);
+        if ($this->haveSupportFile($scan_id) == true) {
+            $support_file = $this->getSupportFile($scan_id);
             foreach ($support_file as $key => $value) {
                 $SupportFile = $value['file_name'];
                 $Support_Id = $value['Support_Id'];
@@ -273,12 +273,12 @@ class Customlib
         }
     }
 
-    public function check_punchfile2($Scan_Id)
+    public function check_punchfile2($scan_id)
     {
         $chk = $this->CI->db
             ->select('*')
             ->from('punchfile2')
-            ->where('scan_id', $Scan_Id)
+            ->where('scan_id', $scan_id)
             ->get()
             ->num_rows();
 
@@ -289,12 +289,12 @@ class Customlib
         }
     }
 
-    public function check_punchfile($Scan_Id)
+    public function check_punchfile($scan_id)
     {
         $chk = $this->CI->db
             ->select('*')
             ->from('punchfile')
-            ->where('scan_id', $Scan_Id)
+            ->where('scan_id', $scan_id)
             ->get()
             ->num_rows();
 
@@ -469,12 +469,12 @@ class Customlib
         if (in_array($scanDetail->doc_type, $accounting_type)) {
             $punchfile = $this->CI->db
                 ->select(
-                    'Scan_Id, Group_Id, DocType, DocTypeId, Company, CompanyID, From_ID, FromName, To_ID, ToName, File_Date, File_Type, File_No, Related_Person, Related_Address, BillDate, BillMonth, BillYear, ReferenceNo, Loc_Name, Loc_Add, FromDateTime, ToDateTime, SubTotal, Total_Amount, Total_Discount, Grand_Total, NatureOfPayment, DateOf_SanctApp, GST_IGST_Amount, SGST_Amount, CGST_Amount, Cess, TCS, Department, DepartmentID, Ledger, Category, FileName, Section, TravelMode, TravelQuota, TravelClass, BookingDate, PassengerDetail, BookingStatus, TravelInsurance, TypeOfLoanDoc, BankName, BankIfscCode, BankAccountNo, BankAddress, DueDate, RenewalDate, Period, PaperSubmitted, Vehicle_Type, VehicleRs_PerKM, TripStarted, TripEnded, VehicleRegNo, OpeningKm, ClosingKm, TotalRunKM, ChequeNo, NoOfFarmers, Dealers_TradePartners, CropDetails, VerietyDetails, MealsAmount, HallTent_Amount, Gift_Amount, AVTent_Amount, HiredVehicle_Amount, Snacks_Amount, OthCharge_Amount, MeterNumber, PreviousReading, CurrentReading, UnitsConsumed, LastDateOfPayment, ServiceNo, FDRNo, Depositer, DepositAccNo, MaturityAmount, MaturityDate, RateOfInterest, JointHolderName, DepositedFrom, ChallanPurpose, BankBSRCode, PaymentHead, AgencyAddress, VehicleClass, RegNo, DriverCharges, BSRCode, MobileNo, BillingCycle, TariffPlan, PreviousBalance, LastPayement, NomineeDetails, SumAssured, PremiumDate, Coverage, AgentName, PropertyArea, OtherSpecif, Financial_Year, Remark, CPIN, CIN, GSTIN, Email, EmployeeID, EmployeeCode, Employee_Name, Cal_By, Month, MonthName, Hotel, Hotel_Name, Hotel_Address, Particular, Airline, Base_Fare, Surcharge, Cute_Charge, Extra_Luggage, CreditNo, CreditDate, Created_By, Created_Date, file_punch_date, business_entity_id, document_number, narration, tdsApplicable, TDS_JV_no, TDS_section, TDS_percentage, TDS_amount, Payment_Amount, account_group, account, favouring'
+                    'scan_id, Group_Id, DocType, DocTypeId, Company, CompanyID, From_ID, FromName, To_ID, ToName, File_Date, File_Type, File_No, Related_Person, Related_Address, BillDate, BillMonth, BillYear, ReferenceNo, Loc_Name, Loc_Add, FromDateTime, ToDateTime, SubTotal, Total_Amount, Total_Discount, Grand_Total, NatureOfPayment, DateOf_SanctApp, GST_IGST_Amount, SGST_Amount, CGST_Amount, Cess, TCS, Department, DepartmentID, Ledger, Category, FileName, Section, TravelMode, TravelQuota, TravelClass, BookingDate, PassengerDetail, BookingStatus, TravelInsurance, TypeOfLoanDoc, BankName, BankIfscCode, BankAccountNo, BankAddress, DueDate, RenewalDate, Period, PaperSubmitted, Vehicle_Type, VehicleRs_PerKM, TripStarted, TripEnded, VehicleRegNo, OpeningKm, ClosingKm, TotalRunKM, ChequeNo, NoOfFarmers, Dealers_TradePartners, CropDetails, VerietyDetails, MealsAmount, HallTent_Amount, Gift_Amount, AVTent_Amount, HiredVehicle_Amount, Snacks_Amount, OthCharge_Amount, MeterNumber, PreviousReading, CurrentReading, UnitsConsumed, LastDateOfPayment, ServiceNo, FDRNo, Depositer, DepositAccNo, MaturityAmount, MaturityDate, RateOfInterest, JointHolderName, DepositedFrom, ChallanPurpose, BankBSRCode, PaymentHead, AgencyAddress, VehicleClass, RegNo, DriverCharges, BSRCode, MobileNo, BillingCycle, TariffPlan, PreviousBalance, LastPayement, NomineeDetails, SumAssured, PremiumDate, Coverage, AgentName, PropertyArea, OtherSpecif, Financial_Year, Remark, CPIN, CIN, GSTIN, Email, EmployeeID, EmployeeCode, Employee_Name, Cal_By, Month, MonthName, Hotel, Hotel_Name, Hotel_Address, Particular, Airline, Base_Fare, Surcharge, Cute_Charge, Extra_Luggage, CreditNo, CreditDate, Created_By, Created_Date, file_punch_date, business_entity_id, document_number, narration, tdsApplicable, TDS_JV_no, TDS_section, TDS_percentage, TDS_amount, Payment_Amount, account_group, account, favouring'
                 )
                 ->get_where('punchfile', ['scan_id' => $scanId])
                 ->row();
             if ($punchfile != null) {
-                log_message('debug', 'Punchfile found for Scan_Id: ' . $scanId);
+                log_message('debug', 'Punchfile found for scan_id: ' . $scanId);
                 if ($secondaryDb->insert('punchfile', $punchfile)) {
                     log_message('debug', 'Punchfile inserted successfully into secondary DB.');
                 } else {
@@ -490,7 +490,7 @@ class Customlib
                     log_message('debug', 'Transaction completed successfully.');
                 }
             } else {
-                log_message('debug', 'No punchfile found for Scan_Id: ' . $scanId);
+                log_message('debug', 'No punchfile found for scan_id: ' . $scanId);
                 echo "No punchfile found.";
             }
         } else {
@@ -501,32 +501,32 @@ class Customlib
         }
 
         if ($scanDetail->doc_type == 'invoice' || $scanDetail->doc_type == 'fixed_asset' || $scanDetail->doc_type == 'vehicle_maintenance') {
-            $invoiceDetail = $this->CI->db->select('Scan_Id, Particular, HSN, Qty, Unit, MRP, Discount, Price, Amount, GST, SGST, IGST, Cess, Total_Amount')->get_where('invoice_detail', ['scan_id' => $scanId])->result_array();
+            $invoiceDetail = $this->CI->db->select('scan_id, Particular, HSN, Qty, Unit, MRP, Discount, Price, Amount, GST, SGST, IGST, Cess, Total_Amount')->get_where('invoice_detail', ['scan_id' => $scanId])->result_array();
             foreach ($invoiceDetail as $value) {
                 $secondaryDb->insert('invoice_detail', $value);
             }
         } elseif ($scanDetail->doc_type == 'two_four_wheeler' || $scanDetail->doc_type == 'local_conveyance') {
-            $two_four_wheeler = $this->CI->db->select('Scan_Id, VehicleReg, JourneyStartDt, JourneyEndDt, DistTraOpen, DistTraClose, Totalkm, FilledTAmt')->get_where('vehicle_traveling', ['scan_id' => $scanId])->result_array();
+            $two_four_wheeler = $this->CI->db->select('scan_id, VehicleReg, JourneyStartDt, JourneyEndDt, DistTraOpen, DistTraClose, Totalkm, FilledTAmt')->get_where('vehicle_traveling', ['scan_id' => $scanId])->result_array();
             foreach ($two_four_wheeler as $value) {
                 $secondaryDb->insert('vehicle_traveling', $value);
             }
         } elseif ($scanDetail->doc_type == 'lodging' || $scanDetail->doc_type == 'air' || $scanDetail->doc_type == 'rail') {
-            $lodging_employee = $this->CI->db->select('Scan_Id, emp_id, emp_name, emp_code')->get_where('lodging_employee', ['scan_id' => $scanId])->result_array();
+            $lodging_employee = $this->CI->db->select('scan_id, emp_id, emp_name, emp_code')->get_where('lodging_employee', ['scan_id' => $scanId])->result_array();
             foreach ($lodging_employee as $value) {
                 $secondaryDb->insert('lodging_employee', $value);
             }
         } elseif ($scanDetail->doc_type == 'gst_challan') {
-            $gst_chalan = $this->CI->db->select('Scan_Id, Particular, Tax, Interest, Penalty, Fees, Other, Total')->get_where('gst_challan_detail', ['scan_id' => $scanId])->result_array();
+            $gst_chalan = $this->CI->db->select('scan_id, Particular, Tax, Interest, Penalty, Fees, Other, Total')->get_where('gst_challan_detail', ['scan_id' => $scanId])->result_array();
             foreach ($gst_chalan as $value) {
                 $secondaryDb->insert('gst_challan_detail', $value);
             }
         } elseif ($scanDetail->doc_type == 'labour_payment') {
-            $labour_payment_detail = $this->CI->db->select('Scan_Id, Head, Amount')->get_where('labour_payment_detail', ['scan_id' => $scanId])->result_array();
+            $labour_payment_detail = $this->CI->db->select('scan_id, Head, Amount')->get_where('labour_payment_detail', ['scan_id' => $scanId])->result_array();
             foreach ($labour_payment_detail as $value) {
                 $secondaryDb->insert('labour_payment_detail', $value);
             }
         } elseif ($scanDetail->doc_type == 'ticket_cancellation') {
-            $ticket_cancellation = $this->CI->db->select('Scan_Id, Emp_Id, Emp_Name, Amount, PNR')->CI->db->get_where('ticket_cancellation', ['scan_id' => $scanId])->result_array();
+            $ticket_cancellation = $this->CI->db->select('scan_id, Emp_Id, Emp_Name, Amount, PNR')->CI->db->get_where('ticket_cancellation', ['scan_id' => $scanId])->result_array();
             foreach ($ticket_cancellation as $value) {
                 $secondaryDb->insert('ticket_cancellation', $value);
             }
@@ -536,9 +536,9 @@ class Customlib
     function set_missing_data()
     {
         $secondaryDb = $this->CI->load->database('secondary', true);
-        // Use AND instead of OR in the condition to ensure the Scan_Id is not in both subqueries
-        $scan_ids_result = $secondaryDb->query("SELECT Scan_Id FROM `y{ $this->year_id}_scan_file` WHERE 
-            (Scan_Id NOT IN (SELECT Scan_Id FROM punchfile) AND Scan_Id NOT IN (SELECT Scan_Id FROM punchfile2))");
+        // Use AND instead of OR in the condition to ensure the scan_id is not in both subqueries
+        $scan_ids_result = $secondaryDb->query("SELECT scan_id FROM `y{ $this->year_id}_scan_file` WHERE 
+            (scan_id NOT IN (SELECT scan_id FROM punchfile) AND scan_id NOT IN (SELECT scan_id FROM punchfile2))");
 
         // Fetch the result as an array of objects
         $scan_ids = $scan_ids_result->result_array();

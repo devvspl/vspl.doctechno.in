@@ -82,6 +82,7 @@ $route['approve_file/(:num)'] = 'punch/approve_file/$1';
 $route['reject_file/(:num)'] = 'punch/reject_file/$1';
 // ===========================Temp Scanner===========================
 $route['temp-supporting/(:any)'] = 'Scan/temp_upload_supporting/$1';
+$route['temp-final-submit'] = 'Scan/final_submit';
 //--------------Scan File-------------------
 $route['scan'] = 'Scan';
 $route['myscannedfiles'] = 'Scan/myscannedfiles';
@@ -123,22 +124,22 @@ $route['finance_punch_action_status'] = 'Finance_Punch';
 $route['my_finance_punched_file'] = 'Finance_Punch/my_punched_file';
 $route['my_finance_punched_file/(:any)'] = 'Finance_Punch/my_punched_file/$1';
 //--------------View Record----------------------
-$route['file_detail/(:any)/(:any)'] = 'Record/index/$1/$2';   //$1=Scan_Id,$2=DocType_Id
-$route['view_record/(:any)/(:any)'] = 'MobileView/index/$1/$2';   //$1=Scan_Id,$2=DocType_Id
+$route['file_detail/(:any)/(:any)'] = 'Record/index/$1/$2';   //$1=scan_id,$2=DocType_Id
+$route['view_record/(:any)/(:any)'] = 'MobileView/index/$1/$2';   //$1=scan_id,$2=DocType_Id
 $route['vspl_file_detail/(:any)/(:any)'] = 'Record/vspl_index/$1/$2';
 //--------------Approve File-------------------
 $route['approve'] = 'Approve';
 $route['my_approved_file'] = 'Approve/my_approved_file';
 $route['my_approved_file/(:any)'] = 'Approve/my_approved_file/$i';
-$route['approve_record/(:any)'] = 'Approve/approve_record/$1';   //$1=Scan_Id
-$route['approve_record_by_super_approver/(:any)'] = 'Approve/approve_record_by_super_approver/$1';   //$1=Scan_Id
-$route['reject_record/(:any)'] = 'Approve/reject_record/$1';   //$1=Scan_Id
+$route['approve_record/(:any)'] = 'Approve/approve_record/$1';   //$1=scan_id
+$route['approve_record_by_super_approver/(:any)'] = 'Approve/approve_record_by_super_approver/$1';   //$1=scan_id
+$route['reject_record/(:any)'] = 'Approve/reject_record/$1';   //$1=scan_id
 $route['rejected_by_me'] = 'Approve/rejected_by_me';
 $route['reject_list_company/(:any)']='Approve/reject_list_company/$1';
 //----------------Admin ------------------
 $route['admin_rejected_list'] = 'Record/admin_rejected_list';
-$route['give_edit_permission/(:any)'] = 'Record/give_edit_permission/$1';   //$1=Scan_Id
-$route['reject_approved_file/(:any)'] = 'Record/reject_approved_file/$1';   //$1=Scan_Id
+$route['give_edit_permission/(:any)'] = 'Record/give_edit_permission/$1';   //$1=scan_id
+$route['reject_approved_file/(:any)'] = 'Record/reject_approved_file/$1';   //$1=scan_id
 $route['report'] = 'Record/report';
 $route['bill_approval_report'] = 'Record/bill_approval_report';
 //----------------data extraction ------------------

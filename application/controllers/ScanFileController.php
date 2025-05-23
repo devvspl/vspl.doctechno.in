@@ -41,7 +41,7 @@ class ScanFileController extends CI_Controller {
     public function deleteTableAllRow($table, $scanId) {
         $this->db->where('scan_id', $scanId);
         $this->db->delete($table);
-        $this->session->set_flashdata('success_message', "Row with Scan_Id: $scanId has been deleted from the $table table.");
+        $this->session->set_flashdata('success_message', "Row with scan_id: $scanId has been deleted from the $table table.");
         $redirectUrl = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : base_url('ScanFileController/getScanFileList');
         redirect($redirectUrl);
     }

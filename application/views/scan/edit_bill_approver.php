@@ -98,12 +98,12 @@
 	</div>
 </div>
 <script>
-	function getSupportFile(Scan_Id) {
+	function getSupportFile(scan_id) {
 		$.ajax({
 			url: '<?php echo base_url(); ?>Punch/getSupportFile',
 			type: 'POST',
 			data: {
-				Scan_Id: Scan_Id
+				scan_id: scan_id
 			},
 			dataType: 'json',
 			success: function(response) {
@@ -113,7 +113,7 @@
 					var x = '';
 					$.each(response.data, function(index, value) {
 
-						x += '<object data="' + value.File_Location + '" type="application/pdf" width="100%" height="500px"></object>';
+						x += '<object data="' + value.file_path + '" type="application/pdf" width="100%" height="500px"></object>';
 
 					});
 					$('#detail').html(x);
@@ -125,16 +125,16 @@
 		});
 	}
 
-	function editDocType(Scan_Id, th) {
-        $("#Scan_id_" + Scan_Id).prop('disabled', false);
+	function editDocType(scan_id, th) {
+        $("#Scan_id_" + scan_id).prop('disabled', false);
     }
 
-    function changeBillApprover(Scan_Id, Bill_Approver) {
+    function changeBillApprover(scan_id, Bill_Approver) {
         $.ajax({
             url: '<?php echo base_url(); ?>Scan/changeBillApprover',
             type: 'POST',
             data: {
-                Scan_Id: Scan_Id,
+                scan_id: scan_id,
                 Bill_Approver: Bill_Approver
             },
             dataType: 'json',

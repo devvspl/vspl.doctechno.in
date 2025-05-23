@@ -1,7 +1,7 @@
 <?php
-$Scan_Id = $this->uri->segment(2);
+$scan_id = $this->uri->segment(2);
 $DocType_Id = $this->uri->segment(3);
-$rec = $this->customlib->getScanData($Scan_Id);
+$rec = $this->customlib->getScanData($scan_id);
 $fin_year = $this->customlib->getFinancial_year();
 $company_list = $this->customlib->getCompanyList();
 ?>
@@ -612,7 +612,7 @@ $company_list = $this->customlib->getCompanyList();
                             <tbody>
                                 <?php
                                 if ($DocType_Id == 1) {
-                                    $get_travel_detail = $this->db->query("select * from vehicle_traveling where Scan_Id='$Scan_Id'")->result();
+                                    $get_travel_detail = $this->db->query("select * from vehicle_traveling where scan_id='$scan_id'")->result();
                                     foreach ($get_travel_detail as $key => $value) {
                                 ?>
                                         <tr>
@@ -863,7 +863,7 @@ $company_list = $this->customlib->getCompanyList();
                             <tbody>
                                 <?php
                                 if ($DocType_Id == 23) {
-                                    $get_invoice_detail = $this->db->query("select invoice_detail.*,master_unit.unit_name from invoice_detail left join master_unit on master_unit.unit_id = invoice_detail.Unit where Scan_Id='$Scan_Id'")->result();
+                                    $get_invoice_detail = $this->db->query("select invoice_detail.*,master_unit.unit_name from invoice_detail left join master_unit on master_unit.unit_id = invoice_detail.Unit where scan_id='$scan_id'")->result();
                                     foreach ($get_invoice_detail as $key => $value) {
                                 ?>
                                         <tr>
@@ -2170,7 +2170,7 @@ $company_list = $this->customlib->getCompanyList();
                                 <tbody>
                                     <?php
                                     if ($DocType_Id == 46) {
-                                        $get_gst_challan_detail = $this->db->query("select * from gst_challan_detail where Scan_Id='$Scan_Id'")->result();
+                                        $get_gst_challan_detail = $this->db->query("select * from gst_challan_detail where scan_id='$scan_id'")->result();
 
                                         foreach ($get_gst_challan_detail as $key => $value) {
                                     ?>
@@ -2206,14 +2206,14 @@ $company_list = $this->customlib->getCompanyList();
                         </table>
                     </div>
                 <?php } ?>
-                <?php if ($this->customlib->haveSupportFile($Scan_Id) == 1) { ?>
+                <?php if ($this->customlib->haveSupportFile($scan_id) == 1) { ?>
                     <div class="row" style="margin-top: 10px;padding:0 10px;">
                         <div class="col-md-12">
                             <table class="table" style="border: 1px solid #d4d0d0;font-size:12px;">
                                 <tr>
                                     <td class="bg-primary"><b>Supporting File:</b></td>
                                 </tr>
-                                <?php $support_file = $this->customlib->getSupportFile($Scan_Id);
+                                <?php $support_file = $this->customlib->getSupportFile($scan_id);
                                 foreach ($support_file as $row) {  ?>
                                     <tr>
                                         <td><a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['file_path'] ?>','popup','width=600,height=600');"> <?php echo $row['file_name'] ?></a></td>

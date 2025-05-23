@@ -219,9 +219,9 @@ class Super_scan extends CI_Controller
 
     public function verify_document()
     {
-        $Scan_Id = $this->input->post('scan_id');
+        $scan_id = $this->input->post('scan_id');
         $user_id = $this->session->userdata('user_id');
-        $this->db->where('scan_id', $Scan_Id);
+        $this->db->where('scan_id', $scan_id);
         $query = $this->db->update("y{$this->year_id}_scan_file", ['is_document_verified' => 'Y', 'verified_by' => $user_id, 'verified_date' => date('Y-m-d')]);
         if ($query) {
             echo json_encode(['status' => 200]);

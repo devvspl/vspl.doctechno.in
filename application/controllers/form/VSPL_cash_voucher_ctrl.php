@@ -12,14 +12,14 @@ class VSPL_cash_voucher_ctrl extends CI_Controller
     {
         if ($this->customlib->has_permission("Finance") == 1) {
             if ($this->input->post("submit")) {
-                $Scan_Id = $this->input->post("Scan_Id");
-                $this->db->where(["Scan_Id" => $Scan_Id]);
+                $scan_id = $this->input->post("scan_id");
+                $this->db->where(["scan_id" => $scan_id]);
                 $query = $this->db->update("y{$this->year_id}_scan_file", [
                     "finance_punch" => "Y",
                     "finance_punch_date" => date("Y-m-d"),
                     "finance_punched_by" => $this->session->userdata("user_id"),
                 ]);
-                $this->customlib->update_file_path($Scan_Id);
+                $this->customlib->update_file_path($scan_id);
                 $this->db->trans_complete();
                 if ($this->db->trans_status() === false) {
                     $this->db->trans_rollback();
@@ -31,7 +31,7 @@ class VSPL_cash_voucher_ctrl extends CI_Controller
                 redirect("finance_punch");
             } else {
                 $document_number = $this->input->post("document_number");
-                $Scan_Id = $this->input->post("Scan_Id");
+                $scan_id = $this->input->post("scan_id");
                 $DocTypeId = $this->input->post("DocTypeId");
                 $punch_date = date("Y-m-d");
                 $business_entity_id = $this->input->post("business_entity_id");
@@ -78,18 +78,18 @@ class VSPL_cash_voucher_ctrl extends CI_Controller
                     "TDS_amount" => $TDS_amount,
                     "finance_punched_by" => $this->session->userdata("user_id"),
                 ];
-                $this->db->where(["Scan_Id" => $Scan_Id]);
+                $this->db->where(["scan_id" => $scan_id]);
                 $query = $this->db->update("punchfile", $data);
                 if ($query) {
-                    $this->db->where("Scan_Id", $Scan_Id);
+                    $this->db->where("scan_id", $scan_id);
                     $existing = $this->db->get("cash_voucher_items")->result();
                     if (!empty($existing)) {
-                        $this->db->where("Scan_Id", $Scan_Id);
+                        $this->db->where("scan_id", $scan_id);
                         $this->db->delete("cash_voucher_items");
                     }
                     for ($i = 0; $i < count($DepartmentID); $i++) {
                         $json_data = [
-                            "Scan_Id" => $Scan_Id,
+                            "scan_id" => $scan_id,
                             "DepartmentID" => isset($DepartmentID[$i]) ? $DepartmentID[$i] : null,
                             "cost_center_id" => isset($cost_center_id[$i]) ? $cost_center_id[$i] : null,
                             "business_unit_id" => isset($business_unit_id[$i]) ? $business_unit_id[$i] : null,
@@ -113,11 +113,11 @@ class VSPL_cash_voucher_ctrl extends CI_Controller
            
                        
                         $this->session->set_flashdata("message", '<div class="alert alert-success text-left">Cash Voucher Detail Saved Successfully.</div>');
-                        redirect("vspl_file_entry/" . $Scan_Id . "/" . $DocTypeId);
+                        redirect("vspl_file_entry/" . $scan_id . "/" . $DocTypeId);
                     
                 } else {
                     $this->session->set_flashdata("message", '<div class="alert alert-danger text-left">Failed to update punchfile.</div>');
-                    redirect("vspl_file_entry/" . $Scan_Id . "/" . $DocTypeId);
+                    redirect("vspl_file_entry/" . $scan_id . "/" . $DocTypeId);
                 }
                 
             }

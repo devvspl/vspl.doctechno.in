@@ -13,7 +13,7 @@ class Challan_ctrl extends CI_Controller
 
     public function save_challan()
     {
-        $Scan_Id = $this->input->post('scan_id');
+        $scan_id = $this->input->post('scan_id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
         $Bill_Date   = $this->input->post('Bill_Date');
@@ -26,7 +26,7 @@ class Challan_ctrl extends CI_Controller
         $Amount = $this->input->post('Amount');
         $Remark = $this->input->post('Remark');
         $data = array(
-            'scan_id' => $Scan_Id,
+            'scan_id' => $scan_id,
             'DocType' => $DocType,
             'DocTypeId' => $DocTypeId,
             'BillDate' => $Bill_Date,
@@ -45,13 +45,13 @@ class Challan_ctrl extends CI_Controller
 
         $this->db->trans_start();
         $this->db->trans_strict(FALSE);
-        if ($this->customlib->check_punchfile($Scan_Id) == true) {
+        if ($this->customlib->check_punchfile($scan_id) == true) {
             //Update Existing Record
-            $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
-            $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
+            $this->db->where('scan_id', $scan_id)->update('punchfile', $data);
+            $FileID = $this->db->where('scan_id', $scan_id)->get('punchfile')->row()->FileID;
 
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Amount, 'Comment' => $Remark));
-            $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
+            $this->db->where('scan_id', $scan_id)->update("y{$this->year_id}_scan_file", array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
         } else {
             //Insert New Record
             $this->db->insert('punchfile', $data);
@@ -59,7 +59,7 @@ class Challan_ctrl extends CI_Controller
             $this->db->insert('sub_punchfile', array('FileID' => $insert_id, 'Amount' => '-' . $Amount, 'Comment' => $Remark));
         }
 
-        $this->customlib->update_file_path($Scan_Id);
+        $this->customlib->update_file_path($scan_id);
 
         $this->db->trans_complete();
         if ($this->db->trans_status() === FALSE) {
@@ -76,7 +76,7 @@ class Challan_ctrl extends CI_Controller
     {
         $submit = $this->input->post('submit'); // Check if action is 'submit' or 'draft'
     
-        $Scan_Id = $this->input->post('scan_id');
+        $scan_id = $this->input->post('scan_id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
     
@@ -103,7 +103,7 @@ class Challan_ctrl extends CI_Controller
     
         // Prepare data for punchfile
         $data = array(
-            'scan_id' => $Scan_Id,
+            'scan_id' => $scan_id,
             'DocType' => $DocType,
             'DocTypeId' => $DocTypeId,
             'CPIN' => $CPIN,
@@ -127,10 +127,10 @@ class Challan_ctrl extends CI_Controller
         $this->db->trans_start();
         $this->db->trans_strict(FALSE);
     
-        if ($this->customlib->check_punchfile($Scan_Id)) {
+        if ($this->customlib->check_punchfile($scan_id)) {
             // Update punchfile
-            $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
-            $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
+            $this->db->where('scan_id', $scan_id)->update('punchfile', $data);
+            $FileID = $this->db->where('scan_id', $scan_id)->get('punchfile')->row()->FileID;
     
             // Update sub_punchfile
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array(
@@ -139,7 +139,7 @@ class Challan_ctrl extends CI_Controller
             ));
     
             // Remove old details and insert new ones
-            $this->db->where('scan_id', $Scan_Id)->delete('gst_challan_detail');
+            $this->db->where('scan_id', $scan_id)->delete('gst_challan_detail');
         } else {
             // Insert punchfile
             $this->db->insert('punchfile', $data);
@@ -157,7 +157,7 @@ class Challan_ctrl extends CI_Controller
         $details = array();
         for ($i = 0; $i < count($Particular); $i++) {
             $details[] = array(
-                'scan_id' => $Scan_Id,
+                'scan_id' => $scan_id,
                 'Particular' => $Particular[$i],
                 'Tax' => $Tax[$i],
                 'Interest' => $Interest[$i],
@@ -170,14 +170,14 @@ class Challan_ctrl extends CI_Controller
         $this->db->insert_batch('gst_challan_detail', $details);
     
         // Update y{$this->year_id}_scan_file for submit/draft
-        $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
+        $this->db->where('scan_id', $scan_id)->update("y{$this->year_id}_scan_file", array(
             'is_rejected' => 'N',
             'reject_date' => NULL,
             'has_edit_permission' => $submit ? 'N' : 'Y',
             'finance_punch_action_status' => $submit ? 'N' : NULL
         ));
     
-        $this->customlib->update_file_path($Scan_Id);
+        $this->customlib->update_file_path($scan_id);
     
         // Complete transaction
         $this->db->trans_complete();
@@ -195,9 +195,9 @@ class Challan_ctrl extends CI_Controller
     
 
     function getGstItem(){
-        $Scan_Id = $this->input->post('scan_id');
+        $scan_id = $this->input->post('scan_id');
        
-        $result = $this->db->select('*')->from('gst_challan_detail')->where('scan_id', $Scan_Id)->get()->result_array();
+        $result = $this->db->select('*')->from('gst_challan_detail')->where('scan_id', $scan_id)->get()->result_array();
         if (!empty($result)) {
             echo json_encode(array('status' => 200, 'data' => $result));
         } else {

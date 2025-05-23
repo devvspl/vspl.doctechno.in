@@ -2,7 +2,7 @@
 <div id="invoice-details" class="tab-content active">
    <form action="<?= base_url(); ?>form/Vehicle_ctrl/save_two_four_wheel_exp" id="vehicle_expense_form"
       name="vehicle_expense_form" method="post" accept-charset="utf-8">
-      <input type="hidden" name="Scan_Id" id="Scan_Id" value="<?= $Scan_Id ?>">
+      <input type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id ?>">
       <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">
       <div class="row">
          <div class="form-group col-md-6">
@@ -158,14 +158,14 @@
             <?php endif; ?>
          </div>
       <?php
-         if ($this->customlib->haveSupportFile($Scan_Id) == 1) {
+         if ($this->customlib->haveSupportFile($scan_id) == 1) {
          	?>
       <div class="row" style="margin-top: 20px;">
          <div class="col-md-12">
             <label for="">Supporting File:</label>
             <div class="form-group">
                <?php
-                  $support_file = $this->customlib->getSupportFile($Scan_Id);
+                  $support_file = $this->customlib->getSupportFile($scan_id);
                   
                   foreach ($support_file as $row) {
                   	?>
@@ -197,12 +197,12 @@
    getMultiRecord();
    
    function getMultiRecord() {
-   	var Scan_Id = $('#Scan_Id').val();
+   	var scan_id = $('#scan_id').val();
    	$.ajax({
    		url: '<?= base_url() ?>form/Vehicle_ctrl/getTwoFourWheelerRecord',
    		type: 'POST',
    		data: {
-   			Scan_Id: Scan_Id
+   			scan_id: scan_id
    		},
    		dataType: 'json',
    		success: function (response) {

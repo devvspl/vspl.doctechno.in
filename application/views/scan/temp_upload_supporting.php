@@ -101,64 +101,63 @@
    </section>
 </div>
 <script type="text/javascript">
-   $(document).ready(function() {
-       $(document).on('click', '#delete_all', function() {
-           var scan_id = $('#scan_id').val();
-           var url = '<?= base_url() ?>Scan/delete_all';
-           if (confirm('Are you sure to delete all ?')) {
-               $.ajax({
-                   url: url,
-                   type: 'POST',
-                   data: {
-                       'scan_id': scan_id
-                   },
-                   dataType: 'json',
-                   success: function(data) {
-                       if (data.status == 200) {
-                           window.location.href = '<?= base_url() ?>Scan';
-                       }
-                   }
-               });
-           }
-       });
-   
-      $(document).on('click', '#final_submit', function() {
-            var scan_id = $('#scan_id').val();
-            var url = '<?= base_url() ?>Super_scan/final_submit';
-            if (confirm('Are you sure to final submit ?')) {
-                  $.ajax({
-                     url: url,
-                     type: 'POST',
-                     data: {
-                        'scan_id': scan_id
-                     },
-                     dataType: 'json',
-                     success: function(data) {
-                        if (data.status == 200) {
-                              window.location.href = '<?= base_url() ?>Scan';
-                        }
-                     }
-                  });
-            }
-         });
-      });
-      function delete_file(id) {
-       var url = '<?= base_url() ?>Scan/delete_file';
-       if (confirm('Are you sure to delete ?')) {
-           $.ajax({
-               url: url,
-               type: 'POST',
-               data: {
-                   'id': id
-               },
-               dataType: 'json',
-               success: function(data) {
-                   if (data.status == 200) {
-                       window.location.href = '<?= base_url() ?>Scan/upload_supporting/<?= $scan_id; ?>';
-                   }
-               }
-           });
-       }
-   
-   }
+$(document).ready(function () {
+    $(document).on("click", "#delete_all", function () {
+        var scan_id = $("#scan_id").val();
+        var url = "<?= base_url() ?>Scan/delete_all";
+        if (confirm("Are you sure to delete all ?")) {
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: {
+                    scan_id: scan_id,
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (data.status == 200) {
+                        window.location.href = "<?= base_url() ?>Scan";
+                    }
+                },
+            });
+        }
+    });
+
+    $(document).on("click", "#final_submit", function () {
+        var scan_id = $("#scan_id").val();
+        var url = "<?= base_url('temp-final-submit') ?>";
+        if (confirm("Are you sure to final submit ?")) {
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: {
+                    scan_id: scan_id,
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (data.status == 200) {
+                        window.location.href = "<?= base_url() ?>temp_scan";
+                    }
+                },
+            });
+        }
+    });
+});
+function delete_file(id) {
+    var url = "<?= base_url() ?>Scan/delete_file";
+    if (confirm("Are you sure to delete ?")) {
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: {
+                id: id,
+            },
+            dataType: "json",
+            success: function (data) {
+                if (data.status == 200) {
+                    window.location.href = "<?= base_url() ?>Scan/upload_supporting/<?= $scan_id; ?>";
+                }
+            },
+        });
+    }
+}
 </script>

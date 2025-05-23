@@ -17,7 +17,7 @@ class Labour_ctrl extends CI_Controller
 
 
     
-        $Scan_Id = $this->input->post('scan_id');
+        $scan_id = $this->input->post('scan_id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
     
@@ -36,7 +36,7 @@ class Labour_ctrl extends CI_Controller
     
         // Prepare data for punchfile
         $data = array(
-            'scan_id' => $Scan_Id,
+            'scan_id' => $scan_id,
             'group_id' => $this->session->userdata('group_id'),
             'DocType' => $DocType,
             'DocTypeId' => $DocTypeId,
@@ -58,10 +58,10 @@ class Labour_ctrl extends CI_Controller
         $this->db->trans_start();
         $this->db->trans_strict(FALSE);
     
-        if ($this->customlib->check_punchfile($Scan_Id)) {
+        if ($this->customlib->check_punchfile($scan_id)) {
             // Update punchfile
-            $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
-            $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
+            $this->db->where('scan_id', $scan_id)->update('punchfile', $data);
+            $FileID = $this->db->where('scan_id', $scan_id)->get('punchfile')->row()->FileID;
     
             // Update sub_punchfile
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array(
@@ -70,7 +70,7 @@ class Labour_ctrl extends CI_Controller
             ));
     
             // Remove old details
-            $this->db->where('scan_id', $Scan_Id)->delete('labour_payment_detail');
+            $this->db->where('scan_id', $scan_id)->delete('labour_payment_detail');
         } else {
             // Insert punchfile
             $this->db->insert('punchfile', $data);
@@ -88,7 +88,7 @@ class Labour_ctrl extends CI_Controller
         $details = array();
         for ($i = 0; $i < count($Head); $i++) {
             $details[] = array(
-                'scan_id' => $Scan_Id,
+                'scan_id' => $scan_id,
                 'Head' => $Head[$i],
                 'Amount' => $Amount[$i]
             );
@@ -96,14 +96,14 @@ class Labour_ctrl extends CI_Controller
         $this->db->insert_batch('labour_payment_detail', $details);
     
         // Update y{$this->year_id}_scan_file for submit/draft
-        $this->db->where('scan_id', $Scan_Id)->update("y{$this->year_id}_scan_file", array(
+        $this->db->where('scan_id', $scan_id)->update("y{$this->year_id}_scan_file", array(
             'is_rejected' => 'N',
             'reject_date' => NULL,
             'has_edit_permission' => $submit ? 'N' : 'Y',
             'finance_punch_action_status' => $submit ? 'N' : NULL
         ));
     
-        $this->customlib->update_file_path($Scan_Id);
+        $this->customlib->update_file_path($scan_id);
     
         // Complete transaction
         $this->db->trans_complete();
@@ -122,8 +122,8 @@ class Labour_ctrl extends CI_Controller
 
     public function getLabourRecord()
     {
-        $Scan_Id = $this->input->post('scan_id');
-        $result = $this->db->select('*')->from('labour_payment_detail')->where('scan_id', $Scan_Id)->get()->result_array();
+        $scan_id = $this->input->post('scan_id');
+        $result = $this->db->select('*')->from('labour_payment_detail')->where('scan_id', $scan_id)->get()->result_array();
         if (!empty($result)) {
             echo json_encode(array('status' => 200, 'data' => $result));
         } else {

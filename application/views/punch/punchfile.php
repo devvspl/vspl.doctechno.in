@@ -143,16 +143,16 @@
         $('.DocType_Id').select2();
     }); */
 
-    function editDocType(Scan_Id, th) {
-        $("#DocType_Id_" + Scan_Id).prop('disabled', false);
+    function editDocType(scan_id, th) {
+        $("#DocType_Id_" + scan_id).prop('disabled', false);
     }
 
-    function changeDocType(Scan_Id, DocType_Id) {
+    function changeDocType(scan_id, DocType_Id) {
         $.ajax({
             url: '<?php echo base_url(); ?>Punch/changeDocType',
             type: 'POST',
             data: {
-                Scan_Id: Scan_Id,
+                scan_id: scan_id,
                 DocType_Id: DocType_Id
             },
             dataType: 'json',
@@ -167,12 +167,12 @@
         });
     }
 
-    function getSupportFile(Scan_Id) {
+    function getSupportFile(scan_id) {
         $.ajax({
             url: '<?php echo base_url(); ?>Punch/getSupportFile',
             type: 'POST',
             data: {
-                Scan_Id: Scan_Id
+                scan_id: scan_id
             },
             dataType: 'json',
             success: function(response) {
@@ -181,7 +181,7 @@
 
                     var x = '';
                     $.each(response.data, function(index, value) {
-                        x += '<object data="' + value.File_Location + '" type="application/pdf" width="100%" height="500px"></object>';
+                        x += '<object data="' + value.file_path + '" type="application/pdf" width="100%" height="500px"></object>';
 
                     });
                     $('#detail').html(x);
@@ -194,13 +194,13 @@
     }
 
     $(document).on('click', '#resend_scan', function() {
-        var Scan_Id = $(this).data('id');
+        var scan_id = $(this).data('id');
         var Remark = prompt("Please enter remark to resend this file");
         if (Remark == null) {
             window.location.reload();
         } else {
             $.ajax({
-                url: '<?php echo base_url(); ?>resend_scan/' + Scan_Id,
+                url: '<?php echo base_url(); ?>resend_scan/' + scan_id,
                 type: 'POST',
                 data: {
                     Remark: Remark
@@ -217,7 +217,7 @@
     });
     
     $(document).on('click', '.edit_doc_name', function() {
-        var Scan_Id = $(this).data('id');
+        var scan_id = $(this).data('id');
         var DocName = prompt("Please enter new document name", $(this).data('val'));
         if (DocName == null) {
             window.location.reload();
@@ -225,7 +225,7 @@
             $.ajax({
                 url: '<?php echo base_url(); ?>/Punch/edit_doc_name',
                 data: {
-                    Scan_Id: Scan_Id,
+                    scan_id: scan_id,
                     DocName: DocName
                 },
                 type: 'POST',

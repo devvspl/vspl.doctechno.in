@@ -2,12 +2,14 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 class BillApproverController extends CI_Controller
 {
+    protected $year_id;
     function __construct()
     {
         parent::__construct();
         $this->logged_in();
         $this->load->database();
         $this->load->model(array('Bill_approver_model', 'Location_model'));
+        $this->year_id = $this->session->userdata('year_id');
     }
     private function check_role($allowed_roles = [])
     {
@@ -115,15 +117,15 @@ class BillApproverController extends CI_Controller
     }
     public function pending_bill_approve()
     {
-        $bill_list = $this->db->where('bill_approval_status', 'N')->join('master_work_location', 'master_work_location.location_id = y{$this->year_id}_scan_file.location_id', 'left')->where('bill_approver_id', $this->session->userdata('user_id'))->get("y{$this->year_id}_scan_file")->result_array();
+        $bill_list = $this->db->where('bill_approval_status', 'N')->join('master_work_location', "master_work_location.location_id = y{$this->year_id}_scan_file.location_id", 'left')->where('bill_approver_id', $this->session->userdata('user_id'))->get("y{$this->year_id}_scan_file")->result_array();
         $this->data['bill_list'] = $bill_list;
         $this->data['main'] = 'bill_approver/pending_bill_list';
         $this->load->view('layout/template', $this->data);
     }
-    public function bill_detail($Scan_Id)
+    public function bill_detail($scan_id)
     {
         $this->check_role(['bill_approver']);
-        $this->data['bill_detail'] = $this->Bill_approver_model->get_bill_detail($Scan_Id);
+        $this->data['bill_detail'] = $this->Bill_approver_model->get_bill_detail($scan_id);
         $this->data['main'] = 'bill_approver/bill_detail';
         $this->load->view('layout/template', $this->data);
     }
@@ -141,11 +143,11 @@ class BillApproverController extends CI_Controller
         $this->data['main'] = 'bill_approver/rejected_bill_list';
         $this->load->view('layout/template', $this->data);
     }
-    public function reject_bill($Scan_Id)
+    public function reject_bill($scan_id)
     {
         $user_id = $this->session->userdata('user_id');
         $Reject_Remark = $this->input->post('Remark');
-        $this->db->where('scan_id', $Scan_Id);
+        $this->db->where('scan_id', $scan_id);
         $result = $this->db->update("y{$this->year_id}_scan_file", array('bill_approval_status' => 'R', 'bill_approver_id' => $user_id, 'bill_approver_remark' => $Reject_Remark, 'bill_approved_date' => date('Y-m-d')));
         if ($result) {
             echo json_encode(array('status' => '200', 'message' => 'Bill Rejected Successfully.'));
@@ -153,10 +155,10 @@ class BillApproverController extends CI_Controller
             echo json_encode(array('status' => '400', 'message' => 'Something went wrong. Please try again.'));
         }
     }
-    public function approve_bill($Scan_Id)
+    public function approve_bill($scan_id)
     {
         $user_id = $this->session->userdata('user_id');
-        $this->db->where('scan_id', $Scan_Id);
+        $this->db->where('scan_id', $scan_id);
         $result = $this->db->update("y{$this->year_id}_scan_file", array('bill_approval_status' => 'Y', 'extract_status' => 'N', 'bill_approver_id' => $user_id, 'bill_approved_date' => date('Y-m-d')));
         if ($result) {
             $this->session->set_flashdata('message', '<p class="text-success text-center">Bill Approved Successfully.</p>');
