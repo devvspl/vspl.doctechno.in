@@ -1,6 +1,6 @@
 <?php
 $scan_id = $this->uri->segment(2);
-$DocType_Id = $this->uri->segment(3);
+$doc_type_id = $this->uri->segment(3);
 $rec = $this->customlib->getScanData($scan_id);
 $punch_detail = $this->db->get_where('punchfile', ['scan_id' => $scan_id])->row();
 $employee_list = $this->customlib->getEmployeeList();
@@ -33,7 +33,7 @@ $locationlist = $this->customlib->getWorkLocationList();
 			  method="post" accept-charset="utf-8">
 			<div class="col-md-6">
 				<input type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id ?>">
-				<input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">
+				<input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $doc_type_id ?>">
 				<div class="row">
 					<div class="form-group col-md-3">
 						<label for="">Mode:</label>

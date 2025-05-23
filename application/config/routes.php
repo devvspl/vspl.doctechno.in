@@ -124,8 +124,8 @@ $route['finance_punch_action_status'] = 'Finance_Punch';
 $route['my_finance_punched_file'] = 'Finance_Punch/my_punched_file';
 $route['my_finance_punched_file/(:any)'] = 'Finance_Punch/my_punched_file/$1';
 //--------------View Record----------------------
-$route['file_detail/(:any)/(:any)'] = 'Record/index/$1/$2';   //$1=scan_id,$2=DocType_Id
-$route['view_record/(:any)/(:any)'] = 'MobileView/index/$1/$2';   //$1=scan_id,$2=DocType_Id
+$route['file_detail/(:any)/(:any)'] = 'Record/index/$1/$2';   //$1=scan_id,$2=doc_type_id
+$route['view_record/(:any)/(:any)'] = 'MobileView/index/$1/$2';   //$1=scan_id,$2=doc_type_id
 $route['vspl_file_detail/(:any)/(:any)'] = 'Record/vspl_index/$1/$2';
 //--------------Approve File-------------------
 $route['approve'] = 'Approve';

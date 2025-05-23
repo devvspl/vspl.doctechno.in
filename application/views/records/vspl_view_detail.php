@@ -1,6 +1,6 @@
 <?php
    $scan_id = $this->uri->segment(2);
-   $DocType_Id = $this->uri->segment(3);
+   $doc_type_id = $this->uri->segment(3);
    $rec = $this->customlib->getScanData($scan_id);
    $fin_year = $this->customlib->getFinancial_year();
    $company_list = $this->customlib->getCompanyList();
@@ -54,7 +54,7 @@
             </div>
             <?php }
                } ?>
-            <?php if ($DocType_Id == 4) { ?>
+            <?php if ($doc_type_id == 4) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Bank Name</b></td>
@@ -85,7 +85,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 5) { ?>
+            <?php } elseif ($doc_type_id == 5) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Trip Started On</b></td>
@@ -108,7 +108,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 8) { ?>
+            <?php } elseif ($doc_type_id == 8) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 40%;"><b>Certificate Name</b></td>
@@ -131,7 +131,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 10) { ?>
+            <?php } elseif ($doc_type_id == 10) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 40%;"><b>Record Type</b></td>
@@ -158,7 +158,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 11) { ?>
+            <?php } elseif ($doc_type_id == 11) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 40%;"><b>Company</b></td>
@@ -181,7 +181,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 18) { ?>
+            <?php } elseif ($doc_type_id == 18) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 40%;"><b>Document Type</b></td>
@@ -208,7 +208,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 19) { ?>
+            <?php } elseif ($doc_type_id == 19) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 40%;"><b>Document Type</b></td>
@@ -239,7 +239,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 30) { ?>
+            <?php } elseif ($doc_type_id == 30) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 40%;"><b>Date</b></td>
@@ -286,7 +286,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 31) { ?>
+            <?php } elseif ($doc_type_id == 31) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Company No.</b></td>
@@ -321,7 +321,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 32) { ?>
+            <?php } elseif ($doc_type_id == 32) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 40%;"><b>Payment Head</b></td>
@@ -352,7 +352,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 35) { ?>
+            <?php } elseif ($doc_type_id == 35) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 40%;"><b>Purchase Date</b></td>
@@ -431,7 +431,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 36) { ?>
+            <?php } elseif ($doc_type_id == 36) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 40%;"><b>Agency Name</b></td>
@@ -454,7 +454,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 37) { ?>
+            <?php } elseif ($doc_type_id == 37) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 40%;"><b>Certificate Name</b></td>
@@ -489,7 +489,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 41) { ?>
+            <?php } elseif ($doc_type_id == 41) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 40%;"><b>Company</b></td>
@@ -516,7 +516,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 45) { ?>
+            <?php } elseif ($doc_type_id == 45) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 40%;"><b>Vehicle No.</b></td>
@@ -555,7 +555,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 1) { ?>
+            <?php } elseif ($doc_type_id == 1) { ?>
             <div class="table-responsive">
                <table class=" table-bordered" border="1">
                   <tr>
@@ -589,7 +589,7 @@
                            </thead>
                            <tbody>
                               <?php
-                                 if ($DocType_Id == 1) {
+                                 if ($doc_type_id == 1) {
                                     $get_travel_detail = $this->db->query("select * from vehicle_traveling where scan_id='$scan_id'")->result();
                                     foreach ($get_travel_detail as $key => $value) {
                                  ?>
@@ -645,7 +645,7 @@
                   </tr>
                </table>
             </div>
-            <?php } elseif ($DocType_Id == 2) { ?>
+            <?php } elseif ($doc_type_id == 2) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 40%;"><b>Mode</b></td>
@@ -700,7 +700,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 3) { ?>
+            <?php } elseif ($doc_type_id == 3) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 40%;"><b>Company</b></td>
@@ -751,7 +751,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 6) { ?>
+            <?php } elseif ($doc_type_id == 6) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 40%;"><b>Type</b></td>
@@ -790,7 +790,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 23) { ?>
+            <?php } elseif ($doc_type_id == 23) { ?>
             <div class="table-responsive">
                <table class="table-bordered" border="1" style="width: 100%;line-height: 2;">
                   <tr>
@@ -851,7 +851,7 @@
                   </thead>
                   <tbody>
                      <?php
-                        if ($DocType_Id == 23) {
+                        if ($doc_type_id == 23) {
                            $get_invoice_detail = $this->db->query("select invoice_detail.*,master_unit.unit_name from invoice_detail left join master_unit on master_unit.unit_id = invoice_detail.Unit where scan_id='$scan_id'")->result();
                            foreach ($get_invoice_detail as $key => $value) {
                         ?>
@@ -919,7 +919,7 @@
                   </tr>
                </table>
             </div>
-            <?php } elseif ($DocType_Id == 54) { ?>
+            <?php } elseif ($doc_type_id == 54) { ?>
             <div class="table-responsive">
                <table class="table-bordered" border="1" style="width: 100%;line-height: 2;">
                   <tr>
@@ -1002,7 +1002,7 @@
                   </thead>
                   <tbody>
                      <?php
-                        if ($DocType_Id == 54) {
+                        if ($doc_type_id == 54) {
                            $get_invoice_detail = $this->db->query("select invoice_detail.*,master_unit.unit_name from invoice_detail left join master_unit on master_unit.unit_id = invoice_detail.Unit where scan_id='$scan_id'")->result();
                            foreach ($get_invoice_detail as $key => $value) {
                         ?>
@@ -1070,7 +1070,7 @@
                   </tr>
                </table>
             </div>
-            <?php } elseif ($DocType_Id == 44) { ?>
+            <?php } elseif ($doc_type_id == 44) { ?>
             <div class="table-responsive">
                <table class="table-bordered" border="1" style="width: 100%;line-height: 2;">
                   <tr>
@@ -1110,7 +1110,7 @@
                   </thead>
                   <tbody>
                      <?php
-                        if ($DocType_Id == 44) {
+                        if ($doc_type_id == 44) {
                            $get_invoice_detail = $this->db->query("select invoice_detail.*,master_unit.unit_name from invoice_detail left join master_unit on master_unit.unit_id = invoice_detail.Unit where scan_id='$scan_id'")->result();
                            foreach ($get_invoice_detail as $key => $value) {
                         ?>
@@ -1169,7 +1169,7 @@
                   </tr>
                </table>
             </div>
-            <?php } elseif ($DocType_Id == 43) { ?>
+            <?php } elseif ($doc_type_id == 43) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Vendor Name</b></td>
@@ -1242,7 +1242,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 42) { ?>
+            <?php } elseif ($doc_type_id == 42) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Bill Date</b></td>
@@ -1299,7 +1299,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 40) { ?>
+            <?php } elseif ($doc_type_id == 40) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Application Date</b></td>
@@ -1346,7 +1346,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 39) { ?>
+            <?php } elseif ($doc_type_id == 39) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 20%;"><b> Date</b></td>
@@ -1381,7 +1381,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 38) { ?>
+            <?php } elseif ($doc_type_id == 38) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Crop</b></td>
@@ -1420,7 +1420,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 34) { ?>
+            <?php } elseif ($doc_type_id == 34) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 20%;"><b> Booking Date</b></td>
@@ -1459,7 +1459,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 33) { ?>
+            <?php } elseif ($doc_type_id == 33) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 20%;"><b> Bill Date</b></td>
@@ -1514,7 +1514,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 29) { ?>
+            <?php } elseif ($doc_type_id == 29) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Hotel Name:</b></td>
@@ -1557,7 +1557,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 28) { ?>
+            <?php } elseif ($doc_type_id == 28) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark"><b>Bill No.</b></td>
@@ -1625,7 +1625,7 @@
                </thead>
                <tbody>
                   <?php
-                     if ($DocType_Id == 28) {
+                     if ($doc_type_id == 28) {
                         $emp_detail = $this->db->query("select * from lodging_employee  where scan_id='$scan_id'")->result();
                         foreach ($emp_detail as $key => $value) {
                      ?>
@@ -1643,7 +1643,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </tabel>
-            <?php } elseif ($DocType_Id == 27) { ?>
+            <?php } elseif ($doc_type_id == 27) { ?>
             <div class="table-responsive">
                <table class="table-bordered" border="1" style="width: 100%;line-height: 2;">
                   <tr>
@@ -1689,7 +1689,7 @@
                   </thead>
                   <tbody>
                      <?php
-                        if ($DocType_Id == 27) {
+                        if ($doc_type_id == 27) {
                            $get_detail = $this->db->query("select * from vehicle_traveling  where scan_id='$scan_id'")->result();
                            foreach ($get_detail as $key => $value) {
                         ?>
@@ -1723,7 +1723,7 @@
                   </tr>
                </table>
             </div>
-            <?php } elseif ($DocType_Id == 22) { ?>
+            <?php } elseif ($doc_type_id == 22) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 20%;"><b> Insurance Type</b></td>
@@ -1766,7 +1766,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 26) { ?>
+            <?php } elseif ($doc_type_id == 26) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 20%;"><b> Lessor Name</b></td>
@@ -1825,7 +1825,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 25) { ?>
+            <?php } elseif ($doc_type_id == 25) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Date</b></td>
@@ -1856,7 +1856,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 24) { ?>
+            <?php } elseif ($doc_type_id == 24) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Company</b></td>
@@ -1883,7 +1883,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 7) { ?>
+            <?php } elseif ($doc_type_id == 7) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Company</b></td>
@@ -1922,7 +1922,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 16) { ?>
+            <?php } elseif ($doc_type_id == 16) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 20%;"><b> Date</b></td>
@@ -1961,7 +1961,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 9) { ?>
+            <?php } elseif ($doc_type_id == 9) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Bank Name</b></td>
@@ -2000,7 +2000,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 12) { ?>
+            <?php } elseif ($doc_type_id == 12) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Bill Date</b></td>
@@ -2043,7 +2043,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 21) { ?>
+            <?php } elseif ($doc_type_id == 21) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 40%;"><b>Policy Holder Name</b></td>
@@ -2110,7 +2110,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 13) { ?>
+            <?php } elseif ($doc_type_id == 13) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Location</b></td>
@@ -2180,7 +2180,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 14) { ?>
+            <?php } elseif ($doc_type_id == 14) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Bill Date</b></td>
@@ -2223,7 +2223,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 15) { ?>
+            <?php } elseif ($doc_type_id == 15) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 40%;"><b>Bank Name</b></td>
@@ -2262,7 +2262,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 20) { ?>
+            <?php } elseif ($doc_type_id == 20) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 40%;"><b>Section</b></td>
@@ -2309,7 +2309,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 17) { ?>
+            <?php } elseif ($doc_type_id == 17) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Agency Name</b></td>
@@ -2388,7 +2388,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 46) { ?>
+            <?php } elseif ($doc_type_id == 46) { ?>
             <div class="table-responsive">
                <table class="table-bordered" border="1" style="width: 100%;line-height: 2;">
                   <tr>
@@ -2433,7 +2433,7 @@
                   </thead>
                   <tbody>
                      <?php
-                        if ($DocType_Id == 46) {
+                        if ($doc_type_id == 46) {
                            $get_gst_challan_detail = $this->db->query("select * from gst_challan_detail where scan_id='$scan_id'")->result();
                         
                            foreach ($get_gst_challan_detail as $key => $value) {
@@ -2466,7 +2466,7 @@
                   </tr>
                </table>
             </div>
-            <?php } elseif ($DocType_Id == 47) { ?>
+            <?php } elseif ($doc_type_id == 47) { ?>
             <div class="table-responsive">
                <table class="table-bordered" border="1" style="width: 100%;line-height: 2;">
                   <tr>
@@ -2506,7 +2506,7 @@
                   </thead>
                   <tbody>
                      <?php
-                        if ($DocType_Id == 47) {
+                        if ($doc_type_id == 47) {
                            $labour_payment_detail = $this->db->query("select * from labour_payment_detail where scan_id='$scan_id'")->result();
                         
                            foreach ($labour_payment_detail as $key => $value) {
@@ -2534,7 +2534,7 @@
                   </tr>
                </table>
             </div>
-            <?php } elseif ($DocType_Id == 48) { ?>
+            <?php } elseif ($doc_type_id == 48) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 20%"><b>Company Name</b></td>
@@ -2573,7 +2573,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 49) { ?>
+            <?php } elseif ($doc_type_id == 49) { ?>
             <div class="table-responsive">
                <table class="table-bordered" border="1" style="width: 100%;line-height: 2;">
                   <tr>
@@ -2619,7 +2619,7 @@
                   </thead>
                   <tbody>
                      <?php
-                        if ($DocType_Id == 49) {
+                        if ($doc_type_id == 49) {
                            $get_invoice_detail = $this->db->query("select invoice_detail.*,master_unit.unit_name from invoice_detail left join master_unit on master_unit.unit_id = invoice_detail.Unit where scan_id='$scan_id'")->result();
                            foreach ($get_invoice_detail as $key => $value) {
                         ?>
@@ -2684,7 +2684,7 @@
                   <td><?= $file_detail->Remark ?></td>
                </tr>
             </div>
-            <?php } elseif ($DocType_Id == 50) { ?>
+            <?php } elseif ($doc_type_id == 50) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 20%"><b>Company Name</b></td>
@@ -2743,7 +2743,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 51) { ?>
+            <?php } elseif ($doc_type_id == 51) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 20%"><b>Mode</b></td>
@@ -2833,7 +2833,7 @@
                </thead>
                <tbody>
                   <?php
-                     if ($DocType_Id == 51) {
+                     if ($doc_type_id == 51) {
                         $emp_detail = $this->db->query("select * from lodging_employee  where scan_id='$scan_id'")->result();
                         foreach ($emp_detail as $key => $value) {
                      ?>
@@ -2845,7 +2845,7 @@
                   <?php }  ?>
                </tbody>
             </table>
-            <?php } elseif ($DocType_Id == 52) { ?>
+            <?php } elseif ($doc_type_id == 52) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 20%"><b>Mode</b></td>
@@ -2935,7 +2935,7 @@
                </thead>
                <tbody>
                   <?php
-                     if ($DocType_Id == 52) {
+                     if ($doc_type_id == 52) {
                         $emp_detail = $this->db->query("select * from lodging_employee  where scan_id='$scan_id'")->result();
                         foreach ($emp_detail as $key => $value) {
                      ?>
@@ -2947,7 +2947,7 @@
                   <?php }  ?>
                </tbody>
             </table>
-            <?php } elseif ($DocType_Id == 53) { ?>
+            <?php } elseif ($doc_type_id == 53) { ?>
             <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 20%"><b>Mode</b></td>
@@ -3018,7 +3018,7 @@
                   <td>:&emsp;<?= $file_detail->Remark ?></td>
                </tr>
             </table>
-            <?php } elseif ($DocType_Id == 55) { ?>
+            <?php } elseif ($doc_type_id == 55) { ?>
             <table class="table">
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Agent Name</b></td>
@@ -3046,7 +3046,7 @@
                </thead>
                <tbody>
                   <?php
-                     if ($DocType_Id == 55) {
+                     if ($doc_type_id == 55) {
                         $ticket_detail = $this->db->query("select * from ticket_cancellation where scan_id='$scan_id'")->result();
                         foreach ($ticket_detail as $key => $value) {
                      ?>
@@ -3085,7 +3085,7 @@
                <td>Remarks :</td>
                <td><?= $file_detail->Remark ?></td>
             </tr>
-            <?php } elseif ($DocType_Id == 56) { ?>
+            <?php } elseif ($doc_type_id == 56) { ?>
             <div class="table-responsive">
                <table class="table-bordered" border="1" style="width: 100%;line-height: 2;">
                   <tr>
@@ -3174,7 +3174,7 @@
                   </thead>
                   <tbody>
                      <?php
-                        if ($DocType_Id == 56) {
+                        if ($doc_type_id == 56) {
                            $get_invoice_detail = $this->db->query("select invoice_detail.*,master_unit.unit_name from invoice_detail left join master_unit on master_unit.unit_id = invoice_detail.Unit where scan_id='$scan_id'")->result();
                            foreach ($get_invoice_detail as $key => $value) {
                         ?>
@@ -3265,7 +3265,7 @@
       <div id="additional-info" class="tab-content">
          <div class="col-md-8">
             <input type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id ?>">
-            <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">
+            <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $doc_type_id ?>">
             <div class="row" style="background-color: #fff;">
                <div class="form-group col-md-4" style="background-color: #ffffff;     margin-bottom: 0;padding-bottom: 5px;">
                   <label for="">Document No <span class="text-danger">*</span></label>

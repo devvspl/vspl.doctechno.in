@@ -1,7 +1,7 @@
 <div id="invoice-details" class="tab-content active">
    <form action="<?= base_url(); ?>form/Tax_ctrl/Save_Income_Tax_TDS" id="tdsform" name="tdsform" method="post" accept-charset="utf-8">
          <input type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id ?>">
-         <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">
+         <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $doc_type_id ?>">
          <div class="row">
             <div class="form-group col-md-3">
                <label for="">Section:</label>

@@ -1,6 +1,6 @@
 <?php
 $scan_id = $this->uri->segment(2);
-$DocType_Id = $this->uri->segment(3);
+$doc_type_id = $this->uri->segment(3);
 $rec = $this->customlib->getScanData($scan_id);
 $fin_year = $this->customlib->getFinancial_year();
 $company_list = $this->customlib->getCompanyList();
@@ -35,7 +35,7 @@ $company_list = $this->customlib->getCompanyList();
     <div class="box-body">
         <div class="row">
             <div class="col-md-12">
-                <?php if ($DocType_Id == 4) { ?>
+                <?php if ($doc_type_id == 4) { ?>
                     <!-- Bank Statement -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -69,7 +69,7 @@ $company_list = $this->customlib->getCompanyList();
                             </tr>
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 5) { ?>
+                <?php } elseif ($doc_type_id == 5) { ?>
                     <!-- Boarding Pass -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -95,7 +95,7 @@ $company_list = $this->customlib->getCompanyList();
                             </tr>
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 8) { ?>
+                <?php } elseif ($doc_type_id == 8) { ?>
                     <!-- Certificate -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -122,7 +122,7 @@ $company_list = $this->customlib->getCompanyList();
 
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 10) { ?>
+                <?php } elseif ($doc_type_id == 10) { ?>
                     <!-- Company Record -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -153,7 +153,7 @@ $company_list = $this->customlib->getCompanyList();
 
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 11) { ?>
+                <?php } elseif ($doc_type_id == 11) { ?>
                     <!-- Confirmation of Account -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -180,7 +180,7 @@ $company_list = $this->customlib->getCompanyList();
 
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 18) { ?>
+                <?php } elseif ($doc_type_id == 18) { ?>
                     <!-- ID Address Proof -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -211,7 +211,7 @@ $company_list = $this->customlib->getCompanyList();
 
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 19) { ?>
+                <?php } elseif ($doc_type_id == 19) { ?>
                     <!-- Import Export Paper -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -246,7 +246,7 @@ $company_list = $this->customlib->getCompanyList();
 
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 30) { ?>
+                <?php } elseif ($doc_type_id == 30) { ?>
                     <!-- Mediclaim History -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -297,7 +297,7 @@ $company_list = $this->customlib->getCompanyList();
 
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 31) { ?>
+                <?php } elseif ($doc_type_id == 31) { ?>
                     <!-- Miscellaneous -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -317,7 +317,7 @@ $company_list = $this->customlib->getCompanyList();
 
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 32) { ?>
+                <?php } elseif ($doc_type_id == 32) { ?>
                     <!-- PF ESIC -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -352,7 +352,7 @@ $company_list = $this->customlib->getCompanyList();
 
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 35) { ?>
+                <?php } elseif ($doc_type_id == 35) { ?>
                     <!-- Property Record -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -437,7 +437,7 @@ $company_list = $this->customlib->getCompanyList();
 
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 36) { ?>
+                <?php } elseif ($doc_type_id == 36) { ?>
                     <!-- Rating Credentials -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -464,7 +464,7 @@ $company_list = $this->customlib->getCompanyList();
 
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 37) { ?>
+                <?php } elseif ($doc_type_id == 37) { ?>
                     <!--Registration Certificate -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -503,7 +503,7 @@ $company_list = $this->customlib->getCompanyList();
 
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 41) { ?>
+                <?php } elseif ($doc_type_id == 41) { ?>
                     <!-- Tax Credit Document -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -534,7 +534,7 @@ $company_list = $this->customlib->getCompanyList();
 
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 45) { ?>
+                <?php } elseif ($doc_type_id == 45) { ?>
                     <!-- Vehicle Registration Paper -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -577,7 +577,7 @@ $company_list = $this->customlib->getCompanyList();
 
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 1) { ?>
+                <?php } elseif ($doc_type_id == 1) { ?>
                     <!-- Two Four Wheeler Fare-->
 
                     <div class="padding-1">
@@ -611,7 +611,7 @@ $company_list = $this->customlib->getCompanyList();
                             </thead>
                             <tbody>
                                 <?php
-                                if ($DocType_Id == 1) {
+                                if ($doc_type_id == 1) {
                                     $get_travel_detail = $this->db->query("select * from vehicle_traveling where scan_id='$scan_id'")->result();
                                     foreach ($get_travel_detail as $key => $value) {
                                 ?>
@@ -645,7 +645,7 @@ $company_list = $this->customlib->getCompanyList();
 
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 2) { ?>
+                <?php } elseif ($doc_type_id == 2) { ?>
                     <!-- Air Bus Train Fare -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -705,7 +705,7 @@ $company_list = $this->customlib->getCompanyList();
 
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 3) { ?>
+                <?php } elseif ($doc_type_id == 3) { ?>
                     <!-- Bank Loan Paper -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -761,7 +761,7 @@ $company_list = $this->customlib->getCompanyList();
 
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 6) { ?>
+                <?php } elseif ($doc_type_id == 6) { ?>
                     <!-- Cash Deposit Withdrawal -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -807,7 +807,7 @@ $company_list = $this->customlib->getCompanyList();
 
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 23) { ?>
+                <?php } elseif ($doc_type_id == 23) { ?>
                     <!-- Invoice -->
                     <div style="padding:10px;">
                         <table class="table table-bordered- " style="margin-bottom:0px;border: 1px solid #ddd;font-size:12px;">
@@ -862,7 +862,7 @@ $company_list = $this->customlib->getCompanyList();
                             </thead>
                             <tbody>
                                 <?php
-                                if ($DocType_Id == 23) {
+                                if ($doc_type_id == 23) {
                                     $get_invoice_detail = $this->db->query("select invoice_detail.*,master_unit.unit_name from invoice_detail left join master_unit on master_unit.unit_id = invoice_detail.Unit where scan_id='$scan_id'")->result();
                                     foreach ($get_invoice_detail as $key => $value) {
                                 ?>
@@ -942,7 +942,7 @@ $company_list = $this->customlib->getCompanyList();
                             </tbody>
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 44) { ?>
+                <?php } elseif ($doc_type_id == 44) { ?>
                     <div class="padding-1">
                         <table class="table borderless table-pro">
                             <tr>
@@ -964,7 +964,7 @@ $company_list = $this->customlib->getCompanyList();
                             </tr>
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 43) { ?>
+                <?php } elseif ($doc_type_id == 43) { ?>
                     <div class="padding-1">
                         <table class="table borderless table-pro">
                             <tr>
@@ -986,7 +986,7 @@ $company_list = $this->customlib->getCompanyList();
                             </tr>
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 42) { ?>
+                <?php } elseif ($doc_type_id == 42) { ?>
                     <div class="padding-1">
                         <table class="table borderless table-pro">
                             <tr>
@@ -1044,7 +1044,7 @@ $company_list = $this->customlib->getCompanyList();
                             </tr>
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 40) { ?>
+                <?php } elseif ($doc_type_id == 40) { ?>
                     <div class="padding-1">
                         <table class="table borderless table-pro">
                             <tr>
@@ -1094,7 +1094,7 @@ $company_list = $this->customlib->getCompanyList();
                             </tr>
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 39) { ?>
+                <?php } elseif ($doc_type_id == 39) { ?>
                     <div class="padding-1">
                         <table class="table borderless table-pro">
                             <tr>
@@ -1134,7 +1134,7 @@ $company_list = $this->customlib->getCompanyList();
                             </tr>
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 38) { ?>
+                <?php } elseif ($doc_type_id == 38) { ?>
                     <!-- RST OFD -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -1180,7 +1180,7 @@ $company_list = $this->customlib->getCompanyList();
                             </tr>
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 34) { ?>
+                <?php } elseif ($doc_type_id == 34) { ?>
                     <!-- Postage Courier -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -1227,7 +1227,7 @@ $company_list = $this->customlib->getCompanyList();
                             </tr>
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 33) { ?>
+                <?php } elseif ($doc_type_id == 33) { ?>
                     <!-- Postage Courier -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -1289,7 +1289,7 @@ $company_list = $this->customlib->getCompanyList();
                             </tr>
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 29) { ?>
+                <?php } elseif ($doc_type_id == 29) { ?>
                     <!-- Meals -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -1315,7 +1315,7 @@ $company_list = $this->customlib->getCompanyList();
                             </tr>
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 28) { ?>
+                <?php } elseif ($doc_type_id == 28) { ?>
                     <!-- Lodging -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -1393,7 +1393,7 @@ $company_list = $this->customlib->getCompanyList();
                             </tr>
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 27) { ?>
+                <?php } elseif ($doc_type_id == 27) { ?>
                     <!-- Local Conveyance -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -1423,7 +1423,7 @@ $company_list = $this->customlib->getCompanyList();
                             </tr>
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 22) { ?>
+                <?php } elseif ($doc_type_id == 22) { ?>
                     <!-- Insurance Policy -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -1472,7 +1472,7 @@ $company_list = $this->customlib->getCompanyList();
                             </tr>
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 26) { ?>
+                <?php } elseif ($doc_type_id == 26) { ?>
                     <!-- Lease Rent -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -1538,7 +1538,7 @@ $company_list = $this->customlib->getCompanyList();
                             </tr>
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 25) { ?>
+                <?php } elseif ($doc_type_id == 25) { ?>
                     <!-- jeep_campaign -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -1573,7 +1573,7 @@ $company_list = $this->customlib->getCompanyList();
                             </tr>
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 24) { ?>
+                <?php } elseif ($doc_type_id == 24) { ?>
                     <!-- IT Return -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -1606,7 +1606,7 @@ $company_list = $this->customlib->getCompanyList();
                             </tr>
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 7) { ?>
+                <?php } elseif ($doc_type_id == 7) { ?>
                     <!-- Cash Voucher -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -1636,7 +1636,7 @@ $company_list = $this->customlib->getCompanyList();
                             </tr>
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 16) { ?>
+                <?php } elseif ($doc_type_id == 16) { ?>
                     <!-- Challan -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -1679,7 +1679,7 @@ $company_list = $this->customlib->getCompanyList();
                             </tr>
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 9) { ?>
+                <?php } elseif ($doc_type_id == 9) { ?>
                     <!-- Cheque -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -1721,7 +1721,7 @@ $company_list = $this->customlib->getCompanyList();
                             </tr>
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 12) { ?>
+                <?php } elseif ($doc_type_id == 12) { ?>
                     <!-- Dealer Meeting -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -1768,7 +1768,7 @@ $company_list = $this->customlib->getCompanyList();
                             </tr>
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 21) { ?>
+                <?php } elseif ($doc_type_id == 21) { ?>
                     <!-- Insurance Document -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -1841,7 +1841,7 @@ $company_list = $this->customlib->getCompanyList();
                             </tr>
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 13) { ?>
+                <?php } elseif ($doc_type_id == 13) { ?>
                     <!-- Electricity -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -1899,7 +1899,7 @@ $company_list = $this->customlib->getCompanyList();
                             </tr>
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 14) { ?>
+                <?php } elseif ($doc_type_id == 14) { ?>
                     <!-- FD FV -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -1947,7 +1947,7 @@ $company_list = $this->customlib->getCompanyList();
                             </tr>
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 15) { ?>
+                <?php } elseif ($doc_type_id == 15) { ?>
                     <!-- Fixed Deposit -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -1991,7 +1991,7 @@ $company_list = $this->customlib->getCompanyList();
                             </tr>
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 20) { ?>
+                <?php } elseif ($doc_type_id == 20) { ?>
                     <!-- Income Tax TDS -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -2043,7 +2043,7 @@ $company_list = $this->customlib->getCompanyList();
                             </tr>
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 17) { ?>
+                <?php } elseif ($doc_type_id == 17) { ?>
                     <!-- Hired Vehicle -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -2120,7 +2120,7 @@ $company_list = $this->customlib->getCompanyList();
                             </tr>
                         </table>
                     </div>
-                <?php } elseif ($DocType_Id == 46) { ?>
+                <?php } elseif ($doc_type_id == 46) { ?>
                     <!-- GST Challan -->
                     <div class="padding-1">
                         <table class="table borderless table-pro">
@@ -2169,7 +2169,7 @@ $company_list = $this->customlib->getCompanyList();
                                 </thead>
                                 <tbody>
                                     <?php
-                                    if ($DocType_Id == 46) {
+                                    if ($doc_type_id == 46) {
                                         $get_gst_challan_detail = $this->db->query("select * from gst_challan_detail where scan_id='$scan_id'")->result();
 
                                         foreach ($get_gst_challan_detail as $key => $value) {

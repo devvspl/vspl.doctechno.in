@@ -233,7 +233,7 @@ class Super_scan extends CI_Controller
     public function verification()
     {
         $Group = $this->input->post('Group');
-        $DocType_Id = $this->input->post('doc_type_id');
+        $doc_type_id = $this->input->post('doc_type_id');
         $fromDate = $this->input->post('from_date');
         $toDate = $this->input->post('to_date');
         $this->db->select('*');
@@ -246,8 +246,8 @@ class Super_scan extends CI_Controller
         if (!empty($Group)) {
             $this->db->where('group_id', $Group);
         }
-        if (!empty($DocType_Id)) {
-            $this->db->where('doc_type_id', $DocType_Id);
+        if (!empty($doc_type_id)) {
+            $this->db->where('doc_type_id', $doc_type_id);
         }
 
         if (!empty($fromDate)) {

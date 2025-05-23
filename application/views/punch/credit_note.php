@@ -1,7 +1,7 @@
 <div id="invoice-details" class="tab-content active">
    <form action="<?= base_url(); ?>form/CreditNote_ctrl/create" id="credit_note_form" name="credit_note_form" method="post" accept-charset="utf-8">
       <input type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id ?>">
-      <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">
+      <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $doc_type_id ?>">
       <div class="row" style="margin-bottom: 5px;">
          <div class="form-group col-md-3">
             <label for="">Credit Note No:</label>

@@ -179,7 +179,7 @@ $doctype_list = $this->db->select('type_id,file_type')->from('master_doctype')->
 					// Create the hyperlink HTML
 					var fileLink = '<a href="javascript:void(0);" target="popup" onclick="window.open(\'' + value.file_path + '\', \'popup\', \'width=600,height=600\');">' + value.File + '</a>';
 					// Create the hyperlink HTML for viewing file details
-					var viewFileLink = '<a href="' + '<?= base_url() ?>file_detail/' + value.scan_id + '/' + value.DocType_Id + '" class="btn btn-info btn-xs" target="_blank"><i class="fa fa-eye"></i></a>';
+					var viewFileLink = '<a href="' + '<?= base_url() ?>file_detail/' + value.scan_id + '/' + value.doc_type_id + '" class="btn btn-info btn-xs" target="_blank"><i class="fa fa-eye"></i></a>';
 					// Create the "Approve" and "Reject" buttons
 					var button = '<a href="javascript:void(0)" class="btn btn-success btn-xs" onclick="approveRecord(' + value.scan_id + ');">Approve</a> <a href="javascript:void(0);" class="btn btn-danger btn-xs" data-id="' + value.scan_id + '" onclick="rejectRecord(' + value.scan_id + ');">Reject</a>';
 					table.row.add([

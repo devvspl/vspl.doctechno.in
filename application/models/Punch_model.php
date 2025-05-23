@@ -196,7 +196,7 @@ class Punch_model extends MY_Model {
         $this->db->join('master_department', 'cash_voucher_items.DepartmentID = master_department.department_id', 'left');
         $this->db->where(['y{$this->year_id}_scan_file.Group_Id' => 16, 'y{$this->year_id}_scan_file.finance_punch' => 'Y', 'y{$this->year_id}_scan_file.File_Approved' => 'Y', 'y{$this->year_id}_scan_file.finance_punch_status' => 'N', 'punchfile.finance_punch_date IS NOT NULL' => null, 'punchfile.finance_punched_by IS NOT NULL' => null, ]);
         if (!empty($doctype)) {
-            $this->db->where('y{$this->year_id}_scan_file.DocType_Id', $doctype);
+            $this->db->where('y{$this->year_id}_scan_file.doc_type_id', $doctype);
         }
         if (!empty($search)) {
             $this->db->like('punchfile.document_number', $search);
@@ -217,7 +217,7 @@ class Punch_model extends MY_Model {
         $this->db->join('punchfile', 'y{$this->year_id}_scan_file.scan_id = punchfile.scan_id', 'left');
         $this->db->where(['y{$this->year_id}_scan_file.Group_Id' => 16, 'y{$this->year_id}_scan_file.finance_punch' => 'Y', 'y{$this->year_id}_scan_file.finance_punch_status' => 'N', 'punchfile.finance_punch_date IS NOT NULL' => null, 'punchfile.finance_punched_by IS NOT NULL' => null, ]);
         if (!empty($doctype)) {
-            $this->db->where('y{$this->year_id}_scan_file.DocType_Id', $doctype);
+            $this->db->where('y{$this->year_id}_scan_file.doc_type_id', $doctype);
         }
         if (!empty($search)) {
             $this->db->like('punchfile.document_number', $search);
@@ -248,7 +248,7 @@ class Punch_model extends MY_Model {
         $this->db->join('master_department', 'cash_voucher_items.DepartmentID = master_department.department_id', 'left');
         $this->db->where(['y{$this->year_id}_scan_file.Group_Id' => 16, 'y{$this->year_id}_scan_file.finance_punch' => 'Y', 'y{$this->year_id}_scan_file.File_Approved' => 'Y', 'y{$this->year_id}_scan_file.finance_punch_status' => 'N', 'punchfile.finance_punch_date IS NOT NULL' => null, 'punchfile.finance_punched_by IS NOT NULL' => null, ]);
         if (!empty($doctype)) {
-            $this->db->where('y{$this->year_id}_scan_file.DocType_Id', $doctype);
+            $this->db->where('y{$this->year_id}_scan_file.doc_type_id', $doctype);
         }
         if (!empty($from_date)) {
             $this->db->where('punchfile.finance_punch_date >=', $from_date);

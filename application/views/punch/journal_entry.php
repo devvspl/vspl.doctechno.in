@@ -1,6 +1,6 @@
 <?php
    $scan_id = $this->uri->segment(2);
-   $DocType_Id = $this->uri->segment(3);
+   $doc_type_id = $this->uri->segment(3);
    $rec = $this->customlib->getScanData($scan_id);
    $punch_detail = null;
    if (!empty($scan_id)) {
@@ -104,7 +104,7 @@
 </style>
 <?php
    $scan_id = $this->uri->segment(2);
-   $DocType_Id = $this->uri->segment(3);
+   $doc_type_id = $this->uri->segment(3);
    $rec = $this->customlib->getScanData($scan_id);
    $punch_detail = $this->db->get_where('punchfile', ['scan_id' => $scan_id])->row();
    $firm = $this->db->get_where('master_firm', ['status' => 'A'])->result_array();
@@ -169,7 +169,7 @@
       <div id="invoice-details" class="tab-content active">
          <div class="col-md-7">
             <input type="hidden" readonly name="scan_id" id="scan_id" value="<?= $scan_id ?>">
-            <input type="hidden" readonly name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">
+            <input type="hidden" readonly name="DocTypeId" id="DocTypeId" value="<?= $doc_type_id ?>">
             <div class="row" style="margin-bottom: 5px;">
                <div class="form-group col-md-3">
                   <label for="">Invoice No:</label>
@@ -543,7 +543,7 @@
       <div id="additional-info" class="tab-content">
          <div class="col-md-7">
             <input   type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id ?>">
-            <input   type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">
+            <input   type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $doc_type_id ?>">
             <div class="row" style="background-color: #fff;">
                <div class="form-group col-md-4" style="background-color: #ffffff;     margin-bottom: 0;padding-bottom: 5px;">
                   <label for="">Document No</label>
@@ -1075,7 +1075,7 @@
          <div id="invoice-details" class="tab-content active">
             <div class="col-md-7">
                <input type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id ?>">
-               <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">
+               <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $doc_type_id ?>">
                <div class="row" style="margin-bottom: 5px;">
                   <div class="form-group col-md-3">
                      <label for="">Invoice No:</label>

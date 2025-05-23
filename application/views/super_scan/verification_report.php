@@ -40,7 +40,7 @@
 					 <div class="col-sm-2 col-md-2">
                         <div class="form-group">
                            <label> File Type:</label>
-                           <select name="DocType_Id" id="DocType_Id" class="form-control form-control-sm">
+                           <select name="doc_type_id" id="doc_type_id" class="form-control form-control-sm">
                               <option value="">Select</option>
                               <?php foreach ($getFileType as $key => $value) { ?>
                               <option value="<?= $value['type_id']; ?>" <?php if (set_value('doc_type_id') == $value['type_id']) {

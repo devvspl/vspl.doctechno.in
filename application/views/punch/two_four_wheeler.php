@@ -3,7 +3,7 @@
    <form action="<?= base_url(); ?>form/Vehicle_ctrl/save_two_four_wheel_exp" id="vehicle_expense_form"
       name="vehicle_expense_form" method="post" accept-charset="utf-8">
       <input type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id ?>">
-      <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">
+      <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $doc_type_id ?>">
       <div class="row">
          <div class="form-group col-md-6">
             <label for="">Employee / Payee Name :</label> <span class="text-danger">*</span>

@@ -1,7 +1,7 @@
 <div id="additional-info" class="tab-content">
    <form action="<?= base_url('store-additional-detail'); ?>"  method="post">
       <input type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id ?>">
-      <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">
+      <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $doc_type_id ?>">
       <div class="row" style="background-color: #fff;">
          <div class="form-group col-md-4" style="background-color: #ffffff;     margin-bottom: 0;padding-bottom: 5px;">
             <label for="">Document No <span class="text-danger">*</span></label>

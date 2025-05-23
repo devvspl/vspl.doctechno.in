@@ -21,7 +21,7 @@
 </style>
 <?php
    $scan_id = $this->uri->segment(2);
-   $DocType_Id = $this->uri->segment(3);
+   $doc_type_id = $this->uri->segment(3);
    $rec = $this->customlib->getScanData($scan_id);
    $punch_detail = null;
    if (!empty($scan_id)) {
@@ -127,7 +127,7 @@
       <form action="<?= base_url(); ?>form/Cashpayment_New_ctrl/create" id="journal_enty_form" name="journal_enty_form" method="post" accept-charset="utf-8">
          <div class="col-md-7">
             <input  required type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id ?>">
-            <input  required type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">
+            <input  required type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $doc_type_id ?>">
             <div class="row">
                <div class="form-group col-md-4">
                   <label for="">Document No</label>

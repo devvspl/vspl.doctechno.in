@@ -86,7 +86,7 @@
                                                     <?php } ?>
                                                 </td>
                                                 <td class="mailbox-name no-print">
-                                                    <select name="DocType_Id" id="DocType_Id_<?= $row['scan_id'] ?>" class="form-control-sm DocType_Id" disabled onchange="changeDocType(<?= $row['scan_id'] ?>,this.value)">
+                                                    <select name="doc_type_id" id="DocType_Id_<?= $row['scan_id'] ?>" class="form-control-sm doc_type_id" disabled onchange="changeDocType(<?= $row['scan_id'] ?>,this.value)">
                                                         <option value="0">Select</option>
                                                         <?php
                                                         foreach ($my_doctype_list as $value) {
@@ -140,20 +140,20 @@
 
 <script>
    /*   $(document).ready(function() {
-        $('.DocType_Id').select2();
+        $('.doc_type_id').select2();
     }); */
 
     function editDocType(scan_id, th) {
         $("#DocType_Id_" + scan_id).prop('disabled', false);
     }
 
-    function changeDocType(scan_id, DocType_Id) {
+    function changeDocType(scan_id, doc_type_id) {
         $.ajax({
             url: '<?php echo base_url(); ?>Punch/changeDocType',
             type: 'POST',
             data: {
                 scan_id: scan_id,
-                DocType_Id: DocType_Id
+                doc_type_id: doc_type_id
             },
             dataType: 'json',
             success: function(response) {

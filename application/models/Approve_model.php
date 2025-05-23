@@ -32,7 +32,7 @@ class Approve_model extends MY_Model {
             $this->db->where('y{$this->year_id}_scan_file.Group_Id', $group);
         }
 		if ($Doctype !== '') {
-            $this->db->where('y{$this->year_id}_scan_file.DocType_Id', $Doctype);
+            $this->db->where('y{$this->year_id}_scan_file.doc_type_id', $Doctype);
         }
         if ($from_date !== '' && $to_date !== '') {
             $this->db->where('Approve_Date >=', $from_date);
@@ -62,7 +62,7 @@ class Approve_model extends MY_Model {
             $this->db->where('y{$this->year_id}_scan_file.Group_Id', $group);
         }
 		if ($Doctype !== '') {
-            $this->db->where('y{$this->year_id}_scan_file.DocType_Id', $Doctype);
+            $this->db->where('y{$this->year_id}_scan_file.doc_type_id', $Doctype);
         }
         if ($from_date !== '' && $to_date !== '') {
             $this->db->where('Approve_Date >=', $from_date);

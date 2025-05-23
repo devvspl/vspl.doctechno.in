@@ -1,7 +1,7 @@
 <?php
 
 $scan_id = $this->uri->segment(2);
-$DocType_Id = $this->uri->segment(3);
+$doc_type_id = $this->uri->segment(3);
 
 
 ?>
@@ -11,7 +11,7 @@ $DocType_Id = $this->uri->segment(3);
             <div class="col-md-12">
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Record Detail - <?php echo $this->customlib->getDocType($DocType_Id); ?>
+                        <h3 class="box-title">Record Detail - <?php echo $this->customlib->getDocType($doc_type_id); ?>
                             <?php
                             $document_name = $this->customlib->getDocumentName($scan_id);
                             if (!empty($document_name) || $document_name != null) {

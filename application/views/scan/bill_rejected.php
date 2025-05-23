@@ -62,7 +62,7 @@
 										<?php echo $row['bill_approver_remark']; ?>
 									</td>
 									<td class="mailbox-name no-print">
-										<select name="Scan_id" id="Scan_id_<?= $row['scan_id'] ?>" class="form-control-sm DocType_Id" disabled onchange="changeBillApprover(<?= $row['scan_id'] ?>,this.value)">
+										<select name="Scan_id" id="Scan_id_<?= $row['scan_id'] ?>" class="form-control-sm doc_type_id" disabled onchange="changeBillApprover(<?= $row['scan_id'] ?>,this.value)">
 											<option value="0">Select</option>
 											<?php
 											foreach ($bill_approver_list as $value) {

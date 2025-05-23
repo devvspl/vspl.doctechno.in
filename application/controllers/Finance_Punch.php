@@ -99,11 +99,11 @@ class Finance_Punch extends CI_Controller
     function changeDocType()
     {
         $scan_id = $this->input->post("scan_id");
-        $DocType_Id = $this->input->post("DocType_Id");
-        $Doc_Type = $this->customlib->getDocType($DocType_Id);
+        $doc_type_id = $this->input->post("doc_type_id");
+        $Doc_Type = $this->customlib->getDocType($doc_type_id);
         $this->db->where("scan_id", $scan_id);
         $query = $this->db->update("y{$this->year_id}_scan_file", [
-            "DocType_Id" => $DocType_Id,
+            "doc_type_id" => $doc_type_id,
             "Doc_Type" => $Doc_Type,
         ]);
         if ($query) {

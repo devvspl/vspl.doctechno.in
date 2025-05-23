@@ -2,7 +2,7 @@
    <form action="<?= base_url(); ?>form/Miscellaneous_ctrl/Save_Meals" id="Form" name="Form" method="post"
       accept-charset="utf-8">
          <input type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id ?>">
-         <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">
+         <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $doc_type_id ?>">
          <div class="row">
             <div class="form-group col-md-4">
                <label for="">Hotel Name:</label>

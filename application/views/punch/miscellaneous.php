@@ -2,7 +2,7 @@
    <form action="<?= base_url(); ?>form/Miscellaneous_ctrl/create" id="punch_form" name="punch_form" method="post"
       accept-charset="utf-8">
          <input type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id ?>">
-         <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $DocType_Id ?>">
+         <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $doc_type_id ?>">
          <div class="row">
             <div class="col-md-4 form-group ">
                <label for="">Company:</label><span class="text-danger">*</span>
