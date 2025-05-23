@@ -142,7 +142,6 @@
             }
          });
       });
-   
       function delete_file(id) {
        var url = '<?= base_url() ?>Scan/delete_file';
        if (confirm('Are you sure to delete ?')) {
