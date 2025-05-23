@@ -2,7 +2,7 @@
    $scan_id = $this->uri->segment(2);
    $rec = $this->customlib->getScanData($scan_id);
    $group_id = $rec->group_id;
-   $Bill_Approver = $rec->bill_approver_id;
+   $bill_approver_id = $rec->bill_approver_id;
    
    ?>
    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.0/themes/base/jquery-ui.css" />
@@ -115,7 +115,7 @@
                            </div>
                         </div>
                         <?php 
-                           $Bill_Approver = $rec->bill_approver_id;
+                           $bill_approver_id = $rec->bill_approver_id;
                            if ($rec->bill_approval_status == 'N') {
                            ?>
                         <div class="col-md-6">
@@ -224,7 +224,7 @@
 <script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
 <script>
 var groupId = "<?php echo $group_id;?>" ;
-var bill_approver = "<?php echo $Bill_Approver;?>" ;
+var bill_approver = "<?php echo $bill_approver_id;?>" ;
 
 var defaultApproverId = 115;
 var approversByLocation = <?= json_encode($approversByLocation ?? []) ?>;

@@ -88,13 +88,13 @@ class Dashboard extends CI_Controller {
         $complete_scan = $this->db->query("SELECT * FROM `y{$this->year_id}_scan_file` 
 		WHERE Final_Submit ='Y' 
 			  AND is_deleted='N' 
-			  AND ( date(`Scan_Date`) BETWEEN '$from_date' AND '$to_date') $condition");
+			  AND ( date(`scan_date`) BETWEEN '$from_date' AND '$to_date') $condition");
         $complete_scan_count = $complete_scan->num_rows();
         $complete_punch = $this->db->query("SELECT * FROM `y{$this->year_id}_scan_file` WHERE File_Punched ='Y' AND is_deleted='N' AND  date(`Punch_Date`) >= '$from_date' AND date(`Punch_Date`) <= '$to_date' $condition");
         $complete_punch_count = $complete_punch->num_rows();
         $complete_approve = $this->db->query("SELECT * FROM `y{$this->year_id}_scan_file` WHERE File_Approved ='Y' AND is_deleted='N' AND date(`Approve_Date`) >= '$from_date' AND date(`Approve_Date`) <= '$to_date' $condition");
         $complete_approve_count = $complete_approve->num_rows();
-        $pending_punch = $this->db->query("SELECT * FROM `y{$this->year_id}_scan_file` WHERE Final_Submit ='Y' AND File_Punched ='N' AND is_deleted='N' AND date(`Scan_Date`) >= '$from_date' AND date(`Scan_Date`) <= '$to_date' $condition");
+        $pending_punch = $this->db->query("SELECT * FROM `y{$this->year_id}_scan_file` WHERE Final_Submit ='Y' AND File_Punched ='N' AND is_deleted='N' AND date(`scan_date`) >= '$from_date' AND date(`scan_date`) <= '$to_date' $condition");
         $pending_punch_count = $pending_punch->num_rows();
         $pending_approve = $this->db->query("SELECT * FROM `y{$this->year_id}_scan_file` WHERE File_Punched ='Y' AND File_Approved ='N' AND is_deleted='N' AND date(`Punch_Date`) >= '$from_date' AND date(`Punch_Date`) <= '$to_date' $condition");
         $pending_approve_count = $pending_approve->num_rows();
@@ -111,18 +111,18 @@ class Dashboard extends CI_Controller {
                    SUM(IF(y{$this->year_id}_scan_file.Bill_Approved = "R", 1, 0)) AS rejected,
                    SUM(IF(y{$this->year_id}_scan_file.Bill_Approved = "N", 1, 0)) AS pending');
             $this->db->from("y{$this->year_id}_scan_file");
-            $this->db->join('users', 'users.user_id = y{$this->year_id}_scan_file.Bill_Approver', 'left');
+            $this->db->join('users', 'users.user_id = y{$this->year_id}_scan_file.bill_approver_id', 'left');
             $this->db->where('y{$this->year_id}_scan_file.location_id IS NOT NULL');
-            $this->db->group_by('y{$this->year_id}_scan_file.Bill_Approver');
+            $this->db->group_by('y{$this->year_id}_scan_file.bill_approver_id');
         } else {
             $this->db->select('CONCAT(users.first_name, " ", users.last_name) AS bill_approver,
                    SUM(IF(y{$this->year_id}_scan_file.Bill_Approved = "Y", 1, 0)) AS approved,
                    SUM(IF(y{$this->year_id}_scan_file.Bill_Approved = "R", 1, 0)) AS rejected,
                    SUM(IF(y{$this->year_id}_scan_file.Bill_Approved = "N", 1, 0)) AS pending');
             $this->db->from("y{$this->year_id}_scan_file");
-            $this->db->join('users', 'users.user_id = y{$this->year_id}_scan_file.Bill_Approver', 'left');
+            $this->db->join('users', 'users.user_id = y{$this->year_id}_scan_file.bill_approver_id', 'left');
             $this->db->where('y{$this->year_id}_scan_file.location_id IS NOT NULL');
-            $this->db->group_by('y{$this->year_id}_scan_file.Bill_Approver');
+            $this->db->group_by('y{$this->year_id}_scan_file.bill_approver_id');
         }
         $query = $this->db->get();
         $data = $query->result();
@@ -133,10 +133,10 @@ class Dashboard extends CI_Controller {
         $To_Date = $this->input->post('To_Date');
         $this->db->select('master_group.group_name');
         if ($From_Date != '' && $To_Date != '') {
-            $this->db->select('SUM(IF(Final_Submit = "Y" AND y{$this->year_id}_scan_file.is_deleted = "N" AND (date(`Scan_Date`) >= "' . $From_Date . '" AND date(`Scan_Date`) <= "' . $To_Date . '"), 1, 0)) AS Scan', false);
+            $this->db->select('SUM(IF(Final_Submit = "Y" AND y{$this->year_id}_scan_file.is_deleted = "N" AND (date(`scan_date`) >= "' . $From_Date . '" AND date(`scan_date`) <= "' . $To_Date . '"), 1, 0)) AS Scan', false);
             $this->db->select('SUM(IF( y{$this->year_id}_scan_file.is_deleted = "N" AND (date(`Punch_Date`) >= "' . $From_Date . '" AND date(`Punch_Date`) <= "' . $To_Date . '"), 1, 0)) AS Punch', false);
             $this->db->select('SUM(IF( y{$this->year_id}_scan_file.is_deleted = "N" AND (date(`Approve_Date`) >= "' . $From_Date . '" AND date(`Approve_Date`) <= "' . $To_Date . '"), 1, 0)) AS Approve', false);
-            $this->db->select('SUM(IF(File_Punched = "N" AND y{$this->year_id}_scan_file.is_deleted = "N" AND Final_Submit = "Y" AND (date(`Scan_Date`) >= "' . $From_Date . '" AND date(`Scan_Date`) <= "' . $To_Date . '"), 1, 0)) AS Pending_Punch', false);
+            $this->db->select('SUM(IF(File_Punched = "N" AND y{$this->year_id}_scan_file.is_deleted = "N" AND Final_Submit = "Y" AND (date(`scan_date`) >= "' . $From_Date . '" AND date(`scan_date`) <= "' . $To_Date . '"), 1, 0)) AS Pending_Punch', false);
             $this->db->select('SUM(IF(File_Punched = "Y" AND y{$this->year_id}_scan_file.is_deleted = "N" AND File_Approved = "N" AND (date(`Punch_Date`) >= "' . $From_Date . '" AND date(`Punch_Date`) <= "' . $To_Date . '"), 1, 0)) AS Pending_Approve', false);
             $this->db->select('SUM(IF(File_Punched = "Y" AND y{$this->year_id}_scan_file.is_deleted = "N" AND File_Approved = "N" AND Is_Rejected = "Y" AND (date(`Punch_Date`) >= "' . $From_Date . '" AND date(`Punch_Date`) <= "' . $To_Date . '") , 1, 0)) AS Reject', false);
         } else {

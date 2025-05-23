@@ -22,11 +22,11 @@ class Extract_model extends CI_Model {
         $this->db->where('status', 'pending');
         $queuedScans = $this->db->get('tbl_queues')->result_array();
         $queuedScanIds = array_column($queuedScans, 'scan_id');
-        $this->db->select("s.scan_id, g.group_name, l.location_name, s.document_name , s.file_path, IF(s.is_temp_scan = 'Y', s.Temp_Scan_Date, s.Scan_Date) AS Scan_Date, IF(s.is_temp_scan = 'Y', CONCAT(sb.first_name, ' ', sb.last_name), CONCAT(sbb.first_name, ' ', sbb.last_name)) AS scanned_by, CONCAT(ba.first_name, ' ', ba.last_name) AS Bill_Approver, s.Bill_Approver_Date");
+        $this->db->select("s.scan_id, g.group_name, l.location_name, s.document_name , s.file_path, IF(s.is_temp_scan = 'Y', s.temp_scan_date, s.scan_date) AS scan_date, IF(s.is_temp_scan = 'Y', CONCAT(sb.first_name, ' ', sb.last_name), CONCAT(sbb.first_name, ' ', sbb.last_name)) AS scanned_by, CONCAT(ba.first_name, ' ', ba.last_name) AS bill_approver_id, s.bill_approved_date");
         $this->db->from("y{$this->year_id}_scan_file s");
         $this->db->join("master_group g", "g.group_id = s.Group_Id", "left");
         $this->db->join("master_work_location l", "l.location_id = s.Location", "left");
-        $this->db->join("users ba", "ba.user_id = s.Bill_Approver", "left");
+        $this->db->join("users ba", "ba.user_id = s.bill_approver_id", "left");
         $this->db->join("users sb", "sb.user_id = s.Temp_Scan_By", "left");
         $this->db->join("users sbb", "sbb.user_id = s.scanned_by", "left");
         $this->db->where("s.document_name  !=", "");
@@ -45,12 +45,12 @@ class Extract_model extends CI_Model {
         return $this->db->get()->result();
     }
     public function getProcessedList($group_id = null, $location_id = null) {
-        $this->db->select("s.scan_id, g.group_name, md.file_type, s.is_extract, l.location_name, s.document_name , s.file_path, IF(s.is_temp_scan = 'Y', s.Temp_Scan_Date, s.Scan_Date) AS Scan_Date, IF(s.is_temp_scan = 'Y', CONCAT(sb.first_name, ' ', sb.last_name), CONCAT(sbb.first_name, ' ', sbb.last_name)) AS scanned_by, CONCAT(ba.first_name, ' ', ba.last_name) AS Bill_Approver, s.Bill_Approver_Date");
+        $this->db->select("s.scan_id, g.group_name, md.file_type, s.is_extract, l.location_name, s.document_name , s.file_path, IF(s.is_temp_scan = 'Y', s.temp_scan_date, s.scan_date) AS scan_date, IF(s.is_temp_scan = 'Y', CONCAT(sb.first_name, ' ', sb.last_name), CONCAT(sbb.first_name, ' ', sbb.last_name)) AS scanned_by, CONCAT(ba.first_name, ' ', ba.last_name) AS bill_approver_id, s.bill_approved_date");
         $this->db->from("y{$this->year_id}_scan_file s");
         $this->db->join("master_group g", "g.group_id = s.Group_Id", "left");
         $this->db->join("master_doctype md", "md.type_id  = s.DocType_Id", "left");
         $this->db->join("master_work_location l", "l.location_id = s.Location", "left");
-        $this->db->join("users ba", "ba.user_id = s.Bill_Approver", "left");
+        $this->db->join("users ba", "ba.user_id = s.bill_approver_id", "left");
         $this->db->join("users sb", "sb.user_id = s.Temp_Scan_By", "left");
         $this->db->join("users sbb", "sbb.user_id = s.scanned_by", "left");
         $this->db->where("s.document_name  !=", "");
@@ -66,12 +66,12 @@ class Extract_model extends CI_Model {
         return $this->db->get()->result();
     }
     public function getChangeRequestList($group_id = null, $location_id = null) {
-        $this->db->select("s.scan_id, g.group_name, s.is_extract, md.file_type, l.location_name, s.document_name , s.file_path, IF(s.is_temp_scan = 'Y', s.Temp_Scan_Date, s.Scan_Date) AS Scan_Date, IF(s.is_temp_scan = 'Y', CONCAT(sb.first_name, ' ', sb.last_name), CONCAT(sbb.first_name, ' ', sbb.last_name)) AS scanned_by, CONCAT(ba.first_name, ' ', ba.last_name) AS Bill_Approver, s.Bill_Approver_Date");
+        $this->db->select("s.scan_id, g.group_name, s.is_extract, md.file_type, l.location_name, s.document_name , s.file_path, IF(s.is_temp_scan = 'Y', s.temp_scan_date, s.scan_date) AS scan_date, IF(s.is_temp_scan = 'Y', CONCAT(sb.first_name, ' ', sb.last_name), CONCAT(sbb.first_name, ' ', sbb.last_name)) AS scanned_by, CONCAT(ba.first_name, ' ', ba.last_name) AS bill_approver_id, s.bill_approved_date");
         $this->db->from("y{$this->year_id}_scan_file s");
         $this->db->join("master_group g", "g.group_id = s.Group_Id", "left");
         $this->db->join("master_doctype md", "md.type_id  = s.DocType_Id", "left");
         $this->db->join("master_work_location l", "l.location_id = s.Location", "left");
-        $this->db->join("users ba", "ba.user_id = s.Bill_Approver", "left");
+        $this->db->join("users ba", "ba.user_id = s.bill_approver_id", "left");
         $this->db->join("users sb", "sb.user_id = s.Temp_Scan_By", "left");
         $this->db->join("users sbb", "sbb.user_id = s.scanned_by", "left");
         $this->db->where("s.document_name  !=", "");
@@ -86,11 +86,11 @@ class Extract_model extends CI_Model {
         return $this->db->get()->result();
     }
     public function getDocumentDetails($scanId) {
-        $this->db->select("s.scan_id, s.DocType_Id, g.group_name, l.location_name, s.document_name , s.file_path, IF(s.is_temp_scan = 'Y', s.Temp_Scan_Date, s.Scan_Date) AS Scan_Date, IF(s.is_temp_scan = 'Y', CONCAT(sb.first_name, ' ', sb.last_name), CONCAT(sbb.first_name, ' ', sbb.last_name)) AS scanned_by, CONCAT(ba.first_name, ' ', ba.last_name) AS Bill_Approver, s.Bill_Approver_Date");
+        $this->db->select("s.scan_id, s.DocType_Id, g.group_name, l.location_name, s.document_name , s.file_path, IF(s.is_temp_scan = 'Y', s.temp_scan_date, s.scan_date) AS scan_date, IF(s.is_temp_scan = 'Y', CONCAT(sb.first_name, ' ', sb.last_name), CONCAT(sbb.first_name, ' ', sbb.last_name)) AS scanned_by, CONCAT(ba.first_name, ' ', ba.last_name) AS bill_approver_id, s.bill_approved_date");
         $this->db->from("y{$this->year_id}_scan_file s");
         $this->db->join("master_group g", "g.group_id = s.Group_Id", "left");
         $this->db->join("master_work_location l", "l.location_id = s.Location", "left");
-        $this->db->join("users ba", "ba.user_id = s.Bill_Approver", "left");
+        $this->db->join("users ba", "ba.user_id = s.bill_approver_id", "left");
         $this->db->join("users sb", "sb.user_id = s.Temp_Scan_By", "left");
         $this->db->join("users sbb", "sbb.user_id = s.scanned_by", "left");
         $this->db->where("s.scan_id", $scanId);

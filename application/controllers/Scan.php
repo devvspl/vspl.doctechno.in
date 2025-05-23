@@ -433,9 +433,9 @@ class Scan extends CI_Controller
     public function changeBillApprover()
     {
         $scan_id = $this->input->post('scan_id');
-        $Bill_Approver = $this->input->post('bill_approver_id');
+        $bill_approver_id = $this->input->post('bill_approver_id');
         $this->db->where('scan_id', $scan_id);
-        $query = $this->db->update("y{$this->year_id}_scan_file", ['bill_approver_id' => $Bill_Approver]);
+        $query = $this->db->update("y{$this->year_id}_scan_file", ['bill_approver_id' => $bill_approver_id]);
         if ($query) {
             echo json_encode(['status' => 200]);
         } else {

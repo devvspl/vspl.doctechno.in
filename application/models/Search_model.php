@@ -48,12 +48,12 @@ class Search_model extends MY_Model {
             pab.first_name as Approve_By,
             bab.first_name as Bill_Approve_By,
             Approve_Date,
-            Bill_Approver,
-            Bill_Approver_Date,
-            Temp_Scan_Date,
+            bill_approver_id,
+            bill_approved_date,
+            temp_scan_date,
             Temp_Scan_By,
             scanned_by,
-            Scan_Date,
+            scan_date,
             Punch_By,
             Punch_Date,
             File_Punched,
@@ -77,7 +77,7 @@ class Search_model extends MY_Model {
         $this->db->join('punchfile', 'punchfile.scan_id = y{$this->year_id}_scan_file.scan_id', 'left');
         $this->db->join('master_group', 'master_group.group_id = y{$this->year_id}_scan_file.Group_Id', 'left');
         $this->db->join('users pab', 'y{$this->year_id}_scan_file.Approve_By = pab.user_id', 'left');
-        $this->db->join('users bab', 'y{$this->year_id}_scan_file.Bill_Approver = bab.user_id', 'left');
+        $this->db->join('users bab', 'y{$this->year_id}_scan_file.bill_approver_id = bab.user_id', 'left');
         $this->db->where('y{$this->year_id}_scan_file.File_Punched', 'Y');
         $this->db->where('y{$this->year_id}_scan_file.is_deleted', 'N');
         if (!empty($company_wise)) {
@@ -140,10 +140,10 @@ class Search_model extends MY_Model {
             $this->db->where('group_id', $group);
         }
         if (!empty($from_date)) {
-            $this->db->where('Scan_Date >=', $from_date);
+            $this->db->where('scan_date >=', $from_date);
         }
         if (!empty($to_date)) {
-            $this->db->where('Scan_Date <=', $to_date);
+            $this->db->where('scan_date <=', $to_date);
         }
         if (!empty($search_key)) {
             $this->db->group_start()->like('document_name', $search_key)->or_like('file_name', $search_key)->group_end();

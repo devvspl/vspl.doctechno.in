@@ -129,13 +129,13 @@
         $("#Scan_id_" + scan_id).prop('disabled', false);
     }
 
-    function changeBillApprover(scan_id, Bill_Approver) {
+    function changeBillApprover(scan_id, bill_approver_id) {
         $.ajax({
             url: '<?php echo base_url(); ?>Scan/changeBillApprover',
             type: 'POST',
             data: {
                 scan_id: scan_id,
-                Bill_Approver: Bill_Approver
+                bill_approver_id: bill_approver_id
             },
             dataType: 'json',
             success: function(response) {

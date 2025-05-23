@@ -52,11 +52,11 @@ class Record_model extends MY_Model {
     }
     //=================Super Admin All Record================
     function get_all_record_list() {
-        $query = $this->db->select('y{$this->year_id}_scan_file.document_name , y{$this->year_id}_scan_file.Doc_Type,y{$this->year_id}_scan_file.DocType_Id, y{$this->year_id}_scan_file.file_path, y{$this->year_id}_scan_file.File, y{$this->year_id}_scan_file.Temp_Scan_Date, y{$this->year_id}_scan_file.Temp_Scan_By, y{$this->year_id}_scan_file.scanned_by, y{$this->year_id}_scan_file.Scan_Date, y{$this->year_id}_scan_file.Bill_Approver_Date, y{$this->year_id}_scan_file.File_Punched, y{$this->year_id}_scan_file.Punch_By, y{$this->year_id}_scan_file.Punch_Date, y{$this->year_id}_scan_file.File_Approved, y{$this->year_id}_scan_file.Approve_By, y{$this->year_id}_scan_file.Approve_Date, y{$this->year_id}_scan_file.scan_id, punchfile.ServiceNo, punchfile.BookingDate')->from("y{$this->year_id}_scan_file")->join('punchfile', 'y{$this->year_id}_scan_file.scan_id = punchfile.scan_id', 'left')->where('is_deleted', 'N')->order_by('y{$this->year_id}_scan_file.scan_id', 'desc')->get();
+        $query = $this->db->select('y{$this->year_id}_scan_file.document_name , y{$this->year_id}_scan_file.Doc_Type,y{$this->year_id}_scan_file.DocType_Id, y{$this->year_id}_scan_file.file_path, y{$this->year_id}_scan_file.File, y{$this->year_id}_scan_file.temp_scan_date, y{$this->year_id}_scan_file.Temp_Scan_By, y{$this->year_id}_scan_file.scanned_by, y{$this->year_id}_scan_file.scan_date, y{$this->year_id}_scan_file.bill_approved_date, y{$this->year_id}_scan_file.File_Punched, y{$this->year_id}_scan_file.Punch_By, y{$this->year_id}_scan_file.Punch_Date, y{$this->year_id}_scan_file.File_Approved, y{$this->year_id}_scan_file.Approve_By, y{$this->year_id}_scan_file.Approve_Date, y{$this->year_id}_scan_file.scan_id, punchfile.ServiceNo, punchfile.BookingDate')->from("y{$this->year_id}_scan_file")->join('punchfile', 'y{$this->year_id}_scan_file.scan_id = punchfile.scan_id', 'left')->where('is_deleted', 'N')->order_by('y{$this->year_id}_scan_file.scan_id', 'desc')->get();
         return $query->result_array();
     }
 	public function count_filtered_records($group = '', $search = '', $from_date = '', $to_date = '') {
-        $this->db->select('y{$this->year_id}_scan_file.document_name , y{$this->year_id}_scan_file.Doc_Type,y{$this->year_id}_scan_file.DocType_Id, y{$this->year_id}_scan_file.file_path, y{$this->year_id}_scan_file.File, y{$this->year_id}_scan_file.Temp_Scan_Date, y{$this->year_id}_scan_file.Temp_Scan_By, y{$this->year_id}_scan_file.scanned_by, y{$this->year_id}_scan_file.Scan_Date, y{$this->year_id}_scan_file.Bill_Approver_Date, y{$this->year_id}_scan_file.File_Punched, y{$this->year_id}_scan_file.Punch_By, y{$this->year_id}_scan_file.Punch_Date, y{$this->year_id}_scan_file.File_Approved, y{$this->year_id}_scan_file.Approve_By, y{$this->year_id}_scan_file.Approve_Date, y{$this->year_id}_scan_file.scan_id, punchfile.ServiceNo, punchfile.BookingDate');
+        $this->db->select('y{$this->year_id}_scan_file.document_name , y{$this->year_id}_scan_file.Doc_Type,y{$this->year_id}_scan_file.DocType_Id, y{$this->year_id}_scan_file.file_path, y{$this->year_id}_scan_file.File, y{$this->year_id}_scan_file.temp_scan_date, y{$this->year_id}_scan_file.Temp_Scan_By, y{$this->year_id}_scan_file.scanned_by, y{$this->year_id}_scan_file.scan_date, y{$this->year_id}_scan_file.bill_approved_date, y{$this->year_id}_scan_file.File_Punched, y{$this->year_id}_scan_file.Punch_By, y{$this->year_id}_scan_file.Punch_Date, y{$this->year_id}_scan_file.File_Approved, y{$this->year_id}_scan_file.Approve_By, y{$this->year_id}_scan_file.Approve_Date, y{$this->year_id}_scan_file.scan_id, punchfile.ServiceNo, punchfile.BookingDate');
         $this->db->from("y{$this->year_id}_scan_file");
         if (!empty($group)) {
             $this->db->where('y{$this->year_id}_scan_file.Group_Id', $group);
@@ -67,11 +67,11 @@ class Record_model extends MY_Model {
             $this->db->or_like('y{$this->year_id}_scan_file.Doc_Type', $search);
             $this->db->or_like('y{$this->year_id}_scan_file.file_path', $search);
             $this->db->or_like('y{$this->year_id}_scan_file.File', $search);
-            $this->db->or_like('y{$this->year_id}_scan_file.Temp_Scan_Date', $search);
+            $this->db->or_like('y{$this->year_id}_scan_file.temp_scan_date', $search);
             $this->db->or_like('y{$this->year_id}_scan_file.Temp_Scan_By', $search);
             $this->db->or_like('y{$this->year_id}_scan_file.scanned_by', $search);
-            $this->db->or_like('y{$this->year_id}_scan_file.Scan_Date', $search);
-            $this->db->or_like('y{$this->year_id}_scan_file.Bill_Approver_Date', $search);
+            $this->db->or_like('y{$this->year_id}_scan_file.scan_date', $search);
+            $this->db->or_like('y{$this->year_id}_scan_file.bill_approved_date', $search);
             $this->db->or_like('y{$this->year_id}_scan_file.File_Punched', $search);
             $this->db->or_like('y{$this->year_id}_scan_file.Punch_By', $search);
             $this->db->or_like('y{$this->year_id}_scan_file.Punch_Date', $search);
@@ -82,16 +82,16 @@ class Record_model extends MY_Model {
             $this->db->group_end();
         }
 		if (!empty($from_date) && !empty($to_date)) {
-			$this->db->where('y{$this->year_id}_scan_file.Temp_Scan_Date >=', $from_date);
-			$this->db->where('y{$this->year_id}_scan_file.Temp_Scan_Date <=', $to_date);
-			$this->db->where('y{$this->year_id}_scan_file.Scan_Date >=', $from_date);
-			$this->db->where('y{$this->year_id}_scan_file.Scan_Date <=', $to_date);
+			$this->db->where('y{$this->year_id}_scan_file.temp_scan_date >=', $from_date);
+			$this->db->where('y{$this->year_id}_scan_file.temp_scan_date <=', $to_date);
+			$this->db->where('y{$this->year_id}_scan_file.scan_date >=', $from_date);
+			$this->db->where('y{$this->year_id}_scan_file.scan_date <=', $to_date);
 		}
         $this->db->where('is_deleted', 'N');
         return $this->db->count_all_results();
     }
     // public function get_filtered_records($limit, $start, $group = '', $search = '') {
-    //     $this->db->select('y{$this->year_id}_scan_file.document_name , y{$this->year_id}_scan_file.Doc_Type, y{$this->year_id}_scan_file.DocType_Id, y{$this->year_id}_scan_file.file_path, y{$this->year_id}_scan_file.File, y{$this->year_id}_scan_file.Temp_Scan_Date, y{$this->year_id}_scan_file.Temp_Scan_By, y{$this->year_id}_scan_file.scanned_by, y{$this->year_id}_scan_file.Scan_Date, y{$this->year_id}_scan_file.Bill_Approver_Date, y{$this->year_id}_scan_file.File_Punched, y{$this->year_id}_scan_file.Punch_By, y{$this->year_id}_scan_file.Punch_Date, y{$this->year_id}_scan_file.File_Approved, y{$this->year_id}_scan_file.Approve_By, y{$this->year_id}_scan_file.Approve_Date, y{$this->year_id}_scan_file.scan_id, punchfile.ServiceNo, punchfile.BookingDate');
+    //     $this->db->select('y{$this->year_id}_scan_file.document_name , y{$this->year_id}_scan_file.Doc_Type, y{$this->year_id}_scan_file.DocType_Id, y{$this->year_id}_scan_file.file_path, y{$this->year_id}_scan_file.File, y{$this->year_id}_scan_file.temp_scan_date, y{$this->year_id}_scan_file.Temp_Scan_By, y{$this->year_id}_scan_file.scanned_by, y{$this->year_id}_scan_file.scan_date, y{$this->year_id}_scan_file.bill_approved_date, y{$this->year_id}_scan_file.File_Punched, y{$this->year_id}_scan_file.Punch_By, y{$this->year_id}_scan_file.Punch_Date, y{$this->year_id}_scan_file.File_Approved, y{$this->year_id}_scan_file.Approve_By, y{$this->year_id}_scan_file.Approve_Date, y{$this->year_id}_scan_file.scan_id, punchfile.ServiceNo, punchfile.BookingDate');
     //     $this->db->from("y{$this->year_id}_scan_file");
     //     $this->db->join('punchfile', 'y{$this->year_id}_scan_file.scan_id = punchfile.scan_id', 'left');
     //     if (!empty($group)) {
@@ -103,11 +103,11 @@ class Record_model extends MY_Model {
     //         $this->db->or_like('y{$this->year_id}_scan_file.Doc_Type', $search);
     //         $this->db->or_like('y{$this->year_id}_scan_file.file_path', $search);
     //         $this->db->or_like('y{$this->year_id}_scan_file.File', $search);
-    //         $this->db->or_like('y{$this->year_id}_scan_file.Temp_Scan_Date', $search);
+    //         $this->db->or_like('y{$this->year_id}_scan_file.temp_scan_date', $search);
     //         $this->db->or_like('y{$this->year_id}_scan_file.Temp_Scan_By', $search);
     //         $this->db->or_like('y{$this->year_id}_scan_file.scanned_by', $search);
-    //         $this->db->or_like('y{$this->year_id}_scan_file.Scan_Date', $search);
-    //         $this->db->or_like('y{$this->year_id}_scan_file.Bill_Approver_Date', $search);
+    //         $this->db->or_like('y{$this->year_id}_scan_file.scan_date', $search);
+    //         $this->db->or_like('y{$this->year_id}_scan_file.bill_approved_date', $search);
     //         $this->db->or_like('y{$this->year_id}_scan_file.File_Punched', $search);
     //         $this->db->or_like('y{$this->year_id}_scan_file.Punch_By', $search);
     //         $this->db->or_like('y{$this->year_id}_scan_file.Punch_Date', $search);
@@ -125,7 +125,7 @@ class Record_model extends MY_Model {
     //     return $query->result_array();
     // }
 	public function get_filtered_records($limit, $start, $group = '', $search = '', $from_date = '', $to_date = '') {
-		$this->db->select('y{$this->year_id}_scan_file.document_name , y{$this->year_id}_scan_file.Doc_Type, y{$this->year_id}_scan_file.DocType_Id, y{$this->year_id}_scan_file.file_path, y{$this->year_id}_scan_file.File, y{$this->year_id}_scan_file.Temp_Scan_Date, y{$this->year_id}_scan_file.Temp_Scan_By, y{$this->year_id}_scan_file.scanned_by, y{$this->year_id}_scan_file.Scan_Date, y{$this->year_id}_scan_file.Bill_Approver_Date, y{$this->year_id}_scan_file.File_Punched, y{$this->year_id}_scan_file.Punch_By, y{$this->year_id}_scan_file.Punch_Date, y{$this->year_id}_scan_file.File_Approved, y{$this->year_id}_scan_file.Approve_By, y{$this->year_id}_scan_file.Approve_Date, y{$this->year_id}_scan_file.scan_id, punchfile.ServiceNo, punchfile.BookingDate');
+		$this->db->select('y{$this->year_id}_scan_file.document_name , y{$this->year_id}_scan_file.Doc_Type, y{$this->year_id}_scan_file.DocType_Id, y{$this->year_id}_scan_file.file_path, y{$this->year_id}_scan_file.File, y{$this->year_id}_scan_file.temp_scan_date, y{$this->year_id}_scan_file.Temp_Scan_By, y{$this->year_id}_scan_file.scanned_by, y{$this->year_id}_scan_file.scan_date, y{$this->year_id}_scan_file.bill_approved_date, y{$this->year_id}_scan_file.File_Punched, y{$this->year_id}_scan_file.Punch_By, y{$this->year_id}_scan_file.Punch_Date, y{$this->year_id}_scan_file.File_Approved, y{$this->year_id}_scan_file.Approve_By, y{$this->year_id}_scan_file.Approve_Date, y{$this->year_id}_scan_file.scan_id, punchfile.ServiceNo, punchfile.BookingDate');
 		$this->db->from("y{$this->year_id}_scan_file");
 		$this->db->join('punchfile', 'y{$this->year_id}_scan_file.scan_id = punchfile.scan_id', 'left');
 		
@@ -139,11 +139,11 @@ class Record_model extends MY_Model {
 			$this->db->or_like('y{$this->year_id}_scan_file.Doc_Type', $search);
 			$this->db->or_like('y{$this->year_id}_scan_file.file_path', $search);
 			$this->db->or_like('y{$this->year_id}_scan_file.File', $search);
-			$this->db->or_like('y{$this->year_id}_scan_file.Temp_Scan_Date', $search);
+			$this->db->or_like('y{$this->year_id}_scan_file.temp_scan_date', $search);
 			$this->db->or_like('y{$this->year_id}_scan_file.Temp_Scan_By', $search);
 			$this->db->or_like('y{$this->year_id}_scan_file.scanned_by', $search);
-			$this->db->or_like('y{$this->year_id}_scan_file.Scan_Date', $search);
-			$this->db->or_like('y{$this->year_id}_scan_file.Bill_Approver_Date', $search);
+			$this->db->or_like('y{$this->year_id}_scan_file.scan_date', $search);
+			$this->db->or_like('y{$this->year_id}_scan_file.bill_approved_date', $search);
 			$this->db->or_like('y{$this->year_id}_scan_file.File_Punched', $search);
 			$this->db->or_like('y{$this->year_id}_scan_file.Punch_By', $search);
 			$this->db->or_like('y{$this->year_id}_scan_file.Punch_Date', $search);
@@ -158,10 +158,10 @@ class Record_model extends MY_Model {
 	
 		// Date range filtering
 		if (!empty($from_date) && !empty($to_date)) {
-			$this->db->where('y{$this->year_id}_scan_file.Temp_Scan_Date >=', $from_date);
-			$this->db->where('y{$this->year_id}_scan_file.Temp_Scan_Date <=', $to_date);
-			$this->db->where('y{$this->year_id}_scan_file.Scan_Date >=', $from_date);
-			$this->db->where('y{$this->year_id}_scan_file.Scan_Date <=', $to_date);
+			$this->db->where('y{$this->year_id}_scan_file.temp_scan_date >=', $from_date);
+			$this->db->where('y{$this->year_id}_scan_file.temp_scan_date <=', $to_date);
+			$this->db->where('y{$this->year_id}_scan_file.scan_date >=', $from_date);
+			$this->db->where('y{$this->year_id}_scan_file.scan_date <=', $to_date);
 		}
 	
 		$this->db->where('y{$this->year_id}_scan_file.is_deleted', 'N');

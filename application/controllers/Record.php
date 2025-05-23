@@ -130,17 +130,17 @@ class Record extends CI_Controller {
 			$this->db->where('location_id', $location);
 		}
 		if (!empty($fromDate)) {
-			$this->db->where("(Temp_Scan_Date >= '$fromDate' OR Scan_Date >= '$fromDate')", NULL, FALSE);
+			$this->db->where("(temp_scan_date >= '$fromDate' OR scan_date >= '$fromDate')", NULL, FALSE);
 		}
 		if (!empty($toDate)) {
-			$this->db->where("(Temp_Scan_Date <= '$toDate' OR Scan_Date <= '$toDate')", NULL, FALSE);
+			$this->db->where("(temp_scan_date <= '$toDate' OR scan_date <= '$toDate')", NULL, FALSE);
 		}
 		if (!empty($status)) {
 			$this->db->where('bill_approval_status', $status);
 		}
 		if (!empty($last_day) && is_numeric($last_day)) {
 			$end_date = date('Y-m-d', strtotime("-$last_day days"));
-			$this->db->where("(Temp_Scan_Date <= '$end_date' OR Scan_Date <= '$end_date')", NULL, FALSE);
+			$this->db->where("(temp_scan_date <= '$end_date' OR scan_date <= '$end_date')", NULL, FALSE);
 			$this->db->where('bill_approval_status', 'N');
 		}
 		if (!empty($bill_approver)) {
@@ -174,24 +174,24 @@ class Record extends CI_Controller {
 			$this->db->from("y{$this->year_id}_scan_file");
 			$this->db->join('master_work_location', 'y{$this->year_id}_scan_file.location_id = master_work_location.location_id');
 			$this->db->join('users tcb', 'y{$this->year_id}_scan_file.Temp_Scan_By = tcb.user_id');
-			$this->db->join('users ba', 'y{$this->year_id}_scan_file.Bill_Approver = ba.user_id');
+			$this->db->join('users ba', 'y{$this->year_id}_scan_file.bill_approver_id = ba.user_id');
 			$this->db->where('Location is not null', NULL, FALSE);
 			$this->db->where('y{$this->year_id}_scan_file.is_deleted', 'N');
 			if (!empty($location)) {
 				$this->db->where('location_id', $location);
 			}
 			if (!empty($fromDate)) {
-				$this->db->where('date(Temp_Scan_Date) >=', $fromDate);
+				$this->db->where('date(temp_scan_date) >=', $fromDate);
 			}
 			if (!empty($toDate)) {
-				$this->db->where('date(Temp_Scan_Date) <=', $toDate);
+				$this->db->where('date(temp_scan_date) <=', $toDate);
 			}
 			if (!empty($status)) {
 				$this->db->where('bill_approval_status', $status);
 			}
 			if (!empty($last_day) && is_numeric($last_day)) {
 				$date = date('Y-m-d', strtotime("-$last_day days"));
-				$this->db->where('date(Temp_Scan_Date) >=', $date);
+				$this->db->where('date(temp_scan_date) >=', $date);
 				$this->db->where('bill_approval_status', 'N');
 			}
 			if (!empty($bill_approver)) {

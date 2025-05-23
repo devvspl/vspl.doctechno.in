@@ -56,15 +56,15 @@ class Scan_model extends MY_Model {
         $this->db->from("y{$this->year_id}_scan_file");
         $this->db->where('scanned_by', $user_id);
         $this->db->where('is_file_punched', 'Y');
-        $this->db->where('Scan_Date >=', $from_date);
-        $this->db->where('Scan_Date <=', $to_date);
+        $this->db->where('scan_date >=', $from_date);
+        $this->db->where('scan_date <=', $to_date);
         $this->db->order_by('scan_id', 'desc');
         $result = $this->db->get()->result_array();
         return $result;
     }
     function get_myscan_list($user_id) {
         
-        $this->db->select('s.scan_id,s.document_name ,s.File,s.file_extension,s.file_path,s.Final_Submit,s.File_Punched,s.Scan_Date');
+        $this->db->select('s.scan_id,s.document_name ,s.File,s.file_extension,s.file_path,s.Final_Submit,s.File_Punched,s.scan_date');
         $this->db->from("y{$this->year_id}_scan_file s");
         $this->db->where('scanned_by', $user_id);
         $this->db->where('is_file_punched', 'N');
