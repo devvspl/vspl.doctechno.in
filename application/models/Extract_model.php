@@ -25,7 +25,7 @@ class Extract_model extends CI_Model {
         $this->db->select("s.scan_id, g.group_name, l.location_name, s.document_name , s.file_path, IF(s.is_temp_scan = 'Y', s.temp_scan_date, s.scan_date) AS scan_date, IF(s.is_temp_scan = 'Y', CONCAT(sb.first_name, ' ', sb.last_name), CONCAT(sbb.first_name, ' ', sbb.last_name)) AS scanned_by, CONCAT(ba.first_name, ' ', ba.last_name) AS bill_approver_id, s.bill_approved_date");
         $this->db->from("y{$this->year_id}_scan_file s");
         $this->db->join("master_group g", "g.group_id = s.Group_Id", "left");
-        $this->db->join("master_work_location l", "l.location_id = s.Location", "left");
+        $this->db->join("master_work_location l", "l.location_id = s.location_id", "left");
         $this->db->join("users ba", "ba.user_id = s.bill_approver_id", "left");
         $this->db->join("users sb", "sb.user_id = s.Temp_Scan_By", "left");
         $this->db->join("users sbb", "sbb.user_id = s.scanned_by", "left");
@@ -39,7 +39,7 @@ class Extract_model extends CI_Model {
             $this->db->where("s.Group_Id", $group_id);
         }
         if (!empty($location_id)) {
-            $this->db->where("s.Location", $location_id);
+            $this->db->where("s.location_id", $location_id);
         }
         $this->db->where("s.Group_Id", '16');
         return $this->db->get()->result();
@@ -49,7 +49,7 @@ class Extract_model extends CI_Model {
         $this->db->from("y{$this->year_id}_scan_file s");
         $this->db->join("master_group g", "g.group_id = s.Group_Id", "left");
         $this->db->join("master_doctype md", "md.type_id  = s.DocType_Id", "left");
-        $this->db->join("master_work_location l", "l.location_id = s.Location", "left");
+        $this->db->join("master_work_location l", "l.location_id = s.location_id", "left");
         $this->db->join("users ba", "ba.user_id = s.bill_approver_id", "left");
         $this->db->join("users sb", "sb.user_id = s.Temp_Scan_By", "left");
         $this->db->join("users sbb", "sbb.user_id = s.scanned_by", "left");
@@ -60,7 +60,7 @@ class Extract_model extends CI_Model {
             $this->db->where("s.Group_Id", $group_id);
         }
         if (!empty($location_id)) {
-            $this->db->where("s.Location", $location_id);
+            $this->db->where("s.location_id", $location_id);
         }
         $this->db->where("s.Group_Id", '16');
         return $this->db->get()->result();
@@ -70,7 +70,7 @@ class Extract_model extends CI_Model {
         $this->db->from("y{$this->year_id}_scan_file s");
         $this->db->join("master_group g", "g.group_id = s.Group_Id", "left");
         $this->db->join("master_doctype md", "md.type_id  = s.DocType_Id", "left");
-        $this->db->join("master_work_location l", "l.location_id = s.Location", "left");
+        $this->db->join("master_work_location l", "l.location_id = s.location_id", "left");
         $this->db->join("users ba", "ba.user_id = s.bill_approver_id", "left");
         $this->db->join("users sb", "sb.user_id = s.Temp_Scan_By", "left");
         $this->db->join("users sbb", "sbb.user_id = s.scanned_by", "left");
@@ -81,7 +81,7 @@ class Extract_model extends CI_Model {
             $this->db->where("s.Group_Id", $group_id);
         }
         if (!empty($location_id)) {
-            $this->db->where("s.Location", $location_id);
+            $this->db->where("s.location_id", $location_id);
         }
         return $this->db->get()->result();
     }
@@ -89,7 +89,7 @@ class Extract_model extends CI_Model {
         $this->db->select("s.scan_id, s.DocType_Id, g.group_name, l.location_name, s.document_name , s.file_path, IF(s.is_temp_scan = 'Y', s.temp_scan_date, s.scan_date) AS scan_date, IF(s.is_temp_scan = 'Y', CONCAT(sb.first_name, ' ', sb.last_name), CONCAT(sbb.first_name, ' ', sbb.last_name)) AS scanned_by, CONCAT(ba.first_name, ' ', ba.last_name) AS bill_approver_id, s.bill_approved_date");
         $this->db->from("y{$this->year_id}_scan_file s");
         $this->db->join("master_group g", "g.group_id = s.Group_Id", "left");
-        $this->db->join("master_work_location l", "l.location_id = s.Location", "left");
+        $this->db->join("master_work_location l", "l.location_id = s.location_id", "left");
         $this->db->join("users ba", "ba.user_id = s.bill_approver_id", "left");
         $this->db->join("users sb", "sb.user_id = s.Temp_Scan_By", "left");
         $this->db->join("users sbb", "sbb.user_id = s.scanned_by", "left");
