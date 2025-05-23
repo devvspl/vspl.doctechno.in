@@ -7,42 +7,42 @@
 <?php
 $user_id = $this->session->userdata('user_id');
 $this->db->select('*');
-$this->db->from('scan_file');
-$this->db->join('master_work_location', 'master_work_location.location_id = scan_file.Location', 'left');
-$this->db->where('Scan_By', $user_id);
-$this->db->where('File_Punched', 'N');
-$this->db->where('Scan_Resend', 'N');
+$this->db->from('y{$this->year_id}_scan_file');
+$this->db->join('master_work_location', 'master_work_location.location_id = y{$this->year_id}_scan_file.location_id', 'left');
+$this->db->where('scanned_by', $user_id);
+$this->db->where('is_file_punched', 'N');
+$this->db->where('is_scan_resend', 'N');
 $this->db->where('Group_id', $group_id);
-$this->db->order_by('Scan_Id', 'desc');
+$this->db->order_by('scan_id', 'desc');
 $my_lastest_scan = $this->db->get()->result_array();
 
 
 
 $this->db->select('*');
-$this->db->from('scan_file');
-$this->db->where('Group_Id', $group_id);
-$this->db->where('Scan_Resend', 'Y');
+$this->db->from('y{$this->year_id}_scan_file');
+$this->db->where('group_id', $group_id);
+$this->db->where('is_scan_resend', 'Y');
 $query = $this->db->get();
 $scan_rejected =  $query->num_rows();
 
 
 $this->db->select('*');
-$this->db->from('scan_file');
-$this->db->where('Group_Id', $group_id);
-$this->db->where('Temp_Scan', 'Y');
-$this->db->where('Scan_Complete', 'N');
-$this->db->where('temp_scan_reject', 'N');
+$this->db->from('y{$this->year_id}_scan_file');
+$this->db->where('group_id', $group_id);
+$this->db->where('is_temp_scan', 'Y');
+$this->db->where('is_scan_complete', 'N');
+$this->db->where('is_temp_scan_rejected', 'N');
 $result = $this->db->get();
 $scan_pending_name = $result->num_rows();
 
 $this->db->select('*');
-$this->db->from('scan_file');
-$this->db->where('Group_Id', $group_id);
-$this->db->where('Temp_Scan', 'Y');
-$this->db->where('Scan_Complete', 'Y');
-$this->db->where('temp_scan_reject', 'N');
-$this->db->where('document_verified','N');
-$this->db->where('Is_Deleted','N');
+$this->db->from('y{$this->year_id}_scan_file');
+$this->db->where('group_id', $group_id);
+$this->db->where('is_temp_scan', 'Y');
+$this->db->where('is_scan_complete', 'Y');
+$this->db->where('is_temp_scan_rejected', 'N');
+$this->db->where('is_document_verified','N');
+$this->db->where('is_deleted','N');
 $result = $this->db->get();
 $scan_pending_verification = $result->num_rows();
 ?>
@@ -239,35 +239,35 @@ $scan_pending_verification = $result->num_rows();
 										<tr>
 											<td><?php echo $count++; ?></td>
 											<td class="mailbox-name">
-												<?php echo $row['Document_Name']; ?>
+												<?php echo $row['document_name']; ?>
 											</td>
 											<td class="mailbox-name">
-												<a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['File_Location']  ?>','popup','width=600,height=600');"> <?php echo $row['File'] ?></a>
+												<a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['file_path']  ?>','popup','width=600,height=600');"> <?php echo $row['file_name'] ?></a>
 											</td>
 											<td class="mailbox-name">
-												<?= !empty($row['Temp_Scan_Date']) ? date('d-m-Y', strtotime($row['Temp_Scan_Date'])) : ''; ?>
+												<?= !empty($row['temp_scan_date']) ? date('d-m-Y', strtotime($row['temp_scan_date'])) : ''; ?>
 
 											</td>
 											<td class="mailbox-name">
-												<?= date('d-m-Y', strtotime($row['Scan_Date'])); ?>
+												<?= date('d-m-Y', strtotime($row['scan_date'])); ?>
 											</td>
 											<td class="mailbox-name">
 												<?php echo $row['location_name']; ?>
 											</td>
 											<td class="mailbox-name">
-												<?php echo $this->customlib->get_Name($row['Bill_Approver']); ?>
+												<?php echo $this->customlib->get_Name($row['bill_approver_id']); ?>
 											</td>
 											<td class="mailbox-name">
-												<?php echo ($row['Final_Submit'] == 'Y') ? 'Yes' : 'No' ?>
+												<?php echo ($row['is_final_submitted'] == 'Y') ? 'Yes' : 'No' ?>
 											</td>
 											<td class="mailbox-date pull-right no-print">
-												<?php if ($this->customlib->haveSupportFile($row['Scan_Id']) == 1) { ?>
-													<a data-toggle="collapse" href="#detail<?= $row['Scan_Id'] ?>" data-parent="#mytable" style="cursor: pointer;" class="btn btn-default btn-xs"> <i class="fa fa-eye"></i></a>
+												<?php if ($this->customlib->haveSupportFile($row['scan_id']) == 1) { ?>
+													<a data-toggle="collapse" href="#detail<?= $row['scan_id'] ?>" data-parent="#mytable" style="cursor: pointer;" class="btn btn-default btn-xs"> <i class="fa fa-eye"></i></a>
 												<?php } ?>
-												<a href="<?php echo base_url(); ?>Scan/temp_upload_supporting/<?php echo $row['Scan_Id']; ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="Edit">
+												<a href="<?php echo base_url(); ?>Scan/temp_upload_supporting/<?php echo $row['scan_id']; ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="Edit">
                                                         <i class="fa fa-pencil"></i>
                                                        </a>
-												<a href="javascript:void(0);" data-scan_id="<?= $row['Scan_Id']; ?>" class="btn btn-default btn-xs" id="delete_all">
+												<a href="javascript:void(0);" data-scan_id="<?= $row['scan_id']; ?>" class="btn btn-default btn-xs" id="delete_all">
 													<i class="fa fa-remove"></i>
 												</a>
 											</td>

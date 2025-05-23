@@ -4,11 +4,11 @@
    $rec = $this->customlib->getScanData($Scan_Id);
    $punch_detail = null;
    if (!empty($Scan_Id)) {
-   $punch_detail = $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row();
+   $punch_detail = $this->db->get_where('punchfile', ['scan_id' => $Scan_Id])->row();
    if ($punch_detail) {
    
    } else {
-   $punch_detail = $this->db->get_where('scan_file', ['Scan_Id' => $Scan_Id])->row();
+   $punch_detail = $this->db->get_where('y{$this->year_id}_scan_file', ['scan_id' => $Scan_Id])->row();
    }
    } 
    $firm = $this->db->get_where('master_firm', ['status' => 'A'])->result_array();
@@ -41,7 +41,7 @@
    $activities = fetchData('core_activity', $this->db);
    $crop_list = fetchData('master_crop', $this->db);
    $region_list = fetchData('master_region', $this->db); 
-   $journal_entry_items = $this->db->where(['Scan_Id'=>$Scan_Id])->get('journal_entry_items');
+   $journal_entry_items = $this->db->where(['scan_id'=>$Scan_Id])->get('journal_entry_items');
    $groupedActivities = [];
    
    
@@ -106,7 +106,7 @@
    $Scan_Id = $this->uri->segment(2);
    $DocType_Id = $this->uri->segment(3);
    $rec = $this->customlib->getScanData($Scan_Id);
-   $punch_detail = $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row();
+   $punch_detail = $this->db->get_where('punchfile', ['scan_id' => $Scan_Id])->row();
    $firm = $this->db->get_where('master_firm', ['status' => 'A'])->result_array();
    $company_list = $this->customlib->getCompanyList();
    $department_list = $this->customlib->getDepartmentList();
@@ -120,10 +120,10 @@
 <div class="box-body">
 <div class="row">
    <div class="col-md-5">
-      <?php if ($rec->File_Ext == 'pdf') { ?>
-      <object data="<?= $rec->File_Location ?>" type="" height="490px" width="100%;"></object>
+      <?php if ($rec->file_extension == 'pdf') { ?>
+      <object data="<?= $rec->file_path ?>" type="" height="490px" width="100%;"></object>
       <?php } else { ?>
-      <input type="hidden" name="image" id="image" value="<?= $rec->File_Location ?>">
+      <input type="hidden" name="image" id="image" value="<?= $rec->file_path ?>">
       <div id="imageViewerContainer" style="width: 400px; height:490px;"></div>
       <script>
          var curect_file_path = $('#image').val();
@@ -146,7 +146,7 @@
       <?php 
          if ($_SESSION['role'] == 'user') {  
             if ($this->customlib->has_permission('Finance')) { 
-                if ($rec->finance_punch == 'N') { 
+                if ($rec->finance_punch_action_status == 'N') { 
                     ?>
       <style>.select2-container--default .select2-selection--single {
          background-color: #e9ecef !important;
@@ -529,7 +529,7 @@
                         	?>
                      <div class="col-md-3">
                         <a href="javascript:void(0);" target="popup"
-                           onclick="window.open('<?= $row['File_Location'] ?>','popup','width=600,height=600');"> <?php echo $row['File'] ?></a>
+                           onclick="window.open('<?= $row['file_path'] ?>','popup','width=600,height=600');"> <?php echo $row['file_name'] ?></a>
                      </div>
                      <?php
                         }
@@ -682,7 +682,7 @@
                </div>
                <div id="rows_container">
                <?php foreach ($journal_entry_items->result_array() as $entry): ?>
-                  <?php if ($entry['Scan_Id'] == $Scan_Id):  ?>
+                  <?php if ($entry['scan_id'] == $Scan_Id):  ?>
                   <div class="row form-row" id="row_1" style="padding: 5px;">
                      <div class="form-group col-md-4">
                         <label for="department">Department</label>
@@ -1435,7 +1435,7 @@
                            	?>
                         <div class="col-md-3">
                            <a href="javascript:void(0);" target="popup"
-                              onclick="window.open('<?= $row['File_Location'] ?>','popup','width=600,height=600');"> <?php echo $row['File'] ?></a>
+                              onclick="window.open('<?= $row['file_path'] ?>','popup','width=600,height=600');"> <?php echo $row['file_name'] ?></a>
                         </div>
                         <?php
                            }

@@ -210,41 +210,41 @@
                 <tr>
                     <td><?= $i ?></td>
                     <td style="text-align:left;width:30%">
-                        <a href="<?= base_url() . "file_detail/" . $value['Scan_Id'] . "/" . $value['DocTypeId'] ?>" target="_blank"><?= $value['Document_Name'] ?></a>
+                        <a href="<?= base_url() . "file_detail/" . $value['scan_id'] . "/" . $value['DocTypeId'] ?>" target="_blank"><?= $value['document_name'] ?></a>
                     </td>
                     <td style="text-align:center;">
-                        <?= $this->customlib->get_Name($value['Temp_Scan_By']) ?>
+                        <?= $this->customlib->get_Name($value['temp_scan_by']) ?>
                     </td>
                     <td style="text-align:center;">
-                        <?= !empty($value['Temp_Scan_Date']) ? date('d-m-Y', strtotime($value['Temp_Scan_Date'])) : ''; ?>
+                        <?= !empty($value['temp_scan_date']) ? date('d-m-Y', strtotime($value['temp_scan_date'])) : ''; ?>
                     </td>
                     <td style="text-align:center;">
-                        <?= $this->customlib->get_Name($value['Scan_By']) ?>
+                        <?= $this->customlib->get_Name($value['scanned_by']) ?>
                     </td>
                     <td style="text-align:center;">
-                        <?= !empty($value['Scan_Date']) ? date('d-m-Y', strtotime($value['Scan_Date'])) : ''; ?>
+                        <?= !empty($value['scan_date']) ? date('d-m-Y', strtotime($value['scan_date'])) : ''; ?>
                     </td>
 					<td style="text-align:center;">
 						<?= $value['Bill_Approve_By'] ?>
 					</td>
 					<td style="text-align:center;">
-						<?= !empty($value['Bill_Approver_Date']) ? date('d-m-Y', strtotime($value['Bill_Approver_Date'])) : '' ?>
+						<?= !empty($value['bill_approved_date']) ? date('d-m-Y', strtotime($value['bill_approved_date'])) : '' ?>
 					</td>
-                    <?php if ($value['File_Punched'] == 'Y'): ?>
+                    <?php if ($value['is_file_punched'] == 'Y'): ?>
                         <td style="text-align:center;">
-                            <?= $this->customlib->get_Name($value['Punch_By']) ?>
+                            <?= $this->customlib->get_Name($value['punched_by']) ?>
                         </td>
                         <td style="text-align:center;">
-                            <?= date('d-m-Y', strtotime($value['Punch_Date'])) ?>
+                            <?= date('d-m-Y', strtotime($value['punched_date'])) ?>
                         </td>
 						<td style="text-align:center;">
-							<?= $this->customlib->dateDiff($value['Punch_Date'], $value['Scan_Date']) ?>
+							<?= $this->customlib->dateDiff($value['punched_date'], $value['scan_date']) ?>
 						</td>
                         <td style="text-align:center;">
-                            <?= $value['Approve_By'] ?>
+                            <?= $value['approved_by'] ?>
                         </td>
                         <td style="text-align:center;">
-                        <?= !empty($value['Approve_Date']) ? date('d-m-Y', strtotime($value['Approve_Date'])) : '' ?>
+                        <?= !empty($value['approved_date']) ? date('d-m-Y', strtotime($value['approved_date'])) : '' ?>
 
                         </td>
 

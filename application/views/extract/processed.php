@@ -62,17 +62,17 @@
                                 <td class="text-center"><?= $i++ ?></td>
                                 <!-- <td class="text-center"><?= htmlspecialchars($doc->group_name ?? '', ENT_QUOTES, 'UTF-8'); ?></td> -->
                                 <td class="text-center"><?= htmlspecialchars($doc->location_name ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td class="text-center"><?= htmlspecialchars($doc->Document_Name ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td class="text-center"><?= htmlspecialchars($doc->document_name ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
                                 <td class="text-center text-primary"><?= htmlspecialchars($doc->file_type ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td class="text-center"><?= htmlspecialchars($doc->Scan_By ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td class="text-center"><?= htmlspecialchars($doc->Scan_Date ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td class="text-center"><?= htmlspecialchars($doc->Bill_Approver ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td class="text-center"><?= htmlspecialchars($doc->Bill_Approver_Date ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td class="text-center"><?= htmlspecialchars($doc->scanned_by ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td class="text-center"><?= htmlspecialchars($doc->scan_date ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td class="text-center"><?= htmlspecialchars($doc->bill_approver_id ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td class="text-center"><?= htmlspecialchars($doc->bill_approved_date ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
                                 <td class="text-center">
-                                   <?php if ($doc->is_extract == 'C'): ?>
+                                   <?php if ($doc->extract_status == 'C'): ?>
                                       <span class="text-warning font-weight-bold">Change Request Submitted</span>
                                    <?php else: ?>
-                                      <button class="btn btn-sm btn-primary change-request" data-scan-id="<?= htmlspecialchars($doc->Scan_Id ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+                                      <button class="btn btn-sm btn-primary change-request" data-scan-id="<?= htmlspecialchars($doc->scan_id ?? '', ENT_QUOTES, 'UTF-8'); ?>">
                                          Change Request
                                       </button>
                                    <?php endif; ?>

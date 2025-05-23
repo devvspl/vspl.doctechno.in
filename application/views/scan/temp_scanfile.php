@@ -78,35 +78,35 @@
                                  <?php echo $row['location_name']; ?>
                               </td>
                               <td class="mailbox-name">
-                                 <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['File_Location']  ?>','popup','width=600,height=600');"> <?php echo $row['File'] ?></a>
+                                 <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['file_path']  ?>','popup','width=600,height=600');"> <?php echo $row['file_name'] ?></a>
                               </td>
                               <td class="mailbox-name">
-                                 <?= date('d-m-Y',strtotime($row['Temp_Scan_Date']));?>
+                                 <?= date('d-m-Y',strtotime($row['temp_scan_date']));?>
                               </td>
                               <td class="mailbox-date pull-right no-print">
-                                 <?php if ($this->customlib->haveSupportFile($row['Scan_Id']) == 1) { ?>
-                                 <a data-toggle="collapse" href="#detail<?= $row['Scan_Id'] ?>" data-parent="#mytable" style="cursor: pointer;" class="btn btn-default btn-xs"> <i class="fa fa-eye"></i></a>
+                                 <?php if ($this->customlib->haveSupportFile($row['scan_id']) == 1) { ?>
+                                 <a data-toggle="collapse" href="#detail<?= $row['scan_id'] ?>" data-parent="#mytable" style="cursor: pointer;" class="btn btn-default btn-xs"> <i class="fa fa-eye"></i></a>
                                  <?php } ?>
-                                 <a href="<?php echo base_url(); ?>Scan/temp_upload_supporting/<?php echo $row['Scan_Id']; ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="Edit">
+                                 <a href="<?php echo base_url(); ?>Scan/temp_upload_supporting/<?php echo $row['scan_id']; ?>" class="btn btn-default btn-xs" data-toggle="tooltip" title="Edit">
                                  <i class="fa fa-pencil"></i>
-                                 <a href="javascript:void(0);" data-scan_id="<?= $row['Scan_Id']; ?>" class="btn btn-default btn-xs" id="delete_all">
+                                 <a href="javascript:void(0);" data-scan_id="<?= $row['scan_id']; ?>" class="btn btn-default btn-xs" id="delete_all">
                                  <i class="fa fa-remove"></i>
                                  </a>
                               </td>
                            </tr>
-                           <tr id="detail<?= $row['Scan_Id'] ?>" class="collapse accordion-collapse" style="background-color: #FEF9E7;">
+                           <tr id="detail<?= $row['scan_id'] ?>" class="collapse accordion-collapse" style="background-color: #FEF9E7;">
                               <td colspan="6" class="">
-                                 <table class="table table-bordered mytable1" id="subtable<?= $row['Scan_Id'] ?>" style="background-color:#FEF9E7;margin-bottom:0px;">
+                                 <table class="table table-bordered mytable1" id="subtable<?= $row['scan_id'] ?>" style="background-color:#FEF9E7;margin-bottom:0px;">
                                     <tbody>
                                        <?php
-                                          $sql = "SELECT * FROM support_file WHERE Scan_Id = '" . $row['Scan_Id'] . "'";
+                                          $sql = "SELECT * FROM support_file WHERE Scan_Id = '" . $row['scan_id'] . "'";
                                           $query = $this->db->query($sql);
                                           $result = $query->result_array();
                                           foreach ($result as $rec) {
                                           ?>
                                        <tr>
                                           <td class="mailbox-name">
-                                             <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $rec['File_Location']  ?>','popup','width=600,height=600');"> <?php echo $rec['File'] ?></a>
+                                             <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $rec['file_path']  ?>','popup','width=600,height=600');"> <?php echo $rec['file_name'] ?></a>
                                           </td>
                                        </tr>
                                        <?php } ?>

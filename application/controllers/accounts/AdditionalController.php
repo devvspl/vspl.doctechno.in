@@ -115,8 +115,8 @@ class AdditionalController extends CI_Controller {
                     $mainId = $this->db->insert_id();
                 }
                 if (isset($post['final_submit'])) {
-                    $updateData = ['finance_punch' => 'Y', 'finance_punch_status'=>'N', 'finance_punch_by' => $this->session->userdata('user_id'), 'finance_punch_date' => date('Y-m-d') ];
-                    $this->db->where('scan_id', $scan_id)->update('scan_file', $updateData);
+                    $updateData = ['finance_punch_action_status' => 'Y', 'finance_punch_action_status'=>'N', 'finance_punched_by' => $this->session->userdata('user_id'), 'finance_punched_date' => date('Y-m-d') ];
+                    $this->db->where('scan_id', $scan_id)->update('y{$this->year_id}_scan_file', $updateData);
                 }
                 if (!empty($post['cost_center_id']) && is_array($post['cost_center_id'])) {
                     $this->db->where('scan_id', $scan_id)->delete('tbl_additional_information_items');

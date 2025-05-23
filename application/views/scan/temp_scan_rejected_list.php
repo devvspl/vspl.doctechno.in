@@ -39,7 +39,7 @@
 
 
 												<td class="mailbox-name">
-													<a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['File_Location']  ?>','popup','width=600,height=600');"> <?php echo $row['File'] ?></a>
+													<a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['file_path']  ?>','popup','width=600,height=600');"> <?php echo $row['file_name'] ?></a>
 												</td>
 
 
@@ -48,8 +48,8 @@
 												</td>
 
 												<td class="mailbox-name text-center no-print">
-													<?php if ($this->customlib->haveSupportFile($row['Scan_Id']) == 1) { ?>
-														<a href="javascript:void(0);" class="btn btn-link btn-xs" onclick="getSupportFile(<?= $row['Scan_Id'] ?>)"><i class="fa fa-eye"></i></a>
+													<?php if ($this->customlib->haveSupportFile($row['scan_id']) == 1) { ?>
+														<a href="javascript:void(0);" class="btn btn-link btn-xs" onclick="getSupportFile(<?= $row['scan_id'] ?>)"><i class="fa fa-eye"></i></a>
 													<?php } ?>
 												</td>
 
@@ -58,7 +58,7 @@
 												</td>
 												<td>
 
-													<a href="javascript:void(0);" data-scan_id="<?= $row['Scan_Id']; ?>" class="btn btn-default btn-xs" id="delete_all">
+													<a href="javascript:void(0);" data-scan_id="<?= $row['scan_id']; ?>" class="btn btn-default btn-xs" id="delete_all">
 														<i class="fa fa-remove"></i>
 													</a>
 												</td>

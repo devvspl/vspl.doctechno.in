@@ -59,31 +59,31 @@
                                                 <td><?php echo $count++; ?></td>
 
                                                 <td class="mailbox-name">
-                                                    <?php echo $row['Document_Name']; ?>
+                                                    <?php echo $row['document_name']; ?>
                                                 </td>
                                                 <td class="mailbox-name">
-                                                    <?php echo $row['Doc_Type']; ?>
+                                                    <?php echo $row['doc_type']; ?>
                                                 </td>
                                                 <td class="mailbox-name">
-                                                    <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['File_Location']  ?>','popup','width=600,height=600');"> <?php echo $row['File'] ?></a>
+                                                    <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['file_path']  ?>','popup','width=600,height=600');"> <?php echo $row['file_name'] ?></a>
                                                 </td>
                                                 <td class="mailbox-name">
-                                                    <?php echo date('d-m-Y', strtotime($row['Scan_Date'])) ?>
+                                                    <?php echo date('d-m-Y', strtotime($row['scan_date'])) ?>
                                                 </td>
                                                 <td class="mailbox-name">
-                                                    <?php echo $this->customlib->get_Name($row['Punch_By']); ?>
+                                                    <?php echo $this->customlib->get_Name($row['punched_by']); ?>
                                                 </td>
                                                 <td class="mailbox-name">
-                                                    <?php echo date('d-m-Y', strtotime($row['Punch_Date'])) ?>
+                                                    <?php echo date('d-m-Y', strtotime($row['punched_date'])) ?>
                                                 </td>
                                                 <td class="mailbox-date text-center no-print">
-                                                    <?php if ($this->customlib->haveSupportFile($row['Scan_Id']) == 1) { ?>
-                                                        <a href="javascript:void(0);" class="btn btn-link btn-xs" onclick="getSupportFile(<?= $row['Scan_Id'] ?>)"><i class="fa fa-eye"></i></a>
+                                                    <?php if ($this->customlib->haveSupportFile($row['scan_id']) == 1) { ?>
+                                                        <a href="javascript:void(0);" class="btn btn-link btn-xs" onclick="getSupportFile(<?= $row['scan_id'] ?>)"><i class="fa fa-eye"></i></a>
                                                     <?php } ?>
                                                 </td>
                                                 <?php if ($this->customlib->has_permission('PunchView')) { ?>
                                                     <td>
-                                                        <a href="<?php echo base_url(); ?>file_detail/<?= $row['Scan_Id'] ?>/<?= $row['DocType_Id'] ?>" class="btn btn-info btn-xs" target="_blank"><i class="fa fa-eye"></i></a>
+                                                        <a href="<?php echo base_url(); ?>file_detail/<?= $row['scan_id'] ?>/<?= $row['doc_type_id'] ?>" class="btn btn-info btn-xs" target="_blank"><i class="fa fa-eye"></i></a>
                                                     </td>
                                                 <?php } ?>
                                             </tr>

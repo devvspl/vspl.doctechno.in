@@ -13,7 +13,7 @@ class Insurance_ctrl extends CI_Controller
 
     public function save_insurance_policy()
     {
-        $Scan_Id = $this->input->post('Scan_Id');
+        $Scan_Id = $this->input->post('scan_id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
         $submit = $this->input->post('submit');
@@ -25,12 +25,12 @@ class Insurance_ctrl extends CI_Controller
         $From_Date = $this->input->post('From_Date');
         $To_Date = $this->input->post('To_Date');
         $Vehicle_No = $this->input->post('Vehicle_No');
-        $Location = $this->input->post('Location');
+        $Location = $this->input->post('location_id');
         $Amount = $this->input->post('Premium_Amount');
         $Remark = $this->input->post('Remark');
     
         $data = array(
-            'Scan_Id' => $Scan_Id,
+            'scan_id' => $Scan_Id,
             'DocType' => $DocType,
             'DocTypeId' => $DocTypeId,
             'File_Type' => $Insurance_Type,
@@ -43,7 +43,7 @@ class Insurance_ctrl extends CI_Controller
             'Loc_Name' => $Location,
             'Total_Amount' => $Amount,
             'Remark' => $Remark,
-            'Group_Id' => $this->session->userdata('group_id'),
+            'group_id' => $this->session->userdata('group_id'),
             'Created_By' => $this->session->userdata('user_id'),
             'Created_Date' => date('Y-m-d H:i:s'),
         );
@@ -53,8 +53,8 @@ class Insurance_ctrl extends CI_Controller
     
         if ($this->customlib->check_punchfile($Scan_Id)) {
             // Update Existing Record
-            $this->db->where('Scan_Id', $Scan_Id)->update('punchfile', $data);
-            $FileID = $this->db->where('Scan_Id', $Scan_Id)->get('punchfile')->row()->FileID;
+            $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
+            $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
     
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array(
                 'Amount' => '-' . $Amount,
@@ -62,11 +62,11 @@ class Insurance_ctrl extends CI_Controller
             ));
     
             if ($submit) {
-                $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array(
-                    'Is_Rejected' => 'N',
-                    'Reject_Date' => NULL,
-                    'Edit_Permission' => 'N',
-                    'finance_punch' => 'N'
+                $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+                    'is_rejected' => 'N',
+                    'reject_date' => NULL,
+                    'has_edit_permission' => 'N',
+                    'finance_punch_action_status' => 'N'
                 ));
             }
         } else {
@@ -81,11 +81,11 @@ class Insurance_ctrl extends CI_Controller
             ));
     
             if ($submit) {
-                $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array(
-                    'Is_Rejected' => 'N',
-                    'Reject_Date' => NULL,
-                    'Edit_Permission' => 'N',
-                    'finance_punch' => 'N'
+                $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+                    'is_rejected' => 'N',
+                    'reject_date' => NULL,
+                    'has_edit_permission' => 'N',
+                    'finance_punch_action_status' => 'N'
                 ));
             }
         }
@@ -110,7 +110,7 @@ class Insurance_ctrl extends CI_Controller
     
     public function save_insurance_document()
     {
-        $Scan_Id = $this->input->post('Scan_Id');
+        $Scan_Id = $this->input->post('scan_id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
         $Policy_Holder_Name   = $this->input->post('Policy_Holder_Name');
@@ -130,7 +130,7 @@ class Insurance_ctrl extends CI_Controller
         $Insured_Details = $this->input->post('Insured_Details');
         $Remark = $this->input->post('Remark');
         $data = array(
-            'Scan_Id' => $Scan_Id,
+            'scan_id' => $Scan_Id,
             'DocType' => $DocType,
             'DocTypeId' => $DocTypeId,
             'Related_Person' => $Policy_Holder_Name,
@@ -149,7 +149,7 @@ class Insurance_ctrl extends CI_Controller
             'PassengerDetail' => $Insured_Details,
             'Total_Amount' => $Amount,
             'Remark' => $Remark,
-            'Group_Id' => $this->session->userdata('group_id'),
+            'group_id' => $this->session->userdata('group_id'),
             'Created_By' => $this->session->userdata('user_id'),
             'Created_Date' => date('Y-m-d H:i:s'),
         );
@@ -158,11 +158,11 @@ class Insurance_ctrl extends CI_Controller
         $this->db->trans_strict(FALSE);
         if ($this->customlib->check_punchfile($Scan_Id) == true) {
             //Update Existing Record
-            $this->db->where('Scan_Id', $Scan_Id)->update('punchfile', $data);
-            $FileID = $this->db->where('Scan_Id', $Scan_Id)->get('punchfile')->row()->FileID;
+            $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
+            $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
 
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Amount, 'Comment' => $Remark));
-            $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array('Is_Rejected' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N'));
+            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
         } else {
             //Insert New Record
             $this->db->insert('punchfile', $data);

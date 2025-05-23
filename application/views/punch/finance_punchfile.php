@@ -51,22 +51,22 @@
                                   ?>
                            <tr>
                               <td><?php echo $count++; ?></td>
-                              <td><?= $this->customlib->get_Location_Name($row['Location'])?></td>
+                              <td><?= $this->customlib->get_Location_Name($row['location_id'])?></td>
                               <td class="mailbox-name">
-                                 <?php echo $row['Document_Name']; ?>
-                                 <span class="fa fa-pencil edit_doc_name" style="cursor: pointer; display: none;" data-id="<?= $row['Scan_Id'] ?>" data-val="<?= $row['Document_Name']; ?>"></span>
+                                 <?php echo $row['document_name']; ?>
+                                 <span class="fa fa-pencil edit_doc_name" style="cursor: pointer; display: none;" data-id="<?= $row['scan_id'] ?>" data-val="<?= $row['document_name']; ?>"></span>
                               </td>
                               <td class="mailbox-name">
-                                 <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['File_Location'] ?>','popup','width=600,height=600');"> <?php echo $row['File'] ?></a>
+                                 <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['file_path'] ?>','popup','width=600,height=600');"> <?php echo $row['file_name'] ?></a>
                               </td>
                               <td class="mailbox-name">
                                  <?php
-                                    if($row['Temp_Scan']=='Y'){
-                                    	$scan_by = $row['Temp_Scan_By'];
-                                    	$scan_date = $row['Temp_Scan_Date'];
+                                    if($row['is_temp_scan']=='Y'){
+                                    	$scan_by = $row['temp_scan_by'];
+                                    	$scan_date = $row['temp_scan_date'];
                                     }else{
-                                    	$scan_by = $row['Scan_By'];
-                                    	$scan_date = $row['Scan_Date'];
+                                    	$scan_by = $row['scanned_by'];
+                                    	$scan_date = $row['scan_date'];
                                     }
                                     ?>
                                  <?php echo $this->customlib->get_Name($scan_by); ?>
@@ -75,11 +75,11 @@
                                  <?= !empty($scan_date) ? date('d-m-Y', strtotime($scan_date)) : ''; ?>
                               </td>
                               <td class="mailbox-name">
-                                 <?= !empty($row['Bill_Approver_Date']) ? date('d-m-Y', strtotime($row['Bill_Approver_Date'])) : ''; ?>
+                                 <?= !empty($row['bill_approved_date']) ? date('d-m-Y', strtotime($row['bill_approved_date'])) : ''; ?>
                               </td>
                               <td class="mailbox-name">
                                  <?php
-                                    $punch_by = isset($row['Punch_By']) ? $row['Punch_By'] : '';
+                                    $punch_by = isset($row['punched_by']) ? $row['punched_by'] : '';
                                     
                                     if (!empty($punch_by)) {
                                     
@@ -88,21 +88,21 @@
                                         $q = $this->db->query("SELECT * FROM users WHERE user_id = $punch_by")->row(); if ($q) { echo $q->first_name. ' '.$q->last_name; } } ?>
                               </td>
                               <td class="mailbox-name">
-                                 <?=  !empty($row['Punch_Date']) ? date('d-m-Y', strtotime($row['Punch_Date'])) : ''; ?>
+                                 <?=  !empty($row['punched_date']) ? date('d-m-Y', strtotime($row['punched_date'])) : ''; ?>
                               </td>
                               <td class="mailbox-name">
-                                 <?php if ($this->customlib->haveSupportFile($row['Scan_Id']) == 1) { ?>
-                                 <a href="#" class="btn btn-link btn-xs" onclick="getSupportFile(<?= $row['Scan_Id'] ?>)"><i class="fa fa-eye"></i></a>
+                                 <?php if ($this->customlib->haveSupportFile($row['scan_id']) == 1) { ?>
+                                 <a href="#" class="btn btn-link btn-xs" onclick="getSupportFile(<?= $row['scan_id'] ?>)"><i class="fa fa-eye"></i></a>
                                  <?php } ?>
                               </td>
                               <td class="mailbox-name">
-                              <?php if ($row['DocType_Id'] != 0) { ?>
-                                 <?php if ($row['DocType_Id'] == 57) { ?>
-                                       <a href="<?php echo base_url(); ?>file_entry/<?= $row['Scan_Id'] ?>/<?= $row['DocType_Id'] ?>" class="btn btn-success btn-xs" data-toggle="tooltip" title="Punch File">
+                              <?php if ($row['doc_type_id'] != 0) { ?>
+                                 <?php if ($row['doc_type_id'] == 57) { ?>
+                                       <a href="<?php echo base_url(); ?>file_entry/<?= $row['scan_id'] ?>/<?= $row['doc_type_id'] ?>" class="btn btn-success btn-xs" data-toggle="tooltip" title="Punch File">
                                           <i class="fa fa-pencil"></i> Punch
                                        </a>
                                  <?php } else { ?>
-                                       <a href="<?php echo base_url(); ?>vspl_file_entry/<?= $row['Scan_Id'] ?>/<?= $row['DocType_Id'] ?>" class="btn btn-success btn-xs" data-toggle="tooltip" title="Punch File">
+                                       <a href="<?php echo base_url(); ?>vspl_file_entry/<?= $row['scan_id'] ?>/<?= $row['doc_type_id'] ?>" class="btn btn-success btn-xs" data-toggle="tooltip" title="Punch File">
                                           <i class="fa fa-pencil"></i> Punch
                                        </a>
                                  <?php } ?>

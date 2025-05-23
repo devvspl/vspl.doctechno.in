@@ -67,20 +67,20 @@ class Scan_ctrl extends REST_Controller
             $error = array('error' => $this->upload->display_errors());
             $this->response($error, 400);
         } else {
-            $query = $this->db->insert('scan_file', array(
-                'Group_Id' => $this->customlib->getGroupID($user_id),
-                'Scan_By' => $user_id,
+            $query = $this->db->insert('y{$this->year_id}_scan_file', array(
+                'group_id' => $this->customlib->getGroupID($user_id),
+                'scanned_by' => $user_id,
                 'Document_name' => $document_name,
-                'File' => $var_temp_name,
-                'File_Ext' => $file_ext,
-                'File_Location' => base_url() . 'uploads/temp/' . $var_temp_name,
-                'File_Location1' => 'uploads/temp/' . $var_temp_name,
-                'Year' => $year,
-                'Scan_Date' => date('Y-m-d'),
+                'file_name' => $var_temp_name,
+                'file_extension' => $file_ext,
+                'file_path' => base_url() . 'uploads/temp/' . $var_temp_name,
+                'secondary_file_path' => 'uploads/temp/' . $var_temp_name,
+                'year' => $year,
+                'scan_date' => date('Y-m-d'),
             ));
             if ($query) {
                 $data = array();
-                $data['Scan_Id'] = $this->db->insert_id();
+                $data['scan_id'] = $this->db->insert_id();
                 $this->response(array('data' => $data, 'msg' => 'File uploaded successfully.',  'status' => 200), 200);
             } else {
                 $data = array();
@@ -92,7 +92,7 @@ class Scan_ctrl extends REST_Controller
     function upload_support_post()
     {
         $user_id = $this->jwt->decode($this->header['Token'])->user_id;
-        $Scan_Id = $this->post('Scan_Id');
+        $Scan_Id = $this->post('scan_id');
         $file = $_FILES['support_file']['name'];
         $file_ext = pathinfo($file, PATHINFO_EXTENSION);
         $config['upload_path'] = './uploads/temp/';
@@ -108,11 +108,11 @@ class Scan_ctrl extends REST_Controller
         } else {
             $query = $this->db->insert('support_file', array(
 
-                'Scan_Id' => $Scan_Id,
-                'File' => $var_temp_name,
-                'File_Ext' => $file_ext,
-                'File_Location' => base_url() . 'uploads/temp/' . $var_temp_name,
-                'File_Location1' => 'uploads/temp/' . $var_temp_name,
+                'scan_id' => $Scan_Id,
+                'file_name' => $var_temp_name,
+                'file_extension' => $file_ext,
+                'file_path' => base_url() . 'uploads/temp/' . $var_temp_name,
+                'secondary_file_path' => 'uploads/temp/' . $var_temp_name,
 
             ));
             if ($query) {
@@ -128,11 +128,11 @@ class Scan_ctrl extends REST_Controller
     function final_submit_post()
     {
 
-        $Scan_Id = $this->post('Scan_Id');
-        $query = $this->db->update('scan_file', array(
-            'Final_Submit' => 'Y',
+        $Scan_Id = $this->post('scan_id');
+        $query = $this->db->update('y{$this->year_id}_scan_file', array(
+            'is_final_submitted' => 'Y',
         ), array(
-            'Scan_Id' => $Scan_Id,
+            'scan_id' => $Scan_Id,
         ));
         if ($query) {
             $this->response(array('msg' => 'File Submitted successfully.', 'status' => 200), 200);
@@ -156,12 +156,12 @@ class Scan_ctrl extends REST_Controller
 
     function delete_all_post()
     {
-        $Scan_Id = $this->post('Scan_Id');
+        $Scan_Id = $this->post('scan_id');
         $query = $this->db->delete('support_file', array(
-            'Scan_Id' => $Scan_Id,
+            'scan_id' => $Scan_Id,
         ));
-        $query = $this->db->delete('scan_file', array(
-            'Scan_Id' => $Scan_Id,
+        $query = $this->db->delete('y{$this->year_id}_scan_file', array(
+            'scan_id' => $Scan_Id,
         ));
         if ($query) {
             $this->response(array('msg' => 'File Deleted successfully.', 'status' => 200), 200);
@@ -172,7 +172,7 @@ class Scan_ctrl extends REST_Controller
 
     function support_file_list_post()
     {
-        $Scan_Id = $this->post('Scan_Id');
+        $Scan_Id = $this->post('scan_id');
         $result['support_file'] = $this->Scan_model->get_support_file($Scan_Id);
 
         if (!empty($result)) {

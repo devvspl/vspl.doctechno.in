@@ -37,7 +37,7 @@
                            <?php $i = 1; foreach ($queues as $queue) : ?>
                            <tr>
                               <td class="text-center"><?= $i++ ?></td>
-                              <td class="text-center"><?= htmlspecialchars($queue->Document_Name); ?></td>
+                              <td class="text-center"><?= htmlspecialchars($queue->document_name); ?></td>
                               <td class="text-center"><?= htmlspecialchars($queue->file_type); ?></td>
                               <td class="text-center">
                                  <span class="badge badge-<?php 

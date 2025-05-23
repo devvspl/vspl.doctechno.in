@@ -97,7 +97,7 @@ class Cashpayment_New_ctrl extends CI_Controller
 			// Insert updated journal entries
 			for ($i = 0; $i < count($DepartmentID); $i++) {
 				$json_data = [
-					'Scan_Id' => $Scan_Id,
+					'scan_id' => $Scan_Id,
 					'cost_center_id' => $cost_center_id[$i],
 					'location_id' => $location_id[$i],
 					'category_id' => $category_id[$i],
@@ -119,7 +119,7 @@ class Cashpayment_New_ctrl extends CI_Controller
 				$this->db->insert('cash_payment_new_items', $json_data);
 			}
 	
-			$this->db->where("Scan_Id", $Scan_Id)->update("scan_file", [
+			$this->db->where("Scan_Id", $Scan_Id)->update("y{$this->year_id}_scan_file", [
 				"Is_Rejected" => "N",
 				"Reject_Date" => null,
 				"Edit_Permission" => "N",
@@ -139,7 +139,7 @@ class Cashpayment_New_ctrl extends CI_Controller
 			// Insert journal entries
 			for ($i = 0; $i < count($DepartmentID); $i++) {
 				$json_data = [
-					'Scan_Id' => $Scan_Id,
+					'scan_id' => $Scan_Id,
 					'cost_center_id' => $cost_center_id[$i],
 					'location_id' => $location_id[$i],
 					'category_id' => $category_id[$i],

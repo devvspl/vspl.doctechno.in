@@ -77,7 +77,7 @@ class Finance_Punch extends CI_Controller
         $user_id = $this->session->userdata("user_id");
         $Reject_Remark = $this->input->post("Remark");
         $this->db->where("Scan_Id", $Scan_Id);
-        $result = $this->db->update("scan_file", [
+        $result = $this->db->update("y{$this->year_id}_scan_file", [
             "Scan_Resend" => "Y",
             "Scan_Resend_By" => $user_id,
             "Scan_Resend_Remark" => $Reject_Remark,
@@ -102,7 +102,7 @@ class Finance_Punch extends CI_Controller
         $DocType_Id = $this->input->post("DocType_Id");
         $Doc_Type = $this->customlib->getDocType($DocType_Id);
         $this->db->where("Scan_Id", $Scan_Id);
-        $query = $this->db->update("scan_file", [
+        $query = $this->db->update("y{$this->year_id}_scan_file", [
             "DocType_Id" => $DocType_Id,
             "Doc_Type" => $Doc_Type,
         ]);
@@ -158,7 +158,7 @@ class Finance_Punch extends CI_Controller
         $Scan_Id = $this->input->post("Scan_Id");
         $DocName = $this->input->post("DocName");
         $this->db->where("Scan_Id", $Scan_Id);
-        $query = $this->db->update("scan_file", ["Document_Name" => $DocName]);
+        $query = $this->db->update("y{$this->year_id}_scan_file", ["Document_Name" => $DocName]);
 
         if ($query) {
             echo json_encode([

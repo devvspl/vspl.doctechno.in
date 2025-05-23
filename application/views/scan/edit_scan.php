@@ -49,12 +49,12 @@ $group_id = $this->uri->segment(4);
 								</thead>
 								<tbody>
 									<?php
-									$main_file = $this->db->query("SELECT * FROM scan_file WHERE Scan_Id = $Scan_Id")->row();
+									$main_file = $this->db->query("SELECT * FROM y{$this->year_id}_scan_file WHERE Scan_Id = $Scan_Id")->row();
 									?>
 									<tr>
 										<td>1</td>
-										<td><a href="javascript:void(0);" target="popup" onclick="window.open('<?= $main_file->File_Location; ?>','popup','width=600,height=600');"><?= $main_file->File; ?></a></td>
-										<td><?= ($main_file->Main_File == 'Y') ? 'Main File' : 'Support File'; ?></td>
+										<td><a href="javascript:void(0);" target="popup" onclick="window.open('<?= $main_file->file_path; ?>','popup','width=600,height=600');"><?= $main_file->file_name; ?></a></td>
+										<td><?= ($main_file->is_main_file == 'Y') ? 'Main File' : 'Support File'; ?></td>
 										<td>
 											<input type="file" name="rep_file" id="rep_file" class="d-inline"> <button type="button" class="btn btn-sm btn-primary d-inline" id="replace">Replace</button>
 										</td>
@@ -67,8 +67,8 @@ $group_id = $this->uri->segment(4);
 									?>
 										<tr>
 											<td><?= $i; ?></td>
-											<td><a href="javascript:void(0);" target="popup" onclick="window.open('<?= $supporting_file->File_Location; ?>','popup','width=600,height=600');"><?= $supporting_file->File; ?></a></td>
-											<td><?= ($supporting_file->Main_File == 'Y') ? 'Main File' : 'Support File'; ?></td>
+											<td><a href="javascript:void(0);" target="popup" onclick="window.open('<?= $supporting_file->file_path; ?>','popup','width=600,height=600');"><?= $supporting_file->file_name; ?></a></td>
+											<td><?= ($supporting_file->is_main_file == 'Y') ? 'Main File' : 'Support File'; ?></td>
 											<td><a href="javascript:void(0);" class="btn btn-danger btn-xs" onclick="delete_file(<?= $supporting_file->Support_Id ?>)"><i class="fa fa-trash"></a></td>
 										</tr>
 									<?php

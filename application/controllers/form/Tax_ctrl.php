@@ -13,7 +13,7 @@ class Tax_ctrl extends CI_Controller
 
     public function create()
     {
-        $Scan_Id = $this->input->post('Scan_Id');
+        $Scan_Id = $this->input->post('scan_id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
         $Institution_Name = $this->input->post('Institution_Name');
@@ -25,7 +25,7 @@ class Tax_ctrl extends CI_Controller
         $Remark = $this->input->post('Remark');
 
         $data = array(
-            'Scan_Id' => $Scan_Id,
+            'scan_id' => $Scan_Id,
             'DocType' => $DocType,
             'DocTypeId' => $DocTypeId,
 
@@ -36,7 +36,7 @@ class Tax_ctrl extends CI_Controller
             'FromDateTime' => $Certificate_Issue_Date,
             'ToDateTime' => $Valid_Upto,
             'Remark' => $Remark,
-            'Group_Id' => $this->session->userdata('group_id'),
+            'group_id' => $this->session->userdata('group_id'),
             'Created_By' => $this->session->userdata('user_id'),
             'Created_Date' => date('Y-m-d H:i:s'),
         );
@@ -45,8 +45,8 @@ class Tax_ctrl extends CI_Controller
         $this->db->trans_strict(FALSE);
         if ($this->customlib->check_punchfile2($Scan_Id) == true) {
             //Update Existing Record
-            $this->db->where('Scan_Id', $Scan_Id)->update('punchfile2', $data);
-            $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array('Is_Rejected' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N'));
+            $this->db->where('scan_id', $Scan_Id)->update('punchfile2', $data);
+            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
         } else {
             //Insert New Record
             $this->db->insert('punchfile2', $data);
@@ -67,7 +67,7 @@ class Tax_ctrl extends CI_Controller
 
     public function Save_IT_Return()
     {
-        $Scan_Id = $this->input->post('Scan_Id');
+        $Scan_Id = $this->input->post('scan_id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
         $CompanyId = $this->input->post('Company');
@@ -79,7 +79,7 @@ class Tax_ctrl extends CI_Controller
         $Amount = $this->input->post('Amount');
         $Remark = $this->input->post('Remark');
         $data = array(
-            'Scan_Id' => $Scan_Id,
+            'scan_id' => $Scan_Id,
             'DocType' => $DocType,
             'DocTypeId' => $DocTypeId,
             'Company' => $Comapny,
@@ -90,7 +90,7 @@ class Tax_ctrl extends CI_Controller
             'File_No' => $Acknowledge_No,
             'Total_Amount' => $Amount,
             'Remark' => $Remark,
-            'Group_Id' => $this->session->userdata('group_id'),
+            'group_id' => $this->session->userdata('group_id'),
             'Created_By' => $this->session->userdata('user_id'),
             'Created_Date' => date('Y-m-d H:i:s'),
         );
@@ -99,11 +99,11 @@ class Tax_ctrl extends CI_Controller
         $this->db->trans_strict(FALSE);
         if ($this->customlib->check_punchfile($Scan_Id) == true) {
             //Update Existing Record
-            $this->db->where('Scan_Id', $Scan_Id)->update('punchfile', $data);
-            $FileID = $this->db->where('Scan_Id', $Scan_Id)->get('punchfile')->row()->FileID;
+            $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
+            $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
 
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Amount, 'Comment' => $Remark));
-            $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array('Is_Rejected' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N'));
+            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
         } else {
             //Insert New Record
             $this->db->insert('punchfile', $data);
@@ -126,7 +126,7 @@ class Tax_ctrl extends CI_Controller
 
     public function Save_Income_Tax_TDS()
     {
-        $Scan_Id = $this->input->post('Scan_Id');
+        $Scan_Id = $this->input->post('scan_id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
         $submit = $this->input->post('submit');
@@ -145,7 +145,7 @@ class Tax_ctrl extends CI_Controller
         $Remark = $this->input->post('Remark');
     
         $data = array(
-            'Scan_Id' => $Scan_Id,
+            'scan_id' => $Scan_Id,
             'DocType' => $DocType,
             'DocTypeId' => $DocTypeId,
             'Company' => $Comapny,
@@ -160,7 +160,7 @@ class Tax_ctrl extends CI_Controller
             'BankName' => $Bank_Name,
             'Total_Amount' => $Amount,
             'Remark' => $Remark,
-            'Group_Id' => $this->session->userdata('group_id'),
+            'group_id' => $this->session->userdata('group_id'),
             'Created_By' => $this->session->userdata('user_id'),
             'Created_Date' => date('Y-m-d H:i:s'),
         );
@@ -170,8 +170,8 @@ class Tax_ctrl extends CI_Controller
     
         if ($this->customlib->check_punchfile($Scan_Id)) {
             // Update Existing Record
-            $this->db->where('Scan_Id', $Scan_Id)->update('punchfile', $data);
-            $FileID = $this->db->where('Scan_Id', $Scan_Id)->get('punchfile')->row()->FileID;
+            $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
+            $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
     
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array(
                 'Amount' => '-' . $Amount,
@@ -179,11 +179,11 @@ class Tax_ctrl extends CI_Controller
             ));
     
             if ($submit) {
-                $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array(
-                    'Is_Rejected' => 'N',
-                    'Reject_Date' => NULL,
-                    'Edit_Permission' => 'N',
-                    'finance_punch' => 'N'
+                $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+                    'is_rejected' => 'N',
+                    'reject_date' => NULL,
+                    'has_edit_permission' => 'N',
+                    'finance_punch_action_status' => 'N'
                 ));
             }
         } else {
@@ -198,11 +198,11 @@ class Tax_ctrl extends CI_Controller
             ));
     
             if ($submit) {
-                $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array(
-                    'Is_Rejected' => 'N',
-                    'Reject_Date' => NULL,
-                    'Edit_Permission' => 'N',
-                    'finance_punch' => 'N'
+                $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+                    'is_rejected' => 'N',
+                    'reject_date' => NULL,
+                    'has_edit_permission' => 'N',
+                    'finance_punch_action_status' => 'N'
                 ));
             }
         }

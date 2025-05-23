@@ -14,7 +14,7 @@ class Telephone_ctrl extends CI_Controller
     public function Save_Telephone_Bill() {
         $submit = $this->input->post('submit');  // This will check if the action is 'submit' or 'draft'
     
-        $Scan_Id = $this->input->post('Scan_Id');
+        $Scan_Id = $this->input->post('scan_id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
     
@@ -34,7 +34,7 @@ class Telephone_ctrl extends CI_Controller
     
         // Prepare the data to be inserted or updated
         $data = array(
-            'Scan_Id' => $Scan_Id,
+            'scan_id' => $Scan_Id,
             'DocType' => $DocType,
             'DocTypeId' => $DocTypeId,
             'BillDate' => $Bill_Date,
@@ -50,7 +50,7 @@ class Telephone_ctrl extends CI_Controller
             'Grand_Total' => $Amout_Outstanding,
             'DueDate' => $Lst_Payment_Date,
             'Remark' => $Remark,
-            'Group_Id' => $this->session->userdata('group_id'),
+            'group_id' => $this->session->userdata('group_id'),
             'Created_By' => $this->session->userdata('user_id'),
             'Created_Date' => date('Y-m-d H:i:s'),
         );
@@ -61,8 +61,8 @@ class Telephone_ctrl extends CI_Controller
     
         if ($this->customlib->check_punchfile($Scan_Id) == true) {
             // Update existing record
-            $this->db->where('Scan_Id', $Scan_Id)->update('punchfile', $data);
-            $FileID = $this->db->where('Scan_Id', $Scan_Id)->get('punchfile')->row()->FileID;
+            $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
+            $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
     
             // Update the sub_punchfile record
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array(
@@ -72,17 +72,17 @@ class Telephone_ctrl extends CI_Controller
     
             // Handle the 'submit' or 'draft' action
             if ($submit) {
-                $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array(
-                    'Is_Rejected' => 'N', 
-                    'Reject_Date' => NULL, 
-                    'Edit_Permission' => 'N', 
-                    'finance_punch' => 'N'  // Set finance_punch to 'N' when submitting
+                $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+                    'is_rejected' => 'N', 
+                    'reject_date' => NULL, 
+                    'has_edit_permission' => 'N', 
+                    'finance_punch_action_status' => 'N'  // Set finance_punch to 'N' when submitting
                 ));
             } else {
-                $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array(
-                    'Is_Rejected' => 'N', 
-                    'Reject_Date' => NULL, 
-                    'Edit_Permission' => 'Y',  // Allow editing for draft
+                $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+                    'is_rejected' => 'N', 
+                    'reject_date' => NULL, 
+                    'has_edit_permission' => 'Y',  // Allow editing for draft
                    
                 ));
             }
@@ -101,17 +101,17 @@ class Telephone_ctrl extends CI_Controller
     
             // Handle the 'submit' or 'draft' action after insertion
             if ($submit) {
-                $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array(
-                    'Is_Rejected' => 'N', 
-                    'Reject_Date' => NULL, 
-                    'Edit_Permission' => 'N', 
-                    'finance_punch' => 'N'  // Set finance_punch to 'N' when submitting
+                $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+                    'is_rejected' => 'N', 
+                    'reject_date' => NULL, 
+                    'has_edit_permission' => 'N', 
+                    'finance_punch_action_status' => 'N'  // Set finance_punch to 'N' when submitting
                 ));
             } else {
-                $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array(
-                    'Is_Rejected' => 'N', 
-                    'Reject_Date' => NULL, 
-                    'Edit_Permission' => 'Y',  // Allow editing for draft
+                $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+                    'is_rejected' => 'N', 
+                    'reject_date' => NULL, 
+                    'has_edit_permission' => 'Y',  // Allow editing for draft
                   
                 ));
             }
@@ -141,7 +141,7 @@ class Telephone_ctrl extends CI_Controller
     
     public function save_phone_fax()
     {
-        $Scan_Id = $this->input->post('Scan_Id');
+        $Scan_Id = $this->input->post('scan_id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
 
@@ -159,7 +159,7 @@ class Telephone_ctrl extends CI_Controller
         $Last_Payment_Detail = $this->input->post('Last_Payment_Detail');
         $Remark = $this->input->post('Remark');
         $data = array(
-            'Scan_Id' => $Scan_Id,
+            'scan_id' => $Scan_Id,
             'DocType' => $DocType,
             'DocTypeId' => $DocTypeId,
             'BillDate' => $Bill_Date,
@@ -175,7 +175,7 @@ class Telephone_ctrl extends CI_Controller
             'PreviousBalance' => $Previous_Balance,
             'LastPayement' => $Last_Payment_Detail,
             'Remark' => $Remark,
-            'Group_Id' => $this->session->userdata('group_id'),
+            'group_id' => $this->session->userdata('group_id'),
             'Created_By' => $this->session->userdata('user_id'),
             'Created_Date' => date('Y-m-d H:i:s'),
         );
@@ -184,11 +184,11 @@ class Telephone_ctrl extends CI_Controller
         $this->db->trans_strict(FALSE);
         if ($this->customlib->check_punchfile($Scan_Id) == true) {
             //Update Existing Record
-            $this->db->where('Scan_Id', $Scan_Id)->update('punchfile', $data);
-            $FileID = $this->db->where('Scan_Id', $Scan_Id)->get('punchfile')->row()->FileID;
+            $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
+            $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
 
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Charges, 'Comment' => $Remark));
-            $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array('Is_Rejected' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N'));
+            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
         } else {
             //Insert New Record
             $this->db->insert('punchfile', $data);

@@ -1,8 +1,8 @@
 <?php
-$this->db->select('master_group.group_name, SUM(IF(scan_file.File_Punched = "Y" AND scan_file.File_Approved = "N" AND scan_file.Is_Rejected = "N", 1, 0)) as total_count,scan_file.Group_Id');
-$this->db->from('scan_file');
-$this->db->join('master_group', 'master_group.group_id = scan_file.Group_Id');
-$this->db->where('scan_file.Is_Deleted', 'N');
+$this->db->select('master_group.group_name, SUM(IF(y{$this->year_id}_scan_file.File_Punched = "Y" AND y{$this->year_id}_scan_file.File_Approved = "N" AND y{$this->year_id}_scan_file.Is_Rejected = "N", 1, 0)) as total_count,y{$this->year_id}_scan_file.Group_Id');
+$this->db->from('y{$this->year_id}_scan_file');
+$this->db->join('master_group', 'master_group.group_id = y{$this->year_id}_scan_file.Group_Id');
+$this->db->where('y{$this->year_id}_scan_file.Is_Deleted', 'N');
 $this->db->group_by('master_group.group_id');
 $this->db->order_by('total_count', 'desc');
 
@@ -40,7 +40,7 @@ $doctype_list = $this->db->select('type_id,file_type')->from('master_doctype')->
 			foreach ($group_list as $key => $value) { ?>
 				<div class="col-md-3 col-sm-6">
 					<div class="info-box">
-						<a href="javascript:void(0);" onclick="getPendingRecords(<?= $value['Group_Id'] ?>,null);">
+						<a href="javascript:void(0);" onclick="getPendingRecords(<?= $value['group_id'] ?>,null);">
 							<span class="info-box-icon1 bg-green"><i class="fa fa-list-alt"></i></span>
 							<div class="info-box-content">
 								<div class="row">

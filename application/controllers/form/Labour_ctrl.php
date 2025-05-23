@@ -17,14 +17,14 @@ class Labour_ctrl extends CI_Controller
 
 
     
-        $Scan_Id = $this->input->post('Scan_Id');
+        $Scan_Id = $this->input->post('scan_id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
     
         $Voucher_No = $this->input->post('Voucher_No');
         $Payment_Date = $this->input->post('Payment_Date');
         $Payee = $this->input->post('Payee');
-        $Location = $this->input->post('Location');
+        $Location = $this->input->post('location_id');
         $Particular = $this->input->post('Particular');
         $Total_Amount = $this->input->post('Total_Amount');
         $From_Date = $this->input->post('From_Date');
@@ -36,8 +36,8 @@ class Labour_ctrl extends CI_Controller
     
         // Prepare data for punchfile
         $data = array(
-            'Scan_Id' => $Scan_Id,
-            'Group_Id' => $this->session->userdata('group_id'),
+            'scan_id' => $Scan_Id,
+            'group_id' => $this->session->userdata('group_id'),
             'DocType' => $DocType,
             'DocTypeId' => $DocTypeId,
             'File_No' => $Voucher_No,
@@ -60,8 +60,8 @@ class Labour_ctrl extends CI_Controller
     
         if ($this->customlib->check_punchfile($Scan_Id)) {
             // Update punchfile
-            $this->db->where('Scan_Id', $Scan_Id)->update('punchfile', $data);
-            $FileID = $this->db->where('Scan_Id', $Scan_Id)->get('punchfile')->row()->FileID;
+            $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
+            $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
     
             // Update sub_punchfile
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array(
@@ -70,7 +70,7 @@ class Labour_ctrl extends CI_Controller
             ));
     
             // Remove old details
-            $this->db->where('Scan_Id', $Scan_Id)->delete('labour_payment_detail');
+            $this->db->where('scan_id', $Scan_Id)->delete('labour_payment_detail');
         } else {
             // Insert punchfile
             $this->db->insert('punchfile', $data);
@@ -88,19 +88,19 @@ class Labour_ctrl extends CI_Controller
         $details = array();
         for ($i = 0; $i < count($Head); $i++) {
             $details[] = array(
-                'Scan_Id' => $Scan_Id,
+                'scan_id' => $Scan_Id,
                 'Head' => $Head[$i],
                 'Amount' => $Amount[$i]
             );
         }
         $this->db->insert_batch('labour_payment_detail', $details);
     
-        // Update scan_file for submit/draft
-        $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array(
-            'Is_Rejected' => 'N',
-            'Reject_Date' => NULL,
-            'Edit_Permission' => $submit ? 'N' : 'Y',
-            'finance_punch' => $submit ? 'N' : NULL
+        // Update y{$this->year_id}_scan_file for submit/draft
+        $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+            'is_rejected' => 'N',
+            'reject_date' => NULL,
+            'has_edit_permission' => $submit ? 'N' : 'Y',
+            'finance_punch_action_status' => $submit ? 'N' : NULL
         ));
     
         $this->customlib->update_file_path($Scan_Id);
@@ -122,8 +122,8 @@ class Labour_ctrl extends CI_Controller
 
     public function getLabourRecord()
     {
-        $Scan_Id = $this->input->post('Scan_Id');
-        $result = $this->db->select('*')->from('labour_payment_detail')->where('Scan_Id', $Scan_Id)->get()->result_array();
+        $Scan_Id = $this->input->post('scan_id');
+        $result = $this->db->select('*')->from('labour_payment_detail')->where('scan_id', $Scan_Id)->get()->result_array();
         if (!empty($result)) {
             echo json_encode(array('status' => 200, 'data' => $result));
         } else {

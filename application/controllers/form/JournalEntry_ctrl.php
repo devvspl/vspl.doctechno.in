@@ -13,8 +13,8 @@ class JournalEntry_ctrl extends CI_Controller
         if ($this->customlib->has_permission('Finance') == 1) {
             if ($this->input->post("submit")) {
                 $Scan_Id = $this->input->post("Scan_Id");
-                $this->db->where(['Scan_Id' => $Scan_Id]);
-                $query = $this->db->update('scan_file', ['finance_punch' => 'Y', 'finance_punch_date' => date('Y-m-d'), 'Finance_Punch_By' => $this->session->userdata("user_id")]);
+                $this->db->where(['scan_id' => $Scan_Id]);
+                $query = $this->db->update('y{$this->year_id}_scan_file', ['finance_punch_action_status' => 'Y', 'finance_punched_date' => date('Y-m-d'), 'Finance_Punch_By' => $this->session->userdata("user_id")]);
                 $this->customlib->update_file_path($Scan_Id);
                 $this->db->trans_complete();
                 if ($this->db->trans_status() === false) {
@@ -58,17 +58,17 @@ class JournalEntry_ctrl extends CI_Controller
                 $this->db->trans_start();
                 $this->db->trans_strict(false);
                 $data = ["finance_punch_date" => $punch_date, "business_entity_id" => $business_entity_id, "narration" => $narration, "document_number" => $document_number, "finance_total_Amount" => $finance_total_Amount, "tdsApplicable" => $tdsApplicable, "TDS_JV_no" => $TDS_JV_no, "TDS_section" => $TDS_section, "TDS_percentage" => $TDS_percentage, "TDS_amount" => $TDS_amount, "Finance_Punch_By" => $this->session->userdata("user_id"),];
-                $this->db->where(['Scan_Id' => $Scan_Id]);
+                $this->db->where(['scan_id' => $Scan_Id]);
                 $query = $this->db->update('punchfile', $data);
                 if ($query) {
-                    $this->db->where('Scan_Id', $Scan_Id);
+                    $this->db->where('scan_id', $Scan_Id);
                     $existing = $this->db->get('journal_entry_items')->result();
                     if (!empty($existing)) {
-                        $this->db->where('Scan_Id', $Scan_Id);
+                        $this->db->where('scan_id', $Scan_Id);
                         $this->db->delete('journal_entry_items');
                     }
                     for ($i = 0; $i < count($DepartmentID); $i++) {
-                        $json_data = ['Scan_Id' => $Scan_Id, 'DepartmentID' => isset($DepartmentID[$i]) ? $DepartmentID[$i] : null, 'business_unit_id' => isset($business_unit_id[$i]) ? $business_unit_id[$i] : null, 'state_id' => isset($state_id[$i]) ? $state_id[$i] : null, 'region_id' => isset($region_id[$i]) ? $region_id[$i] : null, 'location_id' => isset($location_id[$i]) ? $location_id[$i] : null, 'category_id' => isset($category_id[$i]) ? $category_id[$i] : null, 'crop_id' => isset($crop_id[$i]) ? $crop_id[$i] : null, 'activity_id' => isset($activity_id[$i]) ? $activity_id[$i] : null, 'subledger' => isset($subledger[$i]) ? $subledger[$i] : null, 'debit_ac' => isset($debit_ac[$i]) ? $debit_ac[$i] : null, 'credit_ac' => isset($credit_ac[$i]) ? $credit_ac[$i] : null, 'debit_ac_id' => isset($debit_ac_id[$i]) ? $debit_ac_id[$i] : null, 'credit_ac_id' => isset($credit_ac_id[$i]) ? $credit_ac_id[$i] : null, 'Total_Amount' => isset($Total_Amount[$i]) ? $Total_Amount[$i] : null, 'ReferenceNo' => isset($ReferenceNo[$i]) ? $ReferenceNo[$i] : null, 'Remark' => isset($Remark[$i]) ? $Remark[$i] : null, "Created_By" => $this->session->userdata("user_id"),];
+                        $json_data = ['scan_id' => $Scan_Id, 'DepartmentID' => isset($DepartmentID[$i]) ? $DepartmentID[$i] : null, 'business_unit_id' => isset($business_unit_id[$i]) ? $business_unit_id[$i] : null, 'state_id' => isset($state_id[$i]) ? $state_id[$i] : null, 'region_id' => isset($region_id[$i]) ? $region_id[$i] : null, 'location_id' => isset($location_id[$i]) ? $location_id[$i] : null, 'category_id' => isset($category_id[$i]) ? $category_id[$i] : null, 'crop_id' => isset($crop_id[$i]) ? $crop_id[$i] : null, 'activity_id' => isset($activity_id[$i]) ? $activity_id[$i] : null, 'subledger' => isset($subledger[$i]) ? $subledger[$i] : null, 'debit_ac' => isset($debit_ac[$i]) ? $debit_ac[$i] : null, 'credit_ac' => isset($credit_ac[$i]) ? $credit_ac[$i] : null, 'debit_ac_id' => isset($debit_ac_id[$i]) ? $debit_ac_id[$i] : null, 'credit_ac_id' => isset($credit_ac_id[$i]) ? $credit_ac_id[$i] : null, 'Total_Amount' => isset($Total_Amount[$i]) ? $Total_Amount[$i] : null, 'ReferenceNo' => isset($ReferenceNo[$i]) ? $ReferenceNo[$i] : null, 'Remark' => isset($Remark[$i]) ? $Remark[$i] : null, "Created_By" => $this->session->userdata("user_id"),];
                         $this->db->insert('journal_entry_items', $json_data);
                     }
                     $this->db->trans_complete();
@@ -143,7 +143,7 @@ class JournalEntry_ctrl extends CI_Controller
                     $array[] = ["Scan_Id" => $Scan_Id, "Particular" => $Particular[$i], "HSN" => $HSN[$i], "Qty" => $Qty[$i], "Unit" => $Unit[$i], "MRP" => $MRP[$i], "Discount" => $Discount[$i], "Price" => $Price[$i], "Amount" => $Amount[$i], "GST" => $GST[$i], "SGST" => $SGST[$i], "IGST" => $IGST[$i], "Cess" => $Cess[$i], "Total_Amount" => $TAmount[$i],];
                 }
                 $this->db->insert_batch("invoice_detail", $array);
-                $this->db->where("Scan_Id", $Scan_Id)->update("scan_file", ["Is_Rejected" => "N", "Reject_Date" => null, "Edit_Permission" => "N",]);
+                $this->db->where("Scan_Id", $Scan_Id)->update("y{$this->year_id}_scan_file", ["Is_Rejected" => "N", "Reject_Date" => null, "Edit_Permission" => "N",]);
             } else {
                 $this->db->insert("punchfile", $data);
                 $insert_id = $this->db->insert_id();
@@ -155,8 +155,8 @@ class JournalEntry_ctrl extends CI_Controller
                 $this->db->insert_batch("invoice_detail", $array);
             }
             if ($this->input->post("submit_punch")) {
-                $Scan_Id = (int)$this->input->post('Scan_Id');
-                $query = $this->db->where("Scan_Id", $Scan_Id)->update("scan_file", ["finance_punch" => "N", 'Punch_By' => $this->session->userdata("user_id"), 'Punch_Date' => date('Y-m-d H:i:s')]);
+                $Scan_Id = (int)$this->input->post('scan_id');
+                $query = $this->db->where("Scan_Id", $Scan_Id)->update("y{$this->year_id}_scan_file", ["finance_punch" => "N", 'punched_by' => $this->session->userdata("user_id"), 'punched_date' => date('Y-m-d H:i:s')]);
                 $this->db->trans_complete();
                 if ($this->db->trans_status() === false) {
                     $this->db->trans_rollback();
@@ -266,7 +266,7 @@ class JournalEntry_ctrl extends CI_Controller
                 $array[$i] = ["Scan_Id" => $Scan_Id, "Particular" => $Particular[$i], "HSN" => $HSN[$i], "Qty" => $Qty[$i], "Unit" => $Unit[$i], "MRP" => $MRP[$i], "Discount" => $Discount[$i], "Price" => $Price[$i], "Amount" => $Amount[$i], "GST" => $GST[$i], "SGST" => $SGST[$i], "IGST" => $IGST[$i], "Cess" => $Cess[$i], "Total_Amount" => $TAmount[$i],];
             }
             $this->db->insert_batch("invoice_detail", $array);
-            $this->db->where("Scan_Id", $Scan_Id)->update("scan_file", ["Is_Rejected" => "N", "Reject_Date" => null, "Edit_Permission" => "N",]);
+            $this->db->where("Scan_Id", $Scan_Id)->update("y{$this->year_id}_scan_file", ["Is_Rejected" => "N", "Reject_Date" => null, "Edit_Permission" => "N",]);
         } else {
             $this->db->insert("punchfile", $data);
             $insert_id = $this->db->insert_id();

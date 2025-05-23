@@ -50,17 +50,17 @@
                         <tbody>
                            <?php if (!empty($documents)) : ?>
                            <?php $i = 1; foreach ($documents as $doc) : ?>
-                           <tr data-scan-id="<?= $doc->Scan_Id; ?>">
+                           <tr data-scan-id="<?= $doc->scan_id; ?>">
                               <td class="text-center"><?= $i++ ?></td>
                                 <td class="text-center"><?= htmlspecialchars($doc->location_name ?? ''); ?></td>
-                                <td class="text-center"><?= $doc->Document_Name ?? ''; ?></td>
-                                <td class="text-center"><?= htmlspecialchars($doc->Scan_By ?? ''); ?></td>
-                                <td class="text-center"><?= htmlspecialchars($doc->Scan_Date ?? ''); ?></td>
-                                <td class="text-center"><?= htmlspecialchars($doc->Bill_Approver ?? ''); ?></td>
-                                <td class="text-center"><?= htmlspecialchars($doc->Bill_Approver_Date ?? ''); ?></td>
+                                <td class="text-center"><?= $doc->document_name ?? ''; ?></td>
+                                <td class="text-center"><?= htmlspecialchars($doc->scanned_by ?? ''); ?></td>
+                                <td class="text-center"><?= htmlspecialchars($doc->scan_date ?? ''); ?></td>
+                                <td class="text-center"><?= htmlspecialchars($doc->bill_approver_id ?? ''); ?></td>
+                                <td class="text-center"><?= htmlspecialchars($doc->bill_approved_date ?? ''); ?></td>
 
                               <td class="text-center">
-                                 <button class="btn btn-primary btn-sm view-details" data-scan-id="<?= $doc->Scan_Id; ?>">
+                                 <button class="btn btn-primary btn-sm view-details" data-scan-id="<?= $doc->scan_id; ?>">
                                  Set Document
                                  </button>
                               </td>

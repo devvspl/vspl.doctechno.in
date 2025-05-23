@@ -154,7 +154,7 @@
                   foreach ($support_file as $row) {
                   ?>
                <div class="col-md-3">
-                  <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['File_Location'] ?>','popup','width=600,height=600');"> <?php echo $row['File'] ?></a>
+                  <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['file_path'] ?>','popup','width=600,height=600');"> <?php echo $row['file_name'] ?></a>
                </div>
                <?php
                   }
@@ -330,7 +330,7 @@ $cleanedlocation = cleanSearchValue(
     );
 ?>
       loadDropdownOptions(
-        'Location',
+        'location_id',
         '<?= base_url("extract/ExtractorController/get_location_options") ?>',
         <?= json_encode($cleanedlocation) ?>,
         '<?= isset($punch_detail->Loc_Name) ? $punch_detail->Loc_Name : "" ?>'

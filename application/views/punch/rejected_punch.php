@@ -38,42 +38,42 @@
                                             <tr>
                                                 <td><?php echo $count++; ?></td>
                                                 <td class="mailbox-name">
-                                                    <?php echo $row['Document_Name']; ?>
-                                                    <span class="fa fa-pencil edit_doc_name" style="cursor: pointer;" data-id="<?= $row['Scan_Id'] ?>" data-val="<?= $row['Document_Name']; ?>"></span>
+                                                    <?php echo $row['document_name']; ?>
+                                                    <span class="fa fa-pencil edit_doc_name" style="cursor: pointer;" data-id="<?= $row['scan_id'] ?>" data-val="<?= $row['document_name']; ?>"></span>
                                                 </td>
                                                 <td class="mailbox-name">
-                                                    <?php echo $row['Doc_Type']; ?>
+                                                    <?php echo $row['doc_type']; ?>
                                                 </td>
                                                 <td class="mailbox-name">
-                                                    <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['File_Location']  ?>','popup','width=600,height=600');"> <?php echo $row['File'] ?></a>
-                                                </td>
-
-                                                <td class="mailbox-name">
-                                                    <?php echo date('d-m-Y', strtotime($row['Punch_Date'])) ?>
+                                                    <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['file_path']  ?>','popup','width=600,height=600');"> <?php echo $row['file_name'] ?></a>
                                                 </td>
 
                                                 <td class="mailbox-name">
-                                                    <?php echo $this->customlib->get_Name($row['Approve_By']); ?>
+                                                    <?php echo date('d-m-Y', strtotime($row['punched_date'])) ?>
                                                 </td>
 
                                                 <td class="mailbox-name">
-                                                <?php echo !empty($row['Reject_Date']) ? date('d-m-Y', strtotime($row['Reject_Date'])) : 'N/A'; ?>
+                                                    <?php echo $this->customlib->get_Name($row['approved_by']); ?>
+                                                </td>
+
+                                                <td class="mailbox-name">
+                                                <?php echo !empty($row['reject_date']) ? date('d-m-Y', strtotime($row['reject_date'])) : 'N/A'; ?>
                                                 </td>
                                                 <td class="mailbox-name">
-                                                    <?php echo $row['Reject_Remark']; ?>
+                                                    <?php echo $row['reject_remark']; ?>
                                                 </td>
 
                                                 <td class="mailbox-date text-center no-print">
-                                                    <?php if ($this->customlib->haveSupportFile($row['Scan_Id']) == 1) { ?>
-                                                        <a href="javascript:void(0);" class="btn btn-link btn-xs" onclick="getSupportFile(<?= $row['Scan_Id'] ?>)"><i class="fa fa-eye"></i></a>
+                                                    <?php if ($this->customlib->haveSupportFile($row['scan_id']) == 1) { ?>
+                                                        <a href="javascript:void(0);" class="btn btn-link btn-xs" onclick="getSupportFile(<?= $row['scan_id'] ?>)"><i class="fa fa-eye"></i></a>
                                                     <?php } ?>
                                                 </td>
                                                 <td>
-                                                    <a href="<?php echo base_url(); ?>file_detail/<?= $row['Scan_Id'] ?>/<?= $row['DocType_Id'] ?>" class="btn btn-info btn-xs" target="_blank"><i class="fa fa-eye"></i></a>
+                                                    <a href="<?php echo base_url(); ?>file_detail/<?= $row['scan_id'] ?>/<?= $row['doc_type_id'] ?>" class="btn btn-info btn-xs" target="_blank"><i class="fa fa-eye"></i></a>
                                                 </td>
                                                 <td>
-                                                    <?php if ($row['Edit_Permission'] == 'Y') { ?>
-                                                        <a href="<?php echo base_url(); ?>file_entry/<?= $row['Scan_Id'] ?>/<?= $row['DocType_Id'] ?>" class="btn btn-danger btn-xs" target="_blank"><i class="fa fa-pencil"></i></a>
+                                                    <?php if ($row['has_edit_permission'] == 'Y') { ?>
+                                                        <a href="<?php echo base_url(); ?>file_entry/<?= $row['scan_id'] ?>/<?= $row['doc_type_id'] ?>" class="btn btn-danger btn-xs" target="_blank"><i class="fa fa-pencil"></i></a>
                                                     <?php } ?>
                                                 </td>
                                         <?php

@@ -15,7 +15,7 @@ class Ticket_ctrl extends CI_Controller
 	{
 
 		$data = [
-			'Scan_Id' => $this->input->post('Scan_Id'),
+			'scan_id' => $this->input->post('scan_id'),
 			'DocType' => $this->customlib->getDocType($this->input->post('DocTypeId')),
 			'DocTypeId' => $this->input->post('DocTypeId'),
 			'BillDate' => $this->input->post('BillDate'),
@@ -27,25 +27,25 @@ class Ticket_ctrl extends CI_Controller
 			'Total_Discount' => $this->input->post('Total_Discount'),
 			'Grand_Total' => $this->input->post('Grand_Total'),
 			'Remark' => $this->input->post('Remark'),
-			'Group_Id' => $this->session->userdata('group_id'),
+			'group_id' => $this->session->userdata('group_id'),
 			'Created_By' => $this->session->userdata('user_id'),
 			'Created_Date' => date('Y-m-d H:i:s'),
 		];
 
 		$this->db->trans_start();
 		$this->db->trans_strict(FALSE);
-		$isExistingRecord = $this->customlib->check_punchfile($data['Scan_Id']);
+		$isExistingRecord = $this->customlib->check_punchfile($data['scan_id']);
 		if ($isExistingRecord) {
 			//Update Existing Record
-			$this->db->where('Scan_Id', $data['Scan_Id'])->update('punchfile', $data);
-			$FileID = $this->db->where('Scan_Id', $data['Scan_Id'])->get('punchfile')->row()->FileID;
+			$this->db->where('scan_id', $data['scan_id'])->update('punchfile', $data);
+			$FileID = $this->db->where('scan_id', $data['scan_id'])->get('punchfile')->row()->FileID;
 
 			$this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $data['Grand_Total'], 'Comment' => $data['Remark']));
-			$this->db->where('Scan_Id', $data['Scan_Id'])->delete('ticket_cancellation');
+			$this->db->where('scan_id', $data['scan_id'])->delete('ticket_cancellation');
 			$array = array();
 			for ($i = 0; $i < count($this->input->post('Employee')); $i++) {
 				$array[$i] = array(
-					'Scan_Id' => $data['Scan_Id'],
+					'scan_id' => $data['scan_id'],
 					'Emp_Id' => $this->input->post('Employee')[$i],
 					'PNR' => $this->input->post('PNR')[$i],
 					'Amount' => $this->input->post('Amount')[$i],
@@ -54,7 +54,7 @@ class Ticket_ctrl extends CI_Controller
 				);
 			}
 			$this->db->insert_batch('ticket_cancellation', $array);
-			$this->db->where('Scan_Id', $data['Scan_Id'])->update('scan_file', array('Is_Rejected' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N'));
+			$this->db->where('scan_id', $data['scan_id'])->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
 		} else {
 			//Insert New Record
 			$this->db->insert('punchfile', $data);
@@ -63,7 +63,7 @@ class Ticket_ctrl extends CI_Controller
 			$array = array();
 			for ($i = 0; $i < count($this->input->post('Employee')); $i++) {
 				$array[$i] = array(
-					'Scan_Id' => $data['Scan_Id'],
+					'scan_id' => $data['scan_id'],
 					'Emp_Id' => $this->input->post('Employee')[$i],
 					'PNR' => $this->input->post('PNR')[$i],
 					'Amount' => $this->input->post('Amount')[$i],
@@ -73,7 +73,7 @@ class Ticket_ctrl extends CI_Controller
 			}
 			$this->db->insert_batch('ticket_cancellation', $array);
 		}
-		$this->customlib->update_file_path($data['Scan_Id']);
+		$this->customlib->update_file_path($data['scan_id']);
 		$this->db->trans_complete();
 		if ($this->db->trans_status() === FALSE) {
 			$this->db->trans_rollback();
@@ -88,8 +88,8 @@ class Ticket_ctrl extends CI_Controller
 
 
 	function get_ticket_cancel_employee_list(){
-		$Scan_Id = $this->input->post('Scan_Id');
-		$result = $this->db->select('*')->from('ticket_cancellation')->where('Scan_Id', $Scan_Id)->get()->result_array();
+		$Scan_Id = $this->input->post('scan_id');
+		$result = $this->db->select('*')->from('ticket_cancellation')->where('scan_id', $Scan_Id)->get()->result_array();
 		if (!empty($result)) {
 			echo json_encode(array('status' => 200, 'data' => $result));
 		} else {

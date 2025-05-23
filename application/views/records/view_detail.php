@@ -17,10 +17,10 @@
 <div class="box-body">
    <div class="row">
       <div class="col-md-4">
-         <?php if ($rec->File_Ext == 'pdf') { ?>
-         <object data="<?= $rec->File_Location ?>" type="" height="490px" width="100%;"></object>
+         <?php if ($rec->file_extension == 'pdf') { ?>
+         <object data="<?= $rec->file_path ?>" type="" height="490px" width="100%;"></object>
          <?php } else { ?>
-         <input type="hidden" name="image" id="image" value="<?= $rec->File_Location ?>">
+         <input type="hidden" name="image" id="image" value="<?= $rec->file_path ?>">
          <div id="imageViewerContainer" style=" width: 450px; height:490px; border:2px solid #1b98ae; border:2px solid #1b98ae;"></div>
          <script>
             var curect_file_path = $('#image').val();
@@ -40,12 +40,12 @@
       <div class="col-md-8">
          <?php
             if ($_SESSION['role'] == 'super_approver' || $_SESSION['role'] == 'approver') {
-               if ($file_detail->File_Punched == 'Y' && $file_detail->File_Approved == 'N' && $file_detail->Is_Rejected == 'N') {
+               if ($file_detail->is_file_punched == 'Y' && $file_detail->is_file_approved == 'N' && $file_detail->is_rejected == 'N') {
             
             ?>
          <div class="row" style="float: right;">
-            <button class="btn btn-sm btn-success" onclick="approveRecord(<?= $file_detail->Scan_Id; ?>)">Approve</button>
-            <button class="btn btn-sm btn-danger" onclick="rejectRecord(<?= $file_detail->Scan_Id; ?>)">Reject</button>
+            <button class="btn btn-sm btn-success" onclick="approveRecord(<?= $file_detail->scan_id; ?>)">Approve</button>
+            <button class="btn btn-sm btn-danger" onclick="rejectRecord(<?= $file_detail->scan_id; ?>)">Reject</button>
          </div>
          <?php }
             } ?>
@@ -297,7 +297,7 @@
             </tr>
             <tr>
                <td class="text-dark" style="width: 20%;"><b>Location</b></td>
-               <td>:&emsp;<?= $file_detail->Location ?></td>
+               <td>:&emsp;<?= $file_detail->location_id ?></td>
             </tr>
             <tr>
                <td class="text-dark" style="width: 20%;"><b>Particular</b></td>
@@ -3247,8 +3247,8 @@
                   <?php $support_file = $this->customlib->getSupportFile($Scan_Id);
                      foreach ($support_file as $row) { ?>
                   <div class="col-md-3">
-                     <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['File_Location'] ?>','popup','width=600,height=600');">
-                     <?php echo $row['File'] ?></a>
+                     <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['file_path'] ?>','popup','width=600,height=600');">
+                     <?php echo $row['file_name'] ?></a>
                   </div>
                   <?php } ?>
                </div>

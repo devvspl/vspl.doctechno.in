@@ -13,7 +13,7 @@ class CreditNote_ctrl extends CI_Controller
 
 	public function create()
 	{
-		$Scan_Id = $this->input->post('Scan_Id');
+		$Scan_Id = $this->input->post('scan_id');
 		$DocTypeId = $this->input->post('DocTypeId');
 		$DocType = $this->customlib->getDocType($DocTypeId);
 		$CreditNo = $this->input->post('CreditNo');
@@ -38,11 +38,11 @@ class CreditNote_ctrl extends CI_Controller
 		$Department = $this->customlib->getDepatmentNameById($DepartmentId);
 		$Category = $this->input->post('Category');
 		$Ledger = $this->input->post('Ledger');
-		$File = $this->input->post('File');
+		$File = $this->input->post('file_name');
 		$LR_Number = $this->input->post('LR_Number');
 		$LR_Date = $this->input->post('LR_Date');
 		$Cartoon_Number = $this->input->post('Cartoon_Number');
-		$Location = $this->input->post('Location');
+		$Location = $this->input->post('location_id');
 
 
 		$Sub_Total = $this->input->post('Sub_Total');
@@ -67,8 +67,8 @@ class CreditNote_ctrl extends CI_Controller
 		$TAmount = $this->input->post('TAmount');
 		$Remark = $this->input->post('Remark');
 		$data = array(
-			'Scan_Id' => $Scan_Id,
-			'Group_Id' => $this->session->userdata('group_id'),
+			'scan_id' => $Scan_Id,
+			'group_id' => $this->session->userdata('group_id'),
 			'DocType' => $DocType,
 			'DocTypeId' => $DocTypeId,
 			'CreditNo'=>$CreditNo,
@@ -109,15 +109,15 @@ class CreditNote_ctrl extends CI_Controller
 		$this->db->trans_strict(FALSE);
 		if ($this->customlib->check_punchfile($Scan_Id) == true) {
 			//Update
-			$this->db->where('Scan_Id', $Scan_Id)->update('punchfile', $data);
+			$this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
 
-			$FileID = $this->db->where('Scan_Id', $Scan_Id)->get('punchfile')->row()->FileID;
+			$FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
 			$this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Grand_Total, 'Comment' => $Remark));
-			$this->db->where('Scan_Id', $Scan_Id)->delete('invoice_detail');
+			$this->db->where('scan_id', $Scan_Id)->delete('invoice_detail');
 			$array = array();
 			for ($i = 0; $i < count($Particular); $i++) {
 				$array[$i] = array(
-					'Scan_Id' => $Scan_Id,
+					'scan_id' => $Scan_Id,
 					'Particular' => $Particular[$i],
 					'HSN' => $HSN[$i],
 					'Qty' => $Qty[$i],
@@ -135,7 +135,7 @@ class CreditNote_ctrl extends CI_Controller
 				);
 			}
 			$this->db->insert_batch('invoice_detail', $array);
-			$this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array('Is_Rejected' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N'));
+			$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
 		} else {
 			//Insert
 			$this->db->insert('punchfile', $data);
@@ -144,8 +144,8 @@ class CreditNote_ctrl extends CI_Controller
 			$array = array();
 			for ($i = 0; $i < count($Particular); $i++) {
 				$array[$i] = array(
-					'Scan_Id' => $Scan_Id,
-					'Scan_Id' => $Scan_Id,
+					'scan_id' => $Scan_Id,
+					'scan_id' => $Scan_Id,
 					'Particular' => $Particular[$i],
 					'HSN' => $HSN[$i],
 					'Qty' => $Qty[$i],
@@ -183,9 +183,9 @@ class CreditNote_ctrl extends CI_Controller
 
 	function getInvoiceItem()
 	{
-		$Scan_Id = $this->input->post('Scan_Id');
+		$Scan_Id = $this->input->post('scan_id');
 
-		$result = $this->db->select('*')->from('invoice_detail')->where('Scan_Id', $Scan_Id)->get()->result_array();
+		$result = $this->db->select('*')->from('invoice_detail')->where('scan_id', $Scan_Id)->get()->result_array();
 		if (!empty($result)) {
 			echo json_encode(array('status' => 200, 'data' => $result));
 		} else {

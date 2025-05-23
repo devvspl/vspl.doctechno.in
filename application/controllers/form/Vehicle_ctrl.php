@@ -13,7 +13,7 @@ class Vehicle_ctrl extends CI_Controller
 
 	public function create()
 	{
-		$Scan_Id = $this->input->post('Scan_Id');
+		$Scan_Id = $this->input->post('scan_id');
 		$DocTypeId = $this->input->post('DocTypeId');
 		$DocType = $this->customlib->getDocType($DocTypeId);
 
@@ -28,7 +28,7 @@ class Vehicle_ctrl extends CI_Controller
 		$Remark = $this->input->post('Remark');
 
 		$data = array(
-			'Scan_Id' => $Scan_Id,
+			'scan_id' => $Scan_Id,
 			'DocType' => $DocType,
 			'DocTypeId' => $DocTypeId,
 			'VehicleNo' => $Vehicle_No,
@@ -40,7 +40,7 @@ class Vehicle_ctrl extends CI_Controller
 			'CustomerName' => $Custody_Name,
 			'Hypothecation' => $Hypothecation,
 			'Remark' => $Remark,
-			'Group_Id' => $this->session->userdata('group_id'),
+			'group_id' => $this->session->userdata('group_id'),
 			'Created_By' => $this->session->userdata('user_id'),
 			'Created_Date' => date('Y-m-d H:i:s'),
 		);
@@ -49,8 +49,8 @@ class Vehicle_ctrl extends CI_Controller
 		$this->db->trans_strict(FALSE);
 		if ($this->customlib->check_punchfile2($Scan_Id) == true) {
 			//Update Existing Record
-			$this->db->where('Scan_Id', $Scan_Id)->update('punchfile2', $data);
-			$this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array('Is_Rejected' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N'));
+			$this->db->where('scan_id', $Scan_Id)->update('punchfile2', $data);
+			$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
 		} else {
 			//Insert New Record
 			$this->db->insert('punchfile2', $data);
@@ -76,7 +76,7 @@ class Vehicle_ctrl extends CI_Controller
 		$post = $this->input->post();
 		$submit = isset($post['submit']) ? true : false;
 	
-		$Scan_Id = $post['Scan_Id'];
+		$Scan_Id = $post['scan_id'];
 		$DocTypeId = $post['DocTypeId'];
 		$DocType = $this->customlib->getDocType($DocTypeId);
 		$EmployeeID = $post['Employee'];
@@ -84,8 +84,8 @@ class Vehicle_ctrl extends CI_Controller
 		$Employee_Name = $this->customlib->getEmployeeNameById($EmployeeID);
 	
 		$data = array(
-			'Scan_Id' => $Scan_Id,
-			'Group_Id' => $this->session->userdata('group_id'),
+			'scan_id' => $Scan_Id,
+			'group_id' => $this->session->userdata('group_id'),
 			'DocType' => $DocType,
 			'DocTypeId' => $DocTypeId,
 			'BillDate' => $post['Bill_Date'],
@@ -95,7 +95,7 @@ class Vehicle_ctrl extends CI_Controller
 			'VehicleRegNo' => $post['Vehicle_No'],
 			'Vehicle_Type' => $post['Vehicle_Type'],
 			'VehicleRs_PerKM' => $post['Rate'],
-			'Loc_Name' => $post['Location'],
+			'Loc_Name' => $post['location_id'],
 			'TotalRunKM' => $post['Total_KM'],
 			'Total_Amount' => $post['Total_Amount'],
 			'Grand_Total' => $post['Grand_Total'],
@@ -110,13 +110,13 @@ class Vehicle_ctrl extends CI_Controller
 	
 		if ($this->customlib->check_punchfile($Scan_Id)) {
 			// Update
-			$this->db->where('Scan_Id', $Scan_Id)->update('punchfile', $data);
-			$FileID = $this->db->select('FileID')->where('Scan_Id', $Scan_Id)->get('punchfile')->row('FileID');
+			$this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
+			$FileID = $this->db->select('FileID')->where('scan_id', $Scan_Id)->get('punchfile')->row('FileID');
 			$this->db->where('FileID', $FileID)->update('sub_punchfile', array(
 				'Amount' => '-' . $post['Grand_Total'],
 				'Comment' => $post['Remark']
 			));
-			$this->db->where('Scan_Id', $Scan_Id)->delete('vehicle_traveling');
+			$this->db->where('scan_id', $Scan_Id)->delete('vehicle_traveling');
 		} else {
 			// Insert
 			$this->db->insert('punchfile', $data);
@@ -132,7 +132,7 @@ class Vehicle_ctrl extends CI_Controller
 		$vehicle_entries = [];
 		for ($i = 0; $i < count($post['Dist_Opening']); $i++) {
 			$vehicle_entries[] = array(
-				'Scan_Id' => $Scan_Id,
+				'scan_id' => $Scan_Id,
 				'DistTraOpen' => $post['Dist_Opening'][$i],
 				'DistTraClose' => $post['Dist_Closing'][$i],
 				'Totalkm' => $post['Km'][$i],
@@ -143,13 +143,13 @@ class Vehicle_ctrl extends CI_Controller
 			$this->db->insert_batch('vehicle_traveling', $vehicle_entries);
 		}
 	
-		// If it's a submission, update scan_file to finalize
+		// If it's a submission, update y{$this->year_id}_scan_file to finalize
 		if ($submit) {
-			$this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array(
-				'Is_Rejected' => 'N',
-				'Reject_Date' => NULL,
-				'Edit_Permission' => 'N',
-				'finance_punch' => 'N'
+			$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+				'is_rejected' => 'N',
+				'reject_date' => NULL,
+				'has_edit_permission' => 'N',
+				'finance_punch_action_status' => 'N'
 			));
 			$this->customlib->update_file_path($Scan_Id);
 		}
@@ -171,8 +171,8 @@ class Vehicle_ctrl extends CI_Controller
 
 	public function getTwoFourWheelerRecord()
 	{
-		$Scan_Id = $this->input->post('Scan_Id');
-		$result = $this->db->select('*')->from('vehicle_traveling')->where('Scan_Id', $Scan_Id)->get()->result_array();
+		$Scan_Id = $this->input->post('scan_id');
+		$result = $this->db->select('*')->from('vehicle_traveling')->where('scan_id', $Scan_Id)->get()->result_array();
 
 		if (!empty($result)) {
 			echo json_encode(array('status' => 200, 'data' => $result));
@@ -183,7 +183,7 @@ class Vehicle_ctrl extends CI_Controller
 
 	public function Save_Air_Bus_Fare()
 	{
-		$Scan_Id = $this->input->post('Scan_Id');
+		$Scan_Id = $this->input->post('scan_id');
 		$DocTypeId = $this->input->post('DocTypeId');
 		$DocType = $this->customlib->getDocType($DocTypeId);
 		$Travel_Mode = $this->input->post('Travel_Mode');
@@ -200,7 +200,7 @@ class Vehicle_ctrl extends CI_Controller
 		$Amount = $this->input->post('Amount');
 		$Remark = $this->input->post('Remark');
 		$data = array(
-			'Scan_Id' => $Scan_Id,
+			'scan_id' => $Scan_Id,
 			'DocType' => $DocType,
 			'DocTypeId' => $DocTypeId,
 			'TravelMode' => $Travel_Mode,
@@ -216,7 +216,7 @@ class Vehicle_ctrl extends CI_Controller
 			'TravelInsurance' => $Travel_Insurance,
 			'Total_Amount' => $Amount,
 			'Remark' => $Remark,
-			'Group_Id' => $this->session->userdata('group_id'),
+			'group_id' => $this->session->userdata('group_id'),
 			'Created_By' => $this->session->userdata('user_id'),
 			'Created_Date' => date('Y-m-d H:i:s'),
 		);
@@ -225,11 +225,11 @@ class Vehicle_ctrl extends CI_Controller
 		$this->db->trans_strict(FALSE);
 		if ($this->customlib->check_punchfile($Scan_Id) == true) {
 			//Update Existing Record
-			$this->db->where('Scan_Id', $Scan_Id)->update('punchfile', $data);
-			$FileID = $this->db->where('Scan_Id', $Scan_Id)->get('punchfile')->row()->FileID;
+			$this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
+			$FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
 
 			$this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Amount, 'Comment' => $Remark));
-			$this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array('Is_Rejected' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N'));
+			$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
 		} else {
 			//Insert New Record
 			$this->db->insert('punchfile', $data);
@@ -253,7 +253,7 @@ class Vehicle_ctrl extends CI_Controller
 	public function Save_Vehicle_Maintenance() {
 		$submit = $this->input->post('submit');  // This will check if the action is 'submit' or 'draft'
 	
-		$Scan_Id = $this->input->post('Scan_Id');
+		$Scan_Id = $this->input->post('scan_id');
 		$DocTypeId = $this->input->post('DocTypeId');
 		$DocType = $this->customlib->getDocType($DocTypeId);
 		$VendorId = $this->input->post('Vendor_Name');
@@ -284,8 +284,8 @@ class Vehicle_ctrl extends CI_Controller
 	
 		// Prepare the data to be inserted or updated
 		$data = array(
-			'Scan_Id' => $Scan_Id,
-			'Group_Id' => $this->session->userdata('group_id'),
+			'scan_id' => $Scan_Id,
+			'group_id' => $this->session->userdata('group_id'),
 			'DocType' => $DocType,
 			'DocTypeId' => $DocTypeId,
 			'From_ID' => $VendorId,
@@ -313,8 +313,8 @@ class Vehicle_ctrl extends CI_Controller
 	
 		if ($this->customlib->check_punchfile($Scan_Id) == true) {
 			// Update existing record
-			$this->db->where('Scan_Id', $Scan_Id)->update('punchfile', $data);
-			$FileID = $this->db->where('Scan_Id', $Scan_Id)->get('punchfile')->row()->FileID;
+			$this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
+			$FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
 	
 			// Update the sub_punchfile record
 			$this->db->where('FileID', $FileID)->update('sub_punchfile', array(
@@ -324,17 +324,17 @@ class Vehicle_ctrl extends CI_Controller
 	
 			// Handle the 'submit' or 'draft' action
 			if ($submit) {
-				$this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array(
-					'Is_Rejected' => 'N',
-					'Reject_Date' => NULL,
-					'Edit_Permission' => 'N',  // Disable edit on submit
-					'finance_punch' => 'N'  // Set finance_punch to 'N' when submitting
+				$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+					'is_rejected' => 'N',
+					'reject_date' => NULL,
+					'has_edit_permission' => 'N',  // Disable edit on submit
+					'finance_punch_action_status' => 'N'  // Set finance_punch to 'N' when submitting
 				));
 			} else {
-				$this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array(
-					'Is_Rejected' => 'N',
-					'Reject_Date' => NULL,
-					'Edit_Permission' => 'Y',  // Allow editing for draft
+				$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+					'is_rejected' => 'N',
+					'reject_date' => NULL,
+					'has_edit_permission' => 'Y',  // Allow editing for draft
 				));
 			}
 	
@@ -352,17 +352,17 @@ class Vehicle_ctrl extends CI_Controller
 	
 			// Handle the 'submit' or 'draft' action after insertion
 			if ($submit) {
-				$this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array(
-					'Is_Rejected' => 'N',
-					'Reject_Date' => NULL,
-					'Edit_Permission' => 'N',  // Disable edit on submit
-					'finance_punch' => 'N'  // Set finance_punch to 'N' when submitting
+				$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+					'is_rejected' => 'N',
+					'reject_date' => NULL,
+					'has_edit_permission' => 'N',  // Disable edit on submit
+					'finance_punch_action_status' => 'N'  // Set finance_punch to 'N' when submitting
 				));
 			} else {
-				$this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array(
-					'Is_Rejected' => 'N',
-					'Reject_Date' => NULL,
-					'Edit_Permission' => 'Y',  // Allow editing for draft
+				$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+					'is_rejected' => 'N',
+					'reject_date' => NULL,
+					'has_edit_permission' => 'Y',  // Allow editing for draft
 				));
 			}
 		}
@@ -391,9 +391,9 @@ class Vehicle_ctrl extends CI_Controller
 	
 	function getVehicleMaintenanceItem()
 	{
-		$Scan_Id = $this->input->post('Scan_Id');
+		$Scan_Id = $this->input->post('scan_id');
 
-		$result = $this->db->select('*')->from('labour_payment_detail')->where('Scan_Id', $Scan_Id)->get()->result_array();
+		$result = $this->db->select('*')->from('labour_payment_detail')->where('scan_id', $Scan_Id)->get()->result_array();
 		if (!empty($result)) {
 			echo json_encode(array('status' => 200, 'data' => $result));
 		} else {
@@ -405,7 +405,7 @@ class Vehicle_ctrl extends CI_Controller
 
 		$submit = $this->input->post('submit');  // This will check if the action is 'submit' or 'draft'
 	
-		$Scan_Id = $this->input->post('Scan_Id');
+		$Scan_Id = $this->input->post('scan_id');
 		$DocTypeId = $this->input->post('DocTypeId');
 		$DocType = $this->customlib->getDocType($DocTypeId);
 		$VendorId = $this->input->post('Vendor_Name');
@@ -428,7 +428,7 @@ class Vehicle_ctrl extends CI_Controller
 	
 		// Prepare the data to be inserted or updated
 		$data = array(
-			'Scan_Id' => $Scan_Id,
+			'scan_id' => $Scan_Id,
 			'DocType' => $DocType,
 			'DocTypeId' => $DocTypeId,
 			'FileName' => $Description,
@@ -450,7 +450,7 @@ class Vehicle_ctrl extends CI_Controller
 			'Grand_Total' => $Grand_Total,
 			'Total_Discount' => $Total_Discount,
 			'Remark' => $Remark,
-			'Group_Id' => $this->session->userdata('group_id'),
+			'group_id' => $this->session->userdata('group_id'),
 			'Created_By' => $this->session->userdata('user_id'),
 			'Created_Date' => date('Y-m-d H:i:s'),
 		);
@@ -461,8 +461,8 @@ class Vehicle_ctrl extends CI_Controller
 	
 		if ($this->customlib->check_punchfile($Scan_Id) == true) {
 			// Update existing record
-			$this->db->where('Scan_Id', $Scan_Id)->update('punchfile', $data);
-			$FileID = $this->db->where('Scan_Id', $Scan_Id)->get('punchfile')->row()->FileID;
+			$this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
+			$FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
 	
 			// Update the sub_punchfile record
 			$this->db->where('FileID', $FileID)->update('sub_punchfile', array(
@@ -472,17 +472,17 @@ class Vehicle_ctrl extends CI_Controller
 	
 			// Handle the 'submit' or 'draft' action
 			if ($submit) {
-				$this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array(
-					'Is_Rejected' => 'N', 
-					'Reject_Date' => NULL, 
-					'Edit_Permission' => 'N', 
-					'finance_punch' => 'N'  // Set finance_punch to 'N' when submitting
+				$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+					'is_rejected' => 'N', 
+					'reject_date' => NULL, 
+					'has_edit_permission' => 'N', 
+					'finance_punch_action_status' => 'N'  // Set finance_punch to 'N' when submitting
 				));
 			} else {
-				$this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array(
-					'Is_Rejected' => 'N', 
-					'Reject_Date' => NULL, 
-					'Edit_Permission' => 'Y',  // Allow editing for draft
+				$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+					'is_rejected' => 'N', 
+					'reject_date' => NULL, 
+					'has_edit_permission' => 'Y',  // Allow editing for draft
 				
 				));
 			}
@@ -501,17 +501,17 @@ class Vehicle_ctrl extends CI_Controller
 	
 			// Handle the 'submit' or 'draft' action after insertion
 			if ($submit) {
-				$this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array(
-					'Is_Rejected' => 'N', 
-					'Reject_Date' => NULL, 
-					'Edit_Permission' => 'N', 
-					'finance_punch' => 'N'  // Set finance_punch to 'N' when submitting
+				$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+					'is_rejected' => 'N', 
+					'reject_date' => NULL, 
+					'has_edit_permission' => 'N', 
+					'finance_punch_action_status' => 'N'  // Set finance_punch to 'N' when submitting
 				));
 			} else {
-				$this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array(
-					'Is_Rejected' => 'N', 
-					'Reject_Date' => NULL, 
-					'Edit_Permission' => 'Y',  // Allow editing for draft
+				$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+					'is_rejected' => 'N', 
+					'reject_date' => NULL, 
+					'has_edit_permission' => 'Y',  // Allow editing for draft
 				
 				));
 			}
@@ -543,7 +543,7 @@ class Vehicle_ctrl extends CI_Controller
 
 	public function save_local_conveyance()
 	{
-		$Scan_Id = $this->input->post('Scan_Id');
+		$Scan_Id = $this->input->post('scan_id');
 		$DocTypeId = $this->input->post('DocTypeId');
 		$DocType = $this->customlib->getDocType($DocTypeId);
 		$submit = $this->input->post('submit');
@@ -566,10 +566,10 @@ class Vehicle_ctrl extends CI_Controller
 		$Total_KM = $this->input->post('Total_KM');
 		$Total_Amount = $this->input->post('Total_Amount');
 		$Remark = $this->input->post('Remark');
-		$Location = $this->input->post('Location');
+		$Location = $this->input->post('location_id');
 	
 		$data = array(
-			'Scan_Id' => $Scan_Id,
+			'scan_id' => $Scan_Id,
 			'DocType' => $DocType,
 			'DocTypeId' => $DocTypeId,
 			'TravelMode' => $Travel_Mode,
@@ -585,7 +585,7 @@ class Vehicle_ctrl extends CI_Controller
 			'TotalRunKM' => $Total_KM,
 			'Total_Amount' => $Total_Amount,
 			'Remark' => $Remark,
-			'Group_Id' => $this->session->userdata('group_id'),
+			'group_id' => $this->session->userdata('group_id'),
 			'Created_By' => $this->session->userdata('user_id'),
 			'Created_Date' => date('Y-m-d H:i:s'),
 			'Loc_Name' => $Location,
@@ -596,8 +596,8 @@ class Vehicle_ctrl extends CI_Controller
 	
 		if ($this->customlib->check_punchfile($Scan_Id)) {
 			// Update
-			$this->db->where('Scan_Id', $Scan_Id)->update('punchfile', $data);
-			$FileID = $this->db->where('Scan_Id', $Scan_Id)->get('punchfile')->row()->FileID;
+			$this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
+			$FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
 	
 			$this->db->where('FileID', $FileID)->update('sub_punchfile', array(
 				'Amount' => '-' . $Total_Amount,
@@ -605,15 +605,15 @@ class Vehicle_ctrl extends CI_Controller
 			));
 	
 			if ($submit) {
-				$this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array(
-					'Is_Rejected' => 'N',
-					'Reject_Date' => NULL,
-					'Edit_Permission' => 'N',
-					'finance_punch' => 'N'
+				$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+					'is_rejected' => 'N',
+					'reject_date' => NULL,
+					'has_edit_permission' => 'N',
+					'finance_punch_action_status' => 'N'
 				));
 			}
 	
-			$this->db->where('Scan_Id', $Scan_Id)->delete('vehicle_traveling');
+			$this->db->where('scan_id', $Scan_Id)->delete('vehicle_traveling');
 		} else {
 			// Insert
 			$this->db->insert('punchfile', $data);
@@ -626,11 +626,11 @@ class Vehicle_ctrl extends CI_Controller
 			));
 	
 			if ($submit) {
-				$this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array(
-					'Is_Rejected' => 'N',
-					'Reject_Date' => NULL,
-					'Edit_Permission' => 'N',
-					'finance_punch' => 'N'
+				$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+					'is_rejected' => 'N',
+					'reject_date' => NULL,
+					'has_edit_permission' => 'N',
+					'finance_punch_action_status' => 'N'
 				));
 			}
 		}
@@ -639,7 +639,7 @@ class Vehicle_ctrl extends CI_Controller
 		$travel_data = array();
 		for ($i = 0; $i < count($Date); $i++) {
 			$travel_data[] = array(
-				'Scan_Id' => $Scan_Id,
+				'scan_id' => $Scan_Id,
 				'JourneyStartDt' => date('Y-m-d', strtotime($Date[$i])),
 				'DistTraOpen' => $Dist_Opening[$i],
 				'DistTraClose' => $Dist_Closing[$i],
@@ -670,7 +670,7 @@ class Vehicle_ctrl extends CI_Controller
 
 	public function save_jeep_campaign()
 	{
-		$Scan_Id = $this->input->post('Scan_Id');
+		$Scan_Id = $this->input->post('scan_id');
 		$DocTypeId = $this->input->post('DocTypeId');
 		$DocType = $this->customlib->getDocType($DocTypeId);
 		$Date = $this->input->post('Date');
@@ -681,7 +681,7 @@ class Vehicle_ctrl extends CI_Controller
 		$Amount = $this->input->post('Total_Amount');
 		$Remark = $this->input->post('Remark');
 		$data = array(
-			'Scan_Id' => $Scan_Id,
+			'scan_id' => $Scan_Id,
 			'DocType' => $DocType,
 			'DocTypeId' => $DocTypeId,
 			'BillDate' => $Date,
@@ -691,7 +691,7 @@ class Vehicle_ctrl extends CI_Controller
 			'OthCharge_Amount' => $Other,
 			'Total_Amount' => $Amount,
 			'Remark' => $Remark,
-			'Group_Id' => $this->session->userdata('group_id'),
+			'group_id' => $this->session->userdata('group_id'),
 			'Created_By' => $this->session->userdata('user_id'),
 			'Created_Date' => date('Y-m-d H:i:s'),
 		);
@@ -700,11 +700,11 @@ class Vehicle_ctrl extends CI_Controller
 		$this->db->trans_strict(FALSE);
 		if ($this->customlib->check_punchfile($Scan_Id) == true) {
 			//Update Existing Record
-			$this->db->where('Scan_Id', $Scan_Id)->update('punchfile', $data);
-			$FileID = $this->db->where('Scan_Id', $Scan_Id)->get('punchfile')->row()->FileID;
+			$this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
+			$FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
 
 			$this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Amount, 'Comment' => $Remark));
-			$this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array('Is_Rejected' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N'));
+			$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
 		} else {
 			//Insert New Record
 			$this->db->insert('punchfile', $data);
@@ -727,7 +727,7 @@ class Vehicle_ctrl extends CI_Controller
 
 	public function save_hired_vehicle()
 {
-    $Scan_Id = $this->input->post('Scan_Id');
+    $Scan_Id = $this->input->post('scan_id');
     $DocTypeId = $this->input->post('DocTypeId');
     $DocType = $this->customlib->getDocType($DocTypeId);
     $submit = $this->input->post('submit');
@@ -748,7 +748,7 @@ class Vehicle_ctrl extends CI_Controller
     $Remark = $this->input->post('Remark');
 
     $data = array(
-        'Scan_Id' => $Scan_Id,
+        'scan_id' => $Scan_Id,
         'DocType' => $DocType,
         'DocTypeId' => $DocTypeId,
         'From_ID' => $AgencyID,
@@ -772,18 +772,18 @@ class Vehicle_ctrl extends CI_Controller
         'OthCharge_Amount' => $this->input->post('Other_Charge'),
         'Total_Amount' => $Amount,
         'Remark' => $Remark,
-        'Group_Id' => $this->session->userdata('group_id'),
+        'group_id' => $this->session->userdata('group_id'),
         'Created_By' => $this->session->userdata('user_id'),
         'Created_Date' => date('Y-m-d H:i:s'),
-        'Loc_Name' => $this->input->post('Location'),
+        'Loc_Name' => $this->input->post('location_id'),
     );
 
     $this->db->trans_start();
     $this->db->trans_strict(FALSE);
 
     if ($this->customlib->check_punchfile($Scan_Id)) {
-        $this->db->where('Scan_Id', $Scan_Id)->update('punchfile', $data);
-        $FileID = $this->db->where('Scan_Id', $Scan_Id)->get('punchfile')->row()->FileID;
+        $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
+        $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
 
         $this->db->where('FileID', $FileID)->update('sub_punchfile', array(
             'Amount' => '-' . $Amount,
@@ -791,11 +791,11 @@ class Vehicle_ctrl extends CI_Controller
         ));
 
         if ($submit) {
-            $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array(
-                'Is_Rejected' => 'N',
-                'Reject_Date' => NULL,
-                'Edit_Permission' => 'N',
-                'finance_punch' => 'N'
+            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+                'is_rejected' => 'N',
+                'reject_date' => NULL,
+                'has_edit_permission' => 'N',
+                'finance_punch_action_status' => 'N'
             ));
         }
     } else {
@@ -809,11 +809,11 @@ class Vehicle_ctrl extends CI_Controller
         ));
 
         if ($submit) {
-            $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array(
-                'Is_Rejected' => 'N',
-                'Reject_Date' => NULL,
-                'Edit_Permission' => 'N',
-                'finance_punch' => 'N'
+            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+                'is_rejected' => 'N',
+                'reject_date' => NULL,
+                'has_edit_permission' => 'N',
+                'finance_punch_action_status' => 'N'
             ));
         }
     }
@@ -839,7 +839,7 @@ class Vehicle_ctrl extends CI_Controller
 	public function save_machine_operation()
 	{
 
-		$Scan_Id = $this->input->post('Scan_Id');
+		$Scan_Id = $this->input->post('scan_id');
 		$DocTypeId = $this->input->post('DocTypeId');
 		$DocType = $this->customlib->getDocType($DocTypeId);
 		$CompanyID = $this->input->post('CompanyID');
@@ -850,7 +850,7 @@ class Vehicle_ctrl extends CI_Controller
 		$AgencyAddress = $this->input->post('AgencyAddress');
 		$VehicleRegNo = $this->input->post('VehicleRegNo');
 		$Vehicle_Type = $this->input->post('Vehicle_Type');
-		$Location = $this->input->post('Location');
+		$Location = $this->input->post('location_id');
 		$Invoice_Date = $this->input->post('Invoice_Date');
 		$Particular = $this->input->post('Particular');
 		$Hour = $this->input->post('Hour');
@@ -859,7 +859,7 @@ class Vehicle_ctrl extends CI_Controller
 		$Total_Amount = $this->input->post('Total_Amount');
 		$Remark = $this->input->post('Remark');
 		$data = array(
-			'Scan_Id' => $Scan_Id,
+			'scan_id' => $Scan_Id,
 			'DocType' => $DocType,
 			'DocTypeId' => $DocTypeId,
 			'Company' => $Company_Name,
@@ -878,7 +878,7 @@ class Vehicle_ctrl extends CI_Controller
 			'RateOfInterest' => $Rate,
 			'Total_Amount' => $Total_Amount,
 			'Remark' => $Remark,
-			'Group_Id' => $this->session->userdata('group_id'),
+			'group_id' => $this->session->userdata('group_id'),
 			'Created_By' => $this->session->userdata('user_id'),
 			'Created_Date' => date('Y-m-d H:i:s'),
 		);
@@ -887,11 +887,11 @@ class Vehicle_ctrl extends CI_Controller
 		$this->db->trans_strict(FALSE);
 		if ($this->customlib->check_punchfile($Scan_Id) == true) {
 			//Update Existing Record
-			$this->db->where('Scan_Id', $Scan_Id)->update('punchfile', $data);
-			$FileID = $this->db->where('Scan_Id', $Scan_Id)->get('punchfile')->row()->FileID;
+			$this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
+			$FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
 
 			$this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Total_Amount, 'Comment' => $Remark));
-			$this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array('Is_Rejected' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N'));
+			$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
 		} else {
 			//Insert New Record
 			$this->db->insert('punchfile', $data);
@@ -914,7 +914,7 @@ class Vehicle_ctrl extends CI_Controller
 
 	public function Save_Air()
 	{
-		$Scan_Id = $this->input->post('Scan_Id');
+		$Scan_Id = $this->input->post('scan_id');
 		$DocTypeId = $this->input->post('DocTypeId');
 		$DocType = $this->customlib->getDocType($DocTypeId);
 		$Agent_Name = $this->input->post('Agent_Name');
@@ -938,9 +938,9 @@ class Vehicle_ctrl extends CI_Controller
 		$Other = $this->input->post('Other');
 		$Total_Amount = $this->input->post('Total_Amount');
 		$Remark = $this->input->post('Remark');
-		$Location = $this->input->post('Location');
+		$Location = $this->input->post('location_id');
 		$data = array(
-			'Scan_Id' => $Scan_Id,
+			'scan_id' => $Scan_Id,
 			'DocType' => $DocType,
 			'DocTypeId' => $DocTypeId,
 			'TravelMode' => 'Air',
@@ -965,7 +965,7 @@ class Vehicle_ctrl extends CI_Controller
 			'OthCharge_Amount' => $Other,
 			'Total_Amount' => $Total_Amount,
 			'Remark' => $Remark,
-			'Group_Id' => $this->session->userdata('group_id'),
+			'group_id' => $this->session->userdata('group_id'),
 			'Created_By' => $this->session->userdata('user_id'),
 			'Created_Date' => date('Y-m-d H:i:s'),
 			'Loc_Name'=>$Location,
@@ -975,15 +975,15 @@ class Vehicle_ctrl extends CI_Controller
 		$this->db->trans_strict(FALSE);
 		if ($this->customlib->check_punchfile($Scan_Id) == true) {
 			//Update Existing Record
-			$this->db->where('Scan_Id', $Scan_Id)->update('punchfile', $data);
-			$FileID = $this->db->where('Scan_Id', $Scan_Id)->get('punchfile')->row()->FileID;
+			$this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
+			$FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
 
 			$this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Total_Amount, 'Comment' => $Remark));
-			$this->db->where('Scan_Id', $data['Scan_Id'])->delete('lodging_employee');
+			$this->db->where('scan_id', $data['scan_id'])->delete('lodging_employee');
 			$array = array();
 			for ($i = 0; $i < count($this->input->post('Employee')); $i++) {
 				$array[$i] = array(
-					'Scan_Id' => $data['Scan_Id'],
+					'scan_id' => $data['scan_id'],
 					'emp_id' => $this->input->post('Employee')[$i],
 					'emp_code' => $this->input->post('EmpCode')[$i],
 					'emp_name' => $this->customlib->getEmployeeNameById($this->input->post('Employee')[$i]),
@@ -991,7 +991,7 @@ class Vehicle_ctrl extends CI_Controller
 				);
 			}
 			$this->db->insert_batch('lodging_employee', $array);
-			$this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array('Is_Rejected' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N'));
+			$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
 		} else {
 			//Insert New Record
 			$this->db->insert('punchfile', $data);
@@ -1000,7 +1000,7 @@ class Vehicle_ctrl extends CI_Controller
 			$array = array();
 			for ($i = 0; $i < count($this->input->post('Employee')); $i++) {
 				$array[$i] = array(
-					'Scan_Id' => $data['Scan_Id'],
+					'scan_id' => $data['scan_id'],
 					'emp_id' => $this->input->post('Employee')[$i],
 					'emp_code' => $this->input->post('EmpCode')[$i],
 					'emp_name' => $this->customlib->getEmployeeNameById($this->input->post('Employee')[$i]),
@@ -1025,7 +1025,7 @@ class Vehicle_ctrl extends CI_Controller
 
 	public function Save_Rail()
 	{
-		$Scan_Id = $this->input->post('Scan_Id');
+		$Scan_Id = $this->input->post('scan_id');
 		$DocTypeId = $this->input->post('DocTypeId');
 		$DocType = $this->customlib->getDocType($DocTypeId);
 		$Train_Number = $this->input->post('Train_Number');
@@ -1049,9 +1049,9 @@ class Vehicle_ctrl extends CI_Controller
 		$Other = $this->input->post('Other');
 		$Total_Amount = $this->input->post('Total_Amount');
 		$Remark = $this->input->post('Remark');
-		$Location = $this->input->post('Location');
+		$Location = $this->input->post('location_id');
 		$data = array(
-			'Scan_Id' => $Scan_Id,
+			'scan_id' => $Scan_Id,
 			'DocType' => $DocType,
 			'DocTypeId' => $DocTypeId,
 			'TravelMode' => 'Rail',
@@ -1076,7 +1076,7 @@ class Vehicle_ctrl extends CI_Controller
 			'OthCharge_Amount' => $Other,
 			'Total_Amount' => $Total_Amount,
 			'Remark' => $Remark,
-			'Group_Id' => $this->session->userdata('group_id'),
+			'group_id' => $this->session->userdata('group_id'),
 			'Created_By' => $this->session->userdata('user_id'),
 			'Created_Date' => date('Y-m-d H:i:s'),
 			'Loc_Name'=>$Location,
@@ -1086,15 +1086,15 @@ class Vehicle_ctrl extends CI_Controller
 		$this->db->trans_strict(FALSE);
 		if ($this->customlib->check_punchfile($Scan_Id) == true) {
 			//Update Existing Record
-			$this->db->where('Scan_Id', $Scan_Id)->update('punchfile', $data);
-			$FileID = $this->db->where('Scan_Id', $Scan_Id)->get('punchfile')->row()->FileID;
+			$this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
+			$FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
 
 			$this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Total_Amount, 'Comment' => $Remark));
-			$this->db->where('Scan_Id', $data['Scan_Id'])->delete('lodging_employee');
+			$this->db->where('scan_id', $data['scan_id'])->delete('lodging_employee');
 			$array = array();
 			for ($i = 0; $i < count($this->input->post('Employee')); $i++) {
 				$array[$i] = array(
-					'Scan_Id' => $data['Scan_Id'],
+					'scan_id' => $data['scan_id'],
 					'emp_id' => $this->input->post('Employee')[$i],
 					'emp_code' => $this->input->post('EmpCode')[$i],
 					'emp_name' => $this->customlib->getEmployeeNameById($this->input->post('Employee')[$i]),
@@ -1102,7 +1102,7 @@ class Vehicle_ctrl extends CI_Controller
 				);
 			}
 			$this->db->insert_batch('lodging_employee', $array);
-			$this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array('Is_Rejected' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N'));
+			$this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
 		} else {
 			//Insert New Record
 			$this->db->insert('punchfile', $data);
@@ -1111,7 +1111,7 @@ class Vehicle_ctrl extends CI_Controller
 			$array = array();
 			for ($i = 0; $i < count($this->input->post('Employee')); $i++) {
 				$array[$i] = array(
-					'Scan_Id' => $data['Scan_Id'],
+					'scan_id' => $data['scan_id'],
 					'emp_id' => $this->input->post('Employee')[$i],
 					'emp_code' => $this->input->post('EmpCode')[$i],
 					'emp_name' => $this->customlib->getEmployeeNameById($this->input->post('Employee')[$i]),
@@ -1137,7 +1137,7 @@ class Vehicle_ctrl extends CI_Controller
 	public function Save_Bus()
 	{
 		$data = [
-			'Scan_Id' => $this->input->post('Scan_Id'),
+			'scan_id' => $this->input->post('scan_id'),
 			'DocType' => $this->customlib->getDocType($this->input->post('DocTypeId')),
 			'DocTypeId' => $this->input->post('DocTypeId'),
 			'TravelMode' => 'Bus',
@@ -1158,27 +1158,27 @@ class Vehicle_ctrl extends CI_Controller
 			'OthCharge_Amount' => $this->input->post('Other'),
 			'Total_Amount' => $this->input->post('Total_Amount'),
 			'Remark' => $this->input->post('Remark'),
-			'Group_Id' => $this->session->userdata('group_id'),
+			'group_id' => $this->session->userdata('group_id'),
 			'Created_By' => $this->session->userdata('user_id'),
 			'Created_Date' => date('Y-m-d H:i:s'),
-			'Loc_Name' => $this->input->post('Location'),
+			'Loc_Name' => $this->input->post('location_id'),
 		];
 
 		$this->db->trans_start();
 		$this->db->trans_strict(FALSE);
-		$isExistingRecord = $this->customlib->check_punchfile($data['Scan_Id']);
+		$isExistingRecord = $this->customlib->check_punchfile($data['scan_id']);
 		if ($isExistingRecord) {
-			$this->db->where('Scan_Id', $data['Scan_Id'])->update('punchfile', $data);
-			$fileID = $this->db->where('Scan_Id', $data['Scan_Id'])->get('punchfile')->row()->FileID;
+			$this->db->where('scan_id', $data['scan_id'])->update('punchfile', $data);
+			$fileID = $this->db->where('scan_id', $data['scan_id'])->get('punchfile')->row()->FileID;
 
 			$this->db->where('FileID', $fileID)->update('sub_punchfile', ['Amount' => '-' . $data['Total_Amount'], 'Comment' => $data['Remark']]);
-			$this->db->where('Scan_Id', $data['Scan_Id'])->update('scan_file', ['Is_Rejected' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N']);
+			$this->db->where('scan_id', $data['scan_id'])->update('y{$this->year_id}_scan_file', ['is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N']);
 		} else {
 			$this->db->insert('punchfile', $data);
 			$insert_id = $this->db->insert_id();
 			$this->db->insert('sub_punchfile', ['FileID' => $insert_id, 'Amount' => '-' . $data['Total_Amount'], 'Comment' => $data['Remark']]);
 		}
-		$this->customlib->update_file_path($data['Scan_Id']);
+		$this->customlib->update_file_path($data['scan_id']);
 		$this->db->trans_complete();
 		if ($this->db->trans_status() === FALSE) {
 			$this->db->trans_rollback();

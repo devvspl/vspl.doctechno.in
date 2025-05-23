@@ -2216,7 +2216,7 @@ $company_list = $this->customlib->getCompanyList();
                                 <?php $support_file = $this->customlib->getSupportFile($Scan_Id);
                                 foreach ($support_file as $row) {  ?>
                                     <tr>
-                                        <td><a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['File_Location'] ?>','popup','width=600,height=600');"> <?php echo $row['File'] ?></a></td>
+                                        <td><a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['file_path'] ?>','popup','width=600,height=600');"> <?php echo $row['file_name'] ?></a></td>
                                     </tr>
                                 <?php   }  ?>
                             </table>

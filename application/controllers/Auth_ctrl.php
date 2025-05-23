@@ -35,7 +35,7 @@ class Auth_ctrl extends CI_Controller
                         'username' => $result[0]['username'],
                         'group_id' => $result[0]['group_id'],
                         'authenticated' => true,
-                        'financial_year' => $this->input->post('financial_year'),
+                        'year_id' => $this->input->post('financial_year'),
                     ));
                     redirect('dashboard');
                 } else {

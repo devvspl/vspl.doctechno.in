@@ -84,50 +84,50 @@
                            <tr>
                               <td><?php echo $count++; ?></td>
                               <td class="mailbox-name">
-                                 <?php echo $row['Document_Name']; ?>
+                                 <?php echo $row['document_name']; ?>
                               </td>
                               <td class="mailbox-name">
-                                 <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['File_Location']  ?>','popup','width=600,height=600');"> <?php echo $row['File'] ?></a>
+                                 <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['file_path']  ?>','popup','width=600,height=600');"> <?php echo $row['file_name'] ?></a>
                               </td>
                               <td class="mailbox-name">
-                                 <?php echo $this->customlib->get_Name($row['Temp_Scan_By']); ?>
+                                 <?php echo $this->customlib->get_Name($row['temp_scan_by']); ?>
                               </td>
                               <td class="mailbox-name">
-                                 <?= !empty($row['Temp_Scan_Date']) ? date('d-m-Y', strtotime($row['Temp_Scan_Date'])) : ''; ?>
+                                 <?= !empty($row['temp_scan_date']) ? date('d-m-Y', strtotime($row['temp_scan_date'])) : ''; ?>
                               </td>
                               <td class="mailbox-name">
-                                 <?php echo $this->customlib->get_Name($row['Scan_By']); ?>
+                                 <?php echo $this->customlib->get_Name($row['scanned_by']); ?>
                               </td>
                               <td class="mailbox-name">
-                                 <?= !empty($row['Scan_Date']) ? date('d-m-Y', strtotime($row['Scan_Date'])) : ''; ?>
+                                 <?= !empty($row['scan_date']) ? date('d-m-Y', strtotime($row['scan_date'])) : ''; ?>
                               </td>
                               <td class="mailbox-name">
-                                 <?= !empty($row['Bill_Approver_Date']) ? date('d-m-Y', strtotime($row['Bill_Approver_Date'])) : ''; ?>
+                                 <?= !empty($row['bill_approved_date']) ? date('d-m-Y', strtotime($row['bill_approved_date'])) : ''; ?>
                               </td>
-                              <?php if ($row['File_Punched'] == 'Y') { ?>
+                              <?php if ($row['is_file_punched'] == 'Y') { ?>
                               <td class="mailbox-name">
-                                 <?php echo $this->customlib->get_Name($row['Punch_By']); ?>
+                                 <?php echo $this->customlib->get_Name($row['punched_by']); ?>
                               </td>
                               <td class="mailbox-name">
-                                 <?php echo date('d-m-Y', strtotime($row['Punch_Date'])) ?>
+                                 <?php echo date('d-m-Y', strtotime($row['punched_date'])) ?>
                               </td>
                               <td class="mailbox-name text-center">
-                                 <?php echo $this->customlib->dateDiff($row['Punch_Date'], $row['Scan_Date']); ?>
+                                 <?php echo $this->customlib->dateDiff($row['punched_date'], $row['scan_date']); ?>
                               </td>
                               <?php } else { ?>
                               <td></td>
                               <td></td>
                               <td></td>
                               <?php } ?>
-                              <?php if ($row['File_Approved'] == 'Y') { ?>
+                              <?php if ($row['is_file_approved'] == 'Y') { ?>
                               <td class="mailbox-name">
-                                 <?php echo $this->customlib->get_Name($row['Approve_By']); ?>
+                                 <?php echo $this->customlib->get_Name($row['approved_by']); ?>
                               </td>
                               <td class="mailbox-name">
-                                 <?php echo date('d-m-Y', strtotime($row['Approve_Date'])) ?>
+                                 <?php echo date('d-m-Y', strtotime($row['approved_date'])) ?>
                               </td>
                               <td class="mailbox-name text-center">
-                                 <?php echo $this->customlib->dateDiff($row['Approve_Date'], $row['Punch_Date']); ?>
+                                 <?php echo $this->customlib->dateDiff($row['approved_date'], $row['punched_date']); ?>
                               </td>
                               <?php } else { ?>
                               <td></td>
@@ -135,8 +135,8 @@
                               <td></td>
                               <?php } ?>
                               <!--  <td class="mailbox-date text-center no-print">
-                                 <?php if ($this->customlib->haveSupportFile($row['Scan_Id']) == 1) { ?>
-                                     <a href="javascript:void(0);" class="btn btn-link btn-xs" onclick="getSupportFile(<?= $row['Scan_Id'] ?>)"><i class="fa fa-eye"></i></a>
+                                 <?php if ($this->customlib->haveSupportFile($row['scan_id']) == 1) { ?>
+                                     <a href="javascript:void(0);" class="btn btn-link btn-xs" onclick="getSupportFile(<?= $row['scan_id'] ?>)"><i class="fa fa-eye"></i></a>
                                  <?php } ?>
                                  </td> -->
                               <td><?= $row['ServiceNo'] ?></td>
@@ -144,8 +144,8 @@
                                  <?= !empty($row['BookingDate']) ? date('d-m-Y', strtotime($row['BookingDate'])) : ''; ?>
                               </td>
                               <td class="no-print">
-                                 <?php if ($row['File_Punched'] == 'Y') { ?>
-                                 <a href="<?php echo base_url(); ?>file_detail/<?= $row['Scan_Id'] ?>/<?= $row['DocType_Id'] ?>" class="btn btn-info btn-xs" target="_blank"><i class="fa fa-eye"></i></a>
+                                 <?php if ($row['is_file_punched'] == 'Y') { ?>
+                                 <a href="<?php echo base_url(); ?>file_detail/<?= $row['scan_id'] ?>/<?= $row['doc_type_id'] ?>" class="btn btn-info btn-xs" target="_blank"><i class="fa fa-eye"></i></a>
                                  <?php } ?>
                               </td>
                               <?php

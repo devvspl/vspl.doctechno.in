@@ -25,11 +25,11 @@
    $rec = $this->customlib->getScanData($Scan_Id);
    $punch_detail = null;
    if (!empty($Scan_Id)) {
-   $punch_detail = $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row();
+   $punch_detail = $this->db->get_where('punchfile', ['scan_id' => $Scan_Id])->row();
    if ($punch_detail) {
    
    } else {
-   $punch_detail = $this->db->get_where('scan_file', ['Scan_Id' => $Scan_Id])->row();
+   $punch_detail = $this->db->get_where('y{$this->year_id}_scan_file', ['scan_id' => $Scan_Id])->row();
    }
    } 
    $firm = $this->db->get_where('master_firm', ['status' => 'A'])->result_array();
@@ -41,8 +41,8 @@
    $category_list = $this->customlib->getCategoryList();
    $item_list = $this->customlib->getItemList();
    $locationlist = $this->customlib->getWorkLocationList();
-   $document_number = 'CASH' . date('y-m') . '/' . str_pad($this->db->where('scan_doctype_id', 57)->where('MONTH(Scan_Date)', date('m'))->where('YEAR(Scan_Date)', date('Y'))->count_all_results('scan_file') + 1, 4, '0', STR_PAD_LEFT);
-   $tdsJvNo = 'TDSCASH/' . date('Y-m', strtotime($this->db->select('Scan_Date')->where('scan_doctype_id', 57)->where('MONTH(Scan_Date)', date('m'))->where('YEAR(Scan_Date)', date('Y'))->order_by('Scan_Date', 'DESC')->limit(1)->get('scan_file')->row()->Scan_Date ?? date('Y-m'))) . '/' . str_pad($this->db->where('scan_doctype_id', 57)->where('MONTH(Scan_Date)', date('m'))->where('YEAR(Scan_Date)', date('Y'))->count_all_results('scan_file') + 1, 4, '0', STR_PAD_LEFT);
+   $document_number = 'CASH' . date('y-m') . '/' . str_pad($this->db->where('scan_doctype_id', 57)->where('MONTH(Scan_Date)', date('m'))->where('YEAR(Scan_Date)', date('Y'))->count_all_results('y{$this->year_id}_scan_file') + 1, 4, '0', STR_PAD_LEFT);
+   $tdsJvNo = 'TDSCASH/' . date('Y-m', strtotime($this->db->select('scan_date')->where('scan_doctype_id', 57)->where('MONTH(Scan_Date)', date('m'))->where('YEAR(Scan_Date)', date('Y'))->order_by('scan_date', 'DESC')->limit(1)->get('y{$this->year_id}_scan_file')->row()->scan_date ?? date('Y-m'))) . '/' . str_pad($this->db->where('scan_doctype_id', 57)->where('MONTH(Scan_Date)', date('m'))->where('YEAR(Scan_Date)', date('Y'))->count_all_results('y{$this->year_id}_scan_file') + 1, 4, '0', STR_PAD_LEFT);
    $business_entity = $this->db->where(['status'=>'A', 'is_deleted'=> 'N'])->get('master_business_entity')->result_array();
    function fetchData($tableName, $db) {
    return $db->where('status', 'A')
@@ -64,7 +64,7 @@
    $activities = fetchData('core_activity', $this->db);
    $crop_list = fetchData('master_crop', $this->db);
    $region_list = fetchData('master_region', $this->db); 
-   $cash_payment_new_items = $this->db->where(['Scan_Id'=>$Scan_Id])->get('cash_payment_new_items');
+   $cash_payment_new_items = $this->db->where(['scan_id'=>$Scan_Id])->get('cash_payment_new_items');
    $account_group = $this->db->select('account_group, COUNT(*) AS total_accounts')->from('master_account')->group_by('account_group')->get()->result_array();
    $groupedActivities = [];
    
@@ -104,10 +104,10 @@
 <div class="box-body">
    <div class="row">
       <div class="col-md-5">
-         <?php if ($rec->File_Ext == 'pdf') { ?>
-         <object data="<?= $rec->File_Location ?>" type="" height="490px" width="100%;"></object>
+         <?php if ($rec->file_extension == 'pdf') { ?>
+         <object data="<?= $rec->file_path ?>" type="" height="490px" width="100%;"></object>
          <?php } else { ?>
-         <input  required type="hidden" name="image" id="image" value="<?= $rec->File_Location ?>">
+         <input  required type="hidden" name="image" id="image" value="<?= $rec->file_path ?>">
          <div id="imageViewerContainer" style="width: 400px; height:490px;"></div>
          <script>
             var curect_file_path = $('#image').val();
@@ -190,7 +190,7 @@
                </div>
                <div id="rows_container">
                   <?php foreach ($cash_payment_new_items->result_array() as $entry): ?>
-                  <?php if ($entry['Scan_Id'] == $Scan_Id):  ?>
+                  <?php if ($entry['scan_id'] == $Scan_Id):  ?>
                   <div class="row form-row bg-light" id="row_1" style="padding: 5px;margin-bottom: 13px;">
                                        
 						<div class="form-group col-md-4">
@@ -788,7 +788,7 @@
                         foreach ($support_file as $row) {
                         ?>
                      <div class="col-md-3">
-                        <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['File_Location'] ?>','popup','width=600,height=600');"> <?php echo $row['File'] ?></a>
+                        <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['file_path'] ?>','popup','width=600,height=600');"> <?php echo $row['file_name'] ?></a>
                      </div>
                      <?php
                         }

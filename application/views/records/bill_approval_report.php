@@ -118,46 +118,46 @@
 								<tr>
 									<td><?php echo $count++; ?></td>
 									<td class="mailbox-name">
-										<?php echo $this->customlib->get_Location_Name($row['Location']); ?>
+										<?php echo $this->customlib->get_Location_Name($row['location_id']); ?>
 									</td>
 									<td class="mailbox-name">
-										<?php echo $row['Document_Name']; ?>
+										<?php echo $row['document_name']; ?>
 									</td>
 									<td class="mailbox-name">
 										<a href="javascript:void(0);" target="popup"
-										   onclick="window.open('<?= $row['File_Location'] ?>','popup','width=600,height=600');"> <?php echo $row['File'] ?></a>
+										   onclick="window.open('<?= $row['file_path'] ?>','popup','width=600,height=600');"> <?php echo $row['file_name'] ?></a>
 									</td>
 									<td class="mailbox-name">
 										<?php
-										if ($row['Temp_Scan'] == 'Y') {
-											echo date('d-m-Y', strtotime($row['Temp_Scan_Date']));
+										if ($row['is_temp_scan'] == 'Y') {
+											echo date('d-m-Y', strtotime($row['temp_scan_date']));
 										} ?>
 									</td>
 									<td class="mailbox-name">
 										<?php
-										if ($row['Temp_Scan'] == 'Y') {
-											echo $this->customlib->get_Name($row['Temp_Scan_By']);
+										if ($row['is_temp_scan'] == 'Y') {
+											echo $this->customlib->get_Name($row['temp_scan_by']);
 										}
 										?>
 									</td>
 
 									<td class="mailbox-name">
 										<?php
-										echo $this->customlib->get_Name($row['Scan_By']);
+										echo $this->customlib->get_Name($row['scanned_by']);
 
 										?>
 									</td>
 									<td class="mailbox-name">
 										<?php
-										if($row['Scan_Date'] != null){
-											echo date('d-m-Y', strtotime($row['Scan_Date']));
+										if($row['scan_date'] != null){
+											echo date('d-m-Y', strtotime($row['scan_date']));
 										}
 										?>
 									</td>
 									<td class="text-center">
-										<?php if($row['Bill_Approved'] == 'Y'){
+										<?php if($row['bill_approval_status'] == 'Y'){
 											echo 'Yes';
-										}elseif ($row['Bill_Approved'] =='R'){
+										}elseif ($row['bill_approval_status'] =='R'){
 											echo '<span class="badge bg-red">Rejected</span>';
 										}else{
 											echo 'No';
@@ -165,8 +165,8 @@
 									</td>
 									<td class="mailbox-name">
 										<?php
-										if ($row['Bill_Approved'] == 'Y' || $row['Bill_Approved'] =='R') {
-											echo $this->customlib->get_Name($row['Bill_Approver']);
+										if ($row['bill_approval_status'] == 'Y' || $row['bill_approval_status'] =='R') {
+											echo $this->customlib->get_Name($row['bill_approver_id']);
 										}else{
 											echo '';
 										}
@@ -174,15 +174,15 @@
 									</td>
 									<td class="mailbox-name">
 										<?php
-										if($row['Bill_Approved'] == 'Y'){
-											echo date('d-m-Y', strtotime($row['Bill_Approver_Date']));
+										if($row['bill_approval_status'] == 'Y'){
+											echo date('d-m-Y', strtotime($row['bill_approved_date']));
 										}else{
 											echo '';
 										}
 										?>
 									</td>
 									<td>
-										<?php echo $row['Bill_Approver_Remark'] ?>
+										<?php echo $row['bill_approver_remark'] ?>
 									</td>
 									<?php
 									}

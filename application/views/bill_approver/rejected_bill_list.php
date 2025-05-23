@@ -43,39 +43,39 @@
 													<?php echo $row['location_name']; ?>
 												</td>
 												<td class="mailbox-name">
-													<?php echo $row['Document_Name']; ?>
+													<?php echo $row['document_name']; ?>
 												</td>
 
 												<td class="mailbox-name">
-													<a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['File_Location'] ?>','popup','width=600,height=600');"> <?php echo $row['File'] ?></a>
+													<a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['file_path'] ?>','popup','width=600,height=600');"> <?php echo $row['file_name'] ?></a>
 												</td>
                                                 <?php
-                                                if ($row['Temp_Scan'] === 'Y') { ?>
+                                                if ($row['is_temp_scan'] === 'Y') { ?>
                                                     <td class="mailbox-name">
-                                                        <?php echo $this->customlib->get_Name($row['Temp_Scan_By']); ?>
+                                                        <?php echo $this->customlib->get_Name($row['temp_scan_by']); ?>
                                                     </td>
 
                                                     <td class="mailbox-name">
-                                                        <?php echo date('d-m-Y', strtotime($row['Temp_Scan_Date'])) ?>
+                                                        <?php echo date('d-m-Y', strtotime($row['temp_scan_date'])) ?>
                                                     </td>
                                                 <?php } else { ?>
                                                     <td class="mailbox-name">
-                                                        <?php echo $this->customlib->get_Name($row['Scan_By']); ?>
+                                                        <?php echo $this->customlib->get_Name($row['scanned_by']); ?>
                                                     </td>
 
                                                     <td class="mailbox-name">
-                                                        <?php echo date('d-m-Y', strtotime($row['Scan_Date'])) ?>
+                                                        <?php echo date('d-m-Y', strtotime($row['scan_date'])) ?>
                                                     </td>
                                                 <?php } ?>
 												<td class="mailbox-name">
-													<?php echo date('d-m-Y', strtotime($row['Bill_Approver_Date'])) ?>
+													<?php echo date('d-m-Y', strtotime($row['bill_approved_date'])) ?>
 												</td>
 												<td class="mailbox-name">
-													<?php echo $row['Bill_Approver_Remark']; ?>
+													<?php echo $row['bill_approver_remark']; ?>
 												</td>
 												<td class="mailbox-name text-center no-print">
-													<?php if ($this->customlib->haveSupportFile($row['Scan_Id']) == 1) { ?>
-														<a href="javascript:void(0);" class="btn btn-link btn-xs" onclick="getSupportFile(<?= $row['Scan_Id'] ?>)"><i class="fa fa-eye"></i></a>
+													<?php if ($this->customlib->haveSupportFile($row['scan_id']) == 1) { ?>
+														<a href="javascript:void(0);" class="btn btn-link btn-xs" onclick="getSupportFile(<?= $row['scan_id'] ?>)"><i class="fa fa-eye"></i></a>
 													<?php } ?>
 												</td>
 

@@ -1,8 +1,8 @@
 <?php
    $Scan_Id = $this->uri->segment(2);
    $rec = $this->customlib->getScanData($Scan_Id);
-   $group_id = $rec->Group_Id;
-   $Bill_Approver = $rec->Bill_Approver;
+   $group_id = $rec->group_id;
+   $Bill_Approver = $rec->bill_approver_id;
    
    ?>
    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.0/themes/base/jquery-ui.css" />
@@ -12,10 +12,10 @@
          <div class="row">
             <div class="col-md-8">
                <input type="hidden" name="Scan_Id" id="Scan_Id" value="<?= $Scan_Id; ?>">
-               <?php if ($rec->File_Ext == 'pdf') { ?>
-               <object data="<?= $rec->File_Location ?>" type="" height="490px" width="100%;"></object>
+               <?php if ($rec->file_extension == 'pdf') { ?>
+               <object data="<?= $rec->file_path ?>" type="" height="490px" width="100%;"></object>
                <?php } else { ?>
-               <input type="hidden" name="image" id="image" value="<?= $rec->File_Location ?>">
+               <input type="hidden" name="image" id="image" value="<?= $rec->file_path ?>">
                <div id="imageViewerContainer" style=" width: 450px; height:490px; border:2px solid #1b98ae; border:2px solid #1b98ae;"></div>
                <script>
                   var curect_file_path = $('#image').val();
@@ -33,7 +33,7 @@
                <?php } ?>
             </div>
             <div class="col-md-4">
-               <form style="background-color: #fff;" id="form1" action="<?= base_url('Scan/update_document_name/').$rec->Scan_Id; ?>"  method="post" accept-charset="utf-8" enctype="multipart/form-data">
+               <form style="background-color: #fff;" id="form1" action="<?= base_url('Scan/update_document_name/').$rec->scan_id; ?>"  method="post" accept-charset="utf-8" enctype="multipart/form-data">
                   <input type="hidden" name="group_id" id="group_id" value="<?= $group_id; ?>">   
                   <div class="box-body">
                      <?php if ($this->session->flashdata('message')) { ?>
@@ -65,7 +65,7 @@
                               <select name="location" id="location" class="form-control" required>
                                  <option value="">Select Location</option>
                                  <?php
-                                    $selected = $rec->Location;
+                                    $selected = $rec->location_id;
                                     foreach ($locationlist as $value) { ?>
                                  <option value="<?= $value['location_id'] ?>" <?= ($value['location_id'] == $selected) ? 'selected' : ''; ?>><?= $value['location_name'] ?></option>
                                  <?php } ?>
@@ -74,7 +74,7 @@
                            </div>
                         </div>
                         <?php 
-                           if($rec->Bill_Approved == 'N') {
+                           if($rec->bill_approval_status == 'N') {
 								
 										
                            ?>
@@ -115,8 +115,8 @@
                            </div>
                         </div>
                         <?php 
-                           $Bill_Approver = $rec->Bill_Approver;
-                           if ($rec->Bill_Approved == 'N') {
+                           $Bill_Approver = $rec->bill_approver_id;
+                           if ($rec->bill_approval_status == 'N') {
                            ?>
                         <div class="col-md-6">
                            <div class="form-group">

@@ -13,7 +13,7 @@ class ConfirmationAccount_ctrl extends CI_Controller
 
     public function create()
     {
-        $Scan_Id = $this->input->post('Scan_Id');
+        $Scan_Id = $this->input->post('scan_id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
         $Party_Name = $this->input->post('Party_Name');
@@ -24,7 +24,7 @@ class ConfirmationAccount_ctrl extends CI_Controller
         $Remark = $this->input->post('Remark');
 
         $data = array(
-            'Scan_Id' => $Scan_Id,
+            'scan_id' => $Scan_Id,
             'DocType' => $DocType,
             'DocTypeId' => $DocTypeId,
             'FromName' => $Company,
@@ -35,7 +35,7 @@ class ConfirmationAccount_ctrl extends CI_Controller
             'PeriodDuration' => $Period,
             'DateOfConfirm' => $Date_of_Confirmation,
             'Remark' => $Remark,
-            'Group_Id' => $this->session->userdata('group_id'),
+            'group_id' => $this->session->userdata('group_id'),
             'Created_By' => $this->session->userdata('user_id'),
             'Created_Date' => date('Y-m-d H:i:s'),
         );
@@ -44,8 +44,8 @@ class ConfirmationAccount_ctrl extends CI_Controller
         $this->db->trans_strict(FALSE);
         if ($this->customlib->check_punchfile2($Scan_Id) == true) {
             //Update Existing Record
-            $this->db->where('Scan_Id', $Scan_Id)->update('punchfile2', $data);
-            $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array('Is_Rejected' => 'N','Reject_Date'=>NULL,'Edit_Permission'=>'N'));
+            $this->db->where('scan_id', $Scan_Id)->update('punchfile2', $data);
+            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N','reject_date'=>NULL,'has_edit_permission'=>'N'));
         } else {
             //Insert New Record
             $this->db->insert('punchfile2', $data);

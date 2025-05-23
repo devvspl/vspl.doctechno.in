@@ -6,11 +6,11 @@ class Search_model extends MY_Model {
         $this->load->helper('url');
     }
     public function get_search_with_filter_data($company_wise, $vendor_wise, $from_date, $to_date, $work_location, $ledger_wise, $document_wise) {
-        $this->db->select('scan_file.Scan_Id,Document_Name,FromName,ToName,BillDate,File_No,Remark,punchfile.Created_Date,Total_Amount,Grand_Total,DocTypeId,Loc_Name,group_name,BookingDate,ServiceNo');
-        $this->db->from('scan_file');
-        $this->db->join('punchfile', 'punchfile.Scan_Id = scan_file.Scan_Id', 'left');
-        $this->db->join('master_group', 'master_group.group_id = scan_file.Group_Id', 'left');
-        $this->db->where('File_Approved', 'Y');
+        $this->db->select('y{$this->year_id}_scan_file.Scan_Id,Document_Name,FromName,ToName,BillDate,File_No,Remark,punchfile.Created_Date,Total_Amount,Grand_Total,DocTypeId,Loc_Name,group_name,BookingDate,ServiceNo');
+        $this->db->from('y{$this->year_id}_scan_file');
+        $this->db->join('punchfile', 'punchfile.Scan_Id = y{$this->year_id}_scan_file.Scan_Id', 'left');
+        $this->db->join('master_group', 'master_group.group_id = y{$this->year_id}_scan_file.Group_Id', 'left');
+        $this->db->where('is_file_approved', 'Y');
         if ($company_wise != '') {
             $this->db->where('punchfile.CompanyID', $company_wise);
         }
@@ -57,7 +57,7 @@ class Search_model extends MY_Model {
             Punch_By,
             Punch_Date,
             File_Punched,
-            scan_file.Scan_Id,
+            y{$this->year_id}_scan_file.Scan_Id,
             Document_Name,
             FromName,
             ToName,
@@ -73,13 +73,13 @@ class Search_model extends MY_Model {
             BookingDate,
             ServiceNo
         ');
-        $this->db->from('scan_file');
-        $this->db->join('punchfile', 'punchfile.Scan_Id = scan_file.Scan_Id', 'left');
-        $this->db->join('master_group', 'master_group.group_id = scan_file.Group_Id', 'left');
-        $this->db->join('users pab', 'scan_file.Approve_By = pab.user_id', 'left');
-        $this->db->join('users bab', 'scan_file.Bill_Approver = bab.user_id', 'left');
-        $this->db->where('scan_file.File_Punched', 'Y');
-        $this->db->where('scan_file.Is_Deleted', 'N');
+        $this->db->from('y{$this->year_id}_scan_file');
+        $this->db->join('punchfile', 'punchfile.Scan_Id = y{$this->year_id}_scan_file.Scan_Id', 'left');
+        $this->db->join('master_group', 'master_group.group_id = y{$this->year_id}_scan_file.Group_Id', 'left');
+        $this->db->join('users pab', 'y{$this->year_id}_scan_file.Approve_By = pab.user_id', 'left');
+        $this->db->join('users bab', 'y{$this->year_id}_scan_file.Bill_Approver = bab.user_id', 'left');
+        $this->db->where('y{$this->year_id}_scan_file.File_Punched', 'Y');
+        $this->db->where('y{$this->year_id}_scan_file.Is_Deleted', 'N');
         if (!empty($company_wise)) {
             $this->db->where('punchfile.CompanyID', $company_wise);
         }
@@ -109,15 +109,15 @@ class Search_model extends MY_Model {
         return $query->result_array();
     }
     public function search_global($search) {
-        $this->db->select('scan_file.Scan_Id,Document_Name,FromName,ToName,BillDate,File_No,Remark,punchfile.Created_Date,Total_Amount,Grand_Total,DocTypeId');
-        $this->db->from('scan_file');
-        $this->db->join('punchfile', 'punchfile.Scan_Id = scan_file.Scan_Id', 'left');
+        $this->db->select('y{$this->year_id}_scan_file.Scan_Id,Document_Name,FromName,ToName,BillDate,File_No,Remark,punchfile.Created_Date,Total_Amount,Grand_Total,DocTypeId');
+        $this->db->from('y{$this->year_id}_scan_file');
+        $this->db->join('punchfile', 'punchfile.Scan_Id = y{$this->year_id}_scan_file.Scan_Id', 'left');
         if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'user') {
             $group_id = $this->session->userdata('group_id');
             $this->db->where('punchfile.Group_Id', $group_id);
         }
-        $this->db->where('File_Approved', 'Y');
-        $this->db->like('Document_Name', $search);
+        $this->db->where('is_file_approved', 'Y');
+        $this->db->like('document_name', $search);
         $this->db->or_like('FromName', $search);
         $this->db->or_like('ToName', $search);
         $this->db->or_like('BillDate', $search);
@@ -135,9 +135,9 @@ class Search_model extends MY_Model {
     }
     public function get_filtered_data($group, $from_date, $to_date, $search_key, $doc_type, $location) {
         $this->db->select('*');
-        $this->db->from('scan_file');
+        $this->db->from('y{$this->year_id}_scan_file');
         if (!empty($group)) {
-            $this->db->where('Group_Id', $group);
+            $this->db->where('group_id', $group);
         }
         if (!empty($from_date)) {
             $this->db->where('Scan_Date >=', $from_date);
@@ -146,13 +146,13 @@ class Search_model extends MY_Model {
             $this->db->where('Scan_Date <=', $to_date);
         }
         if (!empty($search_key)) {
-            $this->db->group_start()->like('Document_Name', $search_key)->or_like('File', $search_key)->group_end();
+            $this->db->group_start()->like('document_name', $search_key)->or_like('file_name', $search_key)->group_end();
         }
         if (!empty($doc_type)) {
-            $this->db->where('Doc_Type', $doc_type);
+            $this->db->where('doc_type', $doc_type);
         }
         if (!empty($location)) {
-            $this->db->where('Location', $location);
+            $this->db->where('location_id', $location);
         }
         return $this->db->get()->result_array();
     }

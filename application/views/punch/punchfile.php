@@ -53,22 +53,22 @@
                                         ?>
                                             <tr>
                                                 <td><?php echo $count++; ?></td>
-                                                <td><?= $this->customlib->get_Location_Name($row['Location'])?></td>
+                                                <td><?= $this->customlib->get_Location_Name($row['location_id'])?></td>
                                                 <td class="mailbox-name">
-                                                    <?php echo $row['Document_Name']; ?>
-                                                    <span class="fa fa-pencil edit_doc_name" style="cursor: pointer;display:none" data-id="<?= $row['Scan_Id'] ?>" data-val="<?= $row['Document_Name']; ?>"></span>
+                                                    <?php echo $row['document_name']; ?>
+                                                    <span class="fa fa-pencil edit_doc_name" style="cursor: pointer;display:none" data-id="<?= $row['scan_id'] ?>" data-val="<?= $row['document_name']; ?>"></span>
                                                 </td>
                                                 <td class="mailbox-name">
-                                                    <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['File_Location'] ?>','popup','width=600,height=600');"> <?php echo $row['File'] ?></a>
+                                                    <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['file_path'] ?>','popup','width=600,height=600');"> <?php echo $row['file_name'] ?></a>
                                                 </td>
                                                	<td class="mailbox-name">
 													<?php
-															if($row['Temp_Scan']=='Y'){
-																$scan_by = $row['Temp_Scan_By'];
-																$scan_date = $row['Temp_Scan_Date'];
+															if($row['is_temp_scan']=='Y'){
+																$scan_by = $row['temp_scan_by'];
+																$scan_date = $row['temp_scan_date'];
 															}else{
-																$scan_by = $row['Scan_By'];
-																$scan_date = $row['Scan_Date'];
+																$scan_by = $row['scanned_by'];
+																$scan_date = $row['scan_date'];
 															}
 													?>
 													<?php echo $this->customlib->get_Name($scan_by); ?>
@@ -77,20 +77,20 @@
 												<?= !empty($scan_date) ? date('d-m-Y', strtotime($scan_date)) : ''; ?>
 												</td>
                                                 <td class="mailbox-name">
-													<?= !empty($row['Bill_Approver_Date']) ? date('d-m-Y', strtotime($row['Bill_Approver_Date'])) : ''; ?>
+													<?= !empty($row['bill_approved_date']) ? date('d-m-Y', strtotime($row['bill_approved_date'])) : ''; ?>
 												</td>
                                                 <td class="mailbox-name">
 
-                                                    <?php if ($this->customlib->haveSupportFile($row['Scan_Id']) == 1) { ?>
-                                                        <a href="#" class="btn btn-link btn-xs" onclick="getSupportFile(<?= $row['Scan_Id'] ?>)"><i class="fa fa-eye"></i></a>
+                                                    <?php if ($this->customlib->haveSupportFile($row['scan_id']) == 1) { ?>
+                                                        <a href="#" class="btn btn-link btn-xs" onclick="getSupportFile(<?= $row['scan_id'] ?>)"><i class="fa fa-eye"></i></a>
                                                     <?php } ?>
                                                 </td>
                                                 <td class="mailbox-name no-print">
-                                                    <select name="DocType_Id" id="DocType_Id_<?= $row['Scan_Id'] ?>" class="form-control-sm DocType_Id" disabled onchange="changeDocType(<?= $row['Scan_Id'] ?>,this.value)">
+                                                    <select name="DocType_Id" id="DocType_Id_<?= $row['scan_id'] ?>" class="form-control-sm DocType_Id" disabled onchange="changeDocType(<?= $row['scan_id'] ?>,this.value)">
                                                         <option value="0">Select</option>
                                                         <?php
                                                         foreach ($my_doctype_list as $value) {
-                                                            if ($value['type_id'] == $row['DocType_Id']) {
+                                                            if ($value['type_id'] == $row['doc_type_id']) {
                                                                 echo "<option value='" . $value['type_id'] . "' selected>" . $value['file_type'] . "</option>";
                                                             } else {
                                                                 echo "<option value='" . $value['type_id'] . "'>" . $value['file_type'] . "</option>";
@@ -98,12 +98,12 @@
                                                         }
                                                         ?>
                                                     </select>
-                                                    <!--<i class="fa fa-pencil-square-o text-primary d-inline" aria-hidden="true" id="doctype_edit_<?= $row['Scan_Id'] ?>" onclick="editDocType(<?= $row['Scan_Id'] ?>,this)" style="font-size: 16px;cursor: pointer;"></i>-->
+                                                    <!--<i class="fa fa-pencil-square-o text-primary d-inline" aria-hidden="true" id="doctype_edit_<?= $row['scan_id'] ?>" onclick="editDocType(<?= $row['scan_id'] ?>,this)" style="font-size: 16px;cursor: pointer;"></i>-->
                                                 </td>
                                                 <td class="mailbox-name">
-                                                    <a href="javascript:void(0);" class="btn btn-danger btn-xs" id="resend_scan" data-id="<?= $row['Scan_Id']?>"> <i class="fa fa-undo"></i> Resend</a>
-                                                    <?php if ($row['DocType_Id'] != 0) { ?>
-                                                        <a href="<?php echo base_url(); ?>file_entry/<?= $row['Scan_Id'] ?>/<?= $row['DocType_Id'] ?>" class="btn btn-success btn-xs" data-toggle="tooltip" title="Punch File"><i class="fa fa-pencil"></i> Punch</a>
+                                                    <a href="javascript:void(0);" class="btn btn-danger btn-xs" id="resend_scan" data-id="<?= $row['scan_id']?>"> <i class="fa fa-undo"></i> Resend</a>
+                                                    <?php if ($row['doc_type_id'] != 0) { ?>
+                                                        <a href="<?php echo base_url(); ?>file_entry/<?= $row['scan_id'] ?>/<?= $row['doc_type_id'] ?>" class="btn btn-success btn-xs" data-toggle="tooltip" title="Punch File"><i class="fa fa-pencil"></i> Punch</a>
                                                     <?php } ?>
                                                 </td>
 

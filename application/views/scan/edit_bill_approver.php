@@ -36,27 +36,27 @@
 											<tr>
 												<td><?php echo $count++; ?></td>
 												<td class="mailbox-name">
-													<?php echo $row['Document_Name']; ?>
+													<?php echo $row['document_name']; ?>
 												</td>
 												<td class="mailbox-name">
-													<?php echo $this->customlib->get_Location_Name($row['Location']); ?>
+													<?php echo $this->customlib->get_Location_Name($row['location_id']); ?>
 												</td>
 
 												<td class="mailbox-name">
-													<a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['File_Location']  ?>','popup','width=600,height=600');"> <?php echo $row['File'] ?></a>
+													<a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['file_path']  ?>','popup','width=600,height=600');"> <?php echo $row['file_name'] ?></a>
 												</td>
 												
 												<td class="mailbox-name text-center no-print">
-													<?php if ($this->customlib->haveSupportFile($row['Scan_Id']) == 1) { ?>
-														<a href="javascript:void(0);" class="btn btn-link btn-xs" onclick="getSupportFile(<?= $row['Scan_Id'] ?>)"><i class="fa fa-eye"></i></a>
+													<?php if ($this->customlib->haveSupportFile($row['scan_id']) == 1) { ?>
+														<a href="javascript:void(0);" class="btn btn-link btn-xs" onclick="getSupportFile(<?= $row['scan_id'] ?>)"><i class="fa fa-eye"></i></a>
 													<?php } ?>
 												</td>
 												<td class="mailbox-name no-print">
-                                                    <select name="Scan_id" id="Scan_id_<?= $row['Scan_Id'] ?>" class="form-control-sm DocType_Id" disabled onchange="changeBillApprover(<?= $row['Scan_Id'] ?>,this.value)">
+                                                    <select name="Scan_id" id="Scan_id_<?= $row['scan_id'] ?>" class="form-control-sm DocType_Id" disabled onchange="changeBillApprover(<?= $row['scan_id'] ?>,this.value)">
                                                         <option value="0">Select</option>
                                                         <?php
                                                         foreach ($bill_approver_list as $value) {
-                                                            if ($value['user_id'] == $row['Bill_Approver']) {
+                                                            if ($value['user_id'] == $row['bill_approver_id']) {
                                                                 echo "<option value='" . $value['user_id'] . "' selected>" . $value['first_name'] .' '.$value['last_name']. "</option>";
                                                             } else {
                                                                 echo "<option value='" . $value['user_id'] . "'>" . $value['first_name'] .' '.$value['last_name']. "</option>";
@@ -64,7 +64,7 @@
                                                         }
                                                         ?>
                                                     </select>
-                                                    <i class="fa fa-pencil-square-o text-primary d-inline" aria-hidden="true" id="doctype_edit_<?= $row['Scan_Id'] ?>" onclick="editDocType(<?= $row['Scan_Id'] ?>,this)" style="font-size: 16px;cursor: pointer;"></i>
+                                                    <i class="fa fa-pencil-square-o text-primary d-inline" aria-hidden="true" id="doctype_edit_<?= $row['scan_id'] ?>" onclick="editDocType(<?= $row['scan_id'] ?>,this)" style="font-size: 16px;cursor: pointer;"></i>
                                                 </td>
 												
 												

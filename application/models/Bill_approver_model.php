@@ -85,12 +85,12 @@ class Bill_approver_model extends MY_Model {
         return $query->result_array();
     }
     public function get_bill_detail($scan_id) {
-        $this->db->select(' scan_file.Scan_Id, scan_file.Document_Name, master_work_location.location_name, CONCAT(scanned_by.first_name, " ", scanned_by.last_name) AS scanned_by_name, scan_file.Scan_Date, CONCAT(temp_scanned_by.first_name, " ", temp_scanned_by.last_name) AS temp_scanned_by_name, scan_file.Temp_Scan_Date, scan_file.File_Ext, scan_file.File_Location');
-        $this->db->from('scan_file');
-        $this->db->join('master_work_location', 'scan_file.Location = master_work_location.location_id', 'left');
-        $this->db->join('users AS scanned_by', 'scanned_by.user_id = scan_file.Scan_By', 'left');
-        $this->db->join('users AS temp_scanned_by', 'temp_scanned_by.user_id = scan_file.Temp_Scan_By', 'left');
-        $this->db->where('scan_file.Scan_Id', $scan_id);
+        $this->db->select(' y{$this->year_id}_scan_file.Scan_Id, y{$this->year_id}_scan_file.Document_Name, master_work_location.location_name, CONCAT(scanned_by.first_name, " ", scanned_by.last_name) AS scanned_by_name, y{$this->year_id}_scan_file.Scan_Date, CONCAT(temp_scanned_by.first_name, " ", temp_scanned_by.last_name) AS temp_scanned_by_name, y{$this->year_id}_scan_file.Temp_Scan_Date, y{$this->year_id}_scan_file.File_Ext, y{$this->year_id}_scan_file.File_Location');
+        $this->db->from('y{$this->year_id}_scan_file');
+        $this->db->join('master_work_location', 'y{$this->year_id}_scan_file.location_id = master_work_location.location_id', 'left');
+        $this->db->join('users AS scanned_by', 'scanned_by.user_id = y{$this->year_id}_scan_file.Scan_By', 'left');
+        $this->db->join('users AS temp_scanned_by', 'temp_scanned_by.user_id = y{$this->year_id}_scan_file.Temp_Scan_By', 'left');
+        $this->db->where('y{$this->year_id}_scan_file.Scan_Id', $scan_id);
         $query = $this->db->get();
         return $query->row();
     }

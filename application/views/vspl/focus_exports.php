@@ -97,7 +97,7 @@
                               <td><?= $record['CashBankAC'] ?></td>
                               <td><?= $record['BusinessEntity'] ?></td>
                               <td><?= $record['CostCenter'] ?></td>
-                              <td><?= $record['Location'] ?></td>
+                              <td><?= $record['location_id'] ?></td>
                               <td><?= $record['Crop'] ?></td>
                               <td><?= $record['Activity'] ?></td>
                            </tr>

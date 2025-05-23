@@ -61,22 +61,22 @@
                            <tr>
                               <td><?php echo $count++; ?></td>
                               <td class="mailbox-name">
-                                 <?php echo $row['Document_Name']; ?>
+                                 <?php echo $row['document_name']; ?>
                               </td>
                               <td class="mailbox-name">
-                                 <?php echo $row['Doc_Type']; ?>
+                                 <?php echo $row['doc_type']; ?>
                               </td>
                               <td class="mailbox-name">
-                                 <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['File_Location']  ?>','popup','width=600,height=600');"> <?php echo $row['File'] ?></a>
+                                 <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['file_path']  ?>','popup','width=600,height=600');"> <?php echo $row['file_name'] ?></a>
                               </td>
                               <td class="mailbox-name">
                                  <?php
-                                    if($row['Temp_Scan']=='Y'){
-                                    	$scan_by = $row['Temp_Scan_By'];
-                                    	$scan_date = $row['Temp_Scan_Date'];
+                                    if($row['is_temp_scan']=='Y'){
+                                    	$scan_by = $row['temp_scan_by'];
+                                    	$scan_date = $row['temp_scan_date'];
                                     }else{
-                                    	$scan_by = $row['Scan_By'];
-                                    	$scan_date = $row['Scan_Date'];
+                                    	$scan_by = $row['scanned_by'];
+                                    	$scan_date = $row['scan_date'];
                                     }
                                     ?>
                                  <?php echo $this->customlib->get_Name($scan_by); ?>
@@ -85,17 +85,17 @@
                                  <?= !empty($scan_date) ? date('d-m-Y', strtotime($scan_date)) : ''; ?>
                               </td>
                               <td class="mailbox-name">
-                                 <?= !empty($row['Bill_Approver_Date']) ? date('d-m-Y', strtotime($row['Bill_Approver_Date'])) : ''; ?>
+                                 <?= !empty($row['bill_approved_date']) ? date('d-m-Y', strtotime($row['bill_approved_date'])) : ''; ?>
                               </td>
                               <td class="mailbox-name">
-                                 <?php echo date('d-m-Y', strtotime($row['Punch_Date'])) ?>
+                                 <?php echo date('d-m-Y', strtotime($row['punched_date'])) ?>
                               </td>
-                              <?php if ($row['File_Approved'] == 'Y') { ?>
+                              <?php if ($row['is_file_approved'] == 'Y') { ?>
                               <td class="mailbox-name">
-                                 <?php echo $this->customlib->get_Name($row['Approve_By']); ?>
+                                 <?php echo $this->customlib->get_Name($row['approved_by']); ?>
                               </td>
                               <td class="mailbox-name">
-                                 <?php echo date('d-m-Y', strtotime($row['Approve_Date'])) ?>
+                                 <?php echo date('d-m-Y', strtotime($row['approved_date'])) ?>
                               </td>
                               <?php } else { ?>
                               <td class="mailbox-name">
@@ -106,12 +106,12 @@
                               </td>
                               <?php } ?>
                               <td class="mailbox-date text-center no-print">
-                                 <?php if ($this->customlib->haveSupportFile($row['Scan_Id']) == 1) { ?>
-                                 <a href="javascript:void(0);" class="btn btn-link btn-xs" onclick="getSupportFile(<?= $row['Scan_Id'] ?>)"><i class="fa fa-eye"></i></a>
+                                 <?php if ($this->customlib->haveSupportFile($row['scan_id']) == 1) { ?>
+                                 <a href="javascript:void(0);" class="btn btn-link btn-xs" onclick="getSupportFile(<?= $row['scan_id'] ?>)"><i class="fa fa-eye"></i></a>
                                  <?php } ?>
                               </td>
                               <td>
-                                 <a href="<?php echo base_url(); ?>file_detail/<?= $row['Scan_Id'] ?>/<?= $row['DocType_Id'] ?>" class="btn btn-info btn-xs" target="_blank"><i class="fa fa-eye"></i></a>
+                                 <a href="<?php echo base_url(); ?>file_detail/<?= $row['scan_id'] ?>/<?= $row['doc_type_id'] ?>" class="btn btn-info btn-xs" target="_blank"><i class="fa fa-eye"></i></a>
                               </td>
                               <?php
                                  }

@@ -72,8 +72,8 @@ class Record extends CI_Controller {
 		$this->load->view('layout/template', $this->data);
 	}
 	function give_edit_permission($Scan_Id) {
-		$this->db->where('Scan_Id', $Scan_Id);
-		$result = $this->db->update('scan_file', array('Edit_Permission' => 'Y'));
+		$this->db->where('scan_id', $Scan_Id);
+		$result = $this->db->update('y{$this->year_id}_scan_file', array('has_edit_permission' => 'Y'));
 		if ($result) {
 			echo json_encode(array('status' => '200'));
 		} else {
@@ -84,9 +84,9 @@ class Record extends CI_Controller {
 		$this->session->set_userdata('top_menu', 'report');
 		$user_list = $this->Record_model->get_user();
 		$this->data['user_list'] = $user_list;
-		$Scan_By = $this->input->post('Scan_By');
-		$Punch_By = $this->input->post('Punch_By');
-		$Approve_By = $this->input->post('Approve_By');
+		$Scan_By = $this->input->post('scanned_by');
+		$Punch_By = $this->input->post('punched_by');
+		$Approve_By = $this->input->post('approved_by');
 		if ($Scan_By != '' || $Punch_By != '' || $Approve_By != '') {
 			$record_list = $this->Record_model->get_filter_record($Scan_By, $Punch_By, $Approve_By);
 		} else {
@@ -99,8 +99,8 @@ class Record extends CI_Controller {
 	function all_record() {
 	}
 	function reject_approved_file($Scan_Id) {
-		$this->db->where('Scan_Id', $Scan_Id);
-		$result = $this->db->update('scan_file', array('File_Approved' => 'N', 'Approve_Date' => NULL, 'Approve_By' => NULL));
+		$this->db->where('scan_id', $Scan_Id);
+		$result = $this->db->update('y{$this->year_id}_scan_file', array('is_file_approved' => 'N', 'approved_date' => NULL, 'approved_by' => NULL));
 		if ($result) {
 			echo json_encode(array('status' => '200'));
 		} else {
@@ -123,11 +123,11 @@ class Record extends CI_Controller {
 		$toDate = $this->input->post('to_date');
 		$last_day = $this->input->post('last_day');
 		$this->db->select('*');
-		$this->db->from('scan_file');
+		$this->db->from('y{$this->year_id}_scan_file');
 		$this->db->where('Location is not null', NULL, FALSE);
-		$this->db->where('Is_Deleted', 'N');
+		$this->db->where('is_deleted', 'N');
 		if (!empty($location)) {
-			$this->db->where('Location', $location);
+			$this->db->where('location_id', $location);
 		}
 		if (!empty($fromDate)) {
 			$this->db->where("(Temp_Scan_Date >= '$fromDate' OR Scan_Date >= '$fromDate')", NULL, FALSE);
@@ -136,15 +136,15 @@ class Record extends CI_Controller {
 			$this->db->where("(Temp_Scan_Date <= '$toDate' OR Scan_Date <= '$toDate')", NULL, FALSE);
 		}
 		if (!empty($status)) {
-			$this->db->where('Bill_Approved', $status);
+			$this->db->where('bill_approval_status', $status);
 		}
 		if (!empty($last_day) && is_numeric($last_day)) {
 			$end_date = date('Y-m-d', strtotime("-$last_day days"));
 			$this->db->where("(Temp_Scan_Date <= '$end_date' OR Scan_Date <= '$end_date')", NULL, FALSE);
-			$this->db->where('Bill_Approved', 'N');
+			$this->db->where('bill_approval_status', 'N');
 		}
 		if (!empty($bill_approver)) {
-			$this->db->where('Bill_Approver', $bill_approver);
+			$this->db->where('bill_approver_id', $bill_approver);
 		}
 
 		$this->data['record_list'] = $this->db->get()->result_array();
@@ -170,15 +170,15 @@ class Record extends CI_Controller {
 			$fromDate = $this->input->get('from_date');
 			$toDate = $this->input->get('to_date');
 			$last_day = $this->input->get('last_day');
-			$this->db->select(['tcb.first_name as scan_by_name', 'ba.first_name as bill_approver_name', 'master_work_location.location_name', 'Location', 'Document_Name', 'File', 'File_Location', 'Temp_Scan', 'Temp_Scan_By', 'Temp_Scan_Date', 'Scan_By', 'Scan_Date', 'Bill_Approved', 'Bill_Approver', 'Bill_Approver_Date', 'Bill_Approver_Remark']);
-			$this->db->from('scan_file');
-			$this->db->join('master_work_location', 'scan_file.Location = master_work_location.location_id');
-			$this->db->join('users tcb', 'scan_file.Temp_Scan_By = tcb.user_id');
-			$this->db->join('users ba', 'scan_file.Bill_Approver = ba.user_id');
+			$this->db->select(['tcb.first_name as scan_by_name', 'ba.first_name as bill_approver_name', 'master_work_location.location_name', 'location_id', 'document_name', 'file_name', 'file_path', 'is_temp_scan', 'temp_scan_by', 'temp_scan_date', 'scanned_by', 'scan_date', 'bill_approval_status', 'bill_approver_id', 'bill_approved_date', 'bill_approver_remark']);
+			$this->db->from('y{$this->year_id}_scan_file');
+			$this->db->join('master_work_location', 'y{$this->year_id}_scan_file.location_id = master_work_location.location_id');
+			$this->db->join('users tcb', 'y{$this->year_id}_scan_file.Temp_Scan_By = tcb.user_id');
+			$this->db->join('users ba', 'y{$this->year_id}_scan_file.Bill_Approver = ba.user_id');
 			$this->db->where('Location is not null', NULL, FALSE);
-			$this->db->where('scan_file.Is_Deleted', 'N');
+			$this->db->where('y{$this->year_id}_scan_file.Is_Deleted', 'N');
 			if (!empty($location)) {
-				$this->db->where('Location', $location);
+				$this->db->where('location_id', $location);
 			}
 			if (!empty($fromDate)) {
 				$this->db->where('date(Temp_Scan_Date) >=', $fromDate);
@@ -187,22 +187,22 @@ class Record extends CI_Controller {
 				$this->db->where('date(Temp_Scan_Date) <=', $toDate);
 			}
 			if (!empty($status)) {
-				$this->db->where('Bill_Approved', $status);
+				$this->db->where('bill_approval_status', $status);
 			}
 			if (!empty($last_day) && is_numeric($last_day)) {
 				$date = date('Y-m-d', strtotime("-$last_day days"));
 				$this->db->where('date(Temp_Scan_Date) >=', $date);
-				$this->db->where('Bill_Approved', 'N');
+				$this->db->where('bill_approval_status', 'N');
 			}
 			if (!empty($bill_approver)) {
-				$this->db->where('Bill_Approver', $bill_approver);
+				$this->db->where('bill_approver_id', $bill_approver);
 			}
 			if (!empty($search)) {
 				$this->db->group_start();
-				$this->db->like('Location', $search);
-				$this->db->or_like('Document_Name', $search);
-				$this->db->or_like('Scan_By', $search);
-				$this->db->or_like('Bill_Approver', $search);
+				$this->db->like('location_id', $search);
+				$this->db->or_like('document_name', $search);
+				$this->db->or_like('scanned_by', $search);
+				$this->db->or_like('bill_approver_id', $search);
 				$this->db->group_end();
 			}
 			$totalRecords = $this->db->count_all_results('', false);

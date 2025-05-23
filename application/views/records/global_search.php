@@ -84,7 +84,7 @@
                                     foreach ($result as $key => $value) {
                                         echo "<tr>";
                                         echo "<td>" . $i . "</td>";
-                                        echo "<td style='text-align:left;width:30%'><a href=" . base_url() . "file_detail/" . $value['Scan_Id'] . "/" . $value['DocTypeId'] . " target='_blank'>" . $value['Document_Name'] . "</a></td>";
+                                        echo "<td style='text-align:left;width:30%'><a href=" . base_url() . "file_detail/" . $value['scan_id'] . "/" . $value['DocTypeId'] . " target='_blank'>" . $value['document_name'] . "</a></td>";
                                         echo "<td style='text-align:left;width:12%'>" . $value['FromName'] . "</td>";
                                         echo "<td style='text-align:left;width:12%'>" . $value['ToName'] . "</td>";
                                         echo "<td style='text-align:left;width:8%'>" . date('d-m-Y', strtotime($value['BillDate']?? '')) . "</td>";

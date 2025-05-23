@@ -13,7 +13,7 @@ class Property_ctrl extends CI_Controller
 
     public function create()
     {
-        $Scan_Id = $this->input->post('Scan_Id');
+        $Scan_Id = $this->input->post('scan_id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
 
@@ -23,7 +23,7 @@ class Property_ctrl extends CI_Controller
         $Purchase_Value = $this->input->post('Purchase_Value');
         $Market_Value = $this->input->post('Market_Value');
         $Additional_Payment = $this->input->post('Additional_Payment');
-        $Location = $this->input->post('Location');
+        $Location = $this->input->post('location_id');
         $Area = $this->input->post('Area');
         $KH_No = $this->input->post('KH_No');
         $PH_No = $this->input->post('PH_No');
@@ -38,7 +38,7 @@ class Property_ctrl extends CI_Controller
         $Remark = $this->input->post('Remark');
 
         $data = array(
-            'Scan_Id' => $Scan_Id,
+            'scan_id' => $Scan_Id,
             'DocType' => $DocType,
             'DocTypeId' => $DocTypeId,
 
@@ -61,7 +61,7 @@ class Property_ctrl extends CI_Controller
             'Map_Approval' => $Map_Approval_Detail,
             'Additional_Exposure' => $Additional_Exposure,
             'Remark' => $Remark,
-            'Group_Id' => $this->session->userdata('group_id'),
+            'group_id' => $this->session->userdata('group_id'),
             'Created_By' => $this->session->userdata('user_id'),
             'Created_Date' => date('Y-m-d H:i:s'),
         );
@@ -70,8 +70,8 @@ class Property_ctrl extends CI_Controller
         $this->db->trans_strict(FALSE);
         if ($this->customlib->check_punchfile2($Scan_Id) == true) {
             //Update Existing Record
-            $this->db->where('Scan_Id', $Scan_Id)->update('punchfile2', $data);
-            $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array('Is_Rejected' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N'));
+            $this->db->where('scan_id', $Scan_Id)->update('punchfile2', $data);
+            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
         } else {
             //Insert New Record
             $this->db->insert('punchfile2', $data);
@@ -92,7 +92,7 @@ class Property_ctrl extends CI_Controller
 
     public function save_lease_rent()
     {
-        $Scan_Id = $this->input->post('Scan_Id');
+        $Scan_Id = $this->input->post('scan_id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
         $Lessor_Name   = $this->input->post('Lessor_Name');
@@ -110,7 +110,7 @@ class Property_ctrl extends CI_Controller
         $Amount = $this->input->post('Total_Amount');
         $Remark = $this->input->post('Remark');
         $data = array(
-            'Scan_Id' => $Scan_Id,
+            'scan_id' => $Scan_Id,
             'DocType' => $DocType,
             'DocTypeId' => $DocTypeId,
             'FromName' => $Lessor_Name,
@@ -127,7 +127,7 @@ class Property_ctrl extends CI_Controller
             'GST_IGST_Amount' => $IGST,
             'Total_Amount' => $Amount,
             'Remark' => $Remark,
-            'Group_Id' => $this->session->userdata('group_id'),
+            'group_id' => $this->session->userdata('group_id'),
             'Created_By' => $this->session->userdata('user_id'),
             'Created_Date' => date('Y-m-d H:i:s'),
         );
@@ -136,11 +136,11 @@ class Property_ctrl extends CI_Controller
         $this->db->trans_strict(FALSE);
         if ($this->customlib->check_punchfile($Scan_Id) == true) {
             //Update Existing Record
-            $this->db->where('Scan_Id', $Scan_Id)->update('punchfile', $data);
-            $FileID = $this->db->where('Scan_Id', $Scan_Id)->get('punchfile')->row()->FileID;
+            $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
+            $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
 
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Amount, 'Comment' => $Remark));
-            $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array('Is_Rejected' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N'));
+            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
         } else {
             //Insert New Record
             $this->db->insert('punchfile', $data);

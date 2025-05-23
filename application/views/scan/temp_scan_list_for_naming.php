@@ -40,25 +40,25 @@
                                                 </td>
 
 												<td class="mailbox-name">
-													<?php echo $row['File'] ?>
+													<?php echo $row['file_name'] ?>
 												</td>
 												<td class="mailbox-name">
-													<?php echo $this->customlib->get_Name($row['Temp_Scan_By']); ?>
+													<?php echo $this->customlib->get_Name($row['temp_scan_by']); ?>
 												</td>
 
 												<td class="mailbox-name">
-													<?php echo date('d-m-Y', strtotime($row['Temp_Scan_Date'])) ?>
+													<?php echo date('d-m-Y', strtotime($row['temp_scan_date'])) ?>
 												</td>
 
 												<td class="mailbox-name text-center no-print">
-													<?php if ($this->customlib->haveSupportFile($row['Scan_Id']) == 1) { ?>
-														<a href="javascript:void(0);" class="btn btn-link btn-xs" onclick="getSupportFile(<?= $row['Scan_Id'] ?>)"><i class="fa fa-eye"></i></a>
+													<?php if ($this->customlib->haveSupportFile($row['scan_id']) == 1) { ?>
+														<a href="javascript:void(0);" class="btn btn-link btn-xs" onclick="getSupportFile(<?= $row['scan_id'] ?>)"><i class="fa fa-eye"></i></a>
 													<?php } ?>
 												</td>
 
 												<td>
 
-													<a href="javascript:void(0);" onclick="openFile('<?= base_url(); ?>naming_file/<?= $row['Scan_Id'] ?>')" class="btn btn-success btn-xs" data-toggle="tooltip" title="Scan File"><i class="fa fa-pencil"></i> Edit</a>
+													<a href="javascript:void(0);" onclick="openFile('<?= base_url(); ?>naming_file/<?= $row['scan_id'] ?>')" class="btn btn-success btn-xs" data-toggle="tooltip" title="Scan File"><i class="fa fa-pencil"></i> Edit</a>
 
 													<script>
 														function openFile(url) {

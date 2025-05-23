@@ -32,7 +32,7 @@
                 <div class="card mb-4">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="mb-0"><?php echo $table; ?> Table</h5>
-                        <button class="btn btn-danger btn-sm" onclick="deleteAllRowsForTable('<?php echo $table; ?>', '<?php echo $rows[0]['Scan_Id']; ?>')">Delete Rows</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteAllRowsForTable('<?php echo $table; ?>', '<?php echo $rows[0]['scan_id']; ?>')">Delete Rows</button>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover mb-0">

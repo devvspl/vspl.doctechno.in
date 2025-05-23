@@ -7,7 +7,7 @@ class Bank_ctrl extends CI_Controller {
         $this->load->model('Scan_model');
     }
     public function create() {
-        $Scan_Id = $this->input->post('Scan_Id');
+        $Scan_Id = $this->input->post('scan_id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
         $Bank_Name = $this->input->post('Bank_Name');
@@ -18,13 +18,13 @@ class Bank_ctrl extends CI_Controller {
         $Perid = $this->input->post('Period');
         $Financial_Year = $this->input->post('Financial_Year');
         $Remark = $this->input->post('Remark');
-        $data = array('Scan_Id' => $Scan_Id, 'DocType' => $DocType, 'DocTypeId' => $DocTypeId, 'FromName' => $Bank_Name, 'ToName' => $Comapny, 'BankName' => $Bank_Name, 'Company' => $Comapny, 'CompanyId' => $CompanyId, 'BankAccountNo' => $Account_No, 'CustomerName' => $Account_Name, 'Related_Person' => $Account_Name, 'PeriodDuration' => $Perid, 'FinYear' => $Financial_Year, 'Remark' => $Remark, 'Group_Id' => $this->session->userdata('group_id'), 'Created_By' => $this->session->userdata('user_id'), 'Created_Date' => date('Y-m-d H:i:s'),);
+        $data = array('scan_id' => $Scan_Id, 'DocType' => $DocType, 'DocTypeId' => $DocTypeId, 'FromName' => $Bank_Name, 'ToName' => $Comapny, 'BankName' => $Bank_Name, 'Company' => $Comapny, 'CompanyId' => $CompanyId, 'BankAccountNo' => $Account_No, 'CustomerName' => $Account_Name, 'Related_Person' => $Account_Name, 'PeriodDuration' => $Perid, 'FinYear' => $Financial_Year, 'Remark' => $Remark, 'group_id' => $this->session->userdata('group_id'), 'Created_By' => $this->session->userdata('user_id'), 'Created_Date' => date('Y-m-d H:i:s'),);
         $this->db->trans_start();
         $this->db->trans_strict(FALSE);
         if ($this->customlib->check_punchfile2($Scan_Id) == true) {
             //Update Existing Record
-            $this->db->where('Scan_Id', $Scan_Id)->update('punchfile2', $data);
-            $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array('Is_Rejected' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N'));
+            $this->db->where('scan_id', $Scan_Id)->update('punchfile2', $data);
+            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
         } else {
             //Insert New Record
             $this->db->insert('punchfile2', $data);
@@ -41,7 +41,7 @@ class Bank_ctrl extends CI_Controller {
         }
     }
     public function save_bank_loan_paper() {
-        $Scan_Id = $this->input->post('Scan_Id');
+        $Scan_Id = $this->input->post('scan_id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
         $Bank_Name = $this->input->post('Bank_Name');
@@ -56,15 +56,15 @@ class Bank_ctrl extends CI_Controller {
         $Type_Doc = $this->input->post('Type_Doc');
         $Paper_Submitted = $this->input->post('Paper_Submitted');
         $Remark = $this->input->post('Remark');
-        $data = array('Scan_Id' => $Scan_Id, 'DocType' => $DocType, 'DocTypeId' => $DocTypeId, 'FromName' => $Comapny, 'ToName' => $Bank_Name, 'Company' => $Comapny, 'CompanyID' => $CompanyId, 'BankName' => $Bank_Name, 'BankAddress' => $Branch, 'BillDate' => $Sanction_Date, 'Total_Amount' => $Sanction_Amount, 'Period' => $Period, 'DueDate' => $Due_Date, 'RenewalDate' => $Renewal_Date, 'File_Type' => $Type_Doc, 'PaperSubmitted' => $Paper_Submitted, 'Remark' => $Remark, 'Group_Id' => $this->session->userdata('group_id'), 'Created_By' => $this->session->userdata('user_id'), 'Created_Date' => date('Y-m-d H:i:s'),);
+        $data = array('scan_id' => $Scan_Id, 'DocType' => $DocType, 'DocTypeId' => $DocTypeId, 'FromName' => $Comapny, 'ToName' => $Bank_Name, 'Company' => $Comapny, 'CompanyID' => $CompanyId, 'BankName' => $Bank_Name, 'BankAddress' => $Branch, 'BillDate' => $Sanction_Date, 'Total_Amount' => $Sanction_Amount, 'Period' => $Period, 'DueDate' => $Due_Date, 'RenewalDate' => $Renewal_Date, 'File_Type' => $Type_Doc, 'PaperSubmitted' => $Paper_Submitted, 'Remark' => $Remark, 'group_id' => $this->session->userdata('group_id'), 'Created_By' => $this->session->userdata('user_id'), 'Created_Date' => date('Y-m-d H:i:s'),);
         $this->db->trans_start();
         $this->db->trans_strict(FALSE);
         if ($this->customlib->check_punchfile($Scan_Id) == true) {
             //Update Existing Record
-            $this->db->where('Scan_Id', $Scan_Id)->update('punchfile', $data);
-            $FileID = $this->db->where('Scan_Id', $Scan_Id)->get('punchfile')->row()->FileID;
+            $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
+            $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Sanction_Amount, 'Comment' => $Remark));
-            $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array('Is_Rejected' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N'));
+            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
         } else {
             //Insert New Record
             $this->db->insert('punchfile', $data);
@@ -84,7 +84,7 @@ class Bank_ctrl extends CI_Controller {
     }
     public function save_cash()
     {
-        $Scan_Id = $this->input->post('Scan_Id');
+        $Scan_Id = $this->input->post('scan_id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
         $Type = $this->input->post('Type');
@@ -98,7 +98,7 @@ class Bank_ctrl extends CI_Controller {
         $submit = $this->input->post('submit'); // '1' for Submit, empty/0 for Draft
     
         $data = array(
-            'Scan_Id' => $Scan_Id,
+            'scan_id' => $Scan_Id,
             'DocType' => $DocType,
             'DocTypeId' => $DocTypeId,
             'File_Type' => $Type,
@@ -109,7 +109,7 @@ class Bank_ctrl extends CI_Controller {
             'Related_Person' => $Beneficiary_Name,
             'Total_Amount' => $Amount,
             'Remark' => $Remark,
-            'Group_Id' => $this->session->userdata('group_id'),
+            'group_id' => $this->session->userdata('group_id'),
             'Created_By' => $this->session->userdata('user_id'),
             'Created_Date' => date('Y-m-d H:i:s'),
         );
@@ -118,19 +118,19 @@ class Bank_ctrl extends CI_Controller {
         $this->db->trans_strict(FALSE);
     
         if ($this->customlib->check_punchfile($Scan_Id)) {
-            $this->db->where('Scan_Id', $Scan_Id)->update('punchfile', $data);
-            $FileID = $this->db->where('Scan_Id', $Scan_Id)->get('punchfile')->row()->FileID;
+            $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
+            $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array(
                 'Amount' => '-' . $Amount,
                 'Comment' => $Remark
             ));
     
             if ($submit) {
-                $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array(
-                    'Is_Rejected' => 'N',
-                    'Reject_Date' => NULL,
-                    'Edit_Permission' => 'N',
-                    'finance_punch' => 'N'
+                $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+                    'is_rejected' => 'N',
+                    'reject_date' => NULL,
+                    'has_edit_permission' => 'N',
+                    'finance_punch_action_status' => 'N'
                 ));
             }
         } else {
@@ -143,11 +143,11 @@ class Bank_ctrl extends CI_Controller {
             ));
     
             if ($submit) {
-                $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array(
-                    'Is_Rejected' => 'N',
-                    'Reject_Date' => NULL,
-                    'Edit_Permission' => 'N',
-                    'finance_punch' => 'N'
+                $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array(
+                    'is_rejected' => 'N',
+                    'reject_date' => NULL,
+                    'has_edit_permission' => 'N',
+                    'finance_punch_action_status' => 'N'
                 ));
             }
         }
@@ -169,7 +169,7 @@ class Bank_ctrl extends CI_Controller {
     }
     
     public function Save_RTGS_NEFT() {
-        $Scan_Id = $this->input->post('Scan_Id');
+        $Scan_Id = $this->input->post('scan_id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
         $Type = $this->input->post('Type');
@@ -181,15 +181,15 @@ class Bank_ctrl extends CI_Controller {
         $Beneficiary_Name = $this->input->post('Beneficiary_Name');
         $Amount = $this->input->post('Amount');
         $Remark = $this->input->post('Remark');
-        $data = array('Scan_Id' => $Scan_Id, 'DocType' => $DocType, 'DocTypeId' => $DocTypeId, 'File_Type' => $Type, 'BillDate' => $Date, 'BankName' => $Bank_Name, 'BankAddress' => $Branch, 'BankAccountNo' => $Account_No, 'BankIfscCode' => $IFSC_Code, 'Related_Person' => $Beneficiary_Name, 'Total_Amount' => $Amount, 'Remark' => $Remark, 'Group_Id' => $this->session->userdata('group_id'), 'Created_By' => $this->session->userdata('user_id'), 'Created_Date' => date('Y-m-d H:i:s'),);
+        $data = array('scan_id' => $Scan_Id, 'DocType' => $DocType, 'DocTypeId' => $DocTypeId, 'File_Type' => $Type, 'BillDate' => $Date, 'BankName' => $Bank_Name, 'BankAddress' => $Branch, 'BankAccountNo' => $Account_No, 'BankIfscCode' => $IFSC_Code, 'Related_Person' => $Beneficiary_Name, 'Total_Amount' => $Amount, 'Remark' => $Remark, 'group_id' => $this->session->userdata('group_id'), 'Created_By' => $this->session->userdata('user_id'), 'Created_Date' => date('Y-m-d H:i:s'),);
         $this->db->trans_start();
         $this->db->trans_strict(FALSE);
         if ($this->customlib->check_punchfile($Scan_Id) == true) {
             //Update Existing Record
-            $this->db->where('Scan_Id', $Scan_Id)->update('punchfile', $data);
-            $FileID = $this->db->where('Scan_Id', $Scan_Id)->get('punchfile')->row()->FileID;
+            $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
+            $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Amount, 'Comment' => $Remark));
-            $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array('Is_Rejected' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N'));
+            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
         } else {
             //Insert New Record
             $this->db->insert('punchfile', $data);
@@ -209,7 +209,7 @@ class Bank_ctrl extends CI_Controller {
     }
     // public function save_cash_voucher()
     // {
-    //     $Scan_Id = $this->input->post('Scan_Id');
+    //     $Scan_Id = $this->input->post('scan_id');
     //     $DocTypeId = $this->input->post('DocTypeId');
     //     $DocType = $this->customlib->getDocType($DocTypeId);
     // 	$CompanyID = $this->input->post('CompanyID');
@@ -219,11 +219,11 @@ class Bank_ctrl extends CI_Controller {
     //     $Payee = $this->input->post('Payee');
     //     $Payer = $this->input->post('Payer');
     //     $Particular = $this->input->post('Particular');
-    //     $Loc_Name = $this->input->post('Location');
+    //     $Loc_Name = $this->input->post('location_id');
     //     $Amount = $this->input->post('Amount');
     //     $Remark = $this->input->post('Remark');
     //     $data = array(
-    //         'Scan_Id' => $Scan_Id,
+    //         'scan_id' => $Scan_Id,
     //         'DocType' => $DocType,
     //         'DocTypeId' => $DocTypeId,
     //         'File_No' => $Voucher_No,
@@ -236,7 +236,7 @@ class Bank_ctrl extends CI_Controller {
     //         'FileName' => $Particular,
     //         'Total_Amount' => $Amount,
     //         'Remark' => $Remark,
-    //         'Group_Id' => $this->session->userdata('group_id'),
+    //         'group_id' => $this->session->userdata('group_id'),
     //         'Created_By' => $this->session->userdata('user_id'),
     //         'Created_Date' => date('Y-m-d H:i:s'),
     //     );
@@ -244,10 +244,10 @@ class Bank_ctrl extends CI_Controller {
     //     $this->db->trans_strict(FALSE);
     //     if ($this->customlib->check_punchfile($Scan_Id) == true) {
     //         //Update Existing Record
-    //         $this->db->where('Scan_Id', $Scan_Id)->update('punchfile', $data);
-    //         $FileID = $this->db->where('Scan_Id', $Scan_Id)->get('punchfile')->row()->FileID;
+    //         $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
+    //         $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
     //         $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Amount, 'Comment' => $Remark));
-    //         $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array('Is_Rejected' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N'));
+    //         $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
     //     } else {
     //         //Insert New Record
     //         $this->db->insert('punchfile', $data);
@@ -266,7 +266,7 @@ class Bank_ctrl extends CI_Controller {
     //     }
     // }
     public function save_cash_voucher() {
-        $Scan_Id = $this->input->post('Scan_Id');
+        $Scan_Id = $this->input->post('scan_id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
         $CompanyID = $this->input->post('CompanyID');
@@ -276,22 +276,22 @@ class Bank_ctrl extends CI_Controller {
         $Payee = $this->input->post('Payee');
         $Payer = $this->input->post('Payer');
         $Particular = $this->input->post('Particular');
-        $Loc_Name = $this->input->post('Location');
+        $Loc_Name = $this->input->post('location_id');
         $Amount = $this->input->post('Amount');
         $Remark = $this->input->post('Remark');
-        $data = array('Scan_Id' => $Scan_Id, 'DocType' => $DocType, 'finance_total_Amount' => $Amount, 'DocTypeId' => $DocTypeId, 'File_No' => $Voucher_No, 'CompanyID' => $CompanyID, 'Company' => $Comapny, 'BillDate' => $Voucher_Date, 'Related_Person' => $Payee, 'AgentName' => $Payer, 'Loc_Name' => $Loc_Name, 'FileName' => $Particular, 'Total_Amount' => $Amount, 'Remark' => $Remark, 'Group_Id' => $this->session->userdata('group_id'), 'Created_By' => $this->session->userdata('user_id'), 'Created_Date' => date('Y-m-d H:i:s'),);
+        $data = array('scan_id' => $Scan_Id, 'DocType' => $DocType, 'finance_total_Amount' => $Amount, 'DocTypeId' => $DocTypeId, 'File_No' => $Voucher_No, 'CompanyID' => $CompanyID, 'Company' => $Comapny, 'BillDate' => $Voucher_Date, 'Related_Person' => $Payee, 'AgentName' => $Payer, 'Loc_Name' => $Loc_Name, 'FileName' => $Particular, 'Total_Amount' => $Amount, 'Remark' => $Remark, 'group_id' => $this->session->userdata('group_id'), 'Created_By' => $this->session->userdata('user_id'), 'Created_Date' => date('Y-m-d H:i:s'),);
         if ($this->session->userdata('group_id') == 16) {
             if ($this->customlib->check_punchfile($Scan_Id)) {
-                $this->db->where('Scan_Id', $Scan_Id)->update('punchfile', $data);
-                $FileID = $this->db->select('FileID')->where('Scan_Id', $Scan_Id)->get('punchfile')->row()->FileID;
+                $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
+                $FileID = $this->db->select('FileID')->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
                 $this->db->where('FileID', $FileID)->update('sub_punchfile', ['Amount' => '-' . $Amount, 'Comment' => $Remark]);
-                $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', ['Is_Rejected' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N']);
-                $query = $this->db->where("Scan_Id", $Scan_Id)->update("scan_file", ['finance_punch' => 'N', 'Punch_By' => $this->session->userdata("user_id"), 'Punch_Date' => date('Y-m-d H:i:s') ]);
+                $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', ['is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N']);
+                $query = $this->db->where("Scan_Id", $Scan_Id)->update("y{$this->year_id}_scan_file", ['finance_punch_action_status' => 'N', 'punched_by' => $this->session->userdata("user_id"), 'punched_date' => date('Y-m-d H:i:s') ]);
             } else {
                 $this->db->insert('punchfile', $data);
                 $insert_id = $this->db->insert_id();
                 $this->db->insert('sub_punchfile', ['FileID' => $insert_id, 'Amount' => '-' . $Amount, 'Comment' => $Remark]);
-                $query = $this->db->where("Scan_Id", $Scan_Id)->update("scan_file", ['finance_punch' => 'N', 'Punch_By' => $this->session->userdata("user_id"), 'Punch_Date' => date('Y-m-d H:i:s') ]);
+                $query = $this->db->where("Scan_Id", $Scan_Id)->update("y{$this->year_id}_scan_file", ['finance_punch_action_status' => 'N', 'punched_by' => $this->session->userdata("user_id"), 'punched_date' => date('Y-m-d H:i:s') ]);
             }
             if ($query) {
                 $this->session->set_flashdata('message', '<div class="alert alert-success text-left">Cash Voucher ' . ($this->customlib->check_punchfile($Scan_Id) ? 'updated' : 'added') . ' successfully</div>');
@@ -304,10 +304,10 @@ class Bank_ctrl extends CI_Controller {
             $this->db->trans_strict(FALSE);
             if ($this->customlib->check_punchfile($Scan_Id) == true) {
                 //Update Existing Record
-                $this->db->where('Scan_Id', $Scan_Id)->update('punchfile', $data);
-                $FileID = $this->db->where('Scan_Id', $Scan_Id)->get('punchfile')->row()->FileID;
+                $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
+                $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
                 $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Amount, 'Comment' => $Remark));
-                $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array('Is_Rejected' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N'));
+                $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
             } else {
                 //Insert New Record
                 $this->db->insert('punchfile', $data);
@@ -327,7 +327,7 @@ class Bank_ctrl extends CI_Controller {
         }
     }
     public function save_cheque() {
-        $Scan_Id = $this->input->post('Scan_Id');
+        $Scan_Id = $this->input->post('scan_id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
         $Bank_Name = $this->input->post('Bank_Name');
@@ -339,15 +339,15 @@ class Bank_ctrl extends CI_Controller {
         $Payee = $this->input->post('Payee');
         $Amount = $this->input->post('Cheque_Amount');
         $Remark = $this->input->post('Remark');
-        $data = array('Scan_Id' => $Scan_Id, 'DocType' => $DocType, 'DocTypeId' => $DocTypeId, 'BankName' => $Bank_Name, 'BankAddress' => $Branch_Name, 'BankIfscCode' => $IFSC_Code, 'BankAccountNo' => $Account_No, 'ChequeNo' => $Cheque_No, 'File_Date' => $Cheque_Date, 'Related_Person' => $Payee, 'Total_Amount' => $Amount, 'Remark' => $Remark, 'Group_Id' => $this->session->userdata('group_id'), 'Created_By' => $this->session->userdata('user_id'), 'Created_Date' => date('Y-m-d H:i:s'),);
+        $data = array('scan_id' => $Scan_Id, 'DocType' => $DocType, 'DocTypeId' => $DocTypeId, 'BankName' => $Bank_Name, 'BankAddress' => $Branch_Name, 'BankIfscCode' => $IFSC_Code, 'BankAccountNo' => $Account_No, 'ChequeNo' => $Cheque_No, 'File_Date' => $Cheque_Date, 'Related_Person' => $Payee, 'Total_Amount' => $Amount, 'Remark' => $Remark, 'group_id' => $this->session->userdata('group_id'), 'Created_By' => $this->session->userdata('user_id'), 'Created_Date' => date('Y-m-d H:i:s'),);
         $this->db->trans_start();
         $this->db->trans_strict(FALSE);
         if ($this->customlib->check_punchfile($Scan_Id) == true) {
             //Update Existing Record
-            $this->db->where('Scan_Id', $Scan_Id)->update('punchfile', $data);
-            $FileID = $this->db->where('Scan_Id', $Scan_Id)->get('punchfile')->row()->FileID;
+            $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
+            $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Amount, 'Comment' => $Remark));
-            $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array('Is_Rejected' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N'));
+            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
         } else {
             //Insert New Record
             $this->db->insert('punchfile', $data);
@@ -366,7 +366,7 @@ class Bank_ctrl extends CI_Controller {
         }
     }
     public function save_fixed_deposit() {
-        $Scan_Id = $this->input->post('Scan_Id');
+        $Scan_Id = $this->input->post('scan_id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
         $Bank_Name = $this->input->post('Bank_Name');
@@ -378,15 +378,15 @@ class Bank_ctrl extends CI_Controller {
         $End_Date = $this->input->post('End_Date');
         $Period = $this->input->post('Period');
         $Remark = $this->input->post('Remark');
-        $data = array('Scan_Id' => $Scan_Id, 'DocType' => $DocType, 'DocTypeId' => $DocTypeId, 'BankName' => $Bank_Name, 'DepositAccNo' => $Account_No, 'MaturityAmount' => $Maturity_Amount, 'FromDateTime' => $Start_Date, 'ToDateTime' => $End_Date, 'Period' => $Period, 'Total_Amount' => $Deposit_Amount, 'RateOfInterest' => $Interest, 'Remark' => $Remark, 'Group_Id' => $this->session->userdata('group_id'), 'Created_By' => $this->session->userdata('user_id'), 'Created_Date' => date('Y-m-d H:i:s'),);
+        $data = array('scan_id' => $Scan_Id, 'DocType' => $DocType, 'DocTypeId' => $DocTypeId, 'BankName' => $Bank_Name, 'DepositAccNo' => $Account_No, 'MaturityAmount' => $Maturity_Amount, 'FromDateTime' => $Start_Date, 'ToDateTime' => $End_Date, 'Period' => $Period, 'Total_Amount' => $Deposit_Amount, 'RateOfInterest' => $Interest, 'Remark' => $Remark, 'group_id' => $this->session->userdata('group_id'), 'Created_By' => $this->session->userdata('user_id'), 'Created_Date' => date('Y-m-d H:i:s'),);
         $this->db->trans_start();
         $this->db->trans_strict(FALSE);
         if ($this->customlib->check_punchfile($Scan_Id) == true) {
             //Update Existing Record
-            $this->db->where('Scan_Id', $Scan_Id)->update('punchfile', $data);
-            $FileID = $this->db->where('Scan_Id', $Scan_Id)->get('punchfile')->row()->FileID;
+            $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
+            $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Deposit_Amount, 'Comment' => $Remark));
-            $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array('Is_Rejected' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N'));
+            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
         } else {
             //Insert New Record
             $this->db->insert('punchfile', $data);
@@ -405,7 +405,7 @@ class Bank_ctrl extends CI_Controller {
         }
     }
     public function save_cash_receipt() {
-        $Scan_Id = $this->input->post('Scan_Id');
+        $Scan_Id = $this->input->post('scan_id');
         $DocTypeId = $this->input->post('DocTypeId');
         $DocType = $this->customlib->getDocType($DocTypeId);
         $CompanyID = $this->input->post('CompanyID');
@@ -415,18 +415,18 @@ class Bank_ctrl extends CI_Controller {
         $Receiver = $this->input->post('Receiver');
         $ReceivedFrom = $this->input->post('ReceivedFrom');
         $Particular = $this->input->post('Particular');
-        $Loc_Name = $this->input->post('Location');
+        $Loc_Name = $this->input->post('location_id');
         $Amount = $this->input->post('Amount');
         $Remark = $this->input->post('Remark');
-        $data = array('Scan_Id' => $Scan_Id, 'DocType' => $DocType, 'DocTypeId' => $DocTypeId, 'File_No' => $Receipt_No, 'BillDate' => $Receipt_Date, 'CompanyID' => $CompanyID, 'Company' => $Comapny, 'Related_Person' => $Receiver, 'FromName' => $ReceivedFrom, 'FileName' => $Particular, 'Loc_Name' => $Loc_Name, 'Total_Amount' => $Amount, 'Remark' => $Remark, 'Group_Id' => $this->session->userdata('group_id'), 'Created_By' => $this->session->userdata('user_id'), 'Created_Date' => date('Y-m-d H:i:s'),);
+        $data = array('scan_id' => $Scan_Id, 'DocType' => $DocType, 'DocTypeId' => $DocTypeId, 'File_No' => $Receipt_No, 'BillDate' => $Receipt_Date, 'CompanyID' => $CompanyID, 'Company' => $Comapny, 'Related_Person' => $Receiver, 'FromName' => $ReceivedFrom, 'FileName' => $Particular, 'Loc_Name' => $Loc_Name, 'Total_Amount' => $Amount, 'Remark' => $Remark, 'group_id' => $this->session->userdata('group_id'), 'Created_By' => $this->session->userdata('user_id'), 'Created_Date' => date('Y-m-d H:i:s'),);
         $this->db->trans_start();
         $this->db->trans_strict(FALSE);
         if ($this->customlib->check_punchfile($Scan_Id) == true) {
             //Update Existing Record
-            $this->db->where('Scan_Id', $Scan_Id)->update('punchfile', $data);
-            $FileID = $this->db->where('Scan_Id', $Scan_Id)->get('punchfile')->row()->FileID;
+            $this->db->where('scan_id', $Scan_Id)->update('punchfile', $data);
+            $FileID = $this->db->where('scan_id', $Scan_Id)->get('punchfile')->row()->FileID;
             $this->db->where('FileID', $FileID)->update('sub_punchfile', array('Amount' => '-' . $Amount, 'Comment' => $Remark));
-            $this->db->where('Scan_Id', $Scan_Id)->update('scan_file', array('Is_Rejected' => 'N', 'Reject_Date' => NULL, 'Edit_Permission' => 'N'));
+            $this->db->where('scan_id', $Scan_Id)->update('y{$this->year_id}_scan_file', array('is_rejected' => 'N', 'reject_date' => NULL, 'has_edit_permission' => 'N'));
         } else {
             //Insert New Record
             $this->db->insert('punchfile', $data);

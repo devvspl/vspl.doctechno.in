@@ -65,7 +65,7 @@ class VSPL_Punch extends CI_Controller {
         header("Content-Disposition: attachment; filename=\"$filename\"");
     
         
-        $columns = ['DocNo', 'Date', 'Time', 'CashBankAC', 'Business Entity', 'Narration', 'Favouring', 'TDS JV No', 'Cost Center', 'Location', 'Crop', 'Activity', 'State', 'Category', 'Region', 'Department', 'PMT Category', 'Business Unit', 'Account', 'Amount', 'Reference', 'Remarks', 'TDS'];
+        $columns = ['DocNo', 'Date', 'Time', 'CashBankAC', 'Business Entity', 'Narration', 'Favouring', 'TDS JV No', 'Cost Center', 'location_id', 'Crop', 'Activity', 'State', 'Category', 'Region', 'Department', 'PMT Category', 'Business Unit', 'Account', 'Amount', 'Reference', 'Remarks', 'TDS'];
         fputcsv($output, $columns);
     
         

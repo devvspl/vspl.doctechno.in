@@ -17,7 +17,7 @@
                      </a>
                   <?php endif; ?>
                   <?php if (!empty($user_permission) && $user_permission == 'Y') : ?>
-                     <a href="<?= base_url('finance_punch'); ?>" class="btn btn-primary btn-sm">
+                     <a href="<?= base_url('finance_punch_action_status'); ?>" class="btn btn-primary btn-sm">
                      <i class="fa fa-long-arrow-left"></i> Back
                      </a>
                   <?php endif; ?>
@@ -26,10 +26,10 @@
                <div class="box-body">
                   <div class="row">
                      <div class="col-md-4">
-                        <?php if ($rec->File_Ext == 'pdf') : ?>
-                        <object data="<?= $rec->File_Location ?>" type="" height="490px" width="100%;"></object>
+                        <?php if ($rec->file_extension == 'pdf') : ?>
+                        <object data="<?= $rec->file_path ?>" type="" height="490px" width="100%;"></object>
                         <?php else : ?>
-                        <input type="hidden" name="image" id="image" value="<?= $rec->File_Location ?>">
+                        <input type="hidden" name="image" id="image" value="<?= $rec->file_path ?>">
                         <div id="imageViewerContainer" style="width: 400px; height:490px;"></div>
                         <script>
                            var curect_file_path = $('#image').val();

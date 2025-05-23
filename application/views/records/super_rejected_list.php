@@ -38,37 +38,37 @@
                                             <tr>
                                                 <td><?php echo $count++; ?></td>
                                                 <td class="mailbox-name">
-                                                    <?php echo $row['Document_Name']; ?>
+                                                    <?php echo $row['document_name']; ?>
                                                 </td>
                                                 <td class="mailbox-name">
-                                                    <?php echo $row['Doc_Type']; ?>
+                                                    <?php echo $row['doc_type']; ?>
                                                 </td>
                                                 <td class="mailbox-name">
-                                                    <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['File_Location']  ?>','popup','width=600,height=600');"> <?php echo $row['File'] ?></a>
+                                                    <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['file_path']  ?>','popup','width=600,height=600');"> <?php echo $row['file_name'] ?></a>
                                                 </td>
                                                 <td class="mailbox-name">
-                                                    <?php echo $this->customlib->get_Name($row['Punch_By']); ?>
+                                                    <?php echo $this->customlib->get_Name($row['punched_by']); ?>
                                                 </td>
 
                                                 <td class="mailbox-name">
-                                                    <?php echo date('d-m-Y', strtotime($row['Punch_Date'])) ?>
+                                                    <?php echo date('d-m-Y', strtotime($row['punched_date'])) ?>
                                                 </td>
 
                                                 <!-- <td class="mailbox-name text-center no-print">
-                                                    <?php if ($this->customlib->haveSupportFile($row['Scan_Id']) == 1) { ?>
-                                                        <a href="javascript:void(0);" class="btn btn-link btn-xs" onclick="getSupportFile(<?= $row['Scan_Id'] ?>)"><i class="fa fa-eye"></i></a>
+                                                    <?php if ($this->customlib->haveSupportFile($row['scan_id']) == 1) { ?>
+                                                        <a href="javascript:void(0);" class="btn btn-link btn-xs" onclick="getSupportFile(<?= $row['scan_id'] ?>)"><i class="fa fa-eye"></i></a>
                                                     <?php } ?>
                                                 </td> -->
                                                 <td>
-                                                    <a href="<?php echo base_url(); ?>file_detail/<?= $row['Scan_Id'] ?>/<?= $row['DocType_Id'] ?>" class="btn btn-info btn-xs" target="_blank"><i class="fa fa-eye"></i></a>
+                                                    <a href="<?php echo base_url(); ?>file_detail/<?= $row['scan_id'] ?>/<?= $row['doc_type_id'] ?>" class="btn btn-info btn-xs" target="_blank"><i class="fa fa-eye"></i></a>
                                                 </td>
                                                 <td class="mailbox-name">
-                                                    <?php echo $row['Reject_Remark']; ?>
+                                                    <?php echo $row['reject_remark']; ?>
                                                 </td>
                                                 <td>
-												<a href="<?php echo base_url(); ?>delete_record/<?= $row['Scan_Id'] ?>" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want to delete this file?');">Delete</a>
-                                                    <a href="<?php echo base_url(); ?>approve_record/<?= $row['Scan_Id'] ?>" class="btn btn-success btn-xs" onclick="return confirm('Are you sure you want to approve this file?');">Approve</a>
-                                                    <a href="javascript:void(0);" class="btn btn-warning btn-xs" data-id="<?= $row['Scan_Id'] ?>" id="give_edit_permission">Edit Permission</a>
+												<a href="<?php echo base_url(); ?>delete_record/<?= $row['scan_id'] ?>" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want to delete this file?');">Delete</a>
+                                                    <a href="<?php echo base_url(); ?>approve_record/<?= $row['scan_id'] ?>" class="btn btn-success btn-xs" onclick="return confirm('Are you sure you want to approve this file?');">Approve</a>
+                                                    <a href="javascript:void(0);" class="btn btn-warning btn-xs" data-id="<?= $row['scan_id'] ?>" id="give_edit_permission">Edit Permission</a>
                                                 </td>
                                         <?php
                                         }

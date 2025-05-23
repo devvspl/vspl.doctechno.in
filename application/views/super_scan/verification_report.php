@@ -43,13 +43,13 @@
                            <select name="DocType_Id" id="DocType_Id" class="form-control form-control-sm">
                               <option value="">Select</option>
                               <?php foreach ($getFileType as $key => $value) { ?>
-                              <option value="<?= $value['type_id']; ?>" <?php if (set_value('DocType_Id') == $value['type_id']) {
+                              <option value="<?= $value['type_id']; ?>" <?php if (set_value('doc_type_id') == $value['type_id']) {
                                  echo "selected";
                                  } ?>><?= $value['file_type'] ?></option>
                               <?php } ?>
                            </select>
                         </div>
-                        <span class="text-danger"><?php echo form_error('DocType_Id'); ?></span>
+                        <span class="text-danger"><?php echo form_error('doc_type_id'); ?></span>
                      </div>
                      <div class="col-sm-3 col-md-3">
                         <div class="form-group" style="margin-top: 22px;">
@@ -88,32 +88,32 @@
                            <tr>
                               <td><?php echo $count++; ?></td>
                               <td class="mailbox-name">
-                                 <?php echo $row['Document_Name']; ?>
+                                 <?php echo $row['document_name']; ?>
                               </td>
                               <td class="mailbox-name">
-                                 <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['File_Location'] ?>','popup','width=600,height=600');"> <?php echo $row['File'] ?></a>
+                                 <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['file_path'] ?>','popup','width=600,height=600');"> <?php echo $row['file_name'] ?></a>
                               </td>
                               <td class="mailbox-name">
-                                 <?php echo $this->customlib->get_Name($row['Temp_Scan_By']); ?>
+                                 <?php echo $this->customlib->get_Name($row['temp_scan_by']); ?>
                               </td>
                               <td class="mailbox-name">
-                                 <?php echo date('d-m-Y', strtotime($row['Temp_Scan_Date'])) ?>
+                                 <?php echo date('d-m-Y', strtotime($row['temp_scan_date'])) ?>
                               </td>
                               <td class="mailbox-name">
-                                 <?php echo $this->customlib->get_Name($row['Scan_By']); ?>
+                                 <?php echo $this->customlib->get_Name($row['scanned_by']); ?>
                               </td>
                               <td class="mailbox-name">
-                                 <?php echo date('d-m-Y', strtotime($row['Scan_Date'])) ?>
+                                 <?php echo date('d-m-Y', strtotime($row['scan_date'])) ?>
                               </td>
                               <td class="mailbox-name">
-                                 <?php echo $this->customlib->get_Name($row['document_verified_by']); ?>
+                                 <?php echo $this->customlib->get_Name($row['verified_by']); ?>
                               </td>
                               <td class="mailbox-name">
-                                 <?php echo date('d-m-Y', strtotime($row['document_verified_date'])) ?>
+                                 <?php echo date('d-m-Y', strtotime($row['verified_date'])) ?>
                               </td>
                               <td class="mailbox-name text-center no-print">
-                                 <?php if ($this->customlib->haveSupportFile($row['Scan_Id']) == 1) { ?>
-                                 <a href="javascript:void(0);" class="btn btn-link btn-xs" onclick="getSupportFile(<?= $row['Scan_Id'] ?>)"><i class="fa fa-eye"></i></a>
+                                 <?php if ($this->customlib->haveSupportFile($row['scan_id']) == 1) { ?>
+                                 <a href="javascript:void(0);" class="btn btn-link btn-xs" onclick="getSupportFile(<?= $row['scan_id'] ?>)"><i class="fa fa-eye"></i></a>
                                  <?php } ?>
                               </td>
                            </tr>

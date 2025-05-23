@@ -1,72 +1,72 @@
 <?php
 //======================Over All Scan Punch Approve Count=========================
-// $overall_scan = $this->db->get_where('scan_file', array('Final_Submit' => 'Y', 'Is_Deleted' => 'N'))->result_array();
+// $overall_scan = $this->db->get_where('y{$this->year_id}_scan_file', array('is_final_submitted' => 'Y', 'is_deleted' => 'N'))->result_array();
 // $overall_scan_count = count($overall_scan);
-$overall_scan_count = $this->db->where(array('Final_Submit' => 'Y', 'Is_Deleted' => 'N'))->from('scan_file')->count_all_results();
+$overall_scan_count = $this->db->where(array('is_final_submitted' => 'Y', 'is_deleted' => 'N'))->from('y{$this->year_id}_scan_file')->count_all_results();
 
 
-// $overall_scan_reject = $this->db->get_where('scan_file', array('Scan_Resend' => 'Y', 'Is_Deleted' => 'N'))->result_array();
+// $overall_scan_reject = $this->db->get_where('y{$this->year_id}_scan_file', array('is_scan_resend' => 'Y', 'is_deleted' => 'N'))->result_array();
 // $overall_scan_reject_count = count($overall_scan_reject);
-$overall_scan_reject_count = $this->db->where(array('Scan_Resend' => 'Y', 'Is_Deleted' => 'N'))->from('scan_file')->count_all_results();
+$overall_scan_reject_count = $this->db->where(array('is_scan_resend' => 'Y', 'is_deleted' => 'N'))->from('y{$this->year_id}_scan_file')->count_all_results();
 
 
-// $overall_pending_naming = $this->db->get_where('scan_file', array('Temp_Scan' => "Y", 'Scan_Complete' => "N", 'temp_scan_reject' => "N"))->result_array();
+// $overall_pending_naming = $this->db->get_where('y{$this->year_id}_scan_file', array('is_temp_scan' => "Y", 'is_scan_complete' => "N", 'is_temp_scan_rejected' => "N"))->result_array();
 // $overall_pending_naming_count = count($overall_pending_naming);
-$overall_pending_naming_count = $this->db->where(array('Temp_Scan' => 'Y', 'Scan_Complete' => 'N', 'temp_scan_reject' => 'N'))->from('scan_file')->count_all_results();
+$overall_pending_naming_count = $this->db->where(array('is_temp_scan' => 'Y', 'is_scan_complete' => 'N', 'is_temp_scan_rejected' => 'N'))->from('y{$this->year_id}_scan_file')->count_all_results();
 
 
-// $overall_pending_verification = $this->db->get_where('scan_file', array('Temp_Scan' => "Y", 'Scan_Complete' => "Y", 'temp_scan_reject' => "N", 'document_verified' => 'N', 'scan_file.Is_Deleted' => 'N'))->result_array();
+// $overall_pending_verification = $this->db->get_where('y{$this->year_id}_scan_file', array('is_temp_scan' => "Y", 'is_scan_complete' => "Y", 'is_temp_scan_rejected' => "N", 'is_document_verified' => 'N', 'y{$this->year_id}_scan_file.Is_Deleted' => 'N'))->result_array();
 // $overall_pending_verification_count = count($overall_pending_verification);
-$overall_pending_verification_count = $this->db->where(array('Temp_Scan' => 'Y', 'Scan_Complete' => 'Y', 'temp_scan_reject' => 'N', 'document_verified' => 'N', 'scan_file.Is_Deleted' => 'N'))->from('scan_file')->count_all_results();
+$overall_pending_verification_count = $this->db->where(array('is_temp_scan' => 'Y', 'is_scan_complete' => 'Y', 'is_temp_scan_rejected' => 'N', 'is_document_verified' => 'N', 'y{$this->year_id}_scan_file.Is_Deleted' => 'N'))->from('y{$this->year_id}_scan_file')->count_all_results();
 
 
 
-// $overall_punch = $this->db->get_where('scan_file', array('File_Punched' => 'Y', 'Is_Deleted' => 'N'))->result_array();
+// $overall_punch = $this->db->get_where('y{$this->year_id}_scan_file', array('is_file_punched' => 'Y', 'is_deleted' => 'N'))->result_array();
 // $overall_punch_count = count($overall_punch);
-// $overall_approve = $this->db->get_where('scan_file', array('File_Approved' => 'Y', 'Is_Deleted' => 'N'))->result_array();
+// $overall_approve = $this->db->get_where('y{$this->year_id}_scan_file', array('is_file_approved' => 'Y', 'is_deleted' => 'N'))->result_array();
 // $overall_approve_count = count($overall_approve);
-// $overall_punch_pending = $this->db->get_where('scan_file', array('Final_Submit' => 'Y', 'File_Punched' => 'N'))->result_array();
+// $overall_punch_pending = $this->db->get_where('y{$this->year_id}_scan_file', array('is_final_submitted' => 'Y', 'is_file_punched' => 'N'))->result_array();
 // $overall_punch_pending_count = count($overall_punch_pending);
-// $overall_approve_pending = $this->db->get_where('scan_file', array('File_Punched' => 'Y', 'File_Approved' => 'N', 'Is_Deleted' => 'N', 'Is_Rejected' => 'N'))->result_array();
+// $overall_approve_pending = $this->db->get_where('y{$this->year_id}_scan_file', array('is_file_punched' => 'Y', 'is_file_approved' => 'N', 'is_deleted' => 'N', 'is_rejected' => 'N'))->result_array();
 // $overall_approve_pending_count = count($overall_approve_pending);
 
-$overall_punch_count = $this->db->where(array('File_Punched' => 'Y', 'Is_Deleted' => 'N'))->from('scan_file')->count_all_results();
+$overall_punch_count = $this->db->where(array('is_file_punched' => 'Y', 'is_deleted' => 'N'))->from('y{$this->year_id}_scan_file')->count_all_results();
 
-$overall_approve_count = $this->db->where(array('File_Approved' => 'Y', 'Is_Deleted' => 'N'))->from('scan_file')->count_all_results();
+$overall_approve_count = $this->db->where(array('is_file_approved' => 'Y', 'is_deleted' => 'N'))->from('y{$this->year_id}_scan_file')->count_all_results();
 
-$overall_punch_pending_count = $this->db->where(array('Final_Submit' => 'Y', 'File_Punched' => 'N'))->from('scan_file')->count_all_results();
+$overall_punch_pending_count = $this->db->where(array('is_final_submitted' => 'Y', 'is_file_punched' => 'N'))->from('y{$this->year_id}_scan_file')->count_all_results();
 
-$overall_approve_pending_count = $this->db->where(array('File_Punched' => 'Y', 'File_Approved' => 'N', 'Is_Deleted' => 'N', 'Is_Rejected' => 'N'))->from('scan_file')->count_all_results();
+$overall_approve_pending_count = $this->db->where(array('is_file_punched' => 'Y', 'is_file_approved' => 'N', 'is_deleted' => 'N', 'is_rejected' => 'N'))->from('y{$this->year_id}_scan_file')->count_all_results();
 
 
 //================================================================================
 
 //================Current Date Scan Punch Approve Count===========================
-// $current_date_scan = $this->db->get_where('scan_file', array('Final_Submit' => 'Y', 'Is_Deleted' => 'N', 'Scan_Date' => date('Y-m-d')))->result_array();
+// $current_date_scan = $this->db->get_where('y{$this->year_id}_scan_file', array('is_final_submitted' => 'Y', 'is_deleted' => 'N', 'scan_date' => date('Y-m-d')))->result_array();
 // $current_date_scan_count = count($current_date_scan);
 
-// $current_date_punch = $this->db->get_where('scan_file', array('File_Punched' => 'Y', 'Is_Deleted' => 'N', 'Scan_Date' => date('Y-m-d')))->result_array();
+// $current_date_punch = $this->db->get_where('y{$this->year_id}_scan_file', array('is_file_punched' => 'Y', 'is_deleted' => 'N', 'scan_date' => date('Y-m-d')))->result_array();
 // $current_date_punch_count = count($current_date_punch);
 
-// $current_date_approve = $this->db->get_where('scan_file', array('File_Approved' => 'Y', 'Is_Deleted' => 'N', 'Approve_Date' => date('Y-m-d')))->result_array();
+// $current_date_approve = $this->db->get_where('y{$this->year_id}_scan_file', array('is_file_approved' => 'Y', 'is_deleted' => 'N', 'approved_date' => date('Y-m-d')))->result_array();
 // $current_date_approve_count = count($current_date_approve);
 
 
-// $current_date_punch_pending = $this->db->get_where('scan_file', array('Final_Submit' => 'Y', 'Is_Deleted' => 'N', 'File_Punched' => 'N', 'Scan_Date' => date('Y-m-d')))->result_array();
+// $current_date_punch_pending = $this->db->get_where('y{$this->year_id}_scan_file', array('is_final_submitted' => 'Y', 'is_deleted' => 'N', 'is_file_punched' => 'N', 'scan_date' => date('Y-m-d')))->result_array();
 // $current_date_punch_pending_count = count($current_date_punch_pending);
 
-// $curr_date_approve_pending = $this->db->get_where('scan_file', array('File_Punched' => 'Y', 'File_Approved' => 'N', 'Scan_Date' => date('Y-m-d')))->result_array();
+// $curr_date_approve_pending = $this->db->get_where('y{$this->year_id}_scan_file', array('is_file_punched' => 'Y', 'is_file_approved' => 'N', 'scan_date' => date('Y-m-d')))->result_array();
 // $curr_date_approve_pending_count = count($curr_date_approve_pending);
 
-$current_date_scan_count = $this->db->where(array('Final_Submit' => 'Y', 'Is_Deleted' => 'N', 'Scan_Date' => date('Y-m-d')))->from('scan_file')->count_all_results();
+$current_date_scan_count = $this->db->where(array('is_final_submitted' => 'Y', 'is_deleted' => 'N', 'scan_date' => date('Y-m-d')))->from('y{$this->year_id}_scan_file')->count_all_results();
 
-$current_date_punch_count = $this->db->where(array('File_Punched' => 'Y', 'Is_Deleted' => 'N', 'Scan_Date' => date('Y-m-d')))->from('scan_file')->count_all_results();
+$current_date_punch_count = $this->db->where(array('is_file_punched' => 'Y', 'is_deleted' => 'N', 'scan_date' => date('Y-m-d')))->from('y{$this->year_id}_scan_file')->count_all_results();
 
-$current_date_approve_count = $this->db->where(array('File_Approved' => 'Y', 'Is_Deleted' => 'N', 'Approve_Date' => date('Y-m-d')))->from('scan_file')->count_all_results();
+$current_date_approve_count = $this->db->where(array('is_file_approved' => 'Y', 'is_deleted' => 'N', 'approved_date' => date('Y-m-d')))->from('y{$this->year_id}_scan_file')->count_all_results();
 
-$current_date_punch_pending_count = $this->db->where(array('Final_Submit' => 'Y', 'Is_Deleted' => 'N', 'File_Punched' => 'N', 'Scan_Date' => date('Y-m-d')))->from('scan_file')->count_all_results();
+$current_date_punch_pending_count = $this->db->where(array('is_final_submitted' => 'Y', 'is_deleted' => 'N', 'is_file_punched' => 'N', 'scan_date' => date('Y-m-d')))->from('y{$this->year_id}_scan_file')->count_all_results();
 
-$curr_date_approve_pending_count = $this->db->where(array('File_Punched' => 'Y', 'File_Approved' => 'N', 'Scan_Date' => date('Y-m-d')))->from('scan_file')->count_all_results();
+$curr_date_approve_pending_count = $this->db->where(array('is_file_punched' => 'Y', 'is_file_approved' => 'N', 'scan_date' => date('Y-m-d')))->from('y{$this->year_id}_scan_file')->count_all_results();
 
 
 
@@ -87,20 +87,20 @@ $bill_pending = '';
 	// Convert the comma-separated string to an array
 	//$user_location_array = explode(',', $user_location);
 	
-	$bill_pending_query = $this->db->where('Bill_Approved', 'N')
-		->where_in('Bill_Approver', $this->session->userdata('user_id'))
-		->get('scan_file')
+	$bill_pending_query = $this->db->where('bill_approval_status', 'N')
+		->where_in('bill_approver_id', $this->session->userdata('user_id'))
+		->get('y{$this->year_id}_scan_file')
 		->result_array();
 	$bill_pending = count($bill_pending_query);
 	
 
-	$rejected_bill_by_me_query = $this->db->where('Bill_Approved', 'R')->where('Bill_Approver',$this->session->userdata('user_id'))
-	->get('scan_file')
+	$rejected_bill_by_me_query = $this->db->where('bill_approval_status', 'R')->where('bill_approver_id',$this->session->userdata('user_id'))
+	->get('y{$this->year_id}_scan_file')
 	->result_array();
 	$rejected_bill_by_me = count($rejected_bill_by_me_query);
 
-	$total_bill_approved_by_me_query = $this->db->where('Bill_Approved', 'Y')->where('Bill_Approver',$this->session->userdata('user_id'))
-	->get('scan_file')
+	$total_bill_approved_by_me_query = $this->db->where('bill_approval_status', 'Y')->where('bill_approver_id',$this->session->userdata('user_id'))
+	->get('y{$this->year_id}_scan_file')
 	->result_array();
 	$total_bill_approved_by_me = count($total_bill_approved_by_me_query);
 //}

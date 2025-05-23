@@ -4,16 +4,16 @@ $DocType_Id = $this->uri->segment(3);
 $rec = $this->customlib->getScanData($Scan_Id);
 $company_list = $this->customlib->getCompanyList();
 $fin_year = $this->customlib->getFinancial_year();
-$punch_detail = $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row();
+$punch_detail = $this->db->get_where('punchfile', ['scan_id' => $Scan_Id])->row();
 
 ?>
 <div class="box-body">
     <div class="row">
         <div class="col-md-5">
-        <?php if ($rec->File_Ext == 'pdf') { ?>
-                <object data="<?= $rec->File_Location ?>" type="" height="490px" width="100%;"></object>
+        <?php if ($rec->file_extension == 'pdf') { ?>
+                <object data="<?= $rec->file_path ?>" type="" height="490px" width="100%;"></object>
             <?php } else { ?>
-                <input type="hidden" name="image" id="image" value="<?= $rec->File_Location ?>">
+                <input type="hidden" name="image" id="image" value="<?= $rec->file_path ?>">
                 <div id="imageViewerContainer" style=" width: 450px; height:490px; border:2px solid #1b98ae;"></div>
                 <script>
                     var curect_file_path = $('#image').val();
@@ -55,11 +55,11 @@ $punch_detail = $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row(
                             <?php
                             foreach ($fin_year as $row) {
                             ?>
-                                <option value="<?= $row['Year'] ?>" <?php if (isset($punch_detail->Financial_Year)) {
-                                                                        if ($row['Year'] == $punch_detail->Financial_Year) {
+                                <option value="<?= $row['year'] ?>" <?php if (isset($punch_detail->Financial_Year)) {
+                                                                        if ($row['year'] == $punch_detail->Financial_Year) {
                                                                             echo "selected";
                                                                         }
-                                                                    }  ?>><?= $row['Year'] ?></option>
+                                                                    }  ?>><?= $row['year'] ?></option>
                             <?php
                             }
                             ?>
@@ -71,11 +71,11 @@ $punch_detail = $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row(
                             <?php
                             foreach ($fin_year as $row) {
                             ?>
-                                <option value="<?= $row['Year'] ?>" <?php if (isset($punch_detail->BillYear)) {
-                                                                        if ($row['Year'] == $punch_detail->BillYear) {
+                                <option value="<?= $row['year'] ?>" <?php if (isset($punch_detail->BillYear)) {
+                                                                        if ($row['year'] == $punch_detail->BillYear) {
                                                                             echo "selected";
                                                                         }
-                                                                    }  ?>><?= $row['Year'] ?></option>
+                                                                    }  ?>><?= $row['year'] ?></option>
                             <?php
                             }
                             ?>
@@ -122,7 +122,7 @@ $punch_detail = $this->db->get_where('punchfile', ['Scan_Id' => $Scan_Id])->row(
                                 foreach ($support_file as $row) {
                                 ?>
                                     <div class="col-md-3">
-                                        <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['File_Location'] ?>','popup','width=600,height=600');"> <?php echo $row['File'] ?></a>
+                                        <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['file_path'] ?>','popup','width=600,height=600');"> <?php echo $row['file_name'] ?></a>
                                     </div>
                                 <?php
                                 }
