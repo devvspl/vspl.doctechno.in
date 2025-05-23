@@ -1,9 +1,11 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Extract_model extends CI_Model {
+    protected $year_id;
     public function __construct() {
         parent::__construct();
         $this->load->database();
+        $this->year_id = $this->session->userdata('year_id');
     }
     public function getGroups() {
         $this->db->select("group_id, group_name");

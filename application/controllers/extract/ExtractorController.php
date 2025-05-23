@@ -1,10 +1,12 @@
 <?php
 defined("BASEPATH") or exit("No direct script access allowed");
 class ExtractorController extends CI_Controller {
+    protected $year_id;
     function __construct() {
         parent::__construct();
         $this->logged_in();
         $this->load->model("Extract_model");
+        $this->year_id = $this->session->userdata("year_id");
     }
     private function logged_in() {
         if (!$this->session->userdata("authenticated")) {
