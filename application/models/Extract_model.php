@@ -110,7 +110,7 @@ class Extract_model extends CI_Model {
     public function getQueueList() {
         $this->db->select('q.*, s.document_name , md.file_type');
         $this->db->from('tbl_queues q');
-        $this->db->join('y{$this->year_id}_scan_file s', 's.scan_id = q.scan_id');
+        $this->db->join("y{$this->year_id}_scan_file s", "s.scan_id = q.scan_id");
         $this->db->join('master_doctype md', 'md.type_id = q.type_id');
         $this->db->where_in('q.status', ['pending', 'failed']);
         $this->db->order_by('q.created_at', 'ASC');
