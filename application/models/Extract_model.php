@@ -24,7 +24,7 @@ class Extract_model extends CI_Model {
         $queuedScanIds = array_column($queuedScans, 'scan_id');
         $this->db->select("s.scan_id, g.group_name, l.location_name, s.document_name , s.file_path, IF(s.is_temp_scan = 'Y', s.temp_scan_date, s.scan_date) AS scan_date, IF(s.is_temp_scan = 'Y', CONCAT(sb.first_name, ' ', sb.last_name), CONCAT(sbb.first_name, ' ', sbb.last_name)) AS scanned_by, CONCAT(ba.first_name, ' ', ba.last_name) AS bill_approver_id, s.bill_approved_date");
         $this->db->from("y{$this->year_id}_scan_file s");
-        $this->db->join("master_group g", "g.group_id = s.Group_Id", "left");
+        $this->db->join("master_group g", "g.group_id = s.group_id", "left");
         $this->db->join("master_work_location l", "l.location_id = s.location_id", "left");
         $this->db->join("users ba", "ba.user_id = s.bill_approver_id", "left");
         $this->db->join("users sb", "sb.user_id = s.Temp_Scan_By", "left");
@@ -36,18 +36,18 @@ class Extract_model extends CI_Model {
             $this->db->where_not_in("s.scan_id", $queuedScanIds);
         }
         if (!empty($group_id)) {
-            $this->db->where("s.Group_Id", $group_id);
+            $this->db->where("s.group_id", $group_id);
         }
         if (!empty($location_id)) {
             $this->db->where("s.location_id", $location_id);
         }
-        $this->db->where("s.Group_Id", '16');
+        $this->db->where("s.group_id", '16');
         return $this->db->get()->result();
     }
     public function getProcessedList($group_id = null, $location_id = null) {
         $this->db->select("s.scan_id, g.group_name, md.file_type, s.extract_status, l.location_name, s.document_name , s.file_path, IF(s.is_temp_scan = 'Y', s.temp_scan_date, s.scan_date) AS scan_date, IF(s.is_temp_scan = 'Y', CONCAT(sb.first_name, ' ', sb.last_name), CONCAT(sbb.first_name, ' ', sbb.last_name)) AS scanned_by, CONCAT(ba.first_name, ' ', ba.last_name) AS bill_approver_id, s.bill_approved_date");
         $this->db->from("y{$this->year_id}_scan_file s");
-        $this->db->join("master_group g", "g.group_id = s.Group_Id", "left");
+        $this->db->join("master_group g", "g.group_id = s.group_id", "left");
         $this->db->join("master_doctype md", "md.type_id  = s.doc_type_id", "left");
         $this->db->join("master_work_location l", "l.location_id = s.location_id", "left");
         $this->db->join("users ba", "ba.user_id = s.bill_approver_id", "left");
@@ -57,18 +57,18 @@ class Extract_model extends CI_Model {
         $this->db->where_in("s.extract_status", ["Y", "C"]);
         $this->db->where("s.bill_approval_status", "Y");
         if (!empty($group_id)) {
-            $this->db->where("s.Group_Id", $group_id);
+            $this->db->where("s.group_id", $group_id);
         }
         if (!empty($location_id)) {
             $this->db->where("s.location_id", $location_id);
         }
-        $this->db->where("s.Group_Id", '16');
+        $this->db->where("s.group_id", '16');
         return $this->db->get()->result();
     }
     public function getChangeRequestList($group_id = null, $location_id = null) {
         $this->db->select("s.scan_id, g.group_name, s.extract_status, md.file_type, l.location_name, s.document_name , s.file_path, IF(s.is_temp_scan = 'Y', s.temp_scan_date, s.scan_date) AS scan_date, IF(s.is_temp_scan = 'Y', CONCAT(sb.first_name, ' ', sb.last_name), CONCAT(sbb.first_name, ' ', sbb.last_name)) AS scanned_by, CONCAT(ba.first_name, ' ', ba.last_name) AS bill_approver_id, s.bill_approved_date");
         $this->db->from("y{$this->year_id}_scan_file s");
-        $this->db->join("master_group g", "g.group_id = s.Group_Id", "left");
+        $this->db->join("master_group g", "g.group_id = s.group_id", "left");
         $this->db->join("master_doctype md", "md.type_id  = s.doc_type_id", "left");
         $this->db->join("master_work_location l", "l.location_id = s.location_id", "left");
         $this->db->join("users ba", "ba.user_id = s.bill_approver_id", "left");
@@ -78,7 +78,7 @@ class Extract_model extends CI_Model {
         $this->db->where_in("s.extract_status", ["C"]);
         $this->db->where("s.bill_approval_status", "Y");
         if (!empty($group_id)) {
-            $this->db->where("s.Group_Id", $group_id);
+            $this->db->where("s.group_id", $group_id);
         }
         if (!empty($location_id)) {
             $this->db->where("s.location_id", $location_id);
@@ -88,7 +88,7 @@ class Extract_model extends CI_Model {
     public function getDocumentDetails($scanId) {
         $this->db->select("s.scan_id, s.doc_type_id, g.group_name, l.location_name, s.document_name , s.file_path, IF(s.is_temp_scan = 'Y', s.temp_scan_date, s.scan_date) AS scan_date, IF(s.is_temp_scan = 'Y', CONCAT(sb.first_name, ' ', sb.last_name), CONCAT(sbb.first_name, ' ', sbb.last_name)) AS scanned_by, CONCAT(ba.first_name, ' ', ba.last_name) AS bill_approver_id, s.bill_approved_date");
         $this->db->from("y{$this->year_id}_scan_file s");
-        $this->db->join("master_group g", "g.group_id = s.Group_Id", "left");
+        $this->db->join("master_group g", "g.group_id = s.group_id", "left");
         $this->db->join("master_work_location l", "l.location_id = s.location_id", "left");
         $this->db->join("users ba", "ba.user_id = s.bill_approver_id", "left");
         $this->db->join("users sb", "sb.user_id = s.Temp_Scan_By", "left");
@@ -166,15 +166,15 @@ class Extract_model extends CI_Model {
             }
             unset($data['Round Off']);
         }
-        $this->db->select("Group_Id, Location");
+        $this->db->select("group_id, location_id");
         $this->db->where("scan_id", $scanId);
         $query = $this->db->get("y{$this->year_id}_scan_file");
         if ($query->num_rows() == 0) {
             return false;
         }
         $scanData = $query->row_array();
-        $groupId = $scanData["Group_Id"];
-        $location = $scanData["Location"];
+        $groupId = $scanData["group_id"];
+        $location = $scanData["location_id"];
         $this->db->where("scan_id", $scanId);
         if ($this->db->get($tableName)->num_rows() > 0) {
             $this->db->where("scan_id", $scanId)->delete($tableName);
@@ -351,7 +351,7 @@ class Extract_model extends CI_Model {
         if (!$tempData) {
             return ["status" => "error", "message" => "No data found in temp table for scan_id: $scanId"];
         }
-        $punchData = ["scan_id" => $scanId, "DocType" => $docType, "DocTypeId" => $docTypeId, "Group_Id" => $this->session->userdata("group_id"), "Created_By" => $this->session->userdata("user_id"), "Created_Date" => date("Y-m-d H:i:s") ];
+        $punchData = ["scan_id" => $scanId, "DocType" => $docType, "DocTypeId" => $docTypeId, "group_id" => $this->session->userdata("group_id"), "Created_By" => $this->session->userdata("user_id"), "Created_Date" => date("Y-m-d H:i:s") ];
         foreach ($tempData as $key => $value) {
             if (isset($fieldMap[$key])) {
                 $map = $fieldMap[$key];
