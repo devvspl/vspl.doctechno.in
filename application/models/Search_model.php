@@ -9,7 +9,7 @@ class Search_model extends MY_Model {
         $this->db->select('y{$this->year_id}_scan_file.scan_id,document_name ,FromName,ToName,BillDate,File_No,Remark,punchfile.Created_Date,Total_Amount,Grand_Total,DocTypeId,Loc_Name,group_name,BookingDate,ServiceNo');
         $this->db->from("y{$this->year_id}_scan_file");
         $this->db->join('punchfile', 'punchfile.scan_id = y{$this->year_id}_scan_file.scan_id', 'left');
-        $this->db->join('master_group', 'master_group.group_id = y{$this->year_id}_scan_file.Group_Id', 'left');
+        $this->db->join('master_group', 'master_group.group_id = y{$this->year_id}_scan_file.group_id', 'left');
         $this->db->where('is_file_approved', 'Y');
         if ($company_wise != '') {
             $this->db->where('punchfile.CompanyID', $company_wise);
@@ -28,7 +28,7 @@ class Search_model extends MY_Model {
         }
         if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'user') {
             $group_id = $this->session->userdata('group_id');
-            $this->db->where('punchfile.Group_Id', $group_id);
+            $this->db->where('punchfile.group_id', $group_id);
         }
         $end_date = '';
         if ($to_date != '') {
@@ -75,7 +75,7 @@ class Search_model extends MY_Model {
         ');
         $this->db->from("y{$this->year_id}_scan_file");
         $this->db->join('punchfile', 'punchfile.scan_id = y{$this->year_id}_scan_file.scan_id', 'left');
-        $this->db->join('master_group', 'master_group.group_id = y{$this->year_id}_scan_file.Group_Id', 'left');
+        $this->db->join('master_group', 'master_group.group_id = y{$this->year_id}_scan_file.group_id', 'left');
         $this->db->join('users pab', 'y{$this->year_id}_scan_file.Approve_By = pab.user_id', 'left');
         $this->db->join('users bab', 'y{$this->year_id}_scan_file.bill_approver_id = bab.user_id', 'left');
         $this->db->where('y{$this->year_id}_scan_file.is_file_punched', 'Y');
@@ -97,7 +97,7 @@ class Search_model extends MY_Model {
         }
         if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'user') {
             $group_id = $this->session->userdata('group_id');
-            $this->db->where('punchfile.Group_Id', $group_id);
+            $this->db->where('punchfile.group_id', $group_id);
         }
         if (!empty($from_date)) {
             $from_date.= ' 00:00:00';
@@ -114,7 +114,7 @@ class Search_model extends MY_Model {
         $this->db->join('punchfile', 'punchfile.scan_id = y{$this->year_id}_scan_file.scan_id', 'left');
         if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'user') {
             $group_id = $this->session->userdata('group_id');
-            $this->db->where('punchfile.Group_Id', $group_id);
+            $this->db->where('punchfile.group_id', $group_id);
         }
         $this->db->where('is_file_approved', 'Y');
         $this->db->like('document_name', $search);

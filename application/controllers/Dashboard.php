@@ -80,7 +80,7 @@ class Dashboard extends CI_Controller {
         $user = $this->input->post('user');
         $condition = '';
         if ($group != '' || $group != null) {
-            $condition.= " AND Group_Id = '$group'";
+            $condition.= " AND group_id = '$group'";
         }
         if ($user != '' || $user != null) {
             $condition.= " AND (Punch_By = '$user')";
@@ -152,9 +152,9 @@ class Dashboard extends CI_Controller {
         }
     
         $this->db->from($table);
-        $this->db->join('master_group', 'master_group.group_id = ' . $table . '.Group_Id');
+        $this->db->join('master_group', 'master_group.group_id = ' . $table . '.group_id');
         $this->db->where($table . '.is_deleted', 'N');
-        $this->db->group_by($table . '.Group_Id, master_group.group_name');
+        $this->db->group_by($table . '.group_id, master_group.group_name');
     
         $query = $this->db->get();
         $data = $query->result_array();
@@ -164,12 +164,12 @@ class Dashboard extends CI_Controller {
     function get_report_for_super_approver() {
         $this->db->select('master_group.group_name,master_group.group_id');
         $this->db->from("y{$this->year_id}_scan_file");
-        $this->db->join('master_group', 'master_group.group_id = y{$this->year_id}_scan_file.Group_Id');
+        $this->db->join('master_group', 'master_group.group_id = y{$this->year_id}_scan_file.group_id');
         $this->db->select('SUM(IF(is_file_punched = "Y"  AND is_file_approved = "Y" AND Is_Rejected = "N" , 1, 0)) AS Approve', false);
         $this->db->select('SUM(IF(is_file_punched = "Y" AND is_file_approved = "N" AND Is_Rejected = "Y" AND y{$this->year_id}_scan_file.Edit_Permission ="N"  , 1, 0)) AS Reject', false);
         $this->db->select('SUM(IF(is_file_punched = "Y" AND is_file_approved = "N" AND Is_Rejected = "N",  1, 0)) AS Pending_Approve', false);
         $this->db->where('y{$this->year_id}_scan_file.is_deleted', 'N');
-        $this->db->group_by('y{$this->year_id}_scan_file.Group_Id, master_group.group_name');
+        $this->db->group_by('y{$this->year_id}_scan_file.group_id, master_group.group_name');
         $query = $this->db->get();
         $data = $query->result_array();
         $formattedData = [];
@@ -181,13 +181,13 @@ class Dashboard extends CI_Controller {
     function get_report_for_super_scanner() {
         $this->db->select('master_group.group_name,master_group.group_id');
         $this->db->from("y{$this->year_id}_scan_file");
-        $this->db->join('master_group', 'master_group.group_id = y{$this->year_id}_scan_file.Group_Id');
+        $this->db->join('master_group', 'master_group.group_id = y{$this->year_id}_scan_file.group_id');
         $this->db->select('SUM(IF(y{$this->year_id}_scan_file.is_final_submitted = "Y" , 1, 0)) AS Scan', false);
         $this->db->select('SUM(IF(is_scan_resend = "Y" , 1, 0)) AS Reject', false);
         $this->db->select('SUM(IF(is_temp_scan = "Y" AND Scan_Complete = "N" AND temp_scan_reject = "N",  1, 0)) AS Pending', false);
         $this->db->select('SUM(IF(is_temp_scan = "Y" AND Scan_Complete = "Y" AND temp_scan_reject = "N" AND document_verified="N",  1, 0)) AS Pending_Verification', false);
         $this->db->where('y{$this->year_id}_scan_file.is_deleted', 'N');
-        $this->db->group_by('y{$this->year_id}_scan_file.Group_Id, master_group.group_name');
+        $this->db->group_by('y{$this->year_id}_scan_file.group_id, master_group.group_name');
         $query = $this->db->get();
         $data = $query->result_array();
         $formattedData = [];

@@ -138,19 +138,19 @@ class Super_scan extends CI_Controller
         $file = $_FILES['main_file']['name'];
         $file_ext = pathinfo($file, PATHINFO_EXTENSION);
         $year = date('Y');
-		$Group_Id = $this->input->post('group_id');
+		$group_id = $this->input->post('group_id');
         $config = ['upload_path' => './uploads/temp/', 'allowed_types' => 'jpg|png|jpeg|pdf', 'max_size' => 8192, 'file_name' => time() . '.' . $file_ext];
         $this->load->library('upload', $config);
         if (!$this->upload->do_upload('main_file')) {
             $error = $this->upload->display_errors();
             $this->session->set_flashdata('message', '<div class="alert alert-danger">' . $error . '</div>');
-            redirect('super_scan/'. $Group_Id);
+            redirect('super_scan/'. $group_id);
         } else {
             $upload_data = $this->upload->data();
             $file_name = $upload_data['file_name'];
             $bill_voucher_date = $this->reformat_date($bill_voucher_date);
             $data = [
-                'group_id' => $Group_Id,
+                'group_id' => $group_id,
                 'scanned_by' => $scan_by,
                 'Document_name' => $document_name,
                 'location_id' => $location,

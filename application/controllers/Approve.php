@@ -135,7 +135,7 @@ class Approve extends CI_Controller {
         $this->db->where('is_file_approved', 'N');
         $this->db->where('is_rejected', 'N');
         $this->db->where('is_deleted', 'N');
-        $this->db->where('y{$this->year_id}_scan_file.Group_Id', $group_id);
+        $this->db->where('y{$this->year_id}_scan_file.group_id', $group_id);
     $case_condition = "(CASE 
                         WHEN doc_type_id = 57 THEN finance_punch = 'Y'
                         WHEN doc_type_id = 58 THEN finance_punch = 'Y'

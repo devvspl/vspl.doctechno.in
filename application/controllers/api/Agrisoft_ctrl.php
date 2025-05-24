@@ -15,7 +15,7 @@ class Agrisoft_ctrl extends CI_Controller
 	{
 		$secondaryDb = $this->load->database('secondary', TRUE);
 
-         $query = $secondaryDb->select('scan_id, Group_Id, Doc_Type, doc_type_id, document_name , file_path,punched_date,Missing_Data')
+         $query = $secondaryDb->select('scan_id, group_id, Doc_Type, doc_type_id, document_name , file_path,punched_date,Missing_Data')
         ->from("y{$this->year_id}_scan_file")
         ->where('Import_Flag', '0')
         ->get();

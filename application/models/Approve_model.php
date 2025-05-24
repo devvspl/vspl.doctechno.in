@@ -25,11 +25,11 @@ class Approve_model extends MY_Model {
         $user_id = $this->session->userdata('user_id');
         $this->db->select('*');
         $this->db->from("y{$this->year_id}_scan_file");
-        $this->db->join('master_group', 'master_group.group_id = y{$this->year_id}_scan_file.Group_Id', 'left');
+        $this->db->join('master_group', 'master_group.group_id = y{$this->year_id}_scan_file.group_id', 'left');
         $this->db->where('is_file_approved', 'Y');
         $this->db->where('approved_by', $user_id);
         if ($group !== '') {
-            $this->db->where('y{$this->year_id}_scan_file.Group_Id', $group);
+            $this->db->where('y{$this->year_id}_scan_file.group_id', $group);
         }
 		if ($Doctype !== '') {
             $this->db->where('y{$this->year_id}_scan_file.doc_type_id', $Doctype);
@@ -55,11 +55,11 @@ class Approve_model extends MY_Model {
     public function count_filtered_records($search = '', $from_date = '', $to_date = '', $group = '', $Doctype = '') {
         $user_id = $this->session->userdata('user_id');
         $this->db->from("y{$this->year_id}_scan_file");
-        $this->db->join('master_group', 'master_group.group_id = y{$this->year_id}_scan_file.Group_Id', 'left');
+        $this->db->join('master_group', 'master_group.group_id = y{$this->year_id}_scan_file.group_id', 'left');
         $this->db->where('is_file_approved', 'Y');
         $this->db->where('approved_by', $user_id);
         if ($group !== '') {
-            $this->db->where('y{$this->year_id}_scan_file.Group_Id', $group);
+            $this->db->where('y{$this->year_id}_scan_file.group_id', $group);
         }
 		if ($Doctype !== '') {
             $this->db->where('y{$this->year_id}_scan_file.doc_type_id', $Doctype);
@@ -82,7 +82,7 @@ class Approve_model extends MY_Model {
         $user_id = $this->session->userdata('user_id');
         $this->db->select('*');
         $this->db->from("y{$this->year_id}_scan_file");
-        $this->db->join('master_group', 'master_group.group_id = y{$this->year_id}_scan_file.Group_Id', 'left');
+        $this->db->join('master_group', 'master_group.group_id = y{$this->year_id}_scan_file.group_id', 'left');
         $this->db->where('is_file_approved', 'Y');
         $this->db->where('approved_by', $user_id);
         $this->db->order_by('scan_id', 'desc');
@@ -93,7 +93,7 @@ class Approve_model extends MY_Model {
         $user_id = $this->session->userdata('user_id');
         $this->db->select('*');
         $this->db->from("y{$this->year_id}_scan_file");
-        $this->db->join('master_group', 'master_group.group_id = y{$this->year_id}_scan_file.Group_Id', 'left');
+        $this->db->join('master_group', 'master_group.group_id = y{$this->year_id}_scan_file.group_id', 'left');
         $this->db->where('is_file_punched', 'Y');
         $this->db->where('is_file_approved', 'Y');
         $this->db->where_in('approved_by', $user_id);

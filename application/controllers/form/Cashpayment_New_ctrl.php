@@ -73,7 +73,7 @@ class Cashpayment_New_ctrl extends CI_Controller
 			"TDS_section" => $TDS_section,
 			"TDS_percentage" => $TDS_percentage,
 			"TDS_amount" => $TDS_amount,
-			"Group_Id" => $this->session->userdata("group_id"),
+			"group_id" => $this->session->userdata("group_id"),
 			"Created_By" => $this->session->userdata("user_id"),
 			"Created_Date" => date("Y-m-d H:i:s"),
 		];

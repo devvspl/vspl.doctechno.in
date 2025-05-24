@@ -500,8 +500,8 @@ class Scan extends CI_Controller
     public function get_bill_approvers()
     {
         $location_id = $this->input->post('location_id');
-        $Group_Id = $this->session->userdata('group_id');
-        if ($Group_Id == 16) {
+        $group_id = $this->session->userdata('group_id');
+        if ($group_id == 16) {
             $this->db->select('user_id, first_name, last_name');
             $this->db->from('users');
             $this->db->where("FIND_IN_SET('2790', firm_id) >", 0);

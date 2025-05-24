@@ -1,7 +1,7 @@
 <?php
-$this->db->select('master_group.group_name, SUM(IF(y{$this->year_id}_scan_file.is_file_punched = "Y" AND y{$this->year_id}_scan_file.is_file_approved = "N" AND y{$this->year_id}_scan_file.Is_Rejected = "N", 1, 0)) as total_count,y{$this->year_id}_scan_file.Group_Id');
+$this->db->select('master_group.group_name, SUM(IF(y{$this->year_id}_scan_file.is_file_punched = "Y" AND y{$this->year_id}_scan_file.is_file_approved = "N" AND y{$this->year_id}_scan_file.Is_Rejected = "N", 1, 0)) as total_count,y{$this->year_id}_scan_file.group_id');
 $this->db->from("y{$this->year_id}_scan_file");
-$this->db->join('master_group', 'master_group.group_id = y{$this->year_id}_scan_file.Group_Id');
+$this->db->join('master_group', 'master_group.group_id = y{$this->year_id}_scan_file.group_id');
 $this->db->where('y{$this->year_id}_scan_file.is_deleted', 'N');
 $this->db->group_by('master_group.group_id');
 $this->db->order_by('total_count', 'desc');

@@ -59,7 +59,7 @@ class Record_model extends MY_Model {
         $this->db->select('y{$this->year_id}_scan_file.document_name , y{$this->year_id}_scan_file.Doc_Type,y{$this->year_id}_scan_file.doc_type_id, y{$this->year_id}_scan_file.file_path, y{$this->year_id}_scan_file.File, y{$this->year_id}_scan_file.temp_scan_date, y{$this->year_id}_scan_file.Temp_Scan_By, y{$this->year_id}_scan_file.scanned_by, y{$this->year_id}_scan_file.scan_date, y{$this->year_id}_scan_file.bill_approved_date, y{$this->year_id}_scan_file.is_file_punched, y{$this->year_id}_scan_file.Punch_By, y{$this->year_id}_scan_file.punched_date, y{$this->year_id}_scan_file.is_file_approved, y{$this->year_id}_scan_file.Approve_By, y{$this->year_id}_scan_file.approved_date, y{$this->year_id}_scan_file.scan_id, punchfile.ServiceNo, punchfile.BookingDate');
         $this->db->from("y{$this->year_id}_scan_file");
         if (!empty($group)) {
-            $this->db->where('y{$this->year_id}_scan_file.Group_Id', $group);
+            $this->db->where('y{$this->year_id}_scan_file.group_id', $group);
         }
         if (!empty($search)) {
             $this->db->group_start();
@@ -95,7 +95,7 @@ class Record_model extends MY_Model {
     //     $this->db->from("y{$this->year_id}_scan_file");
     //     $this->db->join('punchfile', 'y{$this->year_id}_scan_file.scan_id = punchfile.scan_id', 'left');
     //     if (!empty($group)) {
-    //         $this->db->where('y{$this->year_id}_scan_file.Group_Id', $group);
+    //         $this->db->where('y{$this->year_id}_scan_file.group_id', $group);
     //     }
     //     if (!empty($search)) {
     //         $this->db->group_start();
@@ -130,7 +130,7 @@ class Record_model extends MY_Model {
 		$this->db->join('punchfile', 'y{$this->year_id}_scan_file.scan_id = punchfile.scan_id', 'left');
 		
 		if (!empty($group)) {
-			$this->db->where('y{$this->year_id}_scan_file.Group_Id', $group);
+			$this->db->where('y{$this->year_id}_scan_file.group_id', $group);
 		}
 		
 		if (!empty($search)) {
