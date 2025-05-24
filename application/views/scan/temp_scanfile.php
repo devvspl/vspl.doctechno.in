@@ -36,7 +36,7 @@
                            </div>
                         </div>
                      </div>
-                     <div class="form-group">
+                     <div class="form-group mt-3" style="margin-top: 8px;">
                         <input class="filestyle form-control" type='file' name='main_file' id="main_file" accept="image/*,application/pdf">
                      </div>
                   </div>
@@ -68,6 +68,9 @@
                         <tbody>
                            <?php if (empty($my_lastest_scan)) {
                               ?>
+                              <tr>
+                                 <td colspan="6" class="text-center">No Record Found</td>
+                              </tr>
                            <?php
                               } else {
                                   $count = 1;
@@ -171,6 +174,7 @@
    
    $(document).ready(function() {
        $("#location").select2();
+       $("#bill_approver").select2();
        $(document).on('click', '#delete_all', function() {
            var scan_id = $(this).data('scan_id');
            var url = '<?= base_url() ?>Scan/delete_all';

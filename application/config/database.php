@@ -30,9 +30,9 @@ if ($_SERVER['SERVER_NAME'] == 'localhost') {
     $db['default'] = [
         'dsn' => '',
         'hostname' => 'localhost',
-        'username' => 'test_scan_user',
-        'password' => 'testscan@192',
-        'database' => 'test_scan',
+        'username' => 'root',
+        'password' => '',
+        'database' => 'vspl_nova',
         'dbdriver' => 'mysqli',
         'dbprefix' => '',
         'pconnect' => false,

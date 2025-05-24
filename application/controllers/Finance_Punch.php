@@ -78,7 +78,7 @@ class Finance_Punch extends CI_Controller
         $Reject_Remark = $this->input->post("Remark");
         $this->db->where("scan_id", $scan_id);
         $result = $this->db->update("y{$this->year_id}_scan_file", [
-            "Scan_Resend" => "Y",
+            "is_scan_resend" => "Y",
             "Scan_Resend_By" => $user_id,
             "Scan_Resend_Remark" => $Reject_Remark,
             "Scan_Resend_Date" => date("Y-m-d"),

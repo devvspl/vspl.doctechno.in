@@ -4,7 +4,7 @@
          <div class="col-md-12">
             <div class="box box-primary">
                <div class="box-header with-border">
-                  <h3 class="box-title">Punch File - <?= $bill_detail->document_name ?></h3>
+                  <h3 class="box-title">Scanned File - <?= $bill_detail->document_name ?></h3>
                   <div class="box-tools pull-right">
                      <a href="<?= base_url('pending_bill_approve'); ?>" class="btn btn-primary btn-sm">
                      <i class="fa fa-long-arrow-left"></i> Back
@@ -36,16 +36,27 @@
                      </div>
                      <div class="col-md-8">
                         <p><strong>Location:</strong> <?= $bill_detail->location_name ?></p>
+                        <p><strong>Department:</strong>
+                           <?= !empty($bill_detail->department_name) ? $bill_detail->department_name . ' (' . $bill_detail->department_code . ')' : 'NA' ?>
+                        </p>
                         <?php if (!empty($bill_detail->scan_date)) : ?>
                         <p>
                            <strong>Scanned By:</strong>
-                           <?= $bill_detail->scanned_by_name ?> (<?= $bill_detail->scan_date ?>)
+                           <?= $bill_detail->scanned_by_name ?> 
+                        </p>
+                        <p>
+                           <strong>Scan Date:</strong>
+                           <?= $bill_detail->scan_date ?>   
                         </p>
                         <?php endif; ?>
                         <?php if (!empty($bill_detail->temp_scan_date)) : ?>
                         <p>
                            <strong>Temp Scanned By:</strong>
-                           <?= $bill_detail->temp_scanned_by_name ?> (<?= $bill_detail->temp_scan_date ?>)
+                           <?= $bill_detail->temp_scanned_by_name ?> 
+                        </p>
+                        <p>
+                           <strong>Temp Scan Date:</strong>
+                           <?= $bill_detail->temp_scan_date ?>
                         </p>
                         <?php endif; ?>
                         <a href="<?= base_url('approve_bill/' . $bill_detail->scan_id) ?>"
@@ -64,19 +75,25 @@
       </div>
    </section>
 </div>
-<!-- Reject Modal -->
-<div id="rejectModal" class="modal fade" role="dialog" aria-hidden="true" data-backdrop="static">
-   <div class="modal-dialog">
-      <div class="modal-content">
-         <button type="button" class="close" data-dismiss="modal">&times;</button>
+<!-- Redesigned Reject Modal -->
+<div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel" aria-hidden="true" data-backdrop="static">
+   <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content shadow-lg rounded">
+         <div class="modal-header">
+            <h5 class="modal-title" id="rejectModalLabel">Reject Scan</h5>
+            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
          <div class="modal-body">
             <input type="hidden" name="scan_id" id="rejectScanId">
             <div class="form-group">
-               <label for="Reject_Remark">Rejection Reason <span class="text-danger">*</span></label>
-               <input type="text" name="Reject_Remark" id="Reject_Remark" class="form-control">
+               <label for="Reject_Remark" class="font-weight-bold">Rejection Reason <span class="text-danger">*</span></label>
+               <input type="text" name="Reject_Remark" id="Reject_Remark" class="form-control" placeholder="Enter reason for rejection" required>
             </div>
          </div>
          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
             <button type="button" id="reject_btn" class="btn btn-danger">Submit Rejection</button>
          </div>
       </div>
@@ -84,6 +101,7 @@
 </div>
 <!-- JS Handling -->
 <script>
+
    $(document).on("click", "#reject_bill_btn", function () {
       var scanId = $(this).data('id');
       $("#rejectScanId").val(scanId);
@@ -92,40 +110,39 @@
       $("#rejectModal").modal("show");
    });
    $(document).on("click", "#reject_btn", function () {
-        var scanId = $("#rejectScanId").val();
-        var remark = $("#Reject_Remark").val().trim();
-        
-        if (remark === '') {
-            $("#Reject_Remark").focus().css('border-color', 'red');
-            return;
-        }
-        
-        $.ajax({
-            type: "POST",
-            url: "<?= base_url('reject_bill/') ?>" + scanId,
-            data: { Remark: remark },
-            dataType: "json",
-            success: function (response) {
-                if (response.status == 200) {
-                    $("#rejectModal").modal('hide');
-                    $('body').prepend(`
-                    <div class="alert alert-success text-center" id="rejectSuccessMsg" style="position: fixed; top: 10px; left: 50%; transform: translateX(-50%); z-index: 1050; width: auto;">
-                        Bill Rejected Successfully.
-                    </div>
-                    `);
-                    setTimeout(function () {
-                    $("#rejectSuccessMsg").fadeOut(300, function () {
-                        $(this).remove();
-                        window.location.href = "<?= base_url('pending_bill_approve') ?>";
-                    });
-                    }, 2000); 
-                } else {
-                    alert("Rejection failed. Try again.");
-                }
-            },
-            error: function () {
-                alert("An error occurred. Please try again.");
+    var scanId = $("#rejectScanId").val();
+    var remark = $("#Reject_Remark").val().trim();
+    var $btn = $(this);
+   
+    if (remark === '') {
+        $("#Reject_Remark").focus().css('border-color', 'red');
+        return;
+    }
+
+    showLoader();
+
+    $.ajax({
+        type: "POST",
+        url: "<?= base_url('reject_bill/') ?>" + scanId,
+        data: { Remark: remark },
+        dataType: "json",
+        success: function (response) {
+            hideLoader();
+            if (response.status == 200) {
+                $("#rejectModal").modal('hide');
+                showToast('success', 'Bill rejected successfully.');
+   
+                setTimeout(function () {
+                    window.location.href = "<?= base_url('pending_bill_approve') ?>";
+                }, 2000);
+            } else {
+                showToast('error', 'Rejection failed. Try again.');
             }
-        });
-        });
+        },
+        error: function () {
+            hideLoader();
+            showToast('error', 'An unexpected error occurred.');
+        }
+    });
+   });
 </script>

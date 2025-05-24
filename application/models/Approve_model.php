@@ -35,8 +35,8 @@ class Approve_model extends MY_Model {
             $this->db->where('y{$this->year_id}_scan_file.doc_type_id', $Doctype);
         }
         if ($from_date !== '' && $to_date !== '') {
-            $this->db->where('Approve_Date >=', $from_date);
-            $this->db->where('Approve_Date <=', $to_date);
+            $this->db->where('approved_date >=', $from_date);
+            $this->db->where('approved_date <=', $to_date);
         }
         if ($search !== '') {
             $this->db->group_start();
@@ -65,8 +65,8 @@ class Approve_model extends MY_Model {
             $this->db->where('y{$this->year_id}_scan_file.doc_type_id', $Doctype);
         }
         if ($from_date !== '' && $to_date !== '') {
-            $this->db->where('Approve_Date >=', $from_date);
-            $this->db->where('Approve_Date <=', $to_date);
+            $this->db->where('approved_date >=', $from_date);
+            $this->db->where('approved_date <=', $to_date);
         }
         if ($search !== '') {
             $this->db->group_start();
@@ -97,8 +97,8 @@ class Approve_model extends MY_Model {
         $this->db->where('is_file_punched', 'Y');
         $this->db->where('is_file_approved', 'Y');
         $this->db->where_in('approved_by', $user_id);
-        $this->db->where('date(Approve_Date) >=', $from_date);
-        $this->db->where('date(Approve_Date) <=', $to_date);
+        $this->db->where('date(approved_date) >=', $from_date);
+        $this->db->where('date(approved_date) <=', $to_date);
         $this->db->order_by('scan_id', 'desc');
         $query = $this->db->get();
         return $query->result_array();

@@ -64,7 +64,7 @@ class Scan_model extends MY_Model {
     }
     function get_myscan_list($user_id) {
         
-        $this->db->select('s.scan_id,s.document_name ,s.File,s.file_extension,s.file_path,s.Final_Submit,s.File_Punched,s.scan_date');
+        $this->db->select('s.scan_id,s.document_name ,s.File,s.file_extension,s.file_path,s.is_final_submitted,s.is_file_punched,s.scan_date');
         $this->db->from("y{$this->year_id}_scan_file s");
         $this->db->where('scanned_by', $user_id);
         $this->db->where('is_file_punched', 'N');
@@ -82,7 +82,7 @@ class Scan_model extends MY_Model {
     }
     function get_myscan_punched_list($user_id) {
         
-        $this->db->select('s.scan_id,s.Doc_Type,s.doc_type_id,s.document_name ,s.File,s.file_extension,s.file_path,s.Final_Submit,s.File_Punched,Punch_Date');
+        $this->db->select('s.scan_id,s.Doc_Type,s.doc_type_id,s.document_name ,s.File,s.file_extension,s.file_path,s.is_final_submitted,s.is_file_punched,punched_date');
         $this->db->from("y{$this->year_id}_scan_file s");
         $this->db->where('scanned_by', $user_id);
         $this->db->where('is_file_punched', 'Y');

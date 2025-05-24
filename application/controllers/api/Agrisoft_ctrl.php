@@ -15,7 +15,7 @@ class Agrisoft_ctrl extends CI_Controller
 	{
 		$secondaryDb = $this->load->database('secondary', TRUE);
 
-         $query = $secondaryDb->select('scan_id, Group_Id, Doc_Type, doc_type_id, document_name , file_path,Punch_Date,Missing_Data')
+         $query = $secondaryDb->select('scan_id, Group_Id, Doc_Type, doc_type_id, document_name , file_path,punched_date,Missing_Data')
         ->from("y{$this->year_id}_scan_file")
         ->where('Import_Flag', '0')
         ->get();
@@ -200,7 +200,7 @@ class Agrisoft_ctrl extends CI_Controller
 	public function get_punch_date()
 	{
 
-		$scan_detail = $this->db->select('scan_id,Punch_Date')->from("y{$this->year_id}_scan_file")->where('is_file_approved', 'Y')->get()->result_array();
+		$scan_detail = $this->db->select('scan_id,punched_date')->from("y{$this->year_id}_scan_file")->where('is_file_approved', 'Y')->get()->result_array();
      	echo json_encode(array('scan_detail' => $scan_detail));
 		
 	}

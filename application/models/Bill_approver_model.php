@@ -87,11 +87,14 @@ class Bill_approver_model extends MY_Model {
         return $query->result_array();
     }
     public function get_bill_detail($scan_id) {
-        $this->db->select(" sf.scan_id, sf.document_name, mwl.location_name, CONCAT(scanned_by.first_name, ' ', scanned_by.last_name) AS scanned_by_name, sf.scan_date, CONCAT(temp_scanned_by.first_name, ' ', temp_scanned_by.last_name) AS temp_scanned_by_name, sf.temp_scan_date, sf.file_extension, sf.file_path");
+        $this->db->select(" sf.scan_id, sf.document_name, mwl.location_name, CONCAT(scanned_by.first_name, ' ', scanned_by.last_name) AS scanned_by_name, sf.scan_date, CONCAT(temp_scanned_by.first_name, ' ', temp_scanned_by.last_name) AS temp_scanned_by_name, sf.temp_scan_date, sf.file_extension, sf.file_path, COALESCE(dept1.department_name, dept2.department_name) AS department_name, COALESCE(dept1.department_code, dept2.department_code) AS department_code
+        ", false);
         $this->db->from("y{$this->year_id}_scan_file AS sf");
         $this->db->join('master_work_location AS mwl', 'sf.location_id = mwl.location_id', 'left');
         $this->db->join('users AS scanned_by', 'scanned_by.user_id = sf.scanned_by', 'left');
         $this->db->join('users AS temp_scanned_by', 'temp_scanned_by.user_id = sf.Temp_Scan_By', 'left');
+        $this->db->join('core_department AS dept1', 'scanned_by.department_id = dept1.api_id', 'left');
+        $this->db->join('core_department AS dept2', 'temp_scanned_by.department_id = dept2.api_id', 'left');
         $this->db->where('sf.scan_id', (int)$scan_id);
         $query = $this->db->get();
         return $query->row();

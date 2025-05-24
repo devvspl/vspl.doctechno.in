@@ -1,5 +1,5 @@
 <?php
-$this->db->select('master_group.group_name, SUM(IF(y{$this->year_id}_scan_file.File_Punched = "Y" AND y{$this->year_id}_scan_file.File_Approved = "N" AND y{$this->year_id}_scan_file.Is_Rejected = "N", 1, 0)) as total_count,y{$this->year_id}_scan_file.Group_Id');
+$this->db->select('master_group.group_name, SUM(IF(y{$this->year_id}_scan_file.is_file_punched = "Y" AND y{$this->year_id}_scan_file.is_file_approved = "N" AND y{$this->year_id}_scan_file.Is_Rejected = "N", 1, 0)) as total_count,y{$this->year_id}_scan_file.Group_Id');
 $this->db->from("y{$this->year_id}_scan_file");
 $this->db->join('master_group', 'master_group.group_id = y{$this->year_id}_scan_file.Group_Id');
 $this->db->where('y{$this->year_id}_scan_file.is_deleted', 'N');
@@ -188,7 +188,7 @@ $doctype_list = $this->db->select('type_id,file_type')->from('master_doctype')->
 						value.Doc_Type,
 						fileLink, // Add the hyperlink HTML to the table cell
 						value.full_name,
-						value.Punch_Date,
+						value.punched_date,
 						viewFileLink, // Add your additional columns here
 						button,
 					]).draw(false);

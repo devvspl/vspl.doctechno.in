@@ -126,6 +126,8 @@ class BillApproverController extends CI_Controller
     {
         $this->check_role(['bill_approver']);
         $this->data['bill_detail'] = $this->Bill_approver_model->get_bill_detail($scan_id);
+        // print_r($this->data['bill_detail']);
+        // exit;
         $this->data['main'] = 'bill_approver/bill_detail';
         $this->load->view('layout/template', $this->data);
     }

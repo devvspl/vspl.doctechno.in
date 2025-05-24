@@ -47,7 +47,7 @@ class Search_model extends MY_Model {
         $this->db->select('
             pab.first_name as Approve_By,
             bab.first_name as Bill_Approve_By,
-            Approve_Date,
+            approved_date,
             bill_approver_id,
             bill_approved_date,
             temp_scan_date,
@@ -55,8 +55,8 @@ class Search_model extends MY_Model {
             scanned_by,
             scan_date,
             Punch_By,
-            Punch_Date,
-            File_Punched,
+            punched_date,
+            is_file_punched,
             y{$this->year_id}_scan_file.scan_id,
             document_name ,
             FromName,
@@ -78,7 +78,7 @@ class Search_model extends MY_Model {
         $this->db->join('master_group', 'master_group.group_id = y{$this->year_id}_scan_file.Group_Id', 'left');
         $this->db->join('users pab', 'y{$this->year_id}_scan_file.Approve_By = pab.user_id', 'left');
         $this->db->join('users bab', 'y{$this->year_id}_scan_file.bill_approver_id = bab.user_id', 'left');
-        $this->db->where('y{$this->year_id}_scan_file.File_Punched', 'Y');
+        $this->db->where('y{$this->year_id}_scan_file.is_file_punched', 'Y');
         $this->db->where('y{$this->year_id}_scan_file.is_deleted', 'N');
         if (!empty($company_wise)) {
             $this->db->where('punchfile.CompanyID', $company_wise);
