@@ -136,7 +136,7 @@ class Customlib
     {
         $result = $this->CI->db
             ->select('*')
-            ->from('y{ $this->year_id}_scan_file')
+            ->from("y{$this->year_id}_scan_file")
             ->where('scan_id', $scan_id)
             ->get()
             ->row();
@@ -258,7 +258,7 @@ class Customlib
         $file_location1 = $upload_dir . '/' . $File;
         $this->CI->db
             ->where('scan_id', $scan_id)
-            ->update('y{ $this->year_id}_scan_file', ['file_path' => $file_location, 'secondary_file_path' => $file_location1, 'is_file_punched' => 'Y', 'punched_by' => $this->CI->session->userdata('user_id'), 'punched_date' => date('Y-m-d H:i:s')]);
+            ->update("y{$this->year_id}_scan_file", ['file_path' => $file_location, 'secondary_file_path' => $file_location1, 'is_file_punched' => 'Y', 'punched_by' => $this->CI->session->userdata('user_id'), 'punched_date' => date('Y-m-d H:i:s')]);
         if ($this->haveSupportFile($scan_id) == true) {
             $support_file = $this->getSupportFile($scan_id);
             foreach ($support_file as $key => $value) {
@@ -293,7 +293,7 @@ class Customlib
     {
         $chk = $this->CI->db
             ->select('*')
-            ->from('punchfile')
+            ->from('y'.$this->year_id.'_punchdata')
             ->where('scan_id', $scan_id)
             ->get()
             ->num_rows();

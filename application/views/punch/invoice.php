@@ -1,5 +1,5 @@
 <div id="invoice-details" class="tab-content active">
-   <form action="<?= base_url(); ?>form/InvoiceController/create" id="invoice_form" name="invoice_form" method="post"
+   <form action="<?= base_url(); ?>Punch/savePunchToDatabase" id="invoice_form" name="invoice_form" method="post"
       accept-charset="utf-8">
       <input type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id ?>">
       <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $doc_type_id ?>">
@@ -7,21 +7,21 @@
          <div class="form-group col-md-3">
             <label for="">Invoice No: <span class="text-danger">*</span></label>
             <input type="text" name="Bill_No" id="Bill_No" required class="form-control form-control-sm"
-               value="<?= (isset($punch_detail->File_No)) ? $punch_detail->File_No : '' ?>">
+               value="<?= (isset($punch_detail->invoice_no)) ? $punch_detail->invoice_no : '' ?>">
          </div>
          <div class="form-group col-md-3">
             <label for="">Invoice Date: <span class="text-danger">*</span></label>
             <input type="date" name="Bill_Date" id="Bill_Date" required class="form-control form-control-sm"
-               value="<?= (isset($punch_detail->BillDate)) ? date('Y-m-d', strtotime($punch_detail->BillDate)) : '' ?>">
+               value="<?= (isset($punch_detail->invoice_date)) ? date('Y-m-d', strtotime($punch_detail->invoice_date)) : '' ?>">
          </div>
          <div class="form-group col-md-3">
             <label for="">Purchase Order No.:</label>
-            <input type="text" name="Buyer_Order" id="Buyer_Order"  class="form-control form-control-sm" value="<?= (isset($punch_detail->ServiceNo)) ? $punch_detail->ServiceNo : '' ?>">
+            <input type="text" name="Buyer_Order" id="Buyer_Order"  class="form-control form-control-sm" value="<?= (isset($punch_detail->buyers_order_no)) ? $punch_detail->buyers_order_no : '' ?>">
          </div>
          <div class="form-group col-md-3">
             <label for="">Purchase Order Date:</label>
             <input type="text" name="Buyer_Order_Date" id="Buyer_Order_Date" class="form-control form-control-sm datepicker" 
-               value="<?= formatSafeDate($punch_detail->BookingDate ?? '') ?>">
+               value="<?= formatSafeDate($punch_detail->buyers_order_date ?? '') ?>">
          </div>
       </div>
     <div class="row" style="margin-bottom: 5px;">
@@ -65,36 +65,36 @@
          <div class="form-group col-md-6">
             <label for="">Buyer Address :</label>
             <input type="text" name="Buyer_Address" id="Buyer_Address" class="form-control form-control-sm"
-               value="<?= (isset($punch_detail->Loc_Add)) ? $punch_detail->Loc_Add : '' ?>"
+               value="<?= (isset($punch_detail->buyer_address)) ? $punch_detail->buyer_address : '' ?>"
                readonly>
          </div>
          <div class="col-md-6">
             <label for="">Vendor Address :</label>
             <input type="text" name="Vendor_Address" id="Vendor_Address" class="form-control form-control-sm"
-               value="<?= (isset($punch_detail->AgencyAddress)) ? $punch_detail->AgencyAddress : '' ?>"
+               value="<?= (isset($punch_detail->vendor_address)) ? $punch_detail->vendor_address : '' ?>"
                readonly>
          </div>
       </div>
       <div class="row" style="margin-bottom: 5px;">
          <div class="form-group col-md-3">
             <label for="">Dispatch Through:</label>
-            <input type="text" name="Dispatch_Trough" id="Dispatch_Trough" class="form-control form-control-sm" value="<?= (isset($punch_detail->Particular)) ? $punch_detail->Particular : '' ?>">
+            <input type="text" name="Dispatch_Trough" id="Dispatch_Trough" class="form-control form-control-sm" value="<?= (isset($punch_detail->dispatch_through)) ? $punch_detail->dispatch_through : '' ?>">
          </div>
          <div class="form-group col-md-3">
             <label for="">Delivery Note Date:</label>
-            <input type="text" name="Delivery_Note_Date" id="Delivery_Note_Date" class="form-control form-control-sm datepicker" value="<?= formatSafeDate($punch_detail->DueDate ?? '') ?>">
+            <input type="text" name="Delivery_Note_Date" id="Delivery_Note_Date" class="form-control form-control-sm datepicker" value="<?= formatSafeDate($punch_detail->delivery_note_date ?? '') ?>">
          </div>
          <div class="form-group col-md-3">
             <label for="">LR Number:</label>
-            <input type="text" name="LR_Number" id="LR_Number" class="form-control form-control-sm" value="<?= (isset($punch_detail->FDRNo)) ? $punch_detail->FDRNo : '' ?>">
+            <input type="text" name="LR_Number" id="LR_Number" class="form-control form-control-sm" value="<?= (isset($punch_detail->lr_number)) ? $punch_detail->lr_number : '' ?>">
          </div>
          <div class="form-group col-md-3">
             <label for="">LR Date:</label>
-            <input type="text" name="LR_Date" id="LR_Date" class="form-control form-control-sm datepicker" value="<?= formatSafeDate($punch_detail->File_Date ?? '') ?>" >
+            <input type="text" name="LR_Date" id="LR_Date" class="form-control form-control-sm datepicker" value="<?= formatSafeDate($punch_detail->lr_date ?? '') ?>" >
          </div>
          <div class="form-group col-md-3">
             <label for="">Cartoon Number:</label>
-            <input type="text" name="Cartoon_Number" id="Cartoon_Number" class="form-control form-control-sm" value="<?= (isset($punch_detail->RegNo)) ? $punch_detail->RegNo : '' ?>">
+            <input type="text" name="Cartoon_Number" id="Cartoon_Number" class="form-control form-control-sm" value="<?= (isset($punch_detail->cartoon_number)) ? $punch_detail->cartoon_number : '' ?>">
          </div>
       </div>
       <div class="row" style="height: 300px; overflow:auto">
@@ -198,7 +198,7 @@
                   <td colspan="2">
                      <input type="text" name="Sub_Total" id="Sub_Total"
                         class="form-control form-control-sm" readonly
-                        value="<?= (isset($punch_detail->SubTotal)) ? $punch_detail->SubTotal : '' ?>">
+                        value="<?= (isset($punch_detail->sub_total)) ? $punch_detail->sub_total : '' ?>">
                   </td>
                </tr>
                <tr id="tcs_tr">
@@ -206,7 +206,7 @@
                   <td colspan="2">
                      <input type="text" name="TCS" id="TCS" class="form-control form-control-sm"
                         onKeyPress="return isNumberKey(event)" onchange="cal_tax()"
-                        value="<?= (isset($punch_detail->TCS)) ? $punch_detail->TCS : '' ?>">
+                        value="<?= (isset($punch_detail->tcs_percent)) ? $punch_detail->tcs_percent : '' ?>">
                   </td>
                </tr>
                <tr>
@@ -214,7 +214,7 @@
                   <td colspan="2">
                      <input type="text" name="Total" id="Total" class="form-control form-control-sm"
                         readonly
-                        value="<?= (isset($punch_detail->Total_Amount)) ? $punch_detail->Total_Amount : '' ?>">
+                        value="<?= (isset($punch_detail->total)) ? $punch_detail->total : '' ?>">
                   </td>
                </tr>
                <tr>
@@ -222,11 +222,11 @@
                   <td colspan="5">
                      <input type="text" name="Total_Discount" id="Total_Discount"
                         class="form-control form-control-sm d-inline"
-                        value="<?= (isset($punch_detail->Total_Discount)) ? $punch_detail->Total_Discount : '' ?>"
+                        value="<?= (isset($punch_detail->total_discount)) ? $punch_detail->total_discount : '' ?>"
                         style="width:100px;">
                      <span><input type="radio" name="plus_minus" id="plus" class="plus_minus" <?php
                         if (isset($punch_detail->Total_Discount)) {
-                           if ($punch_detail->Grand_Total > $punch_detail->Total_Amount) {
+                           if ($punch_detail->grand_total > $punch_detail->total) {
                               echo "checked";
                            }
                         }
@@ -235,7 +235,7 @@
                      </span>
                      <span><input type="radio" name="plus_minus" id="minus" class="plus_minus" <?php
                         if (isset($punch_detail->Total_Discount)) {
-                           if ($punch_detail->Grand_Total < $punch_detail->Total_Amount) {
+                           if ($punch_detail->grand_total < $punch_detail->total) {
                               echo "checked";
                            }
                         } else {
@@ -248,7 +248,7 @@
                <td colspan="2">
                   <input type="text" name="Grand_Total" id="Grand_Total"
                      class="form-control form-control-sm" readonly
-                     value="<?= (isset($punch_detail->Grand_Total)) ? $punch_detail->Grand_Total : '' ?>">
+                     value="<?= (isset($punch_detail->grand_total)) ? $punch_detail->grand_total : '' ?>">
                </td>
                </tr>
             </table>
@@ -258,7 +258,7 @@
          <div class="form-group col-md-12">
             <label for="">Remark / Comment:</label>
             <textarea name="Remark" id="Remark" cols="10" rows="2"
-               class="form-control form-control-sm"><?= (isset($punch_detail->Remark)) ? $punch_detail->Remark : '' ?></textarea>
+               class="form-control form-control-sm"><?= (isset($punch_detail->remark)) ? $punch_detail->remark : '' ?></textarea>
          </div>
       </div>
       <div class="box-footer">
@@ -430,7 +430,7 @@ $(document).ready(function () {
         'From',
         '<?= base_url("extract/ExtractorController/get_company_options") ?>',
         <?= json_encode($cleanedBuyer) ?>,
-        '<?= isset($punch_detail->From_ID) ? $punch_detail->From_ID : "" ?>'
+        '<?= isset($punch_detail->buyer) ? $punch_detail->buyer : "" ?>'
     );
 
 
@@ -438,7 +438,7 @@ $(document).ready(function () {
         'To',
         '<?= base_url("extract/ExtractorController/get_vendor_options") ?>',
         <?= json_encode($cleanedVendor) ?>,
-        '<?= isset($punch_detail->To_ID) ? $punch_detail->To_ID : "" ?>'
+        '<?= isset($punch_detail->vendor) ? $punch_detail->vendor : "" ?>'
     );
 
    $("#To").on("change", function () {
@@ -602,11 +602,13 @@ function loadItemList() {
 
 function getMultiRecord() {
    const scanId = $("#scan_id").val();
+   const docTypeId = $("#DocTypeId").val();
    toggleLoader(true, "contnetBody");
 
    $.post(
-         "<?= base_url() ?>form/InvoiceController/getInvoiceItem", {
-            scan_id: scanId
+         "<?= base_url() ?>Punch/getPunchItems", {
+            scan_id: scanId,
+            type_id: docTypeId
          },
          (response) => {
             if (response.status === 200) {
@@ -624,19 +626,19 @@ function getMultiRecord() {
 }
 
 function populateRow(index, item) {
-   $(`#Particular${index}`).val(item.Particular).trigger("change");
-   $(`#HSN${index}`).val(item.HSN);
-   $(`#Qty${index}`).val(item.Qty);
-   $(`#Unit${index}`).val(item.Unit);
-   $(`#MRP${index}`).val(item.MRP);
-   $(`#Discount${index}`).val(item.Discount);
-   $(`#GST${index}`).val(item.GST);
-   $(`#SGST${index}`).val(item.SGST);
-   $(`#IGST${index}`).val(item.IGST);
-   $(`#Cess${index}`).val(item.Cess);
-   $(`#Price${index}`).val(item.Price);
-   $(`#Amount${index}`).val(item.Amount);
-   $(`#TAmount${index}`).val(item.Total_Amount);
+   $(`#Particular${index}`).val(item.particular).trigger("change");
+   $(`#HSN${index}`).val(item.hsn);
+   $(`#Qty${index}`).val(item.qty);
+   $(`#Unit${index}`).val(item.unit);
+   $(`#MRP${index}`).val(item.mrp);
+   $(`#Discount${index}`).val(item.discount);
+   $(`#GST${index}`).val(item.gst);
+   $(`#SGST${index}`).val(item.sgst);
+   $(`#IGST${index}`).val(item.igst);
+   $(`#Cess${index}`).val(item.cess);
+   $(`#Price${index}`).val(item.price);
+   $(`#Amount${index}`).val(item.amount);
+   $(`#TAmount${index}`).val(item.total_amount);
 }
 
 function addItemRow() {
