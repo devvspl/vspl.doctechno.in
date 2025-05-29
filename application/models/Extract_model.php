@@ -313,12 +313,33 @@ class Extract_model extends CI_Model
     }
     public function getFileLocation($scanId)
     {
+
+        $year_id = $this->year_id ?? null;
+
+        if (!$year_id) {
+            $query = $this->db->select("id")
+                ->from("financial_years")
+                ->where("is_current", 1)
+                ->get();
+
+            if ($query->num_rows() > 0) {
+                $year_id = $query->row()->id;
+            } else {
+                return null;
+            }
+        }
+
+
+        $tableName = "y{$year_id}_scan_file";
+
         $this->db->select("file_path");
-        $this->db->from("y{$this->year_id}_scan_file");
+        $this->db->from($tableName);
         $this->db->where("scan_id", $scanId);
         $query = $this->db->get();
+
         return $query->num_rows() > 0 ? $query->row()->file_path : null;
     }
+
     public function storeExtractedData($typeId, $scanId, $data)
     {
         $tableName = "ext_tempdata_" . $typeId;
