@@ -98,7 +98,7 @@ class Scan extends CI_Controller
             $file = $_FILES['main_file']['name'];
             $file_ext = pathinfo($file, PATHINFO_EXTENSION);
             $year = date('Y');
-            $config['upload_path'] = './Uploads/temp/';
+            $config['upload_path'] = './uploads/temp/';
             $config['allowed_types'] = 'jpg|png|jpeg|pdf';
             $config['max_size'] = 8192;
             $var_temp_name = time() . '.' . $file_ext;
