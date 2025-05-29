@@ -21,7 +21,7 @@ class Extract_model extends CI_Model
         return $api_list;
     }
     public function getFieldDetails($doctype_id, $has_items_feild)
-    {   
+    {
         $tableName = "";
         if ($has_items_feild == "N") {
             $tableName = "ext_tempdata_" . $doctype_id;
@@ -50,25 +50,114 @@ class Extract_model extends CI_Model
         echo json_encode($columns);
         exit;
     }
-    public function getAllTablesList()
-{
-    $query = $this->db->query("SHOW TABLES");
-    $tables = [];
-    foreach ($query->result_array() as $row) {
-        $tables[] = reset($row);
+    public function getAllTablesList($punchOnly)
+    {
+        $tablePrefix = "y{$this->year_id}_punchdata_";
+
+        $query = $this->db->query("SHOW TABLES");
+
+        $tables = [];
+        foreach ($query->result_array() as $row) {
+            $tableName = reset($row);
+
+            if ($punchOnly === 'Y') {
+
+                if (strpos($tableName, $tablePrefix) === 0) {
+                    $tables[] = $tableName;
+                }
+            } else {
+
+                if (strpos($tableName, $tablePrefix) !== 0) {
+                    $tables[] = $tableName;
+                }
+            }
+        }
+
+        return $tables;
     }
-    return $tables; 
-}
+
+    public function saveFieldMappingsValue($doctype_id, $has_items_feild, $fieldMappings, $table)
+    {
+        $defaultMappings = [
+            [
+                "has_items_feild" => $has_items_feild,
+                "temp_column" => "scan_id",
+                "input_type" => "input",
+                "select_table" => null,
+                "relation_column" => null,
+                "relation_value" => null,
+                "punch_table" => $table,
+                "punch_column" => "scan_id",
+            ],
+            [
+                "has_items_feild" => $has_items_feild,
+                "temp_column" => "group_id",
+                "input_type" => "input",
+                "select_table" => null,
+                "relation_column" => null,
+                "relation_value" => null,
+                "punch_table" => $table,
+                "punch_column" => "group_id",
+            ],
+        ];
+
+        $allMappings = array_merge($defaultMappings, $fieldMappings ?? []);
+        $errors = [];
+
+        $this->db->where([
+            "doctype_id" => $doctype_id,
+            "has_items_feild" => $has_items_feild
+        ])->delete("ext_field_mappings");
+
+        foreach ($allMappings as $field) {
+            if (empty($field["punch_table"]) || empty($field["punch_column"])) {
+                continue;
+            }
+
+            $data = [
+                "doctype_id" => $doctype_id,
+                "has_items_feild" => $has_items_feild,
+                "temp_column" => $field["temp_column"],
+                "input_type" => $field["input_type"],
+                "select_table" => $field["select_table"] ?? null,
+                "relation_column" => $field["relation_column"] ?? null,
+                "relation_value" => $field["relation_value"] ?? null,
+                "punch_table" => $field["punch_table"],
+                "punch_column" => $field["punch_column"],
+                "add_condition" => $field["add_condition"] ?? null,
+                "created_at" => date("Y-m-d H:i:s"),
+                "updated_at" => date("Y-m-d H:i:s"),
+            ];
+
+            if (!$this->db->insert("ext_field_mappings", $data)) {
+                $errors[] = "Failed to insert mapping for column: " . $field["temp_column"];
+            }
+        }
+
+        if (empty($errors)) {
+            return [
+                "status" => "success",
+                "message" => "Field mappings saved successfully."
+            ];
+        } else {
+            return [
+                "status" => "error",
+                "message" => "Some field mappings failed to save.",
+                "errors" => $errors
+            ];
+        }
+    }
 
 
-public function getTableColumnsList($table) {
-    $query = $this->db->query("SHOW COLUMNS FROM `$table`");
-    $columns = [];
-    foreach ($query->result() as $row) {
-        $columns[] = $row->Field;
+    public function getTableColumnsList($table)
+    {
+        $query = $this->db->query("SHOW COLUMNS FROM `$table`");
+        $columns = [];
+        foreach ($query->result() as $row) {
+            $columns[] = $row->Field;
+        }
+        return $columns;
     }
-    return $columns; // ✅ Return the result instead of echoing
-}
 
     public function getGroups()
     {
@@ -319,7 +408,7 @@ public function getTableColumnsList($table) {
                     }
                 }
 
-                // Insert into details table
+
                 foreach ($mainItems as $item) {
                     $detailsData = ["scan_id" => $scanId];
                     foreach ($item as $key => $value) {
@@ -336,7 +425,7 @@ public function getTableColumnsList($table) {
                         }
                     }
 
-                    // Assign tax data
+
                     if ($taxData['gst'] !== null) {
                         $detailsData['gst'] = (float) $taxData['gst'];
                     }
@@ -355,14 +444,14 @@ public function getTableColumnsList($table) {
                         $detailsData['total_amount'] = (float) $detailsData['amount'];
                     }
 
-                    // Ensure required fields, including MRP and Discount
+
                     foreach (['particular', 'hsn', 'qty', 'unit', 'price', 'amount', 'mrp', 'discount_in_mrp'] as $requiredField) {
                         if (!isset($detailsData[$requiredField])) {
                             $detailsData[$requiredField] = in_array($requiredField, ['qty', 'price', 'amount', 'mrp', 'discount_in_mrp']) ? 0.00 : '';
                         }
                     }
 
-                    // Insert into details table
+
                     if (!empty($detailsData)) {
                         if (!$this->db->insert($detailsTable, $detailsData)) {
                             $error = $this->db->error();

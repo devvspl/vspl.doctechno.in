@@ -202,7 +202,8 @@ class ExtractorController extends CI_Controller
 
     public function getAllTables()
     {
-        $tables = $this->Extract_model->getAllTablesList();
+        $punchOnly = $this->input->get('punchOnly');
+        $tables = $this->Extract_model->getAllTablesList($punchOnly);
         echo json_encode($tables);
         exit;
     }
@@ -217,10 +218,24 @@ class ExtractorController extends CI_Controller
     {
         $doctype_id = $this->input->post("doctype_id");
         $has_items_feild = $this->input->post("has_items_feild");
-        $fieldMappings = $this->input->post("fieldMappings");
-        $result = $this->Extract_model->saveFieldMappings($doctype_id, $has_items_feild, $fieldMappings);
+        $fieldMappingsRaw = $this->input->post("fieldMappings");
+
+        
+        $fieldMappings = is_string($fieldMappingsRaw) ? json_decode($fieldMappingsRaw, true) : $fieldMappingsRaw;
+
+        
+        if ($has_items_feild == "N") {
+            $table = "y{$this->year_id}_punchdata_{$doctype_id}";
+        } else {
+            $table = "y{$this->year_id}_punchdata_{$doctype_id}_details";
+        }
+
+        
+        $result = $this->Extract_model->saveFieldMappingsValue($doctype_id, $has_items_feild, $fieldMappings, $table);
+
         echo json_encode($result);
     }
+
     public function get_company_options()
     {
         $search_value = $this->input->post('search_value') ?? '';

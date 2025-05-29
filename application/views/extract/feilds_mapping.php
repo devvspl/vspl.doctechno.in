@@ -174,7 +174,7 @@
                     fieldData.forEach((field, idx) => {
                         if (field.select_table) {
                             let selectTableRow = $("#documentDetailsContent tbody tr").eq(idx);
-                            fetchSelectTable(field.select_table, selectTableRow.find(".select-table"));
+                            fetchSelectTable(field.select_table, 'N', selectTableRow.find(".select-table"));
                         }
                     });
                     fieldData.forEach((field, idx) => {
@@ -192,7 +192,7 @@
                     fieldData.forEach((field, idx) => {
                         let selectTableRow = $("#documentDetailsContent tbody tr").eq(idx);
                         let punchTable = field.punch_table ? field.punch_table : "";
-                        fetchSelectTable(punchTable, selectTableRow.find(".punch-table"));
+                        fetchSelectTable(punchTable, 'Y', selectTableRow.find(".punch-table"));
                     });
                     fieldData.forEach((field, idx) => {
                         if (field.punch_column) {
@@ -213,7 +213,7 @@
 
             if (selectedType === "select") {
                 tableDropdown.prop("disabled", false);
-                fetchSelectTable("", tableDropdown);
+                fetchSelectTable("", 'N', tableDropdown);
             } else {
                 tableDropdown.prop("disabled", true).val("");
                 row.find(".relation-column, .relation-value").prop("disabled", true).html('<option value="">-- Select Column --</option>');
@@ -243,9 +243,9 @@
                 columnDropdown.html('<option value="">-- Select Column --</option>').prop("disabled", true);
             }
         });
-        function fetchSelectTable(selectedTable = "", tableDropdown) {
+        function fetchSelectTable(selectedTable = "", punchOnly, tableDropdown) {
             $.ajax({
-                url: "<?= base_url('extract/ExtractorController/getAllTables'); ?>",
+                url: "<?= base_url('extract/ExtractorController/getAllTables'); ?>" + '?punchOnly=' + punchOnly,
                 type: "POST",
                 success: function (response) {
                     let tables = JSON.parse(response);
