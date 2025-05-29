@@ -545,7 +545,7 @@ class Extract_model extends CI_Model
         if (!$tempData) {
             return ["status" => "error", "message" => "No data found in temp table for scan_id: $scanId"];
         }
-        $punchData = ["scan_id" => $scanId, "doctype" => $docType, "doctype_id" => $docTypeId, "created_by" => $this->session->userdata("user_id") ?? 0, "created_at" => date("Y-m-d H:i:s")];
+        $punchData = ["doctype" => $docType, "doctype_id" => $docTypeId, "created_by" => $this->session->userdata("user_id") ?? 0, "created_at" => date("Y-m-d H:i:s")];
         foreach ($tempData as $key => $value) {
             if (isset($fieldMap[$key])) {
                 $map = $fieldMap[$key];
