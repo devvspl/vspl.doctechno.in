@@ -138,11 +138,20 @@ class BillApproverController extends CI_Controller
     }
     public function my_approved_bill()
     {
-        $bill_list = $this->db->where('bill_approval_status', 'Y')->where('bill_approver_id', $this->session->userdata('user_id'))->join('master_work_location', 'master_work_location.location_id = y{$this->year_id}_scan_file.location_id', 'left')->get("y{$this->year_id}_scan_file")->result_array();
+        $table = "y{$this->year_id}_scan_file";
+
+        $bill_list = $this->db
+            ->where('bill_approval_status', 'Y')
+            ->where('bill_approver_id', $this->session->userdata('user_id'))
+            ->join('master_work_location', "master_work_location.location_id = {$table}.location_id", 'left')
+            ->get($table)
+            ->result_array();
+
         $this->data['bill_list'] = $bill_list;
         $this->data['main'] = 'bill_approver/approved_bill_list';
         $this->load->view('layout/template', $this->data);
     }
+
     public function rejected_bill_by_me()
     {
         $bill_list = $this->db->where('bill_approval_status', 'R')->where('bill_approver_id', $this->session->userdata('user_id'))->join('master_work_location', 'master_work_location.location_id = y{$this->year_id}_scan_file.location_id', 'left')->get("y{$this->year_id}_scan_file")->result_array();
