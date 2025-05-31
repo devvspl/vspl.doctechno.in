@@ -17,10 +17,10 @@
                            <tr class="text-center">
                               <th>S.No</th>
                               <th>Document Name</th>
-                              <th>Location</th>
+                              <!-- <th>Location</th> -->
                               <th>File</th>
                               <th class="no-print">Support</th>
-                              <th class="text-center">Bill Approver</th>
+                              <!-- <th class="text-center">Bill Approver</th> -->
                            </tr>
                         </thead>
                         <tbody>
@@ -36,9 +36,9 @@
                               <td class="mailbox-name">
                                  <?php echo $row['document_name']; ?>
                               </td>
-                              <td class="mailbox-name">
+                              <!-- <td class="mailbox-name">
                                  <?php echo $this->customlib->get_Location_Name($row['location_id']); ?>
-                              </td>
+                              </td> -->
                               <td class="mailbox-name">
                                  <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['file_path']  ?>','popup','width=600,height=600');"> <?php echo $row['file_name'] ?></a>
                               </td>
@@ -47,7 +47,7 @@
                                  <a href="javascript:void(0);" class="btn btn-link btn-xs" onclick="getSupportFile(<?= $row['scan_id'] ?>)"><i class="fa fa-eye"></i></a>
                                  <?php } ?>
                               </td>
-                              <td class="mailbox-name no-print" style="display: flex;gap: 10px;align-items: center;">
+                              <!-- <td class="mailbox-name no-print" style="display: flex;gap: 10px;align-items: center;">
                                  <div class="w-100">
                                     <select
                                        name="Scan_id"
@@ -76,7 +76,7 @@
                                        title="Edit Approver"
                                        ></i>
                                  </div>
-                              </td>
+                              </td> -->
                               <?php
                                  }
                                  $count++;

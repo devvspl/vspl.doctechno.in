@@ -44,7 +44,7 @@ class Bill_approver_model extends MY_Model {
         $this->db->where('status', 'A');
         $this->db->where('is_deleted', 'N');
         $this->db->where('firm_type', 'Company');
-        $this->db->where('firm_id =', 2790);
+        $this->db->where('firm_id =', 2575);
         $result = $this->db->get()->result_array();
         return $result;
     }

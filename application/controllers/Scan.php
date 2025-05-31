@@ -85,13 +85,13 @@ class Scan extends CI_Controller
     }
     public function temp_upload_main()
     {
-        $this->load->library('form_validation');
-        $this->form_validation->set_rules('location', 'location_id', 'required|trim');
-        $this->form_validation->set_rules('bill_approver', 'Bill Approver', 'required|trim');
-        if ($this->form_validation->run() == false) {
-            $this->session->set_flashdata('message', '<div class="alert alert-danger">' . validation_errors() . '</div>');
-            redirect('temp_scan');
-        } else {
+        // $this->load->library('form_validation');
+        // $this->form_validation->set_rules('location', 'location_id', 'required|trim');
+        // $this->form_validation->set_rules('bill_approver', 'Bill Approver', 'required|trim');
+        // if ($this->form_validation->run() == false) {
+        //     $this->session->set_flashdata('message', '<div class="alert alert-danger">' . validation_errors() . '</div>');
+        //     redirect('temp_scan');
+        // } else {
             $Temp_Scan_By = $this->session->userdata('user_id');
             $location = $this->input->post('location');
             $bill_approver = $this->input->post('bill_approver');
@@ -128,7 +128,7 @@ class Scan extends CI_Controller
                     redirect('scan/temp_upload_supporting/' . $insert_id);
                 }
             }
-        }
+        // }
     }
     public function upload_supporting($id)
     {

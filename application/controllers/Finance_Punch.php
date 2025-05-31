@@ -140,10 +140,9 @@ class Finance_Punch extends CI_Controller
     }
     function getDepartmentList()
     {
-        $Company = $this->input->post("Company");
-        $this->db->select("department_id,department_name");
-        $this->db->from("master_department");
-        $this->db->where("company_id", $Company);
+        $this->db->select("*");
+        $this->db->from("core_department");
+        $this->db->where("is_active", 1);
         $query = $this->db->get();
         $result = $query->result();
         if (!empty($result)) {

@@ -1,151 +1,146 @@
 <div id="invoice-details" class="tab-content active">
-   <form action="<?= base_url(); ?>form/Miscellaneous_ctrl/save_lodging" id="bankstatementform"
-      name="bankstatementform" method="post" accept-charset="utf-8">
+   <form action="<?= base_url(); ?>Punch/savePunchToDatabase" id="bankstatementform" name="bankstatementform"
+      method="post" accept-charset="utf-8">
       <input type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id ?>">
       <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $doc_type_id ?>">
       <div class="row">
-         <div class="col-md-4">
-            <label for="">Location :</label>
+         <div class="form-group col-md-4">
+            <label for="location">Location:</label>
             <small class="text-danger">
-            <?php echo isset($temp_punch_detail) ? $temp_punch_detail->location : ''; ?>
+               <?php echo isset($temp_punch_detail) ? $temp_punch_detail->location : ''; ?>
             </small>
-            <select name="Location" id="location_id" class="form-control">
+            <select name="location" id="location_id" class="form-control">
                <option value="">Select Location</option>
             </select>
          </div>
          <div class="form-group col-md-4">
-            <label for="">Bill No:</label>
-            <input type="text" name="Bill_No" id="Bill_No" class="form-control"
-               value="<?= (isset($punch_detail->File_No)) ? $punch_detail->File_No : '' ?>">
+            <label for="bill_no">Bill No:</label>
+            <input type="text" name="bill_no" id="bill_no" class="form-control"
+               value="<?= (isset($punch_detail->bill_no)) ? $punch_detail->bill_no : '' ?>">
          </div>
-         <div class="col-md-4 form-group">
-            <label for="">Bill Date:</label>
-            <input type="text" name="Bill_Date" id="Bill_Date" class="form-control datepicker"
-               value="<?= (isset($punch_detail->BillDate)) ? date('Y-m-d', strtotime($punch_detail->BillDate)) : '' ?>"
+         <div class="form-group col-md-4">
+            <label for="bill_date">Bill Date:</label>
+            <input type="text" name="bill_date" id="bill_date" class="form-control datepicker"
+               value="<?= (isset($punch_detail->bill_date)) ? date('Y-m-d', strtotime($punch_detail->bill_date)) : '' ?>"
                autocomplete="off">
          </div>
       </div>
       <div class="row">
          <div class="form-group col-md-6">
-            <label for="">Billing Name:</label>
+            <label for="billing_name">Billing Name:</label>
             <small class="text-danger">
-            <?php echo isset($temp_punch_detail) ? $temp_punch_detail->billing_name : ''; ?>
+               <?php echo isset($temp_punch_detail) ? $temp_punch_detail->billing_name : ''; ?>
             </small>
-            <select name="Billing_Name" id="Billing_Name" class="form-control select2">
+            <select name="billing_name" id="billing_name" class="form-control select2">
                <option value="">Select</option>
-   
             </select>
          </div>
          <div class="form-group col-md-6">
-            <label for="">Billing Address:</label>
-            <input type="text" name="Billing_Address" id="Billing_Address" class="form-control"
-               value="<?= (isset($punch_detail->Related_Address)) ? $punch_detail->Related_Address : '' ?>"
-               readonly>
+            <label for="billing_address">Billing Address:</label>
+            <input type="text" name="billing_address" id="billing_address" class="form-control"
+               value="<?= (isset($punch_detail->billing_address)) ? $punch_detail->billing_address : '' ?>" readonly>
          </div>
       </div>
       <div class="row">
          <div class="form-group col-md-6">
-            <label for="">Hotel Name:</label>
+            <label for="hotel_name">hotel Name:</label>
             <small class="text-danger">
-            <?php echo isset($temp_punch_detail) ? $temp_punch_detail->hotel_name : ''; ?>
+               <?php echo isset($temp_punch_detail) ? $temp_punch_detail->hotel_name : ''; ?>
             </small>
-            <select name="Hotel" id="Hotel" class="form-control">
+            <select name="hotel_name" id="hotel" class="form-control">
                <option value="">Select</option>
-              
             </select>
          </div>
          <div class="form-group col-md-6">
-            <label for="">Hotel Address:</label>
-            <input type="text" name="Hotel_Address" id="Hotel_Address" class="form-control"
-               value="<?= (isset($punch_detail->Hotel_Address)) ? $punch_detail->Hotel_Address : '' ?>"
-               readonly>
+            <label for="hotel_address">hotel Address:</label>
+            <input type="text" name="hotel_address" id="hotel_address" class="form-control"
+               value="<?= (isset($punch_detail->hotel_address)) ? $punch_detail->hotel_address : '' ?>" readonly>
          </div>
       </div>
       <div class="row">
-         <div class="col-md-3 form-group">
-            <label for="">Billing instruction</label>
-            <select name="Billing_Instruction" id="Billing_Instruction" class="form-control">
+         <div class="form-group col-md-3">
+            <label for="billing_instruction">Billing Instruction:</label>
+            <select name="billing_instruction" id="billing_instruction" class="form-control">
                <option value="">Select</option>
                <?php
-                  $Billing_Instruction = array('Direct ', 'Bill to Company');
-                  foreach ($Billing_Instruction as $key => $value) { ?>
-               <option value="<?= $value ?>" <?php if (isset($punch_detail->Particular) && $punch_detail->Particular == $value) {
-                  echo "selected";
-                  } ?>><?= $value ?></option>
+               $billing_instruction = ['Direct', 'Bill to Company'];
+               foreach ($billing_instruction as $value) { ?>
+                  <option value="<?= $value ?>" <?php if (isset($punch_detail->billing_instruction) && $punch_detail->billing_instruction == $value) {
+                       echo "selected";
+                    } ?>><?= $value ?></option>
                <?php } ?>
             </select>
          </div>
-         <div class="col-md-3 form-group">
-            <label for="Booking_Id"> Booking ID:</label>
-            <input type="text" name="Booking_Id" id="Booking_Id" class="form-control"
-               value="<?= (isset($punch_detail->RegNo)) ? $punch_detail->RegNo : '' ?>">
+         <div class="form-group col-md-3">
+            <label for="booking_id">Booking ID:</label>
+            <input type="text" name="booking_id" id="booking_id" class="form-control"
+               value="<?= (isset($punch_detail->booking_id)) ? $punch_detail->booking_id : '' ?>">
          </div>
-         <div class="col-md-3 form-group">
-            <label for="">Chk. In Date/Time:</label>
-            <input type="text" name="Arrival_Date" id="Arrival_Date" class="form-control datetimepicker"
-               value="<?= (isset($punch_detail->FromDateTime)) ? $punch_detail->FromDateTime : '' ?>"
+         <div class="form-group col-md-3">
+            <label for="check_in">Check In Date/Time:</label>
+            <input type="text" name="check_in" id="arrival_date" class="form-control datetimepicker"
+               value="<?= (isset($punch_detail->check_in)) ? $punch_detail->check_in : '' ?>"
                onchange="calculate_duration();">
          </div>
          <div class="form-group col-md-3">
-            <label for="">Chk. Out Date/Time:</label>
-            <input type="text" name="Departure_Date" id="Departure_Date" class="form-control datetimepicker"
-               value="<?= (isset($punch_detail->ToDateTime)) ? $punch_detail->ToDateTime : '' ?>"
+            <label for="check_out">Check Out Date/Time:</label>
+            <input type="text" name="check_out" id="departure_date" class="form-control datetimepicker"
+               value="<?= (isset($punch_detail->check_out)) ? $punch_detail->check_out : '' ?>"
                onchange="calculate_duration();">
          </div>
       </div>
       <div class="row">
          <div class="form-group col-md-3">
-            <label for="">Duration of Stay:</label>
-            <input type="text" name="Duration" id="Duration" class="form-control"
-               value="<?= (isset($punch_detail->Period)) ? $punch_detail->Period : '' ?>" readonly>
+            <label for="duration_of_stay">duration of Stay:</label>
+            <input type="text" name="duration_of_stay" id="duration" class="form-control"
+               value="<?= (isset($punch_detail->duration_of_stay)) ? $punch_detail->duration_of_stay : '' ?>" readonly>
          </div>
-         <div class="col-md-3 form-group">
-            <label for="No_Room">Number of Rooms :</label>
+         <div class="form-group col-md-3">
+            <label for="number_of_rooms">Number of Rooms:</label>
             <?php
-               $list = array('1' => 1, '2' => 2, '3' => 3, '4' => 4, '5' => 5, '6' => 6, '7' => 7, '8' => 8, '9' => 9, '10' => 10);
-               echo form_dropdown('No_Room', $list, (isset($punch_detail->ReferenceNo)) ? $punch_detail->ReferenceNo : '', 'class="form-control" id="No_Room" onchange="calculate();"');
-               ?>
+            $room_list = array_combine(range(1, 10), range(1, 10));
+            echo form_dropdown('number_of_rooms', $room_list, (isset($punch_detail->number_of_rooms)) ? $punch_detail->number_of_rooms : '', 'class="form-control" id="number_of_rooms" onchange="calculate();"');
+            ?>
          </div>
          <div class="form-group col-md-3">
-            <label for="">Room Type:</label>
-            <input type="text" name="Room_Type" id="Room_Type" class="form-control"
-               value="<?= (isset($punch_detail->TravelClass)) ? $punch_detail->TravelClass : '' ?>">
+            <label for="room_type">Room Type:</label>
+            <input type="text" name="room_type" id="room_type" class="form-control"
+               value="<?= (isset($punch_detail->room_type)) ? $punch_detail->room_type : '' ?>">
          </div>
          <div class="form-group col-md-3">
-            <label for="">Meal Plan:</label>
-            <input type="text" name="Meal" id="Meal" class="form-control"
-               value="<?= (isset($punch_detail->Loc_Name)) ? $punch_detail->Loc_Name : '' ?>">
+            <label for="meal_plan">Meal Plan:</label>
+            <input type="text" name="meal_plan" id="meal" class="form-control"
+               value="<?= (isset($punch_detail->meal_plan)) ? $punch_detail->meal_plan : '' ?>">
          </div>
       </div>
       <div class="row">
          <table class="table">
             <thead style="text-align: center;">
                <th style="width: 10%">#</th>
-               <th style="width: 50%;">Employee</th>
-               <th style="width: 20%">Emp Cpde</th>
+               <th style="width: 50%;">employee</th>
+               <th style="width: 20%">Emp Code</th>
                <th></th>
             </thead>
             <tbody id="multi_record">
                <tr>
                   <td>1</td>
                   <td>
-                     <select name="Employee[]" id="Employee1"
-                        class="form-control form-select form-select-sm select2" onchange="getCode(1)">
+                     <select name="employee[]" id="employee1" class="form-control select2" onchange="getCode(1)">
                         <option value="">Select</option>
                         <?php
-                           foreach ($employee_list as $key => $value) {
-                           	$id = htmlspecialchars($value['id']);
-                           	$code = htmlspecialchars($value['emp_code']);
-                           	$name = htmlspecialchars($value['emp_name']);
-                           	$company = htmlspecialchars($value['company_code']);
-                           	echo "<option value='{$id}' data-code='{$code}'>{$name} - {$company}</option>";
-                           }
-                           ?>
+                        foreach ($employee_list as $value) {
+                           $id = htmlspecialchars($value['id']);
+                           $code = htmlspecialchars($value['emp_code']);
+                           $name = htmlspecialchars($value['emp_name']);
+                           $company = htmlspecialchars($value['company_code']);
+                           $selected = (isset($punch_detail->employee) && $punch_detail->employee == $id) ? 'selected' : '';
+                           echo "<option value='{$id}' data-code='{$code}' {$selected}>{$name} - {$company}</option>";
+                        }
+                        ?>
                      </select>
                   </td>
                   <td>
-                     <input type="text" readonly name="EmpCode[]" id="EmpCode1"
-                        class="form-control form-control-sm">
+                     <input type="text" readonly name="emp_code[]" id="empcode1" class="form-control form-control-sm">
                   </td>
                   <td>
                      <button type="button" name="add" id="add" class="btn btn-primary btn-xs"
@@ -156,227 +151,230 @@
          </table>
       </div>
       <div class="row">
-         <div class="col-md-4 form-group">
-            <label for="Room_Rate">Rate:</label>
-            <input type="number" class="form-control" min="1" step="0.5" id="Room_Rate" name="Room_Rate" onchange="calculate();" value="<?= (isset($punch_detail->TariffPlan)) ? $punch_detail->TariffPlan : '' ?>">
+         <div class="form-group col-md-4">
+            <label for="rate">Rate:</label>
+            <input type="number" class="form-control" min="1" step="0.5" id="room_rate" name="rate"
+               onchange="calculate();" value="<?= (isset($punch_detail->rate)) ? $punch_detail->rate : '' ?>">
          </div>
-         <div class="col-md-4 form-group">
-            <label for="Amount">Amount:</label>
-            <input type="number" class="form-control" readonly id="Amount" name="Amount" value="<?= (isset($punch_detail->SubTotal)) ? $punch_detail->SubTotal : '' ?>">
+         <div class="form-group col-md-4">
+            <label for="amount">amount:</label>
+            <input type="number" class="form-control" readonly id="amount" name="amount"
+               value="<?= (isset($punch_detail->amount)) ? $punch_detail->amount : '' ?>">
          </div>
-         <div class="col-md-4 form-group">
-            <label for="Other_Charge">Other Charges (+):</label>
-            <input type="number" class="form-control" id="Other_Charge" name="Other_Charge" onchange="calculate();" value="<?= (isset($punch_detail->OthCharge_Amount)) ? $punch_detail->OthCharge_Amount : '' ?>">
+         <div class="form-group col-md-4">
+            <label for="other_charges">Other Charges (+):</label>
+            <input type="number" class="form-control" id="other_charge" name="other_charges" onchange="calculate();"
+               value="<?= (isset($punch_detail->other_charges)) ? $punch_detail->other_charges : '' ?>">
          </div>
-         <div class="col-md-4 form-group">
-            <label for="Discount">Discount (-):</label>
-            <input type="number" class="form-control" id="Discount" name="Discount" onchange="calculate();" value="<?= (isset($punch_detail->Total_Discount)) ? $punch_detail->Total_Discount : '' ?>">
+         <div class="form-group col-md-4">
+            <label for="discount">discount (-):</label>
+            <input type="number" class="form-control" id="discount" name="discount" onchange="calculate();"
+               value="<?= (isset($punch_detail->discount)) ? $punch_detail->discount : '' ?>">
          </div>
-         <div class="col-md-4 form-group">
-            <label for="Gst">GST (%):</label>
-            <input type="number" class="form-control" id="Gst" name="Gst" onchange="calculate();" value="<?= (isset($punch_detail->GSTIN)) ? $punch_detail->GSTIN : '' ?>">
+         <div class="form-group col-md-4">
+            <label for="gst">gst (%):</label>
+            <input type="number" class="form-control" id="gst" name="gst" onchange="calculate();"
+               value="<?= (isset($punch_detail->gst)) ? $punch_detail->gst : '' ?>">
          </div>
-         <div class="col-md-4 form-group">
-            <label for="Grand_Total">Grand Total:</label>
-            <input type="number" class="form-control" id="Grand_Total" name="Grand_Total" step="0.1" value="<?= (isset($punch_detail->Grand_Total)) ? $punch_detail->Grand_Total : '' ?>">
+         <div class="form-group col-md-4">
+            <label for="grand_total">Grand Total:</label>
+            <input type="number" class="form-control" id="grand_total" name="grand_total" step="0.1"
+               value="<?= (isset($punch_detail->grand_total)) ? $punch_detail->grand_total : '' ?>">
          </div>
       </div>
       <div class="row mt-3">
          <div class="form-group col-md-12">
-            <label for="">Remark / Comment:</label>
-            <textarea name="Remark" id="Remark" cols="10" rows="3"
-               class="form-control"><?= (isset($punch_detail->Remark)) ? $punch_detail->Remark : '' ?></textarea>
+            <label for="remark_comment">Remark / Comment:</label>
+            <textarea name="remark_comment" id="remark_comment" cols="10" rows="3"
+               class="form-control"><?= (isset($punch_detail->remark_comment)) ? $punch_detail->remark_comment : '' ?></textarea>
          </div>
       </div>
       <div class="box-footer">
          <button type="reset" class="btn btn-danger">Reset</button>
-         <?php if (!empty($user_permission) &&  $user_permission == 'N') : ?>
-         <input type="submit" class="btn btn-success pull-right" style="margin-left: 20px;" name="submit" value="Final Submit"></input>
+         <?php if (!empty($user_permission) && $user_permission == 'N'): ?>
+            <input type="submit" class="btn btn-success pull-right" style="margin-left: 20px;" name="submit"
+               value="Final Submit"></input>
          <?php endif; ?>
-         <?php if (!empty($user_permission) && ($user_permission == 'Y' || $user_permission == 'N')) : ?>
-         <input type="submit" class="btn btn-info pull-right"  name="save_as_draft" value="Save as Draft"></input>
+         <?php if (!empty($user_permission) && ($user_permission == 'Y' || $user_permission == 'N')): ?>
+            <input type="submit" class="btn btn-info pull-right" name="save_as_draft" value="Save as Draft"></input>
          <?php endif; ?>
       </div>
-      <?php
-         if ($this->customlib->haveSupportFile($scan_id) == 1) {
-         	?>
-      <div class="row" style="margin-top: 20px;">
-         <div class="col-md-12">
-            <label for="">Supporting File:</label>
-            <div class="form-group">
-               <?php
+      <?php if ($this->customlib->haveSupportFile($scan_id) == 1): ?>
+         <div class="row" style="margin-top: 20px;">
+            <div class="col-md-12">
+               <label for="supporting_file">Supporting File:</label>
+               <div class="form-group">
+                  <?php
                   $support_file = $this->customlib->getSupportFile($scan_id);
-                  
                   foreach ($support_file as $row) {
-                  	?>
-               <div class="col-md-3">
-                  <a href="javascript:void(0);" target="popup"
-                     onclick="window.open('<?= $row['file_path'] ?>','popup','width=600,height=600');"> <?php echo $row['file_name'] ?></a>
+                     ?>
+                     <div class="col-md-3">
+                        <a href="javascript:void(0);" target="popup"
+                           onclick="window.open('<?= $row['file_path'] ?>','popup','width=600,height=600');"><?php echo $row['file_name'] ?></a>
+                     </div>
+                  <?php } ?>
                </div>
-               <?php
-                  }
-                  ?>
             </div>
          </div>
-      </div>
-      <?php } ?>
+      <?php endif; ?>
    </form>
 </div>
 <script>
    $(".select2").select2();
    $("#location_id").select2();
-   $("#Hotel").select2();
-   $("#Billing_Name").select2();
-   $(document).on("change", "#Billing_Name", function () {
-   	var address = $(this).find(':selected').data('address');
-   	$("#Billing_Address").val(address);
+   $("#hotel").select2();
+   $("#billing_name").select2();
+   $(document).on("change", "#billing_name", function () {
+      var address = $(this).find(':selected').data('address');
+      $("#billing_address").val(address);
    });
-   $(document).on("change", "#Hotel", function () {
-   	var address = $(this).find(':selected').data('address');
-   	$("#Hotel_Address").val(address);
+   $(document).on("change", "#hotel", function () {
+      var address = $(this).find(':selected').data('address');
+      $("#hotel_address").val(address);
    });
-   
+
    $(".datetimepicker").datetimepicker({
-   	timepicker: true,
-   	format: 'Y-m-d H:i:s'
+      timepicker: true,
+      format: 'Y-m-d H:i:s'
    });
-   
+
    $(".datepicker").datetimepicker({
-   	timepicker: false,
-   	format: 'Y-m-d'
+      timepicker: false,
+      format: 'Y-m-d'
    });
-   
+
    function calculate_duration() {
-   	const check_in = $("#Arrival_Date").val();
-   	const check_out = $("#Departure_Date").val();
-   
-   	if (!check_in || !check_out) {
-   		return;
-   	}
-   
-   	const timeDiff = Math.abs(new Date(check_out) - new Date(check_in));
-   	const duration = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-   
-   	$("#Duration").val(duration);
+      const check_in = $("#arrival_date").val();
+      const check_out = $("#departure_date").val();
+
+      if (!check_in || !check_out) {
+         return;
+      }
+
+      const timeDiff = Math.abs(new Date(check_out) - new Date(check_in));
+      const duration = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+
+      $("#duration").val(duration);
    }
-   
+
    $(document).ready(function () {
-   
-   	var employee_list = <?= json_encode($employee_list) ?>;
-   
-   
-   	$(document).on('click', '#add', function () {
-   		Count++;
-   		multi_record(Count);
-   	});
-   	$(document).on('click', '#remove', function () {
-   		$(this).closest('tr').remove();
-   	});
-   	var Count = 1;
-   
-   	getMultiRecord();
-   	function getMultiRecord() {
-   		var scan_id = $('#scan_id').val();
-   		$.ajax({
-   			url: '<?= base_url() ?>form/Miscellaneous_ctrl/getLodgingEmployee',
-   			type: 'POST',
-   			data: {
-   				scan_id: scan_id
-   			},
-   			dataType: 'json',
-   			success: function (response) {
-   
-   				if (response.status == 200) {
-   					Count = (response.data).length;
-   
-   					for (var i = 1; i <= Count; i++) {
-   						if (i >= 2) {
-   							multi_record(i);
-   						}
-   						$("#Employee" + i).val(response.data[i - 1].emp_id).trigger('change');
-   						$("#EmpCode" + i).val(response.data[i - 1].emp_code);
-   
-   					}
-   				}
-   			}
-   		});
-   	}
-   
-   	function multi_record(num) {
-   		var html = '';
-   		html += '<tr>';
-   		html += '<td>' + num + '</td>';
-   		html += '<td><select name="Employee[]" id="Employee' + num + '" class="form-control form-select form-select-sm select2" onchange="getCode(' + num + ')"><option value="">Select</option>' +
-   			employee_list.map(function (item) {
-   				return '<option value="' + item.id + '" data-code="' + item.emp_code + '">' + item.emp_name + ' - ' + item.company_code + '</option>';
-   			}).join('') +
-   			'</select></td>';
-   		html += '<td><input type="text" readonly name="EmpCode[]" id="EmpCode' + num + '" class="form-control form-control-sm"></td>';
-   		html += '<td><button type="button" name="remove" id="remove" class="btn btn-danger btn-xs remove" style="margin-top: 2px;"><i class="fa fa-minus"></i></button></td>';
-   		html += '</tr>';
-   		$('#multi_record').append(html);
-   		$(".select2").select2();
-   
-   	}
+
+      var employee_list = <?= json_encode($employee_list) ?>;
+
+
+      $(document).on('click', '#add', function () {
+         Count++;
+         multi_record(Count);
+      });
+      $(document).on('click', '#remove', function () {
+         $(this).closest('tr').remove();
+      });
+      var Count = 1;
+
+      getMultiRecord();
+      function getMultiRecord() {
+         var scan_id = $('#scan_id').val();
+         const docTypeId = $("#DocTypeId").val();
+         $.ajax({
+            url: '<?= base_url() ?>Punch/getEmployeeItems',
+            type: 'POST',
+            data: {
+               scan_id: scan_id,
+               type_id: docTypeId
+            },
+            dataType: 'json',
+            success: function (response) {
+
+               if (response.status == 200) {
+                  Count = (response.data).length;
+
+                  for (var i = 1; i <= Count; i++) {
+                     if (i >= 2) {
+                        multi_record(i);
+                     }
+                     $("#employee" + i).val(response.data[i - 1].emp_name).trigger('change');
+                     $("#empcode" + i).val(response.data[i - 1].emp_code);
+
+                  }
+               }
+            }
+         });
+      }
+
+      function multi_record(num) {
+         var html = '';
+         html += '<tr>';
+         html += '<td>' + num + '</td>';
+         html += '<td><select name="employee[]" id="employee' + num + '" class="form-control form-select form-select-sm select2" onchange="getCode(' + num + ')"><option value="">Select</option>' +
+            employee_list.map(function (item) {
+               return '<option value="' + item.id + '" data-code="' + item.emp_code + '">' + item.emp_name + ' - ' + item.company_code + '</option>';
+            }).join('') +
+            '</select></td>';
+         html += '<td><input type="text" readonly name="emp_code[]" id="empcode' + num + '" class="form-control form-control-sm"></td>';
+         html += '<td><button type="button" name="remove" id="remove" class="btn btn-danger btn-xs remove" style="margin-top: 2px;"><i class="fa fa-minus"></i></button></td>';
+         html += '</tr>';
+         $('#multi_record').append(html);
+         $(`#employee${num}`).select2()
+      }
    });
-   
+
    function getCode(num) {
-   	var code = $("#Employee" + num).find(':selected').data('code');
-   	$("#EmpCode" + num).val(code);
+      var code = $("#employee" + num).find(':selected').data('code');
+      $("#empcode" + num).val(code);
    }
-   
+
    function calculate() {
-   	const duration = parseFloat($("#Duration").val()) || 1;
-   	const no_room = parseFloat($("#No_Room").val()) || 1;
-   	const room_rate = parseFloat($("#Room_Rate").val()) || 1;
-   	const other_charge = parseFloat($("#Other_Charge").val()) || 0;
-   	const discount = parseFloat($("#Discount").val()) || 0;
-   	const gst = parseFloat($("#Gst").val()) || 0;
-   	let total = duration * no_room * room_rate;
-   	$("#Amount").val(total);
-   	let sub_total = total + other_charge - discount;
-   	sub_total *= 1 + gst / 100;
-   	$("#Grand_Total").val((sub_total).toFixed(2));
+      const duration = parseFloat($("#duration").val()) || 1;
+      const number_of_rooms = parseFloat($("#number_of_rooms").val()) || 1;
+      const room_rate = parseFloat($("#room_rate").val()) || 1;
+      const other_charge = parseFloat($("#other_charge").val()) || 0;
+      const discount = parseFloat($("#discount").val()) || 0;
+      const gst = parseFloat($("#gst").val()) || 0;
+      let total = duration * number_of_rooms * room_rate;
+      $("#amount").val(total);
+      let sub_total = total + other_charge - discount;
+      sub_total *= 1 + gst / 100;
+      $("#grand_total").val((sub_total).toFixed(2));
    }
    $(document).ready(function () {
-   $("#invoice-tab").click(function () {
-        $("#additional-info").removeClass("active");
-        $("#invoice-details").addClass("active");
-        $(".tabs").removeClass("active-tab");
-        $(this).addClass("active-tab");
-    });
-   
-    $("#additional-info-tab").click(function () {
-        $("#invoice-details").removeClass("active");
-        $("#additional-info").addClass("active");
-        $(".tabs").removeClass("active-tab");
-        $(this).addClass("active-tab");
-    });
-   
-   <?php 
-      $cleanedCompany = cleanSearchValue( isset($temp_punch_detail->billing_name) && !is_null($temp_punch_detail->billing_name) ? $temp_punch_detail->billing_name : "");
-      $cleanedHotel = cleanSearchValue( isset($temp_punch_detail->hotel_name) && !is_null($temp_punch_detail->hotel_name) ? $temp_punch_detail->hotel_name : "");
-      $cleanedLocation = cleanSearchValue( isset($temp_punch_detail->location) && !is_null($temp_punch_detail->location) ? $temp_punch_detail->location : "");
-   ?>
-   
-   loadDropdownOptions(
-        'Billing_Name',
-        '<?= base_url("extract/ExtractorController/get_company_options") ?>',
-        <?= json_encode($cleanedCompany) ?>,
-        '<?= isset($punch_detail->CompanyID) ? $punch_detail->CompanyID : "" ?>'
-    );
+      $("#invoice-tab").click(function () {
+         $("#additional-info").removeClass("active");
+         $("#invoice-details").addClass("active");
+         $(".tabs").removeClass("active-tab");
+         $(this).addClass("active-tab");
+      });
+
+      $("#additional-info-tab").click(function () {
+         $("#invoice-details").removeClass("active");
+         $("#additional-info").addClass("active");
+         $(".tabs").removeClass("active-tab");
+         $(this).addClass("active-tab");
+      });
+
+      <?php
+      $cleanedCompany = cleanSearchValue(isset($temp_punch_detail->billing_name) && !is_null($temp_punch_detail->billing_name) ? $temp_punch_detail->billing_name : "");
+      $cleanedhotel = cleanSearchValue(isset($temp_punch_detail->hotel_name) && !is_null($temp_punch_detail->hotel_name) ? $temp_punch_detail->hotel_name : "");
+      $cleanedLocation = cleanSearchValue(isset($temp_punch_detail->location) && !is_null($temp_punch_detail->location) ? $temp_punch_detail->location : "");
+      ?>
+
       loadDropdownOptions(
-         'Hotel',
+         'billing_name',
+         '<?= base_url("extract/ExtractorController/get_company_options") ?>',
+         <?= json_encode($cleanedCompany) ?>,
+         '<?= isset($punch_detail->billing_name) ? $punch_detail->billing_name : "" ?>'
+      );
+      loadDropdownOptions(
+         'hotel',
          '<?= base_url("extract/ExtractorController/get_hotel_options") ?>',
-         <?= json_encode($cleanedHotel) ?>,
-         '<?= isset($punch_detail->Hotel) ? $punch_detail->Hotel : "" ?>'
+         <?= json_encode($cleanedhotel) ?>,
+         '<?= isset($punch_detail->hotel_name) ? $punch_detail->hotel_name : "" ?>'
       );
       loadDropdownOptions(
          'location_id',
          '<?= base_url("extract/ExtractorController/get_location_options") ?>',
          <?= json_encode($cleanedLocation) ?>,
-         '<?= isset($punch_detail->location_id) ? $punch_detail->location_id : "" ?>'
+         '<?= isset($punch_detail->location) ? $punch_detail->location : "" ?>'
       );
-   
-});
+
+   });
 </script>

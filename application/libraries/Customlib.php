@@ -178,9 +178,8 @@ class Customlib
     public function getDepartmentList()
     {
         $this->CI->db->select('*');
-        $this->CI->db->from('master_department');
-        $this->CI->db->where('is_deleted', 'N');
-        $this->CI->db->order_by('department_name', 'asc');
+        $this->CI->db->from('core_department');
+        $this->CI->db->where('is_active', 1);
         $result = $this->CI->db->get()->result_array();
         return $result;
     }

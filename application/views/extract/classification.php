@@ -98,6 +98,7 @@
 <script>
 $(document).ready(function () {
     $("#location_id").select2();
+    $('.select2').select2();
     $(".view-details").on("click", function () {
         let scanId = $(this).data("scan-id");
         $("#documentDetailsModal").modal("show");
@@ -117,48 +118,119 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on("click", ".extract-btn", function () {
-        let $button = $(this);
-        let scanId = $button.data("scan-id");
-        let typeId = $("#docType_" + scanId).val();
-        if (typeId === "") {
-            alert("Please select a document type.");
-            return;
-        }
-        $button.prop("disabled", true).text("Please wait...");
-        $.ajax({
-            url: "<?= base_url('extract/ExtractorController/extractDetails'); ?>",
-            type: "POST",
-            data: { scan_id: scanId, type_id: typeId },
-            success: function (response) {
-                let jsonResponse = JSON.parse(response);
-                if (jsonResponse.status == 'success') {
-                    $("#documentDetailsContent").html('<p class="text-success text-center">' + jsonResponse.message + '</p>');
-                    setTimeout(function () {
-                        $("#documentDetailsModal").modal("hide");
-                        $('tr[data-scan-id="' + scanId + '"]').fadeOut(500, function() {
-                            $(this).remove();
-                            $('table tbody tr').each(function(index) {
-                                $(this).find('td:first').text(index + 1);
-                            });
-                        });
-                    }, 1000);
-                } else {
-                    $("#documentDetailsContent").html('<p class="text-danger text-center">' + jsonResponse.message + '</p>');
-                    $button.prop("disabled", false).text("Update");
-                    setTimeout(function () {
-                        $("#documentDetailsModal").modal("hide");
-                    }, 1000);
+    $(document).on('change', 'select[id^="department_"]', function() {
+        var department_id = $(this).val();
+        var scan_id = $(this).attr('id').split('_')[1];
+        var subdepartment_select = $('#subdepartment_' + scan_id);
+        var bill_approver_select = $('#bill_approver_' + scan_id);
+        subdepartment_select.html('<option value="">Select Subdepartment</option>');
+        bill_approver_select.html('<option value="">Select Bill Approver</option>');
+        if (department_id) {
+            // Fetch Subdepartments
+            $.ajax({
+                url: '<?= base_url("extract/ExtractorController/getSubdepartments"); ?>',
+                type: 'POST',
+                data: { department_id: department_id },
+                dataType: 'json',
+                success: function(data) {
+                    $.each(data, function(index, item) {
+                        subdepartment_select.append(
+                            $('<option>').val(item.sub_department_id).text(item.sub_department_name)
+                        );
+                    });
+                },
+                error: function() {
+                    alert('Error fetching subdepartments');
                 }
-            },
-            error: function () {
-                $("#documentDetailsContent").html('<p class="text-danger text-center">Error processing document.</p>');
+            });
+
+            // Fetch Bill Approvers
+            $.ajax({
+                url: '<?= base_url("extract/ExtractorController/getBillApprovers"); ?>',
+                type: 'POST',
+                data: { department_id: department_id },
+                dataType: 'json',
+                success: function(data) {
+                    $.each(data, function(index, item) {
+                        bill_approver_select.append(
+                            $('<option>').val(item.user_id).text(item.name || item.username) // Adjust field name as needed
+                        );
+                    });
+                },
+                error: function() {
+                    alert('Error fetching bill approvers');
+                }
+            });
+        }
+    });
+
+    $(document).on("click", ".extract-btn", function () {
+    let $button = $(this);
+    let scanId = $button.data("scan-id");
+    let typeId = $("#docType_" + scanId).val();
+    let department = $("#department_" + scanId).val();
+    let subdepartment = $("#subdepartment_" + scanId).val(); // Optional
+    let bill_approver = $("#bill_approver_" + scanId).val();
+    let location = $("#location_" + scanId).val();
+
+    if (typeId === "") {
+        alert("Please select a document type.");
+        return;
+    }
+    if (department === "") {
+        alert("Please select a department.");
+        return;
+    }
+    if (bill_approver === "") {
+        alert("Please select a bill approver.");
+        return;
+    }
+    if (location === "") {
+        alert("Please select a location.");
+        return;
+    }
+
+    $button.prop("disabled", true).text("Please wait...");
+    $.ajax({
+        url: "<?= base_url('extract/ExtractorController/extractDetails'); ?>",
+        type: "POST",
+        data: { 
+            scan_id: scanId, 
+            type_id: typeId,
+            department: department,
+            subdepartment: subdepartment, 
+            bill_approver: bill_approver,
+            location: location
+        },
+        success: function (response) {
+            let jsonResponse = JSON.parse(response);
+            if (jsonResponse.status == 'success') {
+                $("#documentDetailsContent").html('<p class="text-success text-center">' + jsonResponse.message + '</p>');
+                setTimeout(function () {
+                    $("#documentDetailsModal").modal("hide");
+                    $('tr[data-scan-id="' + scanId + '"]').fadeOut(500, function() {
+                        $(this).remove();
+                        $('table tbody tr').each(function(index) {
+                            $(this).find('td:first').text(index + 1);
+                        });
+                    });
+                }, 1000);
+            } else {
+                $("#documentDetailsContent").html('<p class="text-danger text-center">' + jsonResponse.message + '</p>');
                 $button.prop("disabled", false).text("Update");
                 setTimeout(function () {
                     $("#documentDetailsModal").modal("hide");
                 }, 1000);
-            },
-        });
+            }
+        },
+        error: function () {
+            $("#documentDetailsContent").html('<p class="text-danger text-center">Error processing document.</p>');
+            $button.prop("disabled", false).text("Update");
+            setTimeout(function () {
+                $("#documentDetailsModal").modal("hide");
+            }, 1000);
+        },
     });
+});
 });
 </script>

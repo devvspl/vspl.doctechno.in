@@ -53,6 +53,9 @@
                                  <button class="btn btn-danger btn-sm remove-queue" data-queue-id="<?= $queue->id; ?>">
                                     <i class="fa fa-trash"></i> Remove
                                  </button>
+                                 <button class="btn btn-primary btn-sm run-queue" data-queue-id="<?= $queue->id; ?>">
+                                    <i class="fa fa-play"></i> Run Queue
+                                 </button>
                               </td>
                            </tr>
                            <?php endforeach; ?>
@@ -73,14 +76,14 @@
 
 <script>
 function processQueue() {
-    var $btn = $('#processQueueBtn'); // Cache button
+    var $btn = $('#processQueueBtn'); 
 
     $.ajax({
-        url: '<?php echo base_url("cron-process-queue"); ?>',
+        url: '<?php echo base_url("process-queue"); ?>',
         type: 'POST',
         dataType: 'json',
         beforeSend: function() {
-            // Disable button and change text
+            
             $btn.prop('disabled', true).html('Please wait...');
         },
         success: function(response) {
@@ -101,7 +104,7 @@ function processQueue() {
 }
 
 
-// Remove from queue
+
 $(document).on('click', '.remove-queue', function() {
     if (confirm('Are you sure you want to remove this item from the queue?')) {
         var queueId = $(this).data('queue-id');
@@ -124,4 +127,34 @@ $(document).on('click', '.remove-queue', function() {
         });
     }
 });
+$(document).on('click', '.run-queue', function(e) {
+    e.preventDefault();
+
+    if (confirm('Are you sure you want to run this queue?')) {
+        var queueId = $(this).data("queue-id");
+        var $btn = $(this);
+
+        $.ajax({
+            url: '<?= base_url("process-queue"); ?>',
+            type: 'POST',
+            dataType: 'json',
+            data: { queue_id: queueId }, 
+            beforeSend: function () {
+                $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Processing...');
+            },
+            success: function (response) {
+                alert(response.message);
+                location.reload();
+            },
+            error: function () {
+                alert('Error processing queue');
+            },
+            complete: function () {
+                $btn.prop('disabled', false).html('<i class="fa fa-trash"></i> Run Queue');
+            }
+        });
+    }
+});
+
+
 </script> 

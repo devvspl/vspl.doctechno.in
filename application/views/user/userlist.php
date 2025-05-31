@@ -66,6 +66,7 @@
                                         <option value="admin">Admin</option>
                                         <option value="super_approver">Super Approver</option>
                                         <option value="super_scan">Super Scanner</option>
+                                        <option value="scan_admin">Scan Admin</option>
                                     <?php } ?>
                                 </select>
                                 <span class="text-danger"><?php echo form_error('role'); ?></span>

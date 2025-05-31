@@ -185,8 +185,8 @@ class Extract_model extends CI_Model
         $this->db->join("users sb", "sb.user_id = s.Temp_Scan_By", "left");
         $this->db->join("users sbb", "sbb.user_id = s.scanned_by", "left");
         $this->db->where("s.document_name  !=", "");
-        $this->db->where("s.extract_status", "N");
-        $this->db->where("s.bill_approval_status", "Y");
+        $this->db->where("s.extract_status", "P");
+        $this->db->where("s.bill_approval_status", "N");
         if (!empty($queuedScanIds)) {
             $this->db->where_not_in("s.scan_id", $queuedScanIds);
         }
@@ -297,9 +297,12 @@ class Extract_model extends CI_Model
         $this->db->order_by('created_at', 'ASC');
         return $this->db->get('tbl_queues')->row();
     }
-    public function getAllPendingQueueItems()
+    public function getAllPendingQueueItems($id = null)
     {
         $this->db->where('status', 'pending');
+        if (!empty($id)) {
+              $this->db->where('id', $id);
+        }
         $this->db->order_by('created_at', 'ASC');
         return $this->db->get('tbl_queues')->result();
     }
@@ -734,5 +737,34 @@ class Extract_model extends CI_Model
             return $b['similarity'] <=> $a['similarity'];
         });
         return $results;
+    }
+    public function getDepartments()
+    {
+        return $this->db->get('core_department')->result();
+    }
+
+    public function getSubdepartments($department_id)
+    {
+        $this->db->distinct();
+        $this->db->select('sd.id, sd.sub_department_name');
+        $this->db->from('core_fun_vertical_dept_mapping fvdm');
+        $this->db->join('core_department_subdepartment_mapping dsm', 'dsm.fun_vertical_dept_id = fvdm.api_id', 'inner');
+        $this->db->join('core_sub_department sd', 'sd.id = dsm.sub_department_id', 'inner');
+        $this->db->where('fvdm.department_id', $department_id);
+        return $this->db->get()->result();
+    }
+
+    public function getBillApprovers($department_id)
+    {
+        $department_ids = array_map('intval', explode(',', $department_id));
+        $this->db->where_in('department_id', $department_ids);
+        return $this->db->get('users')->result();
+    }
+
+    public function updateDocument($scan_id, $data)
+    {
+        $tableName = "y{$this->year_id}_scan_file";
+        $this->db->where('scan_id', $scan_id);
+        return $this->db->update($tableName, $data);
     }
 }

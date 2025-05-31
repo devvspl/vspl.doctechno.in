@@ -117,17 +117,23 @@ class BillApproverController extends CI_Controller
     }
     public function pending_bill_approve()
     {
-        $bill_list = $this->db->where('bill_approval_status', 'N')->join('master_work_location', "master_work_location.location_id = y{$this->year_id}_scan_file.location_id", 'left')->where('bill_approver_id', $this->session->userdata('user_id'))->get("y{$this->year_id}_scan_file")->result_array();
+        $this->db->select('*');
+        $this->db->from("y{$this->year_id}_scan_file");
+        $this->db->join('master_work_location', "master_work_location.location_id = y{$this->year_id}_scan_file.location_id", 'left');
+        $this->db->join('core_department', "core_department.api_id = y{$this->year_id}_scan_file.department_id", 'left');
+        $this->db->where('bill_approval_status', 'N');
+        $this->db->where('extract_status', 'Y');
+        $this->db->where('bill_approver_id', $this->session->userdata('user_id'));
+        $bill_list = $this->db->get()->result_array();
         $this->data['bill_list'] = $bill_list;
         $this->data['main'] = 'bill_approver/pending_bill_list';
         $this->load->view('layout/template', $this->data);
     }
+
     public function bill_detail($scan_id)
     {
         $this->check_role(['bill_approver']);
         $this->data['bill_detail'] = $this->Bill_approver_model->get_bill_detail($scan_id);
-        // print_r($this->data['bill_detail']);
-        // exit;
         $this->data['main'] = 'bill_approver/bill_detail';
         $this->load->view('layout/template', $this->data);
     }

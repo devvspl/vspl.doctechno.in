@@ -186,11 +186,13 @@
 
    function getMultiRecord() {
       var scan_id = $('#scan_id').val();
+      var docTypeId = $("#DocTypeId").val();
       $.ajax({
-         url: '<?= base_url() ?>form/Vehicle_ctrl/getTwoFourWheelerRecord',
+         url: '<?= base_url() ?>Punch/getReadingItems',
          type: 'POST',
          data: {
-            scan_id: scan_id
+            scan_id: scan_id,
+            type_id: docTypeId
          },
          dataType: 'json',
          success: function (response) {
@@ -203,12 +205,12 @@
                      multi_record(i);
                   }
 
-                  $("#date" + i).val(response.data[i - 1].JourneyStartDt);
+                  $("#date" + i).val(response.data[i - 1].travel_date);
 
-                  $("#dist_opening" + i).val(response.data[i - 1].DistTraOpen);
-                  $("#dist_closing" + i).val(response.data[i - 1].DistTraClose);
-                  $("#km" + i).val(response.data[i - 1].Totalkm);
-                  $("#amount" + i).val(response.data[i - 1].FilledTAmt);
+                  $("#dist_opening" + i).val(response.data[i - 1].opening_reading);
+                  $("#dist_closing" + i).val(response.data[i - 1].closing_reading);
+                  $("#km" + i).val(response.data[i - 1].total_km);
+                  $("#amount" + i).val(response.data[i - 1].amount);
                }
             }
          }
@@ -231,7 +233,6 @@
       var html = '';
       html += '<tr>';
       html += '<td><input type="text" class="form-control datepicker" id="date' + num + '" name="date[]"></td>';
-
       html += '<td><input type="text" class="form-control" id="dist_opening' + num + '" name="dist_opening[]" onchange="calc_distance(' + num + ');"></td>';
       html += '<td><input type="text" class="form-control" id="dist_closing' + num + '" name="dist_closing[]" onchange="calc_distance(' + num + ');"></td>';
       html += '<td><input type="text" class="form-control" id="km' + num + '" name="km[]" readonly></td>';
@@ -246,6 +247,7 @@
    }
 
    function calc_distance(num) {
+      console.log(num);
       // Get input values
       var dist_opening = parseFloat($('#dist_opening' + num).val()) || 0;
       var dist_closing = parseFloat($('#dist_closing' + num).val()) || 0;

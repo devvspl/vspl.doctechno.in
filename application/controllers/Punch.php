@@ -160,11 +160,11 @@ class Punch extends CI_Controller
     }
     private function getMiscellaneousData($scan_id, $doc_type_id, $punch_table)
     {
-        return ["rec" => $this->customlib->getScanData($scan_id), "punch_detail" => $this->db->get_where("punchfile2", ["scan_id" => $scan_id])->row(), "temp_punch_detail" => $this->db->get_where("ext_tempdata_{$doc_type_id}", ["scan_id" => $scan_id,])->row(), "document_number" => "CASH/" . date("y-m") . "/" . str_pad($this->db->where("DocTypeId", 7)->where("MONTH(Created_Date)", date("m"))->where("YEAR(Created_Date)", date("Y"))->count_all_results("punchfile") + 1, 4, "0", STR_PAD_LEFT), "tdsJvNo" => "TDSCASH/" . date("Y-m", strtotime($this->db->select("Created_Date")->where("DocTypeId", 7)->where("MONTH(Created_Date)", date("m"))->where("YEAR(Created_Date)", date("Y"))->order_by("Created_Date", "DESC")->limit(1)->get("punchfile")->row()->Created_Date ?? date("Y-m"))) . "/" . str_pad($this->db->where("DocTypeId", 7)->where("MONTH(Created_Date)", date("m"))->where("YEAR(Created_Date)", date("Y"))->count_all_results("punchfile") + 1, 4, "0", STR_PAD_LEFT), "company_list" => $this->customlib->getCompanyList(), "vendor_list" => $this->db->get_where("master_firm", ["status" => "A"])->result_array(), "worklocation_list" => $this->customlib->getWorkLocationList(),];
+        return ["rec" => $this->customlib->getScanData($scan_id), "punch_detail" => $this->db->get_where($punch_table, ["scan_id" => $scan_id])->row(), "temp_punch_detail" => $this->db->get_where("ext_tempdata_{$doc_type_id}", ["scan_id" => $scan_id,])->row(), "document_number" => "CASH/" . date("y-m") . "/" . str_pad($this->db->where("DocTypeId", 7)->where("MONTH(Created_Date)", date("m"))->where("YEAR(Created_Date)", date("Y"))->count_all_results("punchfile") + 1, 4, "0", STR_PAD_LEFT), "tdsJvNo" => "TDSCASH/" . date("Y-m", strtotime($this->db->select("Created_Date")->where("DocTypeId", 7)->where("MONTH(Created_Date)", date("m"))->where("YEAR(Created_Date)", date("Y"))->order_by("Created_Date", "DESC")->limit(1)->get("punchfile")->row()->Created_Date ?? date("Y-m"))) . "/" . str_pad($this->db->where("DocTypeId", 7)->where("MONTH(Created_Date)", date("m"))->where("YEAR(Created_Date)", date("Y"))->count_all_results("punchfile") + 1, 4, "0", STR_PAD_LEFT), "company_list" => $this->customlib->getCompanyList(), "vendor_list" => $this->db->get_where("master_firm", ["status" => "A"])->result_array(), "worklocation_list" => $this->customlib->getWorkLocationList(),];
     }
     private function getRailData($scan_id, $doc_type_id, $punch_table)
     {
-        return ["rec" => $this->customlib->getScanData($scan_id), "punch_detail" => $this->db->get_where("punchfile2", ["scan_id" => $scan_id])->row(), "temp_punch_detail" => $this->db->get_where("ext_tempdata_{$doc_type_id}", ["scan_id" => $scan_id,])->row(), "document_number" => "CASH/" . date("y-m") . "/" . str_pad($this->db->where("DocTypeId", 7)->where("MONTH(Created_Date)", date("m"))->where("YEAR(Created_Date)", date("Y"))->count_all_results("punchfile") + 1, 4, "0", STR_PAD_LEFT), "tdsJvNo" => "TDSCASH/" . date("Y-m", strtotime($this->db->select("Created_Date")->where("DocTypeId", 7)->where("MONTH(Created_Date)", date("m"))->where("YEAR(Created_Date)", date("Y"))->order_by("Created_Date", "DESC")->limit(1)->get("punchfile")->row()->Created_Date ?? date("Y-m"))) . "/" . str_pad($this->db->where("DocTypeId", 7)->where("MONTH(Created_Date)", date("m"))->where("YEAR(Created_Date)", date("Y"))->count_all_results("punchfile") + 1, 4, "0", STR_PAD_LEFT), "employee_list" => $this->customlib->getEmployeeList(), "locationlist" => $this->customlib->getWorkLocationList(),];
+        return ["rec" => $this->customlib->getScanData($scan_id), "punch_detail" => $this->db->get_where($punch_table, ["scan_id" => $scan_id])->row(), "temp_punch_detail" => $this->db->get_where("ext_tempdata_{$doc_type_id}", ["scan_id" => $scan_id,])->row(), "document_number" => "CASH/" . date("y-m") . "/" . str_pad($this->db->where("DocTypeId", 7)->where("MONTH(Created_Date)", date("m"))->where("YEAR(Created_Date)", date("Y"))->count_all_results("punchfile") + 1, 4, "0", STR_PAD_LEFT), "tdsJvNo" => "TDSCASH/" . date("Y-m", strtotime($this->db->select("Created_Date")->where("DocTypeId", 7)->where("MONTH(Created_Date)", date("m"))->where("YEAR(Created_Date)", date("Y"))->order_by("Created_Date", "DESC")->limit(1)->get("punchfile")->row()->Created_Date ?? date("Y-m"))) . "/" . str_pad($this->db->where("DocTypeId", 7)->where("MONTH(Created_Date)", date("m"))->where("YEAR(Created_Date)", date("Y"))->count_all_results("punchfile") + 1, 4, "0", STR_PAD_LEFT), "employee_list" => $this->customlib->getEmployeeList(), "locationlist" => $this->customlib->getWorkLocationList(),];
     }
     private function getSaleBillData($scan_id, $doc_type_id, $punch_table)
     {
@@ -700,6 +700,7 @@ class Punch extends CI_Controller
             'month' => $this->db->escape_str($post['month'] ?? ''),
             'calculation_base' => $this->db->escape_str($post['calculation_base'] ?? ''),
             'per_km_rate' => (float) ($post['per_km_rate'] ?? 0.00),
+            'total_km' => (float) ($post['total_km'] ?? 0.00),
             'total' => (float) ($post['total_amount'] ?? 0.00),
             'remark_comment' => $this->db->escape_str($post['remark_comment'] ?? ''),
             'created_by' => $this->session->userdata('user_id'),
@@ -726,7 +727,60 @@ class Punch extends CI_Controller
 
         return ['main' => $mainData, 'items' => $items];
     }
+    private function processPunchData_28($post)
+    {
+        $scan_id = (int) ($post['scan_id'] ?? 0);
+        $DocTypeId = 28;
+        $DocType = $this->db->escape_str($this->customlib->getDocType($DocTypeId));
+        $mainData = [
+            'scan_id' => $scan_id,
+            'group_id' => $this->session->userdata('group_id'),
+            'doctype' => $DocType,
+            'doctype_id' => $DocTypeId,
+            'location_id' => (int) ($post['location_id'] ?? 0),
+            'location' => $this->db->escape_str($post['location'] ?? ''),
+            'bill_no' => $this->db->escape_str($post['bill_no'] ?? ''),
+            'bill_date' => $this->db->escape_str($post['bill_date'] ?? ''),
+            'billing_name' => $this->db->escape_str($post['billing_name'] ?? ''),
+            'billing_address' => $this->db->escape_str($post['billing_address'] ?? ''),
+            'hotel_name' => $this->db->escape_str($post['hotel_name'] ?? ''),
+            'hotel_address' => $this->db->escape_str($post['hotel_address'] ?? ''),
+            'billing_instruction' => $this->db->escape_str($post['billing_instruction'] ?? ''),
+            'booking_id' => $this->db->escape_str($post['booking_id'] ?? ''),
+            'check_in' => $this->db->escape_str($post['check_in'] ?? ''),
+            'check_out' => $this->db->escape_str($post['check_out'] ?? ''),
+            'duration_of_stay' => (int) ($post['duration_of_stay'] ?? 0),
+            'number_of_rooms' => (int) ($post['number_of_rooms'] ?? 0),
+            'room_type' => $this->db->escape_str($post['room_type'] ?? ''),
+            'meal_plan' => $this->db->escape_str($post['meal_plan'] ?? ''),
+            'rate' => (float) ($post['rate'] ?? 0.00),
+            'amount' => (float) ($post['amount'] ?? 0.00),
+            'other_charges' => (float) ($post['other_charges'] ?? 0.00),
+            'discount' => (float) ($post['discount'] ?? 0.00),
+            'gst' => (float) ($post['gst'] ?? 0.00),
+            'grand_total' => (float) ($post['grand_total'] ?? 0.00),
+            'remark_comment' => $this->db->escape_str($post['remark_comment'] ?? ''),
+            'created_by' => $this->session->userdata('user_id'),
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+            'updated_by' => $this->session->userdata('user_id'),
+        ];
 
+        $items = [];
+        if (!empty($post['employee']) && is_array($post['employee'])) {
+            foreach ($post['employee'] as $key => $employee) {
+                if (!empty($employee)) {
+                    $items[] = [
+                        'scan_id' => $scan_id,
+                        'emp_name' => $this->db->escape_str($employee),
+                        'emp_code' => $this->db->escape_str($post['emp_code'][$key] ?? ''),
+                    ];
+                }
+            }
+        }
+
+        return ['main' => $mainData, 'items' => $items];
+    }
     private function processPunchData_47($post)
     {
         $scan_id = (int) ($post['scan_id'] ?? 0);
@@ -864,6 +918,223 @@ class Punch extends CI_Controller
         }
         return ['main' => $mainData, 'items' => $invoiceDetails];
     }
+    private function processPunchData_29($post)
+    {
+        $scan_id = (int) ($post['scan_id'] ?? 0);
+        $DocTypeId = 29;
+        $DocType = $this->db->escape_str($this->customlib->getDocType($DocTypeId));
+        $mainData = [
+            'scan_id' => $scan_id,
+            'group_id' => $this->session->userdata('group_id'),
+            'doctype' => $DocType,
+            'doctype_id' => $DocTypeId,
+            'location_id' => (int) ($post['location_id'] ?? 0),
+            'hotel_name' => $this->db->escape_str($post['hotel_name'] ?? ''),
+            'bill_no' => $this->db->escape_str($post['bill_no'] ?? ''),
+            'bill_date' => $this->db->escape_str($post['bill_date'] ?? ''),
+            'hotel_address' => $this->db->escape_str($post['hotel_address'] ?? ''),
+            'employee_name' => $this->db->escape_str($post['employee_name'] ?? ''),
+            'emp_code' => $this->db->escape_str($post['emp_code'] ?? ''),
+            'amount' => (float) ($post['amount'] ?? 0.00),
+            'location' => $this->db->escape_str($post['location'] ?? ''),
+            'detail' => $this->db->escape_str($post['detail'] ?? ''),
+            'remark_comment' => $this->db->escape_str($post['remark_comment'] ?? ''),
+            'created_by' => $this->session->userdata('user_id'),
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+            'updated_by' => $this->session->userdata('user_id'),
+        ];
+
+        return ['main' => $mainData, 'items' => []];
+    }
+    private function processPunchData_31($post)
+    {
+        $scan_id = (int) ($post['scan_id'] ?? 0);
+        $DocTypeId = 31;
+        $DocType = $this->db->escape_str($this->customlib->getDocType($DocTypeId));
+        $mainData = [
+            'scan_id' => $scan_id,
+            'group_id' => $this->session->userdata('group_id'),
+            'doctype' => $DocType,
+            'doctype_id' => $DocTypeId,
+            'location_id' => (int) ($post['location_id'] ?? 0),
+            'company' => $this->db->escape_str($post['company'] ?? ''),
+            'voucher_no' => $this->db->escape_str($post['voucher_no'] ?? ''),
+            'voucher_date' => $this->db->escape_str($post['voucher_date'] ?? ''),
+            'location' => $this->db->escape_str($post['location'] ?? ''),
+            'vendor' => $this->db->escape_str($post['vendor'] ?? ''),
+            'amount' => (float) ($post['amount'] ?? 0.00),
+            'particular' => $this->db->escape_str($post['particular'] ?? ''),
+            'remark_comment' => $this->db->escape_str($post['remark_comment'] ?? ''),
+            'created_by' => $this->session->userdata('user_id'),
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+            'updated_by' => $this->session->userdata('user_id'),
+        ];
+
+        return ['main' => $mainData, 'items' => []];
+    }
+    private function processPunchData_50($post)
+    {
+        $scan_id = (int) ($post['scan_id'] ?? 0);
+        $DocTypeId = 50;
+        $DocType = $this->db->escape_str($this->customlib->getDocType($DocTypeId));
+        $mainData = [
+            'scan_id' => $scan_id,
+            'group_id' => $this->session->userdata('group_id'),
+            'doctype' => $DocType,
+            'doctype_id' => $DocTypeId,
+            'location_id' => (int) ($post['location_id'] ?? 0),
+            'company_name' => $this->db->escape_str($post['company_name'] ?? ''),
+            'company_address' => $this->db->escape_str($post['company_address'] ?? ''),
+            'vendor_name' => $this->db->escape_str($post['vendor_name'] ?? ''),
+            'vendor_address' => $this->db->escape_str($post['vendor_address'] ?? ''),
+            'vehicle_no' => $this->db->escape_str($post['vehicle_no'] ?? ''),
+            'vehicle_type' => $this->db->escape_str($post['vehicle_type'] ?? ''),
+            'location' => $this->db->escape_str($post['location'] ?? ''),
+            'invoice_date' => $this->db->escape_str($post['invoice_date'] ?? ''),
+            'particular' => $this->db->escape_str($post['particular'] ?? ''),
+            'hour' => (float) ($post['hour'] ?? 0.00),
+            'trips' => $this->db->escape_str($post['trips'] ?? ''),
+            'rate_per_trip' => (float) ($post['rate_per_trip'] ?? 0.00),
+            'total_amount' => (float) ($post['total_amount'] ?? 0.00),
+            'remark_comment' => $this->db->escape_str($post['remark_comment'] ?? ''),
+            'created_by' => $this->session->userdata('user_id'),
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+            'updated_by' => $this->session->userdata('user_id'),
+        ];
+
+        return ['main' => $mainData, 'items' => []];
+    }
+    private function processPunchData_42($post)
+    {
+        $scan_id = (int) ($post['scan_id'] ?? 0);
+        $DocTypeId = 42;
+        $DocType = $this->db->escape_str($this->customlib->getDocType($DocTypeId));
+        $mainData = [
+            'scan_id' => $scan_id,
+            'group_id' => $this->session->userdata('group_id'),
+            'doctype' => $DocType,
+            'doctype_id' => $DocTypeId,
+            'location_id' => (int) ($post['location_id'] ?? 0),
+            'bill_invoice_date' => $this->db->escape_str($post['bill_invoice_date'] ?? ''),
+            'invoice_bill_no' => $this->db->escape_str($post['invoice_bill_no'] ?? ''),
+            'biller_name' => $this->db->escape_str($post['biller_name'] ?? ''),
+            'telephone_no' => $this->db->escape_str($post['telephone_no'] ?? ''),
+            'invoice_period' => $this->db->escape_str($post['invoice_period'] ?? ''),
+            'invoice_taxable_value' => (float) ($post['invoice_taxable_value'] ?? 0.00),
+            'cgst' => (float) ($post['cgst'] ?? 0.00),
+            'sgst' => (float) ($post['sgst'] ?? 0.00),
+            'igst' => (float) ($post['igst'] ?? 0.00),
+            'total_amount_due' => (float) ($post['total_amount_due'] ?? 0.00),
+            'total_amount_outstanding' => (float) ($post['total_amount_outstanding'] ?? 0.00),
+            'last_payment_date' => $this->db->escape_str($post['last_payment_date'] ?? ''),
+            'remark_comment' => $this->db->escape_str($post['remark_comment'] ?? ''),
+            'created_by' => $this->session->userdata('user_id'),
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+            'updated_by' => $this->session->userdata('user_id'),
+        ];
+
+        return ['main' => $mainData, 'items' => []];
+    }
+
+
+    private function processPunchData_52($post)
+    {
+        $scan_id = (int) ($post['scan_id'] ?? 0);
+        $DocTypeId = 52;
+        $DocType = $this->db->escape_str($this->customlib->getDocType($DocTypeId));
+        $mainData = [
+            'scan_id' => $scan_id,
+            'group_id' => $this->session->userdata('group_id'),
+            'doctype' => $DocType,
+            'doctype_id' => $DocTypeId,
+            'location_id' => (int) ($post['location_id'] ?? 0),
+            'mode' => $this->db->escape_str($post['mode'] ?? ''),
+            'train_number' => $this->db->escape_str($post['train_number'] ?? ''),
+            'agent_name' => $this->db->escape_str($post['agent_name'] ?? ''),
+            'pnr_number' => $this->db->escape_str($post['pnr_number'] ?? ''),
+            'date_of_booking' => $this->db->escape_str($post['date_of_booking'] ?? ''),
+            'journey_date' => $this->db->escape_str($post['journey_date'] ?? ''),
+            'booking_id' => $this->db->escape_str($post['booking_id'] ?? ''),
+            'transaction_id' => $this->db->escape_str($post['transaction_id'] ?? ''),
+            'journey_from' => $this->db->escape_str($post['journey_from'] ?? ''),
+            'journey_upto' => $this->db->escape_str($post['journey_upto'] ?? ''),
+            'travel_class' => $this->db->escape_str($post['travel_class'] ?? ''),
+            'quota' => $this->db->escape_str($post['quota'] ?? ''),
+            'location' => $this->db->escape_str($post['location'] ?? ''),
+            'passenger_details' => $this->db->escape_str($post['passenger_details'] ?? ''),
+            'base_fare' => $this->db->escape_str($post['base_fare'] ?? ''),
+            'gst' => $this->db->escape_str($post['gst'] ?? ''),
+            'fees_surcharge' => $this->db->escape_str($post['fees_surcharge'] ?? ''),
+            'other_charges' => $this->db->escape_str($post['other_charges'] ?? ''),
+            'total_fare' => (float) ($post['total_fare'] ?? 0.00),
+            'remark_comment' => $this->db->escape_str($post['remark_comment'] ?? ''),
+            'created_by' => $this->session->userdata('user_id'),
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+            'updated_by' => $this->session->userdata('user_id'),
+        ];
+
+        $items = [];
+        if (!empty($post['employee']) && is_array($post['employee'])) {
+            foreach ($post['employee'] as $key => $employee) {
+                if (!empty($employee)) {
+                    $items[] = [
+                        'scan_id' => $scan_id,
+                        'employee_name' => $this->db->escape_str($employee),
+                        'emp_code' => $this->db->escape_str($post['emp_code'][$key] ?? ''),
+                    ];
+                }
+            }
+        }
+
+        return ['main' => $mainData, 'items' => $items];
+    }
+
+    private function processPunchData_55($post)
+    {
+        $scan_id = (int) ($post['scan_id'] ?? 0);
+        $DocTypeId = 55;
+        $DocType = $this->db->escape_str($this->customlib->getDocType($DocTypeId));
+        $mainData = [
+            'scan_id' => $scan_id,
+            'group_id' => $this->session->userdata('group_id'),
+            'doctype' => $DocType,
+            'doctype_id' => $DocTypeId,
+            'location_id' => (int) ($post['location_id'] ?? 0),
+            'agent_name' => $this->db->escape_str($post['agent_name'] ?? ''),
+            'booking_date' => $this->db->escape_str($post['booking_date'] ?? ''),
+            'cancelled_date' => $this->db->escape_str($post['cancelled_date'] ?? ''),
+            'sub_total' => (float) ($post['sub_total'] ?? 0.00),
+            'cancellation_charge' => (float) ($post['cancellation_charge'] ?? 0.00),
+            'other_charges' => (float) ($post['other_charges'] ?? 0.00),
+            'grand_total' => (float) ($post['grand_total'] ?? 0.00),
+            'remark_comment' => $this->db->escape_str($post['remark_comment'] ?? ''),
+            'created_by' => $this->session->userdata('user_id'),
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+            'updated_by' => $this->session->userdata('user_id'),
+        ];
+
+        $items = [];
+        if (!empty($post['employee']) && is_array($post['employee'])) {
+            foreach ($post['employee'] as $key => $employee) {
+                if (!empty($employee)) {
+                    $items[] = [
+                        'scan_id' => $scan_id,
+                        'employee_name' => $this->db->escape_str($employee),
+                        'pnr_number' => $this->db->escape_str($post['pnr_number'][$key] ?? ''),
+                        'amount' => (float) ($post['amount'][$key] ?? 0.00),
+                    ];
+                }
+            }
+        }
+
+        return ['main' => $mainData, 'items' => $items];
+    }
     private function fetchPunchDetails($scan_id, $type_id, $year_id)
     {
         if ($scan_id <= 0 || $type_id <= 0) {
@@ -896,8 +1167,6 @@ class Punch extends CI_Controller
         $type_id = (int) $this->input->post('type_id');
         $this->fetchPunchDetails($scan_id, $type_id, $year_id);
     }
-
-
     public function getEmployeeItems()
     {
         $year_id = $this->year_id;
@@ -907,6 +1176,23 @@ class Punch extends CI_Controller
     }
 
     public function getLabourPaymentItems()
+    {
+        $year_id = $this->year_id;
+        $scan_id = (int) $this->input->post('scan_id');
+        $type_id = (int) $this->input->post('type_id');
+        $this->fetchPunchDetails($scan_id, $type_id, $year_id);
+    }
+
+
+    public function getReadingItems()
+    {
+        $year_id = $this->year_id;
+        $scan_id = (int) $this->input->post('scan_id');
+        $type_id = (int) $this->input->post('type_id');
+        $this->fetchPunchDetails($scan_id, $type_id, $year_id);
+    }
+
+     public function getTicketCancellationItems()
     {
         $year_id = $this->year_id;
         $scan_id = (int) $this->input->post('scan_id');
