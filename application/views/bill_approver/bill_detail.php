@@ -38,7 +38,7 @@
                         <p><strong>Location:</strong> <?= $bill_detail->location_name ?></p>
 
                         <p><strong>Department:</strong>
-                           <?= !empty($bill_detail->department_name) ? $bill_detail->department_name . ' (' . $bill_detail->department_code . ')' : 'NA' ?>
+                           <?= !empty($bill_detail->department_name) ? $bill_detail->department_name  : 'NA' ?>
                         </p>
 
                         <p><strong>Sub Department:</strong>
