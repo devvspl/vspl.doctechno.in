@@ -9,7 +9,7 @@
             <small class="text-danger">
             <?php echo isset($temp_punch_detail) ? $temp_punch_detail->location : ''; ?>
             </small>
-            <select name="Location" id="Location" class="form-control">
+            <select name="Location" id="location_id" class="form-control">
                <option value="">Select Location</option>
             </select>
          </div>
@@ -224,7 +224,7 @@
 </div>
 <script>
    $(".select2").select2();
-   $("#Location").select2();
+   $("#location_id").select2();
    $("#Hotel").select2();
    $("#Billing_Name").select2();
    $(document).on("change", "#Billing_Name", function () {

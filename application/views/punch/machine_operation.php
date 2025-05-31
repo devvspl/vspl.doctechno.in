@@ -71,7 +71,7 @@
                <small class="text-danger">
                 <?php echo isset($temp_punch_detail) ? $temp_punch_detail->location : ''; ?>
                </small>
-               <select name="Location" id="Location" class="form-control form-control-sm">
+               <select name="Location" id="location_id" class="form-control form-control-sm">
                   <option value="">Select</option>
                   <?php foreach ($worklocation_list as $key => $value) { ?>
                   <option value="<?= $value['location_name'] ?>" <?php if (isset($punch_detail->Loc_Name)) {
@@ -168,7 +168,7 @@
 <script>
    $("#CompanyID").select2();
    $("#To_ID").select2();
-   $("#Location").select2();
+   $("#location_id").select2();
    $(document).on("change", "#CompanyID", function () {
    	var address = $(this).find(':selected').data('address');
    	$("#Related_Address").val(address);

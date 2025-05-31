@@ -1,6 +1,6 @@
 
 <div id="invoice-details" class="tab-content active">
-   <form action="<?= base_url(); ?>form/Bank_ctrl/save_cash" id="bankstatementform" name="bankstatementform" method="post" accept-charset="utf-8">
+   <form action="<?= base_url(); ?>Punch/savePunchToDatabase" id="bankstatementform" name="bankstatementform" method="post" accept-charset="utf-8">
     
          <input type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id ?>">
          <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $doc_type_id ?>">
@@ -15,7 +15,7 @@
                   <?php
                      $type = array('Cash Deposit', 'Cash Withdrawal');
                      foreach ($type as $key => $value) { ?>
-                  <option value="<?= $value ?>" <?php if (isset($punch_detail->File_Type) && $punch_detail->File_Type == $value) {
+                  <option value="<?= $value ?>" <?php if (isset($punch_detail->type) && $punch_detail->type == $value) {
                      echo "selected";
                      } ?>><?= $value ?></option>
                   <?php } ?>
@@ -23,35 +23,35 @@
             </div>
             <div class="col-md-3 form-group">
                <label for="">Date:</label>
-               <input type="date" name="Date" id="Date" class="form-control" value="<?= (isset($punch_detail->BillDate)) ? $punch_detail->BillDate : ''  ?>">
+               <input type="date" name="Date" id="Date" class="form-control" value="<?= (isset($punch_detail->date)) ? $punch_detail->date : ''  ?>">
             </div>
             <div class="form-group col-md-3">
                <label for="">Bank Name:</label>
-               <input type="text" name="Bank_Name" id="Bank_Name" class="form-control" value="<?= (isset($punch_detail->BankName)) ? $punch_detail->BankName : ''  ?>">
+               <input type="text" name="Bank_Name" id="Bank_Name" class="form-control" value="<?= (isset($punch_detail->bank_name)) ? $punch_detail->bank_name : ''  ?>">
             </div>
             <div class="form-group col-md-3">
                <label for="">Branch:</label>
-               <input type="text" name="Branch" id="Branch" class="form-control" value="<?= (isset($punch_detail->BankAddress)) ? $punch_detail->BankAddress : ''  ?>">
+               <input type="text" name="Branch" id="Branch" class="form-control" value="<?= (isset($punch_detail->branch)) ? $punch_detail->branch : ''  ?>">
             </div>
          </div>
          <div class="row">
             <div class="form-group col-md-4">
                <label for="">Account No:</label>
-               <input type="text" name="Account_No" id="Account_No" class="form-control" value="<?= (isset($punch_detail->BankAccountNo)) ? $punch_detail->BankAccountNo : ''  ?>">
+               <input type="text" name="Account_No" id="Account_No" class="form-control" value="<?= (isset($punch_detail->account_no)) ? $punch_detail->account_no : ''  ?>">
             </div>
             <div class="form-group col-md-4">
                <label for="">Beneficiary Name:</label>
-               <input type="text" name="Beneficiary_Name" id="Beneficiary_Name" class="form-control" value="<?= (isset($punch_detail->Related_Person)) ? $punch_detail->Related_Person : ''  ?>">
+               <input type="text" name="Beneficiary_Name" id="Beneficiary_Name" class="form-control" value="<?= (isset($punch_detail->beneficiary_name)) ? $punch_detail->beneficiary_name : ''  ?>">
             </div>
             <div class="form-group col-md-4">
                <label for="" id="amount_type">Amount:</label>
-               <input type="text" name="Amount" id="Amount" class="form-control" value="<?= (isset($punch_detail->Total_Amount)) ? $punch_detail->Total_Amount : ''  ?>">
+               <input type="text" name="Amount" id="Amount" class="form-control" value="<?= (isset($punch_detail->amount)) ? $punch_detail->amount : ''  ?>">
             </div>
          </div>
          <div class="row">
             <div class="form-group col-md-12">
                <label for="">Remark / Comment:</label>
-               <textarea name="Remark" id="Remark" cols="10" rows="3" class="form-control"><?= (isset($punch_detail->Remark)) ? $punch_detail->Remark : ''  ?></textarea>
+               <textarea name="Remark" id="Remark" cols="10" rows="3" class="form-control"><?= (isset($punch_detail->remark_comment)) ? $punch_detail->remark_comment : ''  ?></textarea>
             </div>
          </div>
          <div class="box-footer">

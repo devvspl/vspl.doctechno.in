@@ -322,7 +322,7 @@
             <div class="row" style="margin-bottom: 5px;">
                <div class="col-md-3 form-group">
                   <label for="">Location:</label>
-                  <select readonly name="Location" id="Location" class="form-control form-control-sm">
+                  <select readonly name="Location" id="location_id" class="form-control form-control-sm">
                      <option value="">Select</option>
                      <?php foreach ($locationlist as $key => $value) { ?>
                      <option value="<?= $value['location_name'] ?>" <?php if (isset($punch_detail->Loc_Name)) {
@@ -1228,7 +1228,7 @@
                <div class="row" style="margin-bottom: 5px;">
                   <div class="col-md-3 form-group">
                      <label for="">Location:</label>
-                     <select name="Location" id="Location" class="form-control form-control-sm">
+                     <select name="Location" id="location_id" class="form-control form-control-sm">
                         <option value="">Select</option>
                         <?php foreach ($locationlist as $key => $value) { ?>
                         <option value="<?= $value['location_name'] ?>" <?php if (isset($punch_detail->Loc_Name)) {

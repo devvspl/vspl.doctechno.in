@@ -64,7 +64,7 @@
                <small class="text-danger">
                <?php echo isset($temp_punch_detail) ? $temp_punch_detail->location : ''; ?>
                </small>
-               <select name="Location" id="Location" class="form-control">
+               <select name="Location" id="location_id" class="form-control">
                   <option value="">Select Location</option>
                  
                </select>
@@ -119,7 +119,7 @@
    </form>
 </div>
 <script>
-   $("#Location").select2();
+   $("#location_id").select2();
    $("#Hotel").select2();
    $(document).on('change', '#Type', function () {
    	var type = $(this).val();

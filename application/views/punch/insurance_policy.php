@@ -1,107 +1,115 @@
 <div id="invoice-details" class="tab-content active">
-   <form action="<?= base_url(); ?>form/Insurance_ctrl/save_insurance_policy" id="form" name="form" method="post" accept-charset="utf-8">
-         <input type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id ?>">
-         <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $doc_type_id ?>">
-         <div class="row">
-            <div class="col-md-3 form-group">
-               <label for="">Insurance Type:</label>
-               <input type="text" name="Insurance_Type" id="Insurance_Type" class="form-control" value="<?= (isset($punch_detail->File_Type)) ? $punch_detail->File_Type : ''  ?>">
-            </div>
-            <div class="col-md-3 form-group">
-               <label for="">Insurance Company:</label>
-               <input type="text" name="Insurance_Company" id="Insurance_Company" class="form-control" value="<?= (isset($punch_detail->AgentName)) ? $punch_detail->AgentName : ''  ?>">
-            </div>
-            <div class="col-md-3 form-group">
-               <label for="">Policy Number:</label>
-               <input type="text" name="Policy_Number" id="Policy_Number" class="form-control" value="<?= (isset($punch_detail->File_No)) ? $punch_detail->File_No : ''  ?>">
-            </div>
-            <div class="col-md-3 form-group">
-               <label for="">Policy Date:</label>
-               <input type="text" name="Policy_Date" id="Policy_Date" class="form-control datepicker" value="<?= (isset($punch_detail->File_Date)) ? date('Y-m-d',strtotime($punch_detail->File_Date)) : ''  ?>">
-            </div>
+   <form action="<?= base_url(); ?>Punch/savePunchToDatabase" id="form" name="form" method="post"
+      accept-charset="utf-8">
+      <input type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id ?>">
+      <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $doc_type_id ?>">
+      <div class="row">
+         <div class="form-group col-md-3">
+            <label for="insurance_type">Insurance Type:</label>
+            <input type="text" name="insurance_type" id="insurance_type" class="form-control"
+               value="<?= (isset($punch_detail->insurance_type)) ? $punch_detail->insurance_type : '' ?>">
          </div>
-         <div class="row">
-            <div class="col-md-3 from-group">
-               <label for="From_Date">From Date:</label>
-               <input type="text" name="From_Date" id="From_Date" class="form-control datepicker" value="<?= (isset($punch_detail->FromDateTime)) ? date('Y-m-d',strtotime($punch_detail->FromDateTime)) : ''  ?>">
-            </div>
-            <div class="col-md-3 form-group">
-               <label for="">To Date:</label>
-               <input type="text" name="To_Date" id="To_Date" class="form-control datepicker" value="<?= (isset($punch_detail->ToDateTime)) ? date('Y-m-d',strtotime($punch_detail->ToDateTime)) : ''  ?>">
-            </div>
-            <div class="col-md-3 form-group">
-               <label for="">Vehicle No:</label>
-               <input type="text" name="Vehicle_No" id="Vehicle_No" class="form-control" value="<?= (isset($punch_detail->VehicleRegNo)) ? $punch_detail->VehicleRegNo : ''  ?>">
-            </div>
-            <div class="col-md-3 form-group">
-               <label for="">Location:</label>
-               <input type="text" name="Location" id="Location" class="form-control" value="<?= (isset($punch_detail->Loc_Name)) ? $punch_detail->Loc_Name : ''  ?>">
-            </div>
+         <div class="form-group col-md-3">
+            <label for="insurance_company">Insurance Company:</label>
+            <input type="text" name="insurance_company" id="insurance_company" class="form-control"
+               value="<?= (isset($punch_detail->insurance_company)) ? $punch_detail->insurance_company : '' ?>">
          </div>
-         <div class="row">
-            <div class="col-md-3 form-group" style="float: right;">
-               <label for="">Premium Amount:</label>
-               <input type="text" name="Premium_Amount" id="Premium_Amount" class="form-control" value="<?= (isset($punch_detail->Total_Amount)) ? $punch_detail->Total_Amount : ''  ?>">
-            </div>
+         <div class="form-group col-md-3">
+            <label for="policy_number">Policy Number:</label>
+            <input type="text" name="policy_number" id="policy_number" class="form-control"
+               value="<?= (isset($punch_detail->policy_number)) ? $punch_detail->policy_number : '' ?>">
          </div>
-         <div class="row">
-            <div class="form-group col-md-12">
-               <label for="">Remark / Comment:</label>
-               <textarea name="Remark" id="Remark" cols="10" rows="3" class="form-control"><?= (isset($punch_detail->Remark)) ? $punch_detail->Remark : ''  ?></textarea>
-            </div>
+         <div class="form-group col-md-3">
+            <label for="policy_date">Policy Date:</label>
+            <input type="text" name="policy_date" id="policy_date" class="form-control datepicker"
+               value="<?= (isset($punch_detail->policy_date)) ? date('Y-m-d', strtotime($punch_detail->policy_date)) : '' ?>">
          </div>
-         <div class="box-footer">
-            <button type="reset" class="btn btn-danger">Reset</button>
-            <?php if (!empty($user_permission) &&  $user_permission == 'N') : ?>
-               <input type="submit" class="btn btn-success pull-right" style="margin-left: 20px;" name="submit" value="Final Submit"></input>
-            <?php endif; ?>
-          
-            <?php if (!empty($user_permission) && ($user_permission == 'Y' || $user_permission == 'N')) : ?>
-            <input type="submit" class="btn btn-info pull-right"  name="save_as_draft" value="Save as Draft"></input>
-            <?php endif; ?>
+      </div>
+      <div class="row">
+         <div class="form-group col-md-3">
+            <label for="from_date">From Date:</label>
+            <input type="text" name="from_date" id="from_date" class="form-control datepicker"
+               value="<?= (isset($punch_detail->from_date)) ? date('Y-m-d', strtotime($punch_detail->from_date)) : '' ?>">
          </div>
-         <?php
-            if ($this->customlib->haveSupportFile($scan_id) == 1) {
-            ?>
+         <div class="form-group col-md-3">
+            <label for="to_date">To Date:</label>
+            <input type="text" name="to_date" id="to_date" class="form-control datepicker"
+               value="<?= (isset($punch_detail->to_date)) ? date('Y-m-d', strtotime($punch_detail->to_date)) : '' ?>">
+         </div>
+         <div class="form-group col-md-3">
+            <label for="vehicle_no">Vehicle No:</label>
+            <input type="text" name="vehicle_no" id="vehicle_no" class="form-control"
+               value="<?= (isset($punch_detail->vehicle_no)) ? $punch_detail->vehicle_no : '' ?>">
+         </div>
+         <div class="form-group col-md-3">
+            <label for="location">Location:</label>
+            <input type="text" name="location" id="location_id" class="form-control"
+               value="<?= (isset($punch_detail->location)) ? $punch_detail->location : '' ?>">
+         </div>
+      </div>
+      <div class="row">
+         <div class="form-group col-md-3" style="float: right;">
+            <label for="premium_amount">Premium Amount:</label>
+            <input type="text" name="premium_amount" id="premium_amount" class="form-control"
+               value="<?= (isset($punch_detail->premium_amount)) ? $punch_detail->premium_amount : '' ?>">
+         </div>
+      </div>
+      <div class="row">
+         <div class="form-group col-md-12">
+            <label for="remark_comment">Remark / Comment:</label>
+            <textarea name="remark_comment" id="remark_comment" cols="10" rows="3"
+               class="form-control"><?= (isset($punch_detail->remark_comment)) ? $punch_detail->remark_comment : '' ?></textarea>
+         </div>
+      </div>
+      <div class="box-footer">
+         <button type="reset" class="btn btn-danger">Reset</button>
+         <?php if (!empty($user_permission) && $user_permission == 'N'): ?>
+            <input type="submit" class="btn btn-success pull-right" style="margin-left: 20px;" name="submit"
+               value="Final Submit"></input>
+         <?php endif; ?>
+         <?php if (!empty($user_permission) && ($user_permission == 'Y' || $user_permission == 'N')): ?>
+            <input type="submit" class="btn btn-info pull-right" name="save_as_draft" value="Save as Draft"></input>
+         <?php endif; ?>
+      </div>
+      <?php if ($this->customlib->haveSupportFile($scan_id) == 1): ?>
          <div class="row" style="margin-top: 20px;">
             <div class="col-md-12">
-               <label for="">Supporting File:</label>
+               <label for="supporting_file">Supporting File:</label>
                <div class="form-group">
                   <?php
-                     $support_file = $this->customlib->getSupportFile($scan_id);
-                     
-                     foreach ($support_file as $row) {
+                  $support_file = $this->customlib->getSupportFile($scan_id);
+                  foreach ($support_file as $row) {
                      ?>
-                  <div class="col-md-3">
-                     <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $row['file_path'] ?>','popup','width=600,height=600');"> <?php echo $row['file_name'] ?></a>
-                  </div>
-                  <?php
-                     }
-                     ?>
+                     <div class="col-md-3">
+                        <a href="javascript:void(0);" target="popup"
+                           onclick="window.open('<?= $row['file_path'] ?>','popup','width=600,height=600');">
+                           <?php echo $row['file_name'] ?></a>
+                     </div>
+                  <?php } ?>
                </div>
             </div>
          </div>
-         <?php } ?>
+      <?php endif; ?>
    </form>
 </div>
 <script>
    $(".datepicker").datetimepicker({
-       timepicker: false,
-       format: 'Y-m-d',
+      timepicker: false,
+      format: 'Y-m-d',
    })
    $(document).ready(function () {
-   $("#invoice-tab").click(function () {
-        $("#additional-info").removeClass("active");
-        $("#invoice-details").addClass("active");
-        $(".tabs").removeClass("active-tab");
-        $(this).addClass("active-tab");
-    });
+      $("#invoice-tab").click(function () {
+         $("#additional-info").removeClass("active");
+         $("#invoice-details").addClass("active");
+         $(".tabs").removeClass("active-tab");
+         $(this).addClass("active-tab");
+      });
 
-    $("#additional-info-tab").click(function () {
-        $("#invoice-details").removeClass("active");
-        $("#additional-info").addClass("active");
-        $(".tabs").removeClass("active-tab");
-        $(this).addClass("active-tab");
-    });
-});
+      $("#additional-info-tab").click(function () {
+         $("#invoice-details").removeClass("active");
+         $("#additional-info").addClass("active");
+         $(".tabs").removeClass("active-tab");
+         $(this).addClass("active-tab");
+      });
+   });
 </script>

@@ -45,7 +45,7 @@
                                                         style="background-color: #007bff; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;"
                                                         data-has_items_feild="N" title="Column Mapping"
                                                         data-doctype_id="<?= $api['doctype_id']; ?>">
-                                                        <i class="fa fa-link"></i> <!-- Icon for Mapping -->
+                                                        <i class="fa fa-link"></i>
                                                     </button>
 
                                                     <?php if ($api['has_items']): ?>
@@ -53,7 +53,7 @@
                                                             style="background-color: #17a2b8; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;"
                                                             data-has_items_feild="Y" title="Items Column Mapping"
                                                             data-doctype_id="<?= $api['doctype_id']; ?>">
-                                                            <i class="fa fa-link"></i> <!-- Icon for Has Items -->
+                                                            <i class="fa fa-link"></i>
                                                         </button>
                                                     <?php endif; ?>
                                                 </td>
@@ -101,6 +101,12 @@
         $(".view-details").on("click", function () {
             let doctypeId = $(this).data("doctype_id");
             let has_items_feild = $(this).data("has_items_feild");
+            let year_id = <?php echo $this->session->userdata("year_id"); ?>;
+            if (!doctypeId || !year_id) {
+                console.error("doctypeId or year_id is missing.");
+                return;
+            }
+
             $("#saveMappings").attr("data-value", doctypeId);
             $("#saveMappings").attr("data-has_items_feild", has_items_feild);
             $("#documentDetailsModal").modal("show");
@@ -116,88 +122,116 @@
                 success: function (response) {
                     let fieldData = JSON.parse(response);
                     let tableHTML = `
-                <table class="table table-bordered table-striped">
-                <thead class="thead-dark">
-                    <tr>
-                        <th rowspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Temp Column</th>
-                        <th rowspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Input Type</th>
-                        <th rowspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Select Table</th>
-                        <th rowspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Search Column</th>
-                        <th rowspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Return Column</th>
-                        <th colspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Punch Table</th>
-                        <th rowspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Punch Column</th>
-                        <th rowspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Condition</th>
-                    </tr>
-                </thead>
-               <tbody>`;
+                            <table class="table table-bordered table-striped">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th rowspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Temp Column</th>
+                                        <th rowspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Input Type</th>
+                                        <th rowspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Select Table</th>
+                                        <th rowspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Search Column</th>
+                                        <th rowspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Return Column</th>
+                                        <th colspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Punch Table</th>
+                                        <th rowspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Punch Column</th>
+                                        <th rowspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Condition</th>
+                                    </tr>
+                                </thead>
+                                <tbody>`;
+
                     fieldData.forEach((field, index) => {
                         tableHTML += `
-               <tr>
-                   <td>${field.temp_column}</td>
-                   <td>
-                       <select class="form-control input-type">
-                           <option value="input" ${field.input_type === "input" ? "selected" : ""}>Input</option>
-                           <option value="select" ${field.input_type === "select" ? "selected" : ""}>Select</option>
-                       </select>
-                   </td>
-                   <td>
-                       <select class="form-control select-table" ${field.input_type === "select" ? "" : "disabled"}>
-                           <option value="">-- Select Table --</option>
-                       </select>
-                   </td>
-                   <td>
-                       <select class="form-control relation-column" disabled>
-                           <option value="">-- Select Column --</option>
-                       </select>
-                   </td>
-                   <td>
-                       <select class="form-control relation-value" disabled>
-                           <option value="">-- Select Column --</option>
-                       </select>
-                   </td>
-                   <td colspan="2">
-                       <select class="form-control punch-table">
-                           <option value="">-- Select Table --</option>
-                          
-                       </select>
-                   </td>
-                   <td>
-                       <select class="form-control punch-column" disabled>
-                           <option value="">-- Select Column --</option>
-                       </select>
-                   </td>
-                   <td><input value="${field.add_condition}" class="form-control add-condition"></td>
-               </tr>`;
+                                <tr>
+                                    <td>${field.temp_column || ''}</td>
+                                    <td>
+                                        <select class="form-control input-type">
+                                            <option value="input" ${field.input_type === "input" ? "selected" : ""}>Input</option>
+                                            <option value="select" ${field.input_type === "select" ? "selected" : ""}>Select</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control select-table" ${field.input_type === "select" ? "" : "disabled"}>
+                                            <option value="">-- Select Table --</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control relation-column" disabled>
+                                            <option value="">-- Select Column --</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control relation-value" disabled>
+                                            <option value="">-- Select Column --</option>
+                                        </select>
+                                    </td>
+                                    <td colspan="2">
+                                        <select class="form-control punch-table">
+                                            <option value="">-- Select Table --</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control punch-column" disabled>
+                                            <option value="">-- Select Column --</option>
+                                        </select>
+                                    </td>
+                                    <td><input value="${field.add_condition || ''}" class="form-control add-condition"></td>
+                                </tr>`;
                     });
+
                     tableHTML += `</tbody></table>`;
                     $("#documentDetailsContent").html(tableHTML);
+
+
                     fieldData.forEach((field, idx) => {
+                        let row = $("#documentDetailsContent tbody tr").eq(idx);
+                        if (!row.length) {
+                            console.warn("Table row not found for index:", idx);
+                            return;
+                        }
+
+
+                        let punchTable = field.punch_table || "";
+                        if (punchTable === null || punchTable.trim() === "") {
+                            if (has_items_feild === 'Y') {
+                                punchTable = `y${year_id}_punchdata_${doctypeId}_details`;
+                            } else {
+                                punchTable = `y${year_id}_punchdata_${doctypeId}`;
+                            }
+                        }
+
+
+                        let column = field.punch_column || "";
+                        if (column === null || column.trim() === "") {
+                            column = field.temp_column || "";
+                            if (column === null || column.trim() === "") {
+                                console.warn("Both punch_column and temp_column are null or empty at index:", idx);
+                            }
+                        }
+
+
                         if (field.select_table) {
-                            let selectTableRow = $("#documentDetailsContent tbody tr").eq(idx);
-                            fetchSelectTable(field.select_table, 'N', selectTableRow.find(".select-table"));
+                            let selectTableElement = row.find(".select-table");
+                            fetchSelectTable(field.select_table, 'N', selectTableElement);
                         }
-                    });
-                    fieldData.forEach((field, idx) => {
+
+
                         if (field.relation_column) {
-                            let relationColumnRow = $("#documentDetailsContent tbody tr").eq(idx);
-                            fetchSelectTableColumns(field.select_table, relationColumnRow.find(".relation-column"), field.relation_column);
+                            let relationColumnElement = row.find(".relation-column");
+                            fetchSelectTableColumns(field.select_table, relationColumnElement, field.relation_column);
                         }
-                    });
-                    fieldData.forEach((field, idx) => {
+
+
                         if (field.relation_value) {
-                            let relationValueRow = $("#documentDetailsContent tbody tr").eq(idx);
-                            fetchSelectTableValue(field.select_table, relationValueRow.find(".relation-value"), field.relation_value);
+                            let relationValueElement = row.find(".relation-value");
+                            fetchSelectTableValue(field.select_table, relationValueElement, field.relation_value);
                         }
-                    });
-                    fieldData.forEach((field, idx) => {
-                        let selectTableRow = $("#documentDetailsContent tbody tr").eq(idx);
-                        let punchTable = field.punch_table ? field.punch_table : "";
-                        fetchSelectTable(punchTable, 'Y', selectTableRow.find(".punch-table"));
-                    });
-                    fieldData.forEach((field, idx) => {
-                        if (field.punch_column) {
-                            let punchRow = $("#documentDetailsContent tbody tr").eq(idx);
-                            fetchPunchColumns(field.punch_table, punchRow.find(".punch-column"), field.punch_column);
+
+
+                        let punchTableElement = row.find(".punch-table");
+                        fetchSelectTable(punchTable, 'Y', punchTableElement);
+
+
+                        if (column !== null && column.trim() !== "") {
+                            let punchColumnElement = row.find(".punch-column");
+                            fetchPunchColumns(punchTable, punchColumnElement, column);
                         }
                     });
                 },
@@ -236,7 +270,6 @@
         $(document).on("change", ".punch-table", function () {
             let selectedTable = $(this).val();
             let columnDropdown = $(this).closest("tr").find(".punch-column");
-
             if (selectedTable) {
                 fetchPunchColumns(selectedTable, columnDropdown);
             } else {
@@ -362,7 +395,8 @@
                     if (result.status === "success") {
                         setTimeout(function () {
                             messageDiv.fadeOut();
-                        }, 10000);
+                            location.reload();
+                        }, 500);
                     } else {
                         messageDiv.html(result.message).removeClass("alert-success").addClass("alert alert-danger").fadeIn();
                     }

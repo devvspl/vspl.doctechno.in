@@ -64,7 +64,7 @@ $punch_detail = $this->db->get_where('punchfile2', ['scan_id' => $scan_id])->row
                 <div class="row">
                     <div class="col-md-4 form-group">
                         <label for="">Location:</label>
-                        <input type="text" name="Location" id="Location" class="form-control" value="<?= (isset($punch_detail->FileLoc)) ? $punch_detail->FileLoc : ''  ?>">
+                        <input type="text" name="Location" id="location_id" class="form-control" value="<?= (isset($punch_detail->FileLoc)) ? $punch_detail->FileLoc : ''  ?>">
                     </div>
                     <div class="col-md-4 form-group">
                         <label for="">Area:</label>

@@ -34,7 +34,7 @@
                <small class="text-danger">
                 <?php echo isset($temp_punch_detail) ? $temp_punch_detail->location : ''; ?>
                </small>
-               <select name="Location" id="Location" class="form-control form-control-sm" required
+               <select name="Location" id="location_id" class="form-control form-control-sm" required
                   data-parsley-errors-container="#LocationError">
                   <option value="">Select</option>
                  
@@ -114,7 +114,7 @@
    $(document).ready(function () {
    	$("#Company").select2();
    	$("#Vendor").select2();
-   	$("#Location").select2();
+   	$("#location_id").select2();
    	$(".datepicker").datetimepicker({
    		timepicker: false,
    		format: 'Y-m-d',

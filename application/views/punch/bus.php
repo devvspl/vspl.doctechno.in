@@ -89,7 +89,7 @@ $locationlist = $this->customlib->getWorkLocationList();
 				<div class="row">
 				<div class="col-md-3">
 						<label for="">Location :</label>
-						<select name="Location" id="Location" class="form-control">
+						<select name="Location" id="location_id" class="form-control">
 							<option value="">Select Location</option>
 							<?php foreach ($locationlist as $key => $value) { ?>
 								<option value="<?= $value['location_name'] ?>" <?php if (isset($punch_detail->Loc_Name)) {

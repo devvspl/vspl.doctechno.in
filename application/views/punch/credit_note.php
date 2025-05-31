@@ -180,7 +180,7 @@
             <small class="text-danger">
              <?php echo isset($temp_punch_detail) ? $temp_punch_detail->location: ''; ?>
             </small>
-            <select name="Location" id="Location" class="form-control form-control-sm">
+            <select name="Location" id="location_id" class="form-control form-control-sm">
                <option value="">Select</option>
                <?php foreach ($locationlist as $key => $value) { ?>
                <option value="<?= $value['location_name'] ?>" <?php if (isset($punch_detail->Loc_Name)) {
