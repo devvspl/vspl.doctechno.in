@@ -1,12 +1,15 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-class Bill_approver_model extends MY_Model {
+class Bill_approver_model extends MY_Model
+{
     protected $year_id;
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->year_id = $this->session->userdata('year_id');
     }
-    public function create($data) {
+    public function create($data)
+    {
         $this->db->trans_start();
         $this->db->trans_strict(FALSE);
         $this->db->insert('users', $data);
@@ -23,7 +26,8 @@ class Bill_approver_model extends MY_Model {
             return TRUE;
         }
     }
-    public function get_user_list($id = null) {
+    public function get_user_list($id = null)
+    {
         if ($id != null) {
             $this->db->where('user_id', $id);
             $result = $this->db->get('users')->row_array();
@@ -38,7 +42,8 @@ class Bill_approver_model extends MY_Model {
             return $result;
         }
     }
-    public function get_company() {
+    public function get_company()
+    {
         $this->db->select('firm_id, firm_type, firm_name');
         $this->db->from('master_firm');
         $this->db->where('status', 'A');
@@ -48,7 +53,8 @@ class Bill_approver_model extends MY_Model {
         $result = $this->db->get()->result_array();
         return $result;
     }
-    public function delete($id) {
+    public function delete($id)
+    {
         $this->db->trans_start();
         $this->db->trans_strict(false);
         $this->db->where('user_id', $id);
@@ -65,7 +71,8 @@ class Bill_approver_model extends MY_Model {
             return true;
         }
     }
-    public function update($data) {
+    public function update($data)
+    {
         $this->db->trans_start();
         $this->db->trans_strict(false);
         $this->db->where('user_id', $data['user_id']);
@@ -82,21 +89,37 @@ class Bill_approver_model extends MY_Model {
             return true;
         }
     }
-    public function get_departments_by_company_ids($company_ids) {
+    public function get_departments_by_company_ids($company_ids)
+    {
         $query = $this->db->select('api_id as department_id, department_name')->where('is_active', 1)->get('core_department');
         return $query->result_array();
     }
-    public function get_bill_detail($scan_id) {
-        $this->db->select(" sf.scan_id, sf.document_name, mwl.location_name, CONCAT(scanned_by.first_name, ' ', scanned_by.last_name) AS scanned_by_name, sf.scan_date, CONCAT(temp_scanned_by.first_name, ' ', temp_scanned_by.last_name) AS temp_scanned_by_name, sf.temp_scan_date, sf.file_extension, sf.file_path, COALESCE(dept1.department_name, dept2.department_name) AS department_name, COALESCE(dept1.department_code, dept2.department_code) AS department_code
-        ", false);
+    public function get_bill_detail($scan_id)
+    {
+        $this->db->select("
+        sf.scan_id,
+        sf.document_name,
+        mwl.location_name,
+        CONCAT(scanned_by.first_name, ' ', scanned_by.last_name) AS scanned_by_name,
+        sf.scan_date,
+        CONCAT(temp_scanned_by.first_name, ' ', temp_scanned_by.last_name) AS temp_scanned_by_name,
+        sf.temp_scan_date,
+        sf.file_extension,
+        sf.file_path,
+        COALESCE(dept.department_name, dept.department_code) AS department_name
+    ", false);
+
         $this->db->from("y{$this->year_id}_scan_file AS sf");
         $this->db->join('master_work_location AS mwl', 'sf.location_id = mwl.location_id', 'left');
         $this->db->join('users AS scanned_by', 'scanned_by.user_id = sf.scanned_by', 'left');
         $this->db->join('users AS temp_scanned_by', 'temp_scanned_by.user_id = sf.Temp_Scan_By', 'left');
-        $this->db->join('core_department AS dept1', 'scanned_by.department_id = dept1.api_id', 'left');
-        $this->db->join('core_department AS dept2', 'temp_scanned_by.department_id = dept2.api_id', 'left');
-        $this->db->where('sf.scan_id', (int)$scan_id);
+        $this->db->join('core_department AS dept', 'sf.department_id = dept.api_id', 'left');
+        $this->db->where('sf.scan_id', (int) $scan_id);
+
         $query = $this->db->get();
+        echo $this->db->last_query();
+        exit;
         return $query->row();
     }
+
 }
