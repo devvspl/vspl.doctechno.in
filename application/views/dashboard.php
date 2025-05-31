@@ -17,7 +17,7 @@ $data_curr_date_pending = '[{ data: [' . $current_date_punch_pending_count . ','
 $total_bill_approved_by_me = '';
 $rejected_bill_by_me = '';
 $bill_pending = '';
-$bill_pending_query = $this->db->where('bill_approval_status', 'N')->where_in('bill_approver_id', $this->session->userdata('user_id'))->get("y{$year_id}_scan_file")->result_array();
+$bill_pending_query = $this->db->where(['bill_approval_status' => 'N', 'extract_status' => 'Y', 'bill_approver_id' => $this->session->userdata('user_id')])->where_in('bill_approver_id', $this->session->userdata('user_id'))->get("y{$year_id}_scan_file")->result_array();
 $bill_pending = count($bill_pending_query);
 $rejected_bill_by_me_query = $this->db->where('bill_approval_status', 'R')->where('bill_approver_id',$this->session->userdata('user_id'))->get("y{$year_id}_scan_file")->result_array();
 $rejected_bill_by_me = count($rejected_bill_by_me_query);
