@@ -754,12 +754,12 @@ class Extract_model extends CI_Model
         return $this->db->get()->result();
     }
 
-    public function getBillApprovers($department_id)
-    {
-        $department_ids = array_map('intval', explode(',', $department_id));
-        $this->db->where_in('department_id', $department_ids);
-        return $this->db->get('users')->result();
-    }
+        public function getBillApprovers($department_id)
+        {
+            $this->db->where("FIND_IN_SET(" . (int)$department_id . ", department_id) >", 0);
+            return $this->db->get('users')->result();
+        }
+
 
     public function updateDocument($scan_id, $data)
     {
