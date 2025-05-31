@@ -120,7 +120,6 @@ class BillApproverController extends CI_Controller
         $this->db->select('*');
         $this->db->from("y{$this->year_id}_scan_file");
         $this->db->join('master_work_location', "master_work_location.location_id = y{$this->year_id}_scan_file.location_id", 'left');
-        $this->db->join('core_department', "core_department.api_id = y{$this->year_id}_scan_file.department_id", 'left');
         $this->db->where('bill_approval_status', 'N');
         $this->db->where('extract_status', 'Y');
         $this->db->where('bill_approver_id', $this->session->userdata('user_id'));
