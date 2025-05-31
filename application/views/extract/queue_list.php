@@ -79,7 +79,7 @@ function processQueue() {
     var $btn = $('#processQueueBtn'); 
 
     $.ajax({
-        url: '<?php echo base_url("process-queue"); ?>',
+        url: '<?php echo base_url("cron-process-queue"); ?>',
         type: 'POST',
         dataType: 'json',
         beforeSend: function() {
