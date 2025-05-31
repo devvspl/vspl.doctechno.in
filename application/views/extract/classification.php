@@ -151,12 +151,19 @@ $(document).ready(function () {
                 data: { department_id: department_id },
                 dataType: 'json',
                 success: function(data) {
-                    $.each(data, function(index, item) {
-                        bill_approver_select.append(
-                            $('<option>').val(item.user_id).text(item.name || item.username) // Adjust field name as needed
-                        );
-                    });
-                },
+    $.each(data, function(index, item) {
+        bill_approver_select.append(
+            $('<option>')
+                .val(item.user_id)
+                .text(
+                    (item.first_name && item.last_name 
+                        ? item.first_name + ' ' + item.last_name 
+                        : item.username
+                    )
+                )
+        );
+    });
+},
                 error: function() {
                     alert('Error fetching bill approvers');
                 }

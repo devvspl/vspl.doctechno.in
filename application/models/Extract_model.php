@@ -301,7 +301,7 @@ class Extract_model extends CI_Model
     {
         $this->db->where('status', 'pending');
         if (!empty($id)) {
-              $this->db->where('id', $id);
+            $this->db->where('id', $id);
         }
         $this->db->order_by('created_at', 'ASC');
         return $this->db->get('tbl_queues')->result();
@@ -754,11 +754,11 @@ class Extract_model extends CI_Model
         return $this->db->get()->result();
     }
 
-        public function getBillApprovers($department_id)
-        {
-            $this->db->where("FIND_IN_SET(" . (int)$department_id . ", department_id) >", 0);
-            return $this->db->get('users')->result();
-        }
+    public function getBillApprovers($department_id)
+    {
+        $this->db->where("FIND_IN_SET(" . (int) $department_id . ", department_id) >", 0);
+        return $this->db->get('users')->result();
+    }
 
 
     public function updateDocument($scan_id, $data)
