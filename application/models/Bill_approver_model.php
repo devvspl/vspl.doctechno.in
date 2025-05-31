@@ -94,6 +94,7 @@ class Bill_approver_model extends MY_Model
         $query = $this->db->select('api_id as department_id, department_name')->where('is_active', 1)->get('core_department');
         return $query->result_array();
     }
+
     public function get_bill_detail($scan_id)
     {
         $this->db->select("
@@ -106,20 +107,23 @@ class Bill_approver_model extends MY_Model
         sf.temp_scan_date,
         sf.file_extension,
         sf.file_path,
-        COALESCE(dept.department_name, dept.department_code) AS department_name
-    ", false);
+        COALESCE(dept.department_name, dept.department_code) AS department_name,
+        core_sub_department.sub_department_name,
+        master_doctype.file_type", false);
 
         $this->db->from("y{$this->year_id}_scan_file AS sf");
         $this->db->join('master_work_location AS mwl', 'sf.location_id = mwl.location_id', 'left');
         $this->db->join('users AS scanned_by', 'scanned_by.user_id = sf.scanned_by', 'left');
         $this->db->join('users AS temp_scanned_by', 'temp_scanned_by.user_id = sf.Temp_Scan_By', 'left');
         $this->db->join('core_department AS dept', 'sf.department_id = dept.api_id', 'left');
+        $this->db->join('core_sub_department', 'sf.sub_department_id = core_sub_department.api_id', 'left');
+        $this->db->join('master_doctype', 'sf.doc_type_id = master_doctype.type_id', 'left');
+
         $this->db->where('sf.scan_id', (int) $scan_id);
 
         $query = $this->db->get();
-        echo $this->db->last_query();
-        exit;
         return $query->row();
     }
+
 
 }
