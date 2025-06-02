@@ -120,7 +120,7 @@ $route['vspl_file_entry/(:any)/(:any)'] = 'Punch/file_entry/$1/$2';
 $route['focus_exports'] = 'VSPL_Punch/focus_exports'; 
 $route['export_cash_payment'] = 'VSPL_Punch/export_cash_payment'; 
 //--------------Finance_Punch File-------------------
-$route['finance_punch_action_status'] = 'Finance_Punch';
+$route['finance_punch'] = 'Finance_Punch';
 $route['my_finance_punched_file'] = 'Finance_Punch/my_punched_file';
 $route['my_finance_punched_file/(:any)'] = 'Finance_Punch/my_punched_file/$1';
 //--------------View Record----------------------
