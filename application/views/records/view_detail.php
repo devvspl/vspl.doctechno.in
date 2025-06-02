@@ -803,8 +803,8 @@ function isDateNull($date)
                      </td>
                   </tr>
                   <?php
-                  $buyer = $this->db->get_where('master_firm', ['id' => $file_detail['punchdata']['buyer_id']])->row_array();
-                  $vendor = $this->db->get_where('master_firm', ['id' => $file_detail['punchdata']['vendor_id']])->row_array();
+                  $buyer = $this->db->get_where('master_firm', ['firm_id' => $file_detail['punchdata']['buyer_id']])->row_array();
+                  $vendor = $this->db->get_where('master_firm', ['firm_id' => $file_detail['punchdata']['vendor_id']])->row_array();
                   ?>
 
                   <tr>
