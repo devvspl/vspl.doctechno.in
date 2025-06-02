@@ -504,7 +504,7 @@ $(document).ready(function () {
       $(".tabs").removeClass("active-tab");
       $(this).addClass("active-tab");
    });
-});
+
 
 function getCountry() {
    $.ajax({
@@ -770,4 +770,5 @@ window.cal_tax = function () {
    $("#Total_Discount").val("0." + decimal);
    $("#Grand_Total").val((total - parseFloat("0." + decimal)).toFixed(2));
 };
+});
 </script>
