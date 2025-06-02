@@ -14,31 +14,10 @@
                         <?php echo $this->session->flashdata('message'); ?>
                      </div>
                      <?php endif; ?>
-                     <form method="GET" action="<?= base_url('classification'); ?>" style="margin-bottom: 15px;">
-                        <div class="row mb-3">
-                           <div class="col-md-4">
-                              <label>Location:</label>
-                              <select name="location_id" id="location_id" class="form-control">
-                                 <option value="">All Locations</option>
-                                 <?php foreach ($locations as $location): ?>
-                                 <option value="<?= $location->location_id; ?>" 
-                                    <?= isset($_GET['location_id']) && $_GET['location_id'] == $location->location_id ? 'selected' : ''; ?>>
-                                    <?= htmlspecialchars($location->location_name ?? ''); ?>
-                                 </option>
-                                 <?php endforeach; ?>
-                              </select>
-                           </div>
-                           <div class="col-md-4">
-                              <label>&nbsp;</label>
-                              <button type="submit" style="padding: 4px 0;" class="btn btn-primary btn-block">Filter</button>
-                           </div>
-                        </div>
-                     </form>
                      <table class="table table-striped table-hover example">
                         <thead>
                            <tr>
                               <th class="text-center">S No.</th>
-                              <th class="text-center">Location</th>
                               <th class="text-center">File Name</th>
                               <th class="text-center">Scanned By</th>
                               <th class="text-center">Scan Date</th>
@@ -52,7 +31,6 @@
                            <?php $i = 1; foreach ($documents as $doc) : ?>
                            <tr data-scan-id="<?= $doc->scan_id; ?>">
                               <td class="text-center"><?= $i++ ?></td>
-                                <td class="text-center"><?= htmlspecialchars($doc->location_name ?? ''); ?></td>
                                 <td class="text-center"><?= $doc->document_name ?? ''; ?></td>
                                 <td class="text-center"><?= htmlspecialchars($doc->scanned_by ?? ''); ?></td>
                                 <td class="text-center"><?= htmlspecialchars($doc->scan_date ?? ''); ?></td>
