@@ -10,11 +10,7 @@ $doc_type_id = $this->uri->segment(3);
         <div class="row">
             <div class="col-md-12">
                 <div class="box box-primary">
-                    <div class="text-center">
-                            <h3>Under Construction</h3>
-                            <p>This section is currently being developed. Please check back later.</p>
-                        </div>
-                    <!-- <div class="box-header with-border">
+                    <div class="box-header with-border">
                         <h3 class="box-title">Record Detail - <?php echo $this->customlib->getDocType($doc_type_id); ?>
                             <?php
                             $document_name = $this->customlib->getDocumentName($scan_id);
@@ -29,7 +25,7 @@ $doc_type_id = $this->uri->segment(3);
                     </div>
                     <?php
                     $this->load->view('records/view_detail');
-                    ?> -->
+                    ?>
                 </div>
             </div>
         </div>
