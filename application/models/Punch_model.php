@@ -7,7 +7,7 @@ class Punch_model extends MY_Model
     {
         parent::__construct();
         $this->load->database();
-        $this->year_id = $this->session->userdata('year_id');
+            $this->year_id = $this->session->userdata('year_id') ?? ($this->db->select('id')->from('financial_years')->where('is_current', 1)->get()->row()->id ?? null);
     }
     public function get_file_for_punch()
     {

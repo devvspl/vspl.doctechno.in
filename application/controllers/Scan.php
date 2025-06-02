@@ -9,7 +9,7 @@ class Scan extends CI_Controller
         $this->logged_in();
         $this->load->database();
         $this->load->model('Scan_model');
-        $this->year_id = $this->session->userdata('year_id');
+            $this->year_id = $this->session->userdata('year_id') ?? ($this->db->select('id')->from('financial_years')->where('is_current', 1)->get()->row()->id ?? null);
     }
     private function logged_in()
     {

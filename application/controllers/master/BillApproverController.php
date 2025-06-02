@@ -9,7 +9,7 @@ class BillApproverController extends CI_Controller
         $this->logged_in();
         $this->load->database();
         $this->load->model(array('Bill_approver_model', 'Location_model'));
-        $this->year_id = $this->session->userdata('year_id');
+            $this->year_id = $this->session->userdata('year_id') ?? ($this->db->select('id')->from('financial_years')->where('is_current', 1)->get()->row()->id ?? null);
     }
     private function check_role($allowed_roles = [])
     {

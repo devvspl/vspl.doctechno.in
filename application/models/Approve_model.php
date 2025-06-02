@@ -5,7 +5,7 @@ class Approve_model extends MY_Model {
     public function __construct() {
 
         parent::__construct();
-        $this->year_id = $this->session->userdata('year_id');
+            $this->year_id = $this->session->userdata('year_id') ?? ($this->db->select('id')->from('financial_years')->where('is_current', 1)->get()->row()->id ?? null);
     }
     function pending_for_approval() {
         $group_id = $this->session->userdata('group_id');

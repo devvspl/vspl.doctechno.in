@@ -5,7 +5,7 @@ class Scan_model extends MY_Model {
     public function __construct() {
         parent::__construct();
         $this->load->database();
-         $this->year_id = $this->session->userdata('year_id');
+             $this->year_id = $this->session->userdata('year_id') ?? ($this->db->select('id')->from('financial_years')->where('is_current', 1)->get()->row()->id ?? null);
     }
     public function get_doctype_list() {
         $user_id = $this->session->userdata('user_id');

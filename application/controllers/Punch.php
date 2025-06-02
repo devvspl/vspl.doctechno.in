@@ -10,7 +10,7 @@ class Punch extends CI_Controller
         $this->load->database();
         $this->load->model("Punch_model");
         $this->load->model("BaseModel");
-        $this->year_id = $this->session->userdata('year_id');
+            $this->year_id = $this->session->userdata('year_id') ?? ($this->db->select('id')->from('financial_years')->where('is_current', 1)->get()->row()->id ?? null);
     }
     private function logged_in()
     {
