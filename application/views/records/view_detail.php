@@ -553,95 +553,91 @@ function isDateNull($date)
                </tr>
             </table>
          <?php } elseif ($doc_type_id == 1) { ?>
-            <div class="table-responsive">
-               <table class=" table-bordered" border="1">
-                  <tr>
-                     <td><b>Employee/Payee Name:</b></td>
-                     <td><?= $file_detail->Employee_Name; ?></td>
-                     <td><b>Emp Code:</b></td>
-                     <td><?= $file_detail->EmployeeCode; ?></td>
-                     <td><b>Bill Date:</b></td>
-                     <td><?= $file_detail->BillDate; ?></td>
-                  </tr>
-                  <tr>
-                     <td><b>Vehicle No:</b></td>
-                     <td><?= $file_detail->VehicleRegNo; ?></td>
-                     <td><b>Vehicle Type :</b></td>
-                     <td><?= $file_detail->Vehicle_Type ?></td>
-                  </tr>
-                  <tr>
-                     <td><b>Location:</b></td>
-                     <td><?= $file_detail->Loc_Name; ?></td>
-                     <td><b>Rs/Km :</b></td>
-                     <td><?= $file_detail->VehicleRs_PerKM ?></td>
-                  </tr>
-                  <tr>
-                     <td colspan="6">
-                        <table class="table text-center" border="1">
-                           <thead style="background-color: red;">
-                              <th>Opening Reading</th>
-                              <th>Closing Reading</th>
-                              <th>Total Km</th>
-                              <th>Amount</th>
-                           </thead>
-                           <tbody>
-                              <?php
-                              if ($doc_type_id == 1) {
-                                 $get_travel_detail = $this->db->query("select * from vehicle_traveling where scan_id='$scan_id'")->result();
-                                 foreach ($get_travel_detail as $key => $value) {
-                                    ?>
-                                    <tr>
-                                       <td><?= $value->DistTraOpen ?></td>
-                                       <td><?= $value->DistTraClose ?></td>
-                                       <td><?= $value->Totalkm ?></td>
-                                       <td><?= $value->FilledTAmt ?></td>
-                                    </tr>
-                                 <?php } ?>
-                              <?php } else { ?>
+
+            <table class="table-bordered">
+               <tr>
+                  <td><b>Employee/Payee Name:</b></td>
+                  <td><?= htmlspecialchars($file_detail['punchdata']['employee_name'] ?? ''); ?></td>
+                  <td><b>Emp Code:</b></td>
+                  <td><?= htmlspecialchars($file_detail['punchdata']['emp_code'] ?? ''); ?></td>
+                  <td><b>Bill Date:</b></td>
+                  <td>
+                     <?= !empty($file_detail['punchdata']['bill_date']) ? date('Y-m-d', strtotime($file_detail['punchdata']['bill_date'])) : ''; ?>
+                  </td>
+               </tr>
+               <tr>
+                  <td><b>Vehicle No:</b></td>
+                  <td><?= htmlspecialchars($file_detail['punchdata']['vehicle_no'] ?? ''); ?></td>
+                  <td><b>Vehicle Type:</b></td>
+                  <td><?= htmlspecialchars($file_detail['punchdata']['vehicle_type'] ?? ''); ?></td>
+               </tr>
+               <tr>
+                  <td><b>Location:</b></td>
+                  <td><?= htmlspecialchars($file_detail['punchdata']['location'] ?? ''); ?></td>
+                  <td><b>Rs/Km:</b></td>
+                  <td><?= number_format($file_detail['punchdata']['rs_km'] ?? 0, 2); ?></td>
+               </tr>
+               <tr>
+                  <td colspan="6">
+                     <table class="table text-center" border="1">
+                        <thead style="background-color: red;">
+                           <th>Opening Reading</th>
+                           <th>Closing Reading</th>
+                           <th>Total Km</th>
+                           <th>Amount</th>
+                        </thead>
+                        <tbody>
+                           <?php if ($doc_type_id == 1 && !empty($file_detail['punchdata_details'])): ?>
+                              <?php foreach ($file_detail['punchdata_details'] as $detail): ?>
                                  <tr>
-                                    <td colspan="3" style="text-align: center;">No Record Found</td>
+                                    <td><?= number_format($detail['opening_km'] ?? 0, 1); ?></td>
+                                    <td><?= number_format($detail['closing_km'] ?? 0, 1); ?></td>
+                                    <td><?= number_format($detail['total_km'] ?? 0, 1); ?></td>
+                                    <td><?= number_format($detail['amount'] ?? 0, 2); ?></td>
                                  </tr>
-                              <?php } ?>
-                           </tbody>
-                        </table>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td colspan="3" style="text-align: right;"><b>Total KM:</b></td>
-                     <td style="text-align: left;">
-                        &emsp;&emsp;&emsp;&emsp;<b><?= $file_detail->TotalRunKM; ?></b>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td colspan="3" style="text-align: right;"><b>Total Amount:</b></td>
-                     <td style="text-align: left;">
-                        &emsp;&emsp;&emsp;&emsp;<b><?= $file_detail->Total_Amount; ?></b>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td colspan="3" style="text-align: right;"><b>Round Off:</b></td>
-                     <td style="text-align: right;"><b>
-                           ( <?php
-                           if ($file_detail->Grand_Total < $file_detail->Total_Amount) {
-                              echo '-';
-                           } else {
-                              echo '+';
-                           }
-                           ?>
-                           )
-                           <?= $file_detail->Total_Discount; ?></b>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td colspan="3" style="text-align: right;"><b>Grand Total:</b></td>
-                     <td style="text-align: right;"><b><?= $file_detail->Grand_Total; ?></b></td>
-                  </tr>
-                  <tr>
-                     <td>Remarks :</td>
-                     <td><?= $file_detail->Remark ?></td>
-                  </tr>
-               </table>
-            </div>
+                              <?php endforeach; ?>
+                           <?php else: ?>
+                              <tr>
+                                 <td colspan="4" style="text-align: center;">No Record Found</td>
+                              </tr>
+                           <?php endif; ?>
+                        </tbody>
+                     </table>
+                  </td>
+               </tr>
+               <tr>
+                  <td colspan="3" style="text-align: right;"><b>Total KM:</b></td>
+                  <td style="text-align: left;">
+                     <b><?= number_format($file_detail['punchdata']['total_run_km'] ?? 0, 0); ?></b>
+                  </td>
+               </tr>
+               <tr>
+                  <td colspan="3" style="text-align: right;"><b>Total Amount:</b></td>
+                  <td style="text-align: left;">
+                     <b><?= number_format($file_detail['punchdata']['total'] ?? 0, 2); ?></b>
+                  </td>
+               </tr>
+               <tr>
+                  <td colspan="3" style="text-align: right;"><b>Round Off:</b></td>
+                  <td style="text-align: right;">
+                     <b>
+                        (<?= ($file_detail['punchdata']['round_off_type'] ?? '') === 'Minus' ? '-' : '+'; ?>)
+                        <?= number_format($file_detail['punchdata']['round_off_value'] ?? 0, 2); ?>
+                     </b>
+                  </td>
+               </tr>
+               <tr>
+                  <td colspan="3" style="text-align: right;"><b>Grand Total:</b></td>
+                  <td style="text-align: right;">
+                     <b><?= number_format($file_detail['punchdata']['grand_total'] ?? 0, 2); ?></b>
+                  </td>
+               </tr>
+               <tr>
+                  <td>Remarks:</td>
+                  <td colspan="5"><?= htmlspecialchars($file_detail['punchdata']['remark_comment'] ?? ''); ?></td>
+               </tr>
+            </table>
+
          <?php } elseif ($doc_type_id == 2) { ?>
             <table class="table borderless">
                <tr>
@@ -908,11 +904,12 @@ function isDateNull($date)
                         <b><?= isset($file_detail['punchdata']['sub_total']) ? htmlspecialchars($file_detail['punchdata']['sub_total']) : '-' ?></b>
                      </td>
                   </tr>
-                  <?php if (isset($file_detail['punchdata']['tcs_percent']) && $file_detail['punchdata']['tcs_percent'] != '0.00') { ?>
+                  <?php if (isset($file_detail['punchdata']['tcs_percent']) && $file_detail['punchdata']['punchdata']['tcs_percent'] != '0.00') { ?>
                      <tr>
                         <td colspan="7" style="text-align: right;"><b>TCS:</b></td>
                         <td style="text-align: right;">
-                           <b><?= htmlspecialchars($file_detail['punchdata']['tcs_percent']) ?>%</b></td>
+                           <b><?= htmlspecialchars($file_detail['punchdata']['tcs_percent']) ?>%</b>
+                        </td>
                      </tr>
                   <?php } ?>
                   <tr>
@@ -925,7 +922,7 @@ function isDateNull($date)
                      <td colspan="7" style="text-align: right;"><b>Round Off:</b></td>
                      <td style="text-align: right;"><b>
                            ( <?php
-                           if (isset($file_detail['punchdata']['grand_total']) && isset($file_detail['punchdata']['total']) && $file_detail['punchdata']['grand_total'] < $file_detail['punchdata']['total']) {
+                           if (isset($file_detail['punchdata']['grand_total']) && isset($file_detail['punchdata']['total']) && $file_detail['punchdata']['punchdata']['grand_total'] < $file_detail['punchdata']['punchdata']['total']) {
                               echo '-';
                            } else {
                               echo '+';

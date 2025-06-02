@@ -47,6 +47,8 @@ class Record extends CI_Controller {
 		$this->session->set_userdata('top_menu', 'punch_master');
 		$this->session->set_userdata('sub_menu', 'punch');
 		$this->data['file_detail'] = $this->Punch_model->getPunchDetail($scan_id, $DocTypeId);
+		// print_r($this->data['file_detail']);
+		// exit;
 		$this->data['main'] = 'records/_record';
 		$this->load->view('layout/template', $this->data);
 	}

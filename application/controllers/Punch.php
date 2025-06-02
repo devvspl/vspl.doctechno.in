@@ -10,7 +10,7 @@ class Punch extends CI_Controller
         $this->load->database();
         $this->load->model("Punch_model");
         $this->load->model("BaseModel");
-            $this->year_id = $this->session->userdata('year_id') ?? ($this->db->select('id')->from('financial_years')->where('is_current', 1)->get()->row()->id ?? null);
+        $this->year_id = $this->session->userdata('year_id') ?? ($this->db->select('id')->from('financial_years')->where('is_current', 1)->get()->row()->id ?? null);
     }
     private function logged_in()
     {
@@ -1192,7 +1192,7 @@ class Punch extends CI_Controller
         $this->fetchPunchDetails($scan_id, $type_id, $year_id);
     }
 
-     public function getTicketCancellationItems()
+    public function getTicketCancellationItems()
     {
         $year_id = $this->year_id;
         $scan_id = (int) $this->input->post('scan_id');

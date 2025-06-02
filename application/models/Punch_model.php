@@ -7,29 +7,16 @@ class Punch_model extends MY_Model
     {
         parent::__construct();
         $this->load->database();
-            $this->year_id = $this->session->userdata('year_id') ?? ($this->db->select('id')->from('financial_years')->where('is_current', 1)->get()->row()->id ?? null);
+        $this->year_id = $this->session->userdata('year_id');
     }
     public function get_file_for_punch()
     {
         $group_id = $this->session->userdata('group_id');
-        $conditions = [
-            'extract_status' => 'Y',
-            'is_file_punched' => 'N',
-            'bill_approval_status' => 'Y',
-            'is_temp_scan_rejected' => 'N',
-            'is_deleted' => 'N'
-        ];
-
-        $this->db->select('*')
-            ->from("y{$this->year_id}_scan_file")
-            ->where_in('group_id', [$group_id])
-            ->where($conditions)
-            ->order_by('scan_id', 'desc');
-
+        $conditions = ['extract_status' => 'Y', 'is_file_punched' => 'N', 'bill_approval_status' => 'Y', 'is_temp_scan_rejected' => 'N', 'is_deleted' => 'N'];
+        $this->db->select('*')->from("y{$this->year_id}_scan_file")->where_in('group_id', [$group_id])->where($conditions)->order_by('scan_id', 'desc');
         $query = $this->db->get();
         return $query->result_array();
     }
-
     function vspl_get_file_for_punch()
     {
         $group_id = $this->session->userdata('group_id');
@@ -344,27 +331,72 @@ class Punch_model extends MY_Model
         $DocTypeId = $this->db->escape_str($DocTypeId);
         $punchdata_table = "y{$this->year_id}_punchdata_{$DocTypeId}";
         $punchdata_details_table = "y{$this->year_id}_punchdata_{$DocTypeId}_details";
+        $result = ['punchdata' => [], 'punchdata_details' => []];
+        $docType = [23 => ["data_method" => "getInvoiceData"], 1 => ["data_method" => "getTwoFourWheelerData",], 4 => ["data_method" => "getBankStatementData",], 5 => ["data_method" => "getBoardingPassData",], 6 => ["data_method" => "getCashDepositWithdrawalsData",], 8 => ["data_method" => "getCertificateData",], 10 => ["data_method" => "getCompanyRecordData",], 11 => ["data_method" => "getConfirmationAccountData",], 18 => ["data_method" => "getIdAddressProofData",], 19 => ["data_method" => "getImportExportPaperData",], 30 => ["data_method" => "getMediclaimHistoryData",], 31 => ["data_method" => "getMiscellaneousData",], 32 => ["data_method" => "getPfEsicData"], 35 => ["data_method" => "getPropertyRecordData",], 36 => ["data_method" => "getRetingCredentialData",], 37 => ["data_method" => "getRegistrationCertificateData",], 41 => ["data_method" => "getTaxCreditDocumentData",], 45 => ["data_method" => "getVehicleRegistrationPaperData",], 44 => ["data_method" => "getVehicleMaintenanceData",], 43 => ["data_method" => "getVehicleFuelData",], 42 => ["data_method" => "getTelephoneBillData",], 40 => ["data_method" => "getSubsidyData"], 39 => ["data_method" => "getRtgsNeftData"], 38 => ["data_method" => "getRstOfdData"], 34 => ["data_method" => "getPostageCourierData",], 33 => ["data_method" => "getPhoneFaxData"], 29 => ["data_method" => "getMealsData"], 28 => ["data_method" => "getLodgingData"], 27 => ["data_method" => "getLocalConveyanceData",], 26 => ["data_method" => "getLeaseRentData"], 25 => ["data_method" => "getJeepCampaignData",], 24 => ["data_method" => "getItReturnData"], 22 => ["data_method" => "getInsurancePolicyData",], 21 => ["data_method" => "getInsuranceDocumentData",], 20 => ["data_method" => "getIncomeTaxTdsData",], 17 => ["data_method" => "getHiredVehicleData",], 16 => ["data_method" => "getChallanData"], 15 => ["data_method" => "getFixedDepositReceiptData",], 14 => ["data_method" => "getFdFvData"], 13 => ["data_method" => "getElectricityBillData",], 12 => ["data_method" => "getDealerMeetingData",], 9 => ["data_method" => "getChequeData"], 7 => ["data_method" => "getCashVoucherData",], 46 => ["data_method" => "getGstChallanData",], 47 => ["data_method" => "getLabourPaymentData",], 48 => ["data_method" => "getCashReceiptData",], 49 => ["data_method" => "getFixedAssetData",], 50 => ["data_method" => "getMachineOperationData",], 51 => ["data_method" => "getAirData"], 52 => ["data_method" => "getRailData"], 53 => ["data_method" => "getBusData"], 54 => ["data_method" => "getSaleBillData"], 55 => ["data_method" => "getTicketCancellationData",], 56 => ["data_method" => "getCreditNoteData",],];
+        if (isset($docType[$DocTypeId]) && method_exists($this, $docType[$DocTypeId]['data_method'])) {
+            $result = $this->{$docType[$DocTypeId]['data_method']}($scan_id, $punchdata_table, $punchdata_details_table);
+        } else {
+            if ($this->db->table_exists($punchdata_table)) {
+                $this->db->select('p.*')->from($punchdata_table . ' p')->where('p.scan_id', $scan_id);
+                $query = $this->db->get();
+                $result['punchdata'] = $query->row_array() ?: [];
+            }
+            if ($this->db->table_exists($punchdata_details_table)) {
+                $this->db->select('pd.*')->from($punchdata_details_table . ' pd')->where('pd.scan_id', $scan_id);
+                $query = $this->db->get();
+                $result['punchdata_details'] = $query->result_array() ?: [];
+            }
+        }
+        return $result;
+    }
+    private function getInvoiceData($scan_id, $punchdata_table, $punchdata_details_table)
+    {
         $result = [
             'punchdata' => [],
             'punchdata_details' => []
         ];
 
-        // Fetch punchdata with buyer and vendor details
         if ($this->db->table_exists($punchdata_table)) {
-            $this->db->select('p.*, bf.firm_name AS buyer_name, bf.address AS buyer_address, vf.firm_name AS vendor_name, vf.address AS vendor_address')
+            $this->db->select('p.*, b.firm_name, b.address, v.firm_name, v.address')
                 ->from($punchdata_table . ' p')
-                ->join('master_firm bf', 'bf.firm_id = p.buyer', 'left')
-                ->join('master_firm vf', 'vf.firm_id = p.vendor', 'left')
+                ->join('master_firm b', 'p.buyer = b.firm_id', 'left')
+                ->join('master_firm v', 'p.vendor = v.firm_id', 'left')
                 ->where('p.scan_id', $scan_id);
             $query = $this->db->get();
             $result['punchdata'] = $query->row_array() ?: [];
         }
 
-        // Fetch punchdata_details with unit name
         if ($this->db->table_exists($punchdata_details_table)) {
-            $this->db->select('pd.*, mu.unit_name')
+            $this->db->select('pd.*, u.unit_name')
                 ->from($punchdata_details_table . ' pd')
-                ->join('master_unit mu', 'mu.unit_id = pd.unit', 'left')
+                ->join('master_unit u', 'pd.unit = u.unit_id', 'left')
+                ->where('pd.scan_id', $scan_id);
+            $query = $this->db->get();
+            $result['punchdata_details'] = $query->result_array() ?: [];
+        }
+
+        return $result;
+    }
+    private function getTwoFourWheelerData($scan_id, $punchdata_table, $punchdata_details_table)
+    {
+        $result = [
+            'punchdata' => [],
+            'punchdata_details' => []
+        ];
+
+        // Fetch punchdata
+        if ($this->db->table_exists($punchdata_table)) {
+            $this->db->select('p.*')
+                ->from($punchdata_table . ' p')
+                ->where('p.scan_id', $scan_id);
+            $query = $this->db->get();
+            $result['punchdata'] = $query->row_array() ?: [];
+        }
+
+        // Fetch punchdata_details
+        if ($this->db->table_exists($punchdata_details_table)) {
+            $this->db->select('pd.*')
+                ->from($punchdata_details_table . ' pd')
                 ->where('pd.scan_id', $scan_id);
             $query = $this->db->get();
             $result['punchdata_details'] = $query->result_array() ?: [];

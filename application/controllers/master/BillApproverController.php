@@ -175,7 +175,7 @@ class BillApproverController extends CI_Controller
     {
         $user_id = $this->session->userdata('user_id');
         $this->db->where('scan_id', $scan_id);
-        $result = $this->db->update("y{$this->year_id}_scan_file", array('bill_approval_status' => 'Y', 'extract_status' => 'N', 'bill_approver_id' => $user_id, 'bill_approved_date' => date('Y-m-d')));
+        $result = $this->db->update("y{$this->year_id}_scan_file", array('bill_approval_status' => 'Y', 'extract_status' => 'Y', 'bill_approver_id' => $user_id, 'bill_approved_date' => date('Y-m-d')));
         if ($result) {
             $this->session->set_flashdata('message', '<p class="text-success text-center">Bill Approved Successfully.</p>');
             redirect('pending_bill_approve');
