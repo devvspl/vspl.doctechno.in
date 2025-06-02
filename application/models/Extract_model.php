@@ -173,13 +173,13 @@ class Extract_model extends CI_Model
     }
     public function getClassificationList($group_id = null, $location_id = null)
     {
-        
+
         $queuedScanIds = array_column(
             $this->db->select('scan_id')->where('status', 'pending')->get('tbl_queues')->result_array(),
             'scan_id'
         );
 
-        
+
         $this->db->select("
         s.scan_id,
         g.group_name,
@@ -192,7 +192,7 @@ class Extract_model extends CI_Model
         s.bill_approved_date
     ");
 
-        
+
         $this->db->from("y{$this->year_id}_scan_file s");
         $this->db->join("master_group g", "g.group_id = s.group_id", "left");
         $this->db->join("master_work_location l", "l.location_id = s.location_id", "left");
@@ -200,27 +200,27 @@ class Extract_model extends CI_Model
         $this->db->join("users sb", "sb.user_id = s.Temp_Scan_By", "left");
         $this->db->join("users sbb", "sbb.user_id = s.scanned_by", "left");
 
-        
+
         $conditions = [
             "s.document_name !=" => "",
             "s.extract_status" => "P",
             "s.bill_approval_status" => "N",
-            "s.group_id" => '16', 
+            "s.group_id" => '16',
         ];
         $this->db->where($conditions);
 
-        
+
         if (!empty($queuedScanIds)) {
             $this->db->where_not_in("s.scan_id", $queuedScanIds);
         }
         if (!empty($group_id)) {
-            $this->db->where("s.group_id", $group_id); 
+            $this->db->where("s.group_id", $group_id);
         }
         if (!empty($location_id)) {
             $this->db->where("s.location_id", $location_id);
         }
 
-        
+
         $this->db->order_by('s.scan_id', 'DESC');
 
         return $this->db->get()->result();
@@ -783,6 +783,7 @@ class Extract_model extends CI_Model
 
     public function getBillApprovers($department_id)
     {
+        $this->db->where('role', 'bill_approver');
         $this->db->where("FIND_IN_SET(" . (int) $department_id . ", department_id) >", 0);
         return $this->db->get('users')->result();
     }
