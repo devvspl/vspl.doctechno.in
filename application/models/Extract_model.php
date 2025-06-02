@@ -7,7 +7,7 @@ class Extract_model extends CI_Model
     {
         parent::__construct();
         $this->load->database();
-            $this->year_id = $this->session->userdata('year_id') ?? ($this->db->select('id')->from('financial_years')->where('is_current', 1)->get()->row()->id ?? null);
+        $this->year_id = $this->session->userdata('year_id') ?? ($this->db->select('id')->from('financial_years')->where('is_current', 1)->get()->row()->id ?? null);
     }
     public function getApiList()
     {
@@ -225,7 +225,6 @@ class Extract_model extends CI_Model
 
         return $this->db->get()->result();
     }
-
     public function getProcessedList($group_id = null, $location_id = null)
     {
         $this->db->select("s.scan_id, g.group_name, md.file_type, s.extract_status, l.location_name, s.document_name , s.file_path, IF(s.is_temp_scan = 'Y', s.temp_scan_date, s.scan_date) AS scan_date, IF(s.is_temp_scan = 'Y', CONCAT(sb.first_name, ' ', sb.last_name), CONCAT(sbb.first_name, ' ', sbb.last_name)) AS scanned_by, CONCAT(ba.first_name, ' ', ba.last_name) AS bill_approver_id, s.bill_approved_date");
