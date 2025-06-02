@@ -1,10 +1,12 @@
 <?php
 defined("BASEPATH") or exit("No direct script access allowed");
 class AdditionalController extends CI_Controller {
+    protected $year_id;
     function __construct() {
         parent::__construct();
         $this->logged_in();
         $this->load->model("AdditionalModel");
+         $this->year_id = $this->session->userdata('year_id') ?? ($this->db->select('id')->from('financial_years')->where('is_current', 1)->get()->row()->id ?? null);
     }
     private function logged_in() {
         if (!$this->session->userdata("authenticated")) {
@@ -115,7 +117,7 @@ class AdditionalController extends CI_Controller {
                     $mainId = $this->db->insert_id();
                 }
                 if (isset($post['final_submit'])) {
-                    $updateData = ['finance_punch_action_status' => 'Y', 'finance_punch_action_status'=>'N', 'finance_punched_by' => $this->session->userdata('user_id'), 'finance_punched_date' => date('Y-m-d') ];
+                    $updateData = ['finance_punch_action_status' => 'Y', 'finance_punched_by' => $this->session->userdata('user_id'), 'finance_punched_date' => date('Y-m-d') ];
                     $this->db->where('scan_id', $scan_id)->update("y{$this->year_id}_scan_file", $updateData);
                 }
                 if (!empty($post['cost_center_id']) && is_array($post['cost_center_id'])) {
