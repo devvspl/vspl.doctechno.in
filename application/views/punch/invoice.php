@@ -406,9 +406,14 @@ $(document).ready(function () {
    let unitList = "";
    let itemList = "";
    let count = 1;
-   loadUnitList();
-   loadItemList();
-   getMultiRecord();
+   Promise.all([loadUnitList(), loadItemList()])
+      .then(() => {
+         getMultiRecord();
+      })
+      .catch((error) => {
+         console.error("Error loading initial data:", error);
+         alert("Failed to load initial data. Please try again.");
+      });
 
    $(document).on("change", "#From", updateBuyerAddress);
    $(document).on("change", "#To", updateVendorAddress);
@@ -577,56 +582,73 @@ function toggleLoader(show, tableId) {
 }
 
 function loadUnitList() {
-   $.post(
-      "<?= base_url() ?>master/UnitController/get_unit_list",
-      (response) => {
-         if (response.status === 200) {
-            unitList = `<option value="">Select Unit</option>` + response.unit_list.map((v) => `<option value="${v.unit_id}">${v.unit_name}</option>`).join("");
-         }
-      },
-      "json"
-   );
-}
-
-function loadItemList() {
-   $.post(
-      "<?= base_url() ?>master/ItemController/get_item_list",
-      (response) => {
-         if (response.status === 200) {
-            itemList = `<option value="">Select Item/Particular</option>` + response.item_list.map((v) => `<option value="${v.item_name}">${v.item_name}</option>`).join("");
-         }
-      },
-      "json"
-   );
+   return new Promise((resolve, reject) => {
+      $.post(
+         "<?= base_url() ?>master/UnitController/get_unit_list",
+         (response) => {
+            if (response.status === 200) {
+               unitList = `<option value="">Select Unit</option>` + response.unit_list.map((v) => `<option value="${v.unit_id}">${v.unit_name}</option>`).join("");
+               resolve();
+            } else {
+               reject("Failed to load unit list");
+            }
+         },
+         "json"
+      ).fail(() => reject("Error fetching unit list"));
+   });
+}function loadItemList() {
+   return new Promise((resolve, reject) => {
+      $.post(
+         "<?= base_url() ?>master/ItemController/get_item_list",
+         (response) => {
+            if (response.status === 200) {
+               itemList = `<option value="">Select Item/Particular</option>` + response.item_list.map((v) => `<option value="${v.item_name}">${v.item_name}</option>`).join("");
+               resolve();
+            } else {
+               reject("Failed to load item list");
+            }
+         },
+         "json"
+      ).fail(() => reject("Error fetching item list"));
+   });
 }
 
 function getMultiRecord() {
    const scanId = $("#scan_id").val();
    const docTypeId = $("#DocTypeId").val();
-   toggleLoader(true, "contnetBody");
+   toggleLoader(true, "contentBody"); // Fixed typo
 
    $.post(
-         "<?= base_url() ?>Punch/getPunchItems", {
-            scan_id: scanId,
-            type_id: docTypeId
-         },
-         (response) => {
-            if (response.status === 200) {
-               count = response.data.length;
+      "<?= base_url() ?>Punch/getPunchItems",
+      {
+         scan_id: scanId,
+         type_id: docTypeId
+      },
+      (response) => {
+         console.log("getMultiRecord response:", response); // Debug response
+         if (response.status === 200) {
+            count = response.data.length;
+            if (count === 0) {
+               addItemRow(); // Add at least one row if no data
+            } else {
                response.data.forEach((item, index) => {
                   if (index > 0) addItemRow();
                   populateRow(index + 1, item);
                });
             }
-         },
-         "json"
-      )
-      .always(() => toggleLoader(false, "contnetBody"))
-      .fail(() => alert("Error fetching data."));
+         } else {
+            alert("No items found or invalid response.");
+         }
+      },
+      "json"
+   )
+   .always(() => toggleLoader(false, "contentBody")) // Fixed typo
+   .fail(() => alert("Error fetching data."));
 }
 
 function populateRow(index, item) {
-   $(`#Particular${index}`).val(item.particular).trigger("change");
+   const $particular = $(`#Particular${index}`);
+   $particular.val(item.particular).trigger("change"); // Trigger change for Select2
    $(`#HSN${index}`).val(item.hsn);
    $(`#Qty${index}`).val(item.qty);
    $(`#Unit${index}`).val(item.unit);
@@ -639,8 +661,17 @@ function populateRow(index, item) {
    $(`#Price${index}`).val(item.price);
    $(`#Amount${index}`).val(item.amount);
    $(`#TAmount${index}`).val(item.total_amount);
-}
 
+   // Reinitialize Select2 for the particular dropdown
+   $particular.select2({
+      allowClear: true,
+      escapeMarkup: (m) => m,
+      placeholder: "Select Item/Particular",
+      language: {
+         noResults: () => "<button class='btn btn-primary btn-block' data-target='#myModal' data-toggle='modal'>Add Item</button>",
+      },
+   });
+}
 function addItemRow() {
    let currentRows = $("#multi_record tr").length;
    let serialNo = currentRows + 1;
