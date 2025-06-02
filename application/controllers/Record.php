@@ -45,12 +45,12 @@ class Record extends CI_Controller {
 	public function index($scan_id, $DocTypeId) {
 		$this->session->set_userdata('top_menu', 'punch_master');
 		$this->session->set_userdata('sub_menu', 'punch');
-		$doc_type_list = array(4, 5, 8, 10, 11, 18, 19, 30, 31, 32, 35, 36, 37, 41, 45);
-		if (in_array($DocTypeId, $doc_type_list)) {
-			$this->data['file_detail'] = $this->Record_model->getRecordFile($scan_id);
-		} else {
-			$this->data['file_detail'] = $this->Record_model->getRecordFile_Accounting($scan_id);
-		}
+		// $doc_type_list = array(4, 5, 8, 10, 11, 18, 19, 30, 31, 32, 35, 36, 37, 41, 45);
+		// if (in_array($DocTypeId, $doc_type_list)) {
+		// 	$this->data['file_detail'] = $this->Record_model->getRecordFile($scan_id);
+		// } else {
+		// 	$this->data['file_detail'] = $this->Record_model->getRecordFile_Accounting($scan_id);
+		// }
 		$this->data['main'] = 'records/_record';
 		$this->load->view('layout/template', $this->data);
 	}
