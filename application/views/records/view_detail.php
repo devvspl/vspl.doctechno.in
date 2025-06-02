@@ -871,7 +871,7 @@ function isDateNull($date)
                      <th>Total Amount</th>
                   </thead>
                   <tbody>
-                     <?php if (!empty($file_detail['punchdata_details'])) { ?>
+                     <?php if (isset($file_detail['punchdata_details']) && is_array($file_detail['punchdata_details']) && !empty($file_detail['punchdata_details'])) { ?>
                         <?php foreach ($file_detail['punchdata_details'] as $value) { ?>
                            <tr>
                               <td><?= isset($value['particular']) ? htmlspecialchars($value['particular']) : '-' ?></td>
@@ -904,7 +904,7 @@ function isDateNull($date)
                         <b><?= isset($file_detail['punchdata']['sub_total']) ? htmlspecialchars($file_detail['punchdata']['sub_total']) : '-' ?></b>
                      </td>
                   </tr>
-                  <?php if (isset($file_detail['punchdata']['tcs_percent']) && $file_detail['punchdata']['punchdata']['tcs_percent'] != '0.00') { ?>
+                  <?php if (isset($file_detail['punchdata']['tcs_percent']) && $file_detail['punchdata']['tcs_percent'] != '0.00') { ?>
                      <tr>
                         <td colspan="7" style="text-align: right;"><b>TCS:</b></td>
                         <td style="text-align: right;">
@@ -920,16 +920,22 @@ function isDateNull($date)
                   </tr>
                   <tr>
                      <td colspan="7" style="text-align: right;"><b>Round Off:</b></td>
-                     <td style="text-align: right;"><b>
+                     <td style="text-align: right;">
+                        <b>
                            ( <?php
-                           if (isset($file_detail['punchdata']['grand_total']) && isset($file_detail['punchdata']['total']) && $file_detail['punchdata']['punchdata']['grand_total'] < $file_detail['punchdata']['punchdata']['total']) {
+                           if (
+                              isset($file_detail['punchdata']['grand_total']) &&
+                              isset($file_detail['punchdata']['total']) &&
+                              $file_detail['punchdata']['grand_total'] < $file_detail['punchdata']['total']
+                           ) {
                               echo '-';
                            } else {
                               echo '+';
                            }
                            ?> )
                            <?= isset($file_detail['punchdata']['round_off']) ? htmlspecialchars($file_detail['punchdata']['round_off']) : '-' ?>
-                        </b></td>
+                        </b>
+                     </td>
                   </tr>
                   <tr>
                      <td colspan="7" style="text-align: right;"><b>Grand Total:</b></td>
@@ -942,7 +948,7 @@ function isDateNull($date)
                   <tr>
                      <td><b>Remarks:</b></td>
                      <td colspan="6" style="text-align: left;">
-                        &nbsp;&nbsp;<?= isset($file_detail['punchdata']['remark']) ? htmlspecialchars($file_detail['punchdata']['remark']) : '-' ?>
+                        <?= isset($file_detail['punchdata']['remark_comment']) ? htmlspecialchars($file_detail['punchdata']['remark_comment']) : '-' ?>
                      </td>
                   </tr>
                </table>
