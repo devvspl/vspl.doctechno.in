@@ -53,15 +53,12 @@ class Record extends CI_Controller {
 	public function vspl_index($scan_id, $DocTypeId) {
 		$this->session->set_userdata('top_menu', 'punch_master');
 		$this->session->set_userdata('sub_menu', 'punch');
-	
 		$this->data['file_detail'] = $this->Record_model->vspl_getRecordFile_Accounting($scan_id);
 		$mainRecord = $this->get_additional_information_by_scan_id($scan_id);
 		$this->data['main_record'] = $mainRecord ? $mainRecord : null;
-	
 		$this->data['main'] = 'records/_vspl_record';
 		$this->load->view('layout/template', $this->data);
 	}
-	
 	public function admin_rejected_list() {
 		$this->data['rejected_list'] = $this->Record_model->getRejectedList();
 		$this->data['main'] = 'records/admin_rejected_list';

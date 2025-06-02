@@ -802,26 +802,24 @@ function isDateNull($date)
                         <?= isset($file_detail['punchdata']['invoice_date']) ? isDateNull($file_detail['punchdata']['invoice_date']) : '-' ?>
                      </td>
                   </tr>
+                  <?php
+                  $buyer = $this->db->get_where('master_firm', ['id' => $file_detail['punchdata']['buyer_id']])->row_array();
+                  $vendor = $this->db->get_where('master_firm', ['id' => $file_detail['punchdata']['vendor_id']])->row_array();
+                  ?>
+
                   <tr>
                      <td><b>Buyer:</b></td>
-                     <td colspan="2">
-                        <?= isset($file_detail['punchdata']['buyer']) ? htmlspecialchars($file_detail['punchdata']['buyer']) : '-' ?>
-                     </td>
+                     <td colspan="2"><?= isset($buyer['firm_name']) ? htmlspecialchars($buyer['firm_name']) : '-' ?></td>
                      <td><b>Buyer Address:</b></td>
-                     <td colspan="2">
-                        <?= isset($file_detail['punchdata']['buyer_address']) ? htmlspecialchars($file_detail['punchdata']['buyer_address']) : '-' ?>
-                     </td>
+                     <td colspan="2"><?= isset($buyer['address']) ? htmlspecialchars($buyer['address']) : '-' ?></td>
                   </tr>
                   <tr>
                      <td><b>Vendor:</b></td>
-                     <td colspan="2">
-                        <?= isset($file_detail['punchdata']['vendor']) ? htmlspecialchars($file_detail['punchdata']['vendor']) : '-' ?>
-                     </td>
+                     <td colspan="2"><?= isset($vendor['firm_name']) ? htmlspecialchars($vendor['firm_name']) : '-' ?></td>
                      <td><b>Vendor Address:</b></td>
-                     <td colspan="2">
-                        <?= isset($file_detail['punchdata']['vendor_address']) ? htmlspecialchars($file_detail['punchdata']['vendor_address']) : '-' ?>
-                     </td>
+                     <td colspan="2"><?= isset($vendor['address']) ? htmlspecialchars($vendor['address']) : '-' ?></td>
                   </tr>
+
                   <tr>
                      <td><b>Purchase Order No.:</b></td>
                      <td>
@@ -877,11 +875,12 @@ function isDateNull($date)
                   <tbody>
                      <?php if (!empty($file_detail['punchdata_details'])) { ?>
                         <?php foreach ($file_detail['punchdata_details'] as $value) { ?>
+                           <?php $unit = $this->db->get_where('master_unit', ['unit_id' => $value['unit']])->row_array(); ?>
                            <tr>
                               <td><?= isset($value['particular']) ? htmlspecialchars($value['particular']) : '-' ?></td>
                               <td><?= isset($value['hsn']) ? htmlspecialchars($value['hsn']) : '-' ?></td>
                               <td><?= isset($value['qty']) ? htmlspecialchars($value['qty']) : '-' ?></td>
-                              <td><?= isset($value['unit']) ? htmlspecialchars($value['unit']) : '-' ?></td>
+                              <td><?= isset($unit['unit_name']) ? htmlspecialchars($unit['unit_name']) : '-' ?></td>
                               <td><?= isset($value['mrp']) ? htmlspecialchars($value['mrp']) : '-' ?></td>
                               <td><?= isset($value['discount_in_mrp']) ? htmlspecialchars($value['discount_in_mrp']) : '-' ?>
                               </td>
@@ -912,7 +911,8 @@ function isDateNull($date)
                      <tr>
                         <td colspan="7" style="text-align: right;"><b>TCS:</b></td>
                         <td style="text-align: right;">
-                           <b><?= htmlspecialchars($file_detail['punchdata']['tcs_percent']) ?>%</b></td>
+                           <b><?= htmlspecialchars($file_detail['punchdata']['tcs_percent']) ?>%</b>
+                        </td>
                      </tr>
                   <?php } ?>
                   <tr>
