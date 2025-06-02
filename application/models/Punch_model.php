@@ -12,10 +12,24 @@ class Punch_model extends MY_Model
     public function get_file_for_punch()
     {
         $group_id = $this->session->userdata('group_id');
-        $this->db->select('*')->from("y{$this->year_id}_scan_file")->where_in('group_id', [$group_id])->where('extract_status', 'Y')->where('is_file_punched', 'N')->where('is_temp_scan_rejected', 'N')->where('is_deleted', 'N')->order_by('scan_id', 'desc');
+        $conditions = [
+            'extract_status' => 'Y',
+            'is_file_punched' => 'N',
+            'bill_approval_status' => 'Y',
+            'is_temp_scan_rejected' => 'N',
+            'is_deleted' => 'N'
+        ];
+
+        $this->db->select('*')
+            ->from("y{$this->year_id}_scan_file")
+            ->where_in('group_id', [$group_id])
+            ->where($conditions)
+            ->order_by('scan_id', 'desc');
+
         $query = $this->db->get();
         return $query->result_array();
     }
+
     function vspl_get_file_for_punch()
     {
         $group_id = $this->session->userdata('group_id');
