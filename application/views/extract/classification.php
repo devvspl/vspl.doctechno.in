@@ -21,8 +21,6 @@
                               <th class="text-center">File Name</th>
                               <th class="text-center">Scanned By</th>
                               <th class="text-center">Scan Date</th>
-                              <th class="text-center">Bill Approver</th>
-                              <th class="text-center">Approval Date</th>
                               <th class="text-center">Action</th>
                            </tr>
                         </thead>
@@ -34,8 +32,7 @@
                                 <td class="text-center"><?= $doc->document_name ?? ''; ?></td>
                                 <td class="text-center"><?= htmlspecialchars($doc->scanned_by ?? ''); ?></td>
                                 <td class="text-center"><?= htmlspecialchars($doc->scan_date ?? ''); ?></td>
-                                <td class="text-center"><?= htmlspecialchars($doc->bill_approver_id ?? ''); ?></td>
-                                <td class="text-center"><?= htmlspecialchars($doc->bill_approved_date ?? ''); ?></td>
+                               
 
                               <td class="text-center">
                                  <button class="btn btn-primary btn-sm view-details" data-scan-id="<?= $doc->scan_id; ?>">
