@@ -616,7 +616,7 @@ function loadUnitList() {
 function getMultiRecord() {
    const scanId = $("#scan_id").val();
    const docTypeId = $("#DocTypeId").val();
-   toggleLoader(true, "contentBody"); // Fixed typo
+   toggleLoader(true, "contentBody"); 
 
    $.post(
       "<?= base_url() ?>Punch/getPunchItems",
@@ -625,11 +625,11 @@ function getMultiRecord() {
          type_id: docTypeId
       },
       (response) => {
-         console.log("getMultiRecord response:", response); // Debug response
+         console.log("getMultiRecord response:", response); 
          if (response.status === 200) {
             count = response.data.length;
             if (count === 0) {
-               addItemRow(); // Add at least one row if no data
+               addItemRow(); 
             } else {
                response.data.forEach((item, index) => {
                   if (index > 0) addItemRow();
@@ -642,13 +642,13 @@ function getMultiRecord() {
       },
       "json"
    )
-   .always(() => toggleLoader(false, "contentBody")) // Fixed typo
+   .always(() => toggleLoader(false, "contentBody")) 
    .fail(() => alert("Error fetching data."));
 }
 
 function populateRow(index, item) {
    const $particular = $(`#Particular${index}`);
-   $particular.val(item.particular).trigger("change"); // Trigger change for Select2
+   $particular.val(item.particular).trigger("change"); 
    $(`#HSN${index}`).val(item.hsn);
    $(`#Qty${index}`).val(item.qty);
    $(`#Unit${index}`).val(item.unit);
@@ -662,7 +662,7 @@ function populateRow(index, item) {
    $(`#Amount${index}`).val(item.amount);
    $(`#TAmount${index}`).val(item.total_amount);
 
-   // Reinitialize Select2 for the particular dropdown
+   
    $particular.select2({
       allowClear: true,
       escapeMarkup: (m) => m,
