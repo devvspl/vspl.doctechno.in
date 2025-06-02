@@ -258,7 +258,7 @@
          <div class="form-group col-md-12">
             <label for="">Remark / Comment:</label>
             <textarea name="Remark" id="Remark" cols="10" rows="2"
-               class="form-control form-control-sm"><?= (isset($punch_detail->remark)) ? $punch_detail->remark : '' ?></textarea>
+               class="form-control form-control-sm"><?= (isset($punch_detail->remark_comment)) ? $punch_detail->remark_comment : '' ?></textarea>
          </div>
       </div>
       <div class="box-footer">
