@@ -2718,7 +2718,6 @@ class Punch extends CI_Controller
             "total" => (float) ($post["Total"] ?? 0),
             "grand_total" => (float) ($post["Grand_Total"] ?? 0),
             "total_discount" => (float) ($post["Total_Discount"] ?? 0),
-            "tcs_percent" => (float) ($post["TCS"] ?? 0),
             "remark_comment" => $this->db->escape_str($post["Remark"] ?? ""),
             "created_by" => $this->session->userdata("user_id"),
             "created_at" => date("Y-m-d H:i:s"),
