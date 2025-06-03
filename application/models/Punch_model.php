@@ -767,7 +767,7 @@ class Punch_model extends MY_Model
         }
 
         if ($this->db->table_exists($punchdata_details_table)) {
-            $this->db->select('pd.particular, pd.hsn, pd.qty, pd.unit, u.unit_name, pd.mrp, pd.discount, pd.price, pd.amount, pd.gst, pd.sgst, pd.igst, pd.total_amount')
+            $this->db->select('pd.*')
                 ->from($punchdata_details_table . ' pd')
                 ->join('master_unit u', 'pd.unit = u.unit_id', 'left')
                 ->where('pd.scan_id', $scan_id);

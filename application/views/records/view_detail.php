@@ -1222,7 +1222,7 @@ function isDateNull($date)
                                     <td><?= isset($value['qty']) ? number_format($value['qty'], 0) : '0' ?></td>
                                     <td><?= isset($value['unit_name']) ? htmlspecialchars($value['unit_name']) : '' ?></td>
                                     <td><?= isset($value['mrp']) ? number_format($value['mrp'], 2) : '0.00' ?></td>
-                                    <td><?= isset($value['discount']) ? number_format($value['discount'], 2) : '0.00' ?></td>
+                                    <td><?= isset($value['discount_in_mrp']) ? number_format($value['discount_in_mrp'], 2) : '0.00' ?></td>
                                     <td><?= isset($value['price']) ? number_format($value['price'], 2) : '0.00' ?></td>
                                     <td><?= isset($value['amount']) ? number_format($value['amount'], 2) : '0.00' ?></td>
                                     <td><?= isset($value['gst']) ? number_format($value['gst'], 2) : '0.00' ?>%</td>
