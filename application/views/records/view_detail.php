@@ -557,7 +557,7 @@ function isDateNull($date)
             <table class="table-bordered">
                <tr>
                   <td><b>Employee/Payee Name:</b></td>
-                  <td><?= htmlspecialchars($file_detail['punchdata']['employee_name'] ?? ''); ?></td>
+                  <td><?= htmlspecialchars($file_detail['punchdata']['emp_name'] ?? ''); ?></td>
                   <td><b>Emp Code:</b></td>
                   <td><?= htmlspecialchars($file_detail['punchdata']['emp_code'] ?? ''); ?></td>
                   <td><b>Bill Date:</b></td>

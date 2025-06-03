@@ -386,11 +386,12 @@ class Punch_model extends MY_Model
 
         // Fetch punchdata
         if ($this->db->table_exists($punchdata_table)) {
-            $this->db->select('p.*')
+            $this->db->select('p.*, e.emp_name')
                 ->from($punchdata_table . ' p')
+                ->join('master_employee e', 'p.employee_name = e.employee_name', 'left')
                 ->where('p.scan_id', $scan_id);
             $query = $this->db->get();
-            $result['punchdata'] = $query->row_array() ?: [];
+            $result['punchdata'] = $query->num_rows() > 0 ? $query->row_array() : [];
         }
 
         // Fetch punchdata_details
@@ -399,11 +400,12 @@ class Punch_model extends MY_Model
                 ->from($punchdata_details_table . ' pd')
                 ->where('pd.scan_id', $scan_id);
             $query = $this->db->get();
-            $result['punchdata_details'] = $query->result_array() ?: [];
+            $result['punchdata_details'] = $query->num_rows() > 0 ? $query->result_array() : [];
         }
 
         return $result;
     }
+
     private function getVehicleFuelData($scan_id, $punchdata_table, $punchdata_details_table)
     {
         $result = [
