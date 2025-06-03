@@ -639,7 +639,7 @@ class Punch_model extends MY_Model
     {
         $result = ['punchdata' => [], 'punchdata_details' => []];
         if ($this->db->table_exists($punchdata_table)) {
-            $this->db->select('p.*, b.firm_name AS company_name_text	, v.firm_name AS vendor_name_text')->from($punchdata_table . ' p')->where('p.scan_id', $scan_id);
+            $this->db->select('p.*')->from($punchdata_table . ' p')->where('p.scan_id', $scan_id);
             $query = $this->db->get();
             $result['punchdata'] = $query->row_array() ?: [];
         }
