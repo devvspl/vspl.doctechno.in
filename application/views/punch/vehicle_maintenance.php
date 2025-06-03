@@ -298,19 +298,19 @@
    						if (i >= 2) {
    							multi_record(i);
    						}
-   						$("#Particular" + i).val(response.data[i - 1].Particular);
-   						$("#HSN" + i).val(response.data[i - 1].HSN);
-   						$("#Qty" + i).val(response.data[i - 1].Qty);
-   						$("#Unit" + i).val(response.data[i - 1].Unit);
-   						$("#MRP" + i).val(response.data[i - 1].MRP);
-   						$("#Discount" + i).val(response.data[i - 1].Discount);
-   						$("#GST" + i).val(response.data[i - 1].GST);
-   						$("#SGST" + i).val(response.data[i - 1].SGST);
-   						$("#IGST" + i).val(response.data[i - 1].IGST);
-   						$("#Cess" + i).val(response.data[i - 1].Cess);
-   						$("#Price" + i).val(response.data[i - 1].Price);
-   						$("#Amount" + i).val(response.data[i - 1].Amount);
-   						$("#TAmount" + i).val(response.data[i - 1].Total_Amount);
+   						$("#Particular" + i).val(response.data[i - 1].particular);
+   						$("#HSN" + i).val(response.data[i - 1].hsn);
+   						$("#Qty" + i).val(response.data[i - 1].qty);
+   						$("#Unit" + i).val(response.data[i - 1].unit);
+   						$("#MRP" + i).val(response.data[i - 1].mrp);
+   						$("#Discount" + i).val(response.data[i - 1].discount_in_mrp);
+   						$("#GST" + i).val(response.data[i - 1].gst);
+   						$("#SGST" + i).val(response.data[i - 1].sgst);
+   						$("#IGST" + i).val(response.data[i - 1].igst);
+   						$("#Cess" + i).val(response.data[i - 1].cess);
+   						$("#Price" + i).val(response.data[i - 1].price);
+   						$("#Amount" + i).val(response.data[i - 1].amount);
+   						$("#TAmount" + i).val(response.data[i - 1].total_amount);
    					}
    				}
    			}
