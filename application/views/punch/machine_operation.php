@@ -193,7 +193,7 @@
 
       <?php
       $cleanedBuyer = cleanSearchValue(
-         isset($temp_punch_detail->company_name) && !is_null($temp_punch_detail->company) ? $temp_punch_detail->company : ""
+         isset($temp_punch_detail->company_name) && !is_null($temp_punch_detail->company_name) ? $temp_punch_detail->company_name : ""
       );
       $cleanedVendor = cleanSearchValue(
          isset($temp_punch_detail->vendor_name) && !is_null($temp_punch_detail->vendor_name) ? $temp_punch_detail->vendor_name : ""
