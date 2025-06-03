@@ -2881,73 +2881,94 @@ function isDateNull($date)
                </tr>
             </table>
          <?php } elseif ($doc_type_id == 47) { ?>
-            <div class="table-responsive">
-               <table class="table-bordered" border="1" style="width: 100%;line-height: 2;">
-                  <tr>
-                     <td><b>Voucher No:</b></td>
-                     <td><?= $file_detail->File_No; ?></td>
-                     <td><b>Payment Date:</b></td>
-                     <td><?= date('d-m-Y', strtotime($file_detail->BillDate)) ?></td>
-                  </tr>
-                  <tr>
-                     <td><b>Payee:</b></td>
-                     <td><?= $file_detail->Related_Person ?></td>
-                     <td><b>Location:</b></td>
-                     <td><?= $file_detail->Loc_Name ?></td>
-                  </tr>
-                  <tr>
-                     <td><b>Particular:</b></td>
-                     <td><?= $file_detail->FileName ?></td>
-                     <td><b>Total Amount:</b></td>
-                     <td><?= $file_detail->Total_Amount; ?></td>
-                  </tr>
-                  <tr>
-                     <td><b>From Date:</b></td>
-                     <td><?= date('d-m-Y', strtotime($file_detail->FromDateTime)) ?></td>
-                     <td><b>To Date:</b></td>
-                     <td><?= date('d-m-Y', strtotime($file_detail->ToDateTime)) ?></td>
-                  </tr>
-                  <tr>
-                     <td><b>Ledger:</b></td>
-                     <td><?= $file_detail->Ledger ?></td>
-                  </tr>
-               </table>
-               <br>
-               <table class="table text-center" border="1">
-                  <thead class="bg-primary">
-                     <th>Head</th>
-                     <th>Amount(₹)</th>
-                  </thead>
-                  <tbody>
-                     <?php
-                     if ($doc_type_id == 47) {
-                        $labour_payment_detail = $this->db->query("select * from labour_payment_detail where scan_id='$scan_id'")->result();
-
-                        foreach ($labour_payment_detail as $key => $value) {
-                           ?>
+            <table class="table borderless">
+               <tr>
+                  <td class="text-dark" style="width: 20%;"><b>Voucher No</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['voucher_no']) ? htmlspecialchars($file_detail['punchdata']['voucher_no']) : '' ?>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="text-dark" style="width: 20%;"><b>Payment Date</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['payment_date']) && $file_detail['punchdata']['payment_date'] !== '0000-00-00' ? date('d-m-Y', strtotime($file_detail['punchdata']['payment_date'])) : '' ?>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="text-dark" style="width: 20%;"><b>Payee</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['payee']) ? htmlspecialchars($file_detail['punchdata']['payee']) : '' ?>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="text-dark" style="width: 20%;"><b>Location</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['location']) ? htmlspecialchars($file_detail['punchdata']['location']) : '' ?>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="text-dark" style="width: 20%;"><b>Particular</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['particular']) ? htmlspecialchars($file_detail['punchdata']['particular']) : '' ?>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="text-dark" style="width: 20%;"><b>From Date</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['from_date']) && $file_detail['punchdata']['from_date'] !== '0000-00-00' ? date('d-m-Y', strtotime($file_detail['punchdata']['from_date'])) : '' ?>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="text-dark" style="width: 20%;"><b>To Date</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['to_date']) && $file_detail['punchdata']['to_date'] !== '0000-00-00' ? date('d-m-Y', strtotime($file_detail['punchdata']['to_date'])) : '' ?>
+                  </td>
+               </tr>
+               <tr>
+                  <td colspan="2">
+                     <table class="table borderless text-center">
+                        <thead style="background-color: red; color: white;">
                            <tr>
-                              <td><?= $value->Head ?></td>
-                              <td><?= $value->Amount ?></td>
+                              <th>Head</th>
+                              <th>Amount (₹)</th>
                            </tr>
-                        <?php } ?>
-                     <?php } else { ?>
-                        <tr>
-                           <td colspan="2" style="text-align: center;">No Record Found</td>
-                        </tr>
-                     <?php } ?>
-                  </tbody>
-               </table>
-               <table class="table">
-                  <tr>
-                     <td style="text-align: center;"><b>Sub Total:</b></td>
-                     <td style="text-align: center;"><b><?= $file_detail->Total_Amount; ?></b></td>
-                  </tr>
-                  <tr>
-                     <td>Remarks :</td>
-                     <td colspan="2"><?= $file_detail->Remark ?></td>
-                  </tr>
-               </table>
-            </div>
+                        </thead>
+                        <tbody>
+                           <?php if ($doc_type_id == 47 && !empty($file_detail['punchdata_details'])) { ?>
+                              <?php foreach ($file_detail['punchdata_details'] as $value) { ?>
+                                 <tr>
+                                    <td><?= isset($value['head']) ? htmlspecialchars($value['head']) : '' ?></td>
+                                    <td><?= isset($value['amount']) ? number_format($value['amount'], 2) : '0.00' ?></td>
+                                 </tr>
+                              <?php } ?>
+                           <?php } else { ?>
+                              <tr>
+                                 <td colspan="2" style="text-align: center;">No Record Found</td>
+                              </tr>
+                           <?php } ?>
+                        </tbody>
+                     </table>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="text-dark" style="width: 20%;"><b>Sub Total</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['sub_total']) ? number_format($file_detail['punchdata']['sub_total'], 2) : '0.00' ?>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="text-dark" style="width: 20%;"><b>Total Amount</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['total_amount']) ? number_format($file_detail['punchdata']['total_amount'], 2) : '0.00' ?>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="text-dark" style="width: 20%;"><b>Remark</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['remark_comment']) ? htmlspecialchars($file_detail['punchdata']['remark_comment']) : '' ?>
+                  </td>
+               </tr>
+            </table>
          <?php } elseif ($doc_type_id == 48) { ?>
             <table class="table borderless">
                <tr>
