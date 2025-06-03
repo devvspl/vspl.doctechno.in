@@ -368,162 +368,13 @@ class Extract_model extends CI_Model
 
         return $query->num_rows() > 0 ? $query->row()->file_path : null;
     }
-    // public function storeExtractedData($typeId, $scanId, $data)
-    // {
-    //     $tableName = "ext_tempdata_" . $typeId;
-    //     if (!$this->db->table_exists($tableName)) {
-    //         return false;
-    //     }
-    //     if (isset($data['Round Off']) && is_array($data['Round Off'])) {
-    //         if (isset($data['Round Off']['Value'])) {
-    //             $data['Round Off Value'] = $data['Round Off']['Value'];
-    //         }
-    //         if (isset($data['Round Off']['Type'])) {
-    //             $data['Round Off Type'] = $data['Round Off']['Type'];
-    //         }
-    //         unset($data['Round Off']);
-    //     }
-    //     $this->db->select("group_id, location_id");
-    //     $this->db->where("scan_id", $scanId);
-    //     $query = $this->db->get("y{$this->year_id}_scan_file");
-    //     if ($query->num_rows() == 0) {
-    //         return false;
-    //     }
-    //     $scanData = $query->row_array();
-    //     $groupId = $scanData["group_id"];
-    //     $location = $scanData["location_id"];
-    //     $this->db->where("scan_id", $scanId);
-    //     if ($this->db->get($tableName)->num_rows() > 0) {
-    //         $this->db->where("scan_id", $scanId)->delete($tableName);
-    //     }
-    //     $flatData = $this->flattenArray($data);
-    //     $tableColumns = $this->db->list_fields($tableName);
-    //     $insertData = ["scan_id" => $scanId, "group_id" => $groupId, "location_id" => $location];
-    //     foreach ($flatData as $key => $value) {
-    //         if (is_array($value))
-    //             continue;
-    //         $column = strtolower(str_replace([" ", "/", "-"], "_", $key));
-    //         $matchedColumn = $this->getBestMatch($column, $tableColumns);
-    //         if ($matchedColumn) {
-    //             if (is_string($value) && $this->isValidDate($value) && stripos($key, 'date') !== false) {
-    //                 $value = date('Y-m-d', strtotime($value));
-    //             } else {
-    //                 if (!is_null($value) && is_string($value)) {
-    //                     $value = preg_replace('/[₹,]/', '', $value);
-    //                 }
-    //                 if (is_numeric($value)) {
-    //                     $value = (float) $value;
-    //                 }
-    //             }
-    //             $insertData[$matchedColumn] = $value;
-    //         } else {
-    //         }
-    //     }
-    //     if ($this->db->insert($tableName, $insertData)) {
-    //         foreach ($flatData as $sectionName => $sectionItems) {
-    //             if (!is_array($sectionItems) || !isset($sectionItems[0]) || !is_array($sectionItems[0])) {
-    //                 continue;
-    //             }
-    //             $detailsTable = "ext_tempdata_{$typeId}_details";
-    //             if (!$this->db->table_exists($detailsTable)) {
-    //                 continue;
-    //             }
-    //             $this->db->where("scan_id", $scanId)->delete($detailsTable);
-    //             $detailsColumns = $this->db->list_fields($detailsTable);
-    //             $mainItems = [];
 
-    //             $taxData = ['gst' => null, 'sgst' => null, 'igst' => null, 'cess' => null, 'tax_amount' => 0];
-    //             foreach ($sectionItems as $item) {
-    //                 if (!is_array($item)) {
-    //                     continue;
-    //                 }
-    //                 $particular = isset($item['Particular']) ? $item['Particular'] : '';
-    //                 if (stripos($particular, 'CGST') !== false || stripos($particular, 'SGST') !== false || stripos($particular, 'IGST') !== false) {
-    //                     if (stripos($particular, 'CGST') !== false && isset($item['GST %'])) {
-    //                         $taxData['gst'] = $item['GST %'];
-    //                         $taxData['tax_amount'] += isset($item['Amount']) ? (float) $item['Amount'] : 0;
-    //                     } elseif (stripos($particular, 'SGST') !== false && isset($item['GST %'])) {
-    //                         $taxData['sgst'] = $item['GST %'];
-    //                         $taxData['tax_amount'] += isset($item['Amount']) ? (float) $item['Amount'] : 0;
-    //                     } elseif (stripos($particular, 'IGST') !== false && isset($item['GST %'])) {
-    //                         $taxData['igst'] = $item['GST %'];
-    //                         $taxData['tax_amount'] += isset($item['Amount']) ? (float) $item['Amount'] : 0;
-    //                     }
-    //                     if (isset($item['Cess %'])) {
-    //                         $taxData['cess'] = $item['Cess %'];
-    //                     }
-    //                 } else {
-    //                     $mainItems[] = $item;
-    //                 }
-    //             }
-
-
-    //             foreach ($mainItems as $item) {
-    //                 $detailsData = ["scan_id" => $scanId];
-    //                 foreach ($item as $key => $value) {
-    //                     if (is_array($value)) {
-    //                         continue;
-    //                     }
-    //                     $column = strtolower(str_replace([" ", "/", "-", "%"], "_", $key));
-    //                     $matchedColumn = $this->getBestMatch($column, $detailsColumns);
-    //                     if ($matchedColumn) {
-    //                         if (in_array($matchedColumn, ['qty', 'mrp', 'discount_in_mrp', 'price', 'amount', 'gst', 'sgst', 'igst', 'cess', 'total_amount']) && !empty($value)) {
-    //                             $value = (float) preg_replace('/[₹,]/', '', $value);
-    //                         }
-    //                         $detailsData[$matchedColumn] = $value;
-    //                     }
-    //                 }
-
-
-    //                 if ($taxData['gst'] !== null) {
-    //                     $detailsData['gst'] = (float) $taxData['gst'];
-    //                 }
-    //                 if ($taxData['sgst'] !== null) {
-    //                     $detailsData['sgst'] = (float) $taxData['sgst'];
-    //                 }
-    //                 if ($taxData['igst'] !== null) {
-    //                     $detailsData['igst'] = (float) $taxData['igst'];
-    //                 }
-    //                 if ($taxData['cess'] !== null) {
-    //                     $detailsData['cess'] = (float) $taxData['cess'];
-    //                 }
-    //                 if (isset($detailsData['amount']) && $taxData['tax_amount'] > 0) {
-    //                     $detailsData['total_amount'] = (float) $detailsData['amount'] + $taxData['tax_amount'];
-    //                 } elseif (isset($detailsData['amount'])) {
-    //                     $detailsData['total_amount'] = (float) $detailsData['amount'];
-    //                 }
-
-
-    //                 foreach (['particular', 'hsn', 'qty', 'unit', 'price', 'amount', 'mrp', 'discount_in_mrp'] as $requiredField) {
-    //                     if (!isset($detailsData[$requiredField])) {
-    //                         $detailsData[$requiredField] = in_array($requiredField, ['qty', 'price', 'amount', 'mrp', 'discount_in_mrp']) ? 0.00 : '';
-    //                     }
-    //                 }
-
-
-    //                 if (!empty($detailsData)) {
-    //                     if (!$this->db->insert($detailsTable, $detailsData)) {
-    //                         $error = $this->db->error();
-    //                         log_message('error', 'Insert failed: ' . json_encode($error));
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //         $docType = $this->customlib->getDocType($typeId);
-    //         $this->db->where("scan_id", $scanId);
-    //         $this->db->update("y{$this->year_id}_scan_file", ["extract_status" => "Y", "Doc_Type" => $docType, "doc_type_id" => $typeId]);
-    //         return $this->moveDataToPunchfile($scanId, $typeId);
-    //     }
-    //     return false;
-    // }
     public function storeExtractedData($typeId, $scanId, $data)
     {
         $tableName = "ext_tempdata_" . $typeId;
         if (!$this->db->table_exists($tableName)) {
             return false;
         }
-
-        // Handle Round Off if present
         if (isset($data['Round Off']) && is_array($data['Round Off'])) {
             if (isset($data['Round Off']['Value'])) {
                 $data['Round Off Value'] = $data['Round Off']['Value'];
@@ -533,33 +384,26 @@ class Extract_model extends CI_Model
             }
             unset($data['Round Off']);
         }
-
-        // Fetch group_id and location_id
-        $this->db->select('group_id, location_id');
-        $this->db->where('scan_id', $scanId);
+        $this->db->select("group_id, location_id");
+        $this->db->where("scan_id", $scanId);
         $query = $this->db->get("y{$this->year_id}_scan_file");
         if ($query->num_rows() == 0) {
             return false;
         }
         $scanData = $query->row_array();
-        $groupId = $scanData['group_id'];
-        $location = $scanData['location_id'];
-
-        // Delete existing data for scan_id
-        $this->db->where('scan_id', $scanId);
+        $groupId = $scanData["group_id"];
+        $location = $scanData["location_id"];
+        $this->db->where("scan_id", $scanId);
         if ($this->db->get($tableName)->num_rows() > 0) {
-            $this->db->where('scan_id', $scanId)->delete($tableName);
+            $this->db->where("scan_id", $scanId)->delete($tableName);
         }
-
-        // Flatten data and map to main table columns
         $flatData = $this->flattenArray($data);
         $tableColumns = $this->db->list_fields($tableName);
-        $insertData = ['scan_id' => $scanId, 'group_id' => $groupId, 'location_id' => $location];
+        $insertData = ["scan_id" => $scanId, "group_id" => $groupId, "location_id" => $location];
         foreach ($flatData as $key => $value) {
-            if (is_array($value)) {
+            if (is_array($value))
                 continue;
-            }
-            $column = strtolower(str_replace([' ', '/', '-'], '_', $key));
+            $column = strtolower(str_replace([" ", "/", "-"], "_", $key));
             $matchedColumn = $this->getBestMatch($column, $tableColumns);
             if ($matchedColumn) {
                 if (is_string($value) && $this->isValidDate($value) && stripos($key, 'date') !== false) {
@@ -573,32 +417,90 @@ class Extract_model extends CI_Model
                     }
                 }
                 $insertData[$matchedColumn] = $value;
+            } else {
             }
         }
-
-        // Insert into main table
         if ($this->db->insert($tableName, $insertData)) {
-            // Handle details table
-            $detailsTable = "ext_tempdata_{$typeId}_details";
-            if ($this->db->table_exists($detailsTable) && $typeId == 27 && !empty($data['Distance Details']) && is_array($data['Distance Details'])) {
-                // Document type 27 specific handling
-                $this->db->where('scan_id', $scanId)->delete($detailsTable);
+            foreach ($flatData as $sectionName => $sectionItems) {
+                if (!is_array($sectionItems) || !isset($sectionItems[0]) || !is_array($sectionItems[0])) {
+                    continue;
+                }
+                $detailsTable = "ext_tempdata_{$typeId}_details";
+                if (!$this->db->table_exists($detailsTable)) {
+                    continue;
+                }
+                $this->db->where("scan_id", $scanId)->delete($detailsTable);
                 $detailsColumns = $this->db->list_fields($detailsTable);
+                $mainItems = [];
 
-                foreach ($data['Distance Details'] as $item) {
-                    $detailsData = ['scan_id' => $scanId];
+                $taxData = ['gst' => null, 'sgst' => null, 'igst' => null, 'cess' => null, 'tax_amount' => 0];
+                foreach ($sectionItems as $item) {
+                    if (!is_array($item)) {
+                        continue;
+                    }
+                    $particular = isset($item['Particular']) ? $item['Particular'] : '';
+                    if (stripos($particular, 'CGST') !== false || stripos($particular, 'SGST') !== false || stripos($particular, 'IGST') !== false) {
+                        if (stripos($particular, 'CGST') !== false && isset($item['GST %'])) {
+                            $taxData['gst'] = $item['GST %'];
+                            $taxData['tax_amount'] += isset($item['Amount']) ? (float) $item['Amount'] : 0;
+                        } elseif (stripos($particular, 'SGST') !== false && isset($item['GST %'])) {
+                            $taxData['sgst'] = $item['GST %'];
+                            $taxData['tax_amount'] += isset($item['Amount']) ? (float) $item['Amount'] : 0;
+                        } elseif (stripos($particular, 'IGST') !== false && isset($item['GST %'])) {
+                            $taxData['igst'] = $item['GST %'];
+                            $taxData['tax_amount'] += isset($item['Amount']) ? (float) $item['Amount'] : 0;
+                        }
+                        if (isset($item['Cess %'])) {
+                            $taxData['cess'] = $item['Cess %'];
+                        }
+                    } else {
+                        $mainItems[] = $item;
+                    }
+                }
+
+
+                foreach ($mainItems as $item) {
+                    $detailsData = ["scan_id" => $scanId];
                     foreach ($item as $key => $value) {
-                        $column = strtolower(str_replace([' ', '/', '-'], '_', $key));
+                        if (is_array($value)) {
+                            continue;
+                        }
+                        $column = strtolower(str_replace([" ", "/", "-", "%"], "_", $key));
                         $matchedColumn = $this->getBestMatch($column, $detailsColumns);
                         if ($matchedColumn) {
-                            if ($matchedColumn === 'travel_date' && is_string($value) && $this->isValidDate($value)) {
-                                $value = date('Y-m-d', strtotime($value));
-                            } elseif (in_array($matchedColumn, ['opening_reading', 'closing_reading', 'total_km', 'amount'])) {
+                            if (in_array($matchedColumn, ['qty', 'mrp', 'discount_in_mrp', 'price', 'amount', 'gst', 'sgst', 'igst', 'cess', 'total_amount']) && !empty($value)) {
                                 $value = (float) preg_replace('/[₹,]/', '', $value);
                             }
                             $detailsData[$matchedColumn] = $value;
                         }
                     }
+
+
+                    if ($taxData['gst'] !== null) {
+                        $detailsData['gst'] = (float) $taxData['gst'];
+                    }
+                    if ($taxData['sgst'] !== null) {
+                        $detailsData['sgst'] = (float) $taxData['sgst'];
+                    }
+                    if ($taxData['igst'] !== null) {
+                        $detailsData['igst'] = (float) $taxData['igst'];
+                    }
+                    if ($taxData['cess'] !== null) {
+                        $detailsData['cess'] = (float) $taxData['cess'];
+                    }
+                    if (isset($detailsData['amount']) && $taxData['tax_amount'] > 0) {
+                        $detailsData['total_amount'] = (float) $detailsData['amount'] + $taxData['tax_amount'];
+                    } elseif (isset($detailsData['amount'])) {
+                        $detailsData['total_amount'] = (float) $detailsData['amount'];
+                    }
+
+
+                    foreach (['particular', 'hsn', 'qty', 'unit', 'price', 'amount', 'mrp', 'discount_in_mrp'] as $requiredField) {
+                        if (!isset($detailsData[$requiredField])) {
+                            $detailsData[$requiredField] = in_array($requiredField, ['qty', 'price', 'amount', 'mrp', 'discount_in_mrp']) ? 0.00 : '';
+                        }
+                    }
+
 
                     if (!empty($detailsData)) {
                         if (!$this->db->insert($detailsTable, $detailsData)) {
@@ -607,99 +509,14 @@ class Extract_model extends CI_Model
                         }
                     }
                 }
-            } elseif ($this->db->table_exists($detailsTable)) {
-                // Generic handling for other document types
-                $this->db->where('scan_id', $scanId)->delete($detailsTable);
-                $detailsColumns = $this->db->list_fields($detailsTable);
-                foreach ($flatData as $sectionName => $sectionItems) {
-                    if (!is_array($sectionItems) || !isset($sectionItems[0]) || !is_array($sectionItems[0])) {
-                        continue;
-                    }
-                    $mainItems = [];
-                    $taxData = ['gst' => null, 'sgst' => null, 'igst' => null, 'cess' => null, 'tax_amount' => 0];
-                    foreach ($sectionItems as $item) {
-                        if (!is_array($item)) {
-                            continue;
-                        }
-                        $particular = isset($item['Particular']) ? $item['Particular'] : '';
-                        if (stripos($particular, 'CGST') !== false || stripos($particular, 'SGST') !== false || stripos($particular, 'IGST') !== false) {
-                            if (stripos($particular, 'CGST') !== false && isset($item['GST %'])) {
-                                $taxData['gst'] = $item['GST %'];
-                                $taxData['tax_amount'] += isset($item['Amount']) ? (float) $item['Amount'] : 0;
-                            } elseif (stripos($particular, 'SGST') !== false && isset($item['GST %'])) {
-                                $taxData['sgst'] = $item['GST %'];
-                                $taxData['tax_amount'] += isset($item['Amount']) ? (float) $item['Amount'] : 0;
-                            } elseif (stripos($particular, 'IGST') !== false && isset($item['GST %'])) {
-                                $taxData['igst'] = $item['GST %'];
-                                $taxData['tax_amount'] += isset($item['Amount']) ? (float) $item['Amount'] : 0;
-                            }
-                            if (isset($item['Cess %'])) {
-                                $taxData['cess'] = $item['Cess %'];
-                            }
-                        } else {
-                            $mainItems[] = $item;
-                        }
-                    }
-
-                    foreach ($mainItems as $item) {
-                        $detailsData = ['scan_id' => $scanId];
-                        foreach ($item as $key => $value) {
-                            if (is_array($value)) {
-                                continue;
-                            }
-                            $column = strtolower(str_replace([' ', '/', '-', '%'], '_', $key));
-                            $matchedColumn = $this->getBestMatch($column, $detailsColumns);
-                            if ($matchedColumn) {
-                                if (in_array($matchedColumn, ['qty', 'mrp', 'discount_in_mrp', 'price', 'amount', 'gst', 'sgst', 'igst', 'cess', 'total_amount']) && !empty($value)) {
-                                    $value = (float) preg_replace('/[₹,]/', '', $value);
-                                }
-                                $detailsData[$matchedColumn] = $value;
-                            }
-                        }
-
-                        if ($taxData['gst'] !== null) {
-                            $detailsData['gst'] = (float) $taxData['gst'];
-                        }
-                        if ($taxData['sgst'] !== null) {
-                            $detailsData['sgst'] = (float) $taxData['sgst'];
-                        }
-                        if ($taxData['igst'] !== null) {
-                            $detailsData['igst'] = (float) $taxData['igst'];
-                        }
-                        if ($taxData['cess'] !== null) {
-                            $detailsData['cess'] = (float) $taxData['cess'];
-                        }
-                        if (isset($detailsData['amount']) && $taxData['tax_amount'] > 0) {
-                            $detailsData['total_amount'] = (float) $detailsData['amount'] + $taxData['tax_amount'];
-                        } elseif (isset($detailsData['amount'])) {
-                            $detailsData['total_amount'] = (float) $detailsData['amount'];
-                        }
-
-                        foreach (['particular', 'hsn', 'qty', 'unit', 'price', 'amount', 'mrp', 'discount_in_mrp'] as $requiredField) {
-                            if (!isset($detailsData[$requiredField])) {
-                                $detailsData[$requiredField] = in_array($requiredField, ['qty', 'price', 'amount', 'mrp', 'discount_in_mrp']) ? 0.00 : '';
-                            }
-                        }
-
-                        if (!empty($detailsData)) {
-                            if (!$this->db->insert($detailsTable, $detailsData)) {
-                                $error = $this->db->error();
-                                log_message('error', 'Insert failed: ' . json_encode($error));
-                            }
-                        }
-                    }
-                }
             }
-
-            // Update scan file status
             $docType = $this->customlib->getDocType($typeId);
-            $this->db->where('scan_id', $scanId);
-            $this->db->update("y{$this->year_id}_scan_file", ['extract_status' => 'Y', 'Doc_Type' => $docType, 'doc_type_id' => $typeId]);
+            $this->db->where("scan_id", $scanId);
+            $this->db->update("y{$this->year_id}_scan_file", ["extract_status" => "Y", "Doc_Type" => $docType, "doc_type_id" => $typeId]);
             return $this->moveDataToPunchfile($scanId, $typeId);
         }
         return false;
     }
-
     private function getBestMatch($inputColumn, $columns)
     {
         $bestMatch = null;
@@ -718,34 +535,27 @@ class Extract_model extends CI_Model
         }
         return ($bestScore >= 70 || $minDistance <= 3) ? $bestMatch : null;
     }
-
     private function flattenArray($data, $excludeKeys = [])
     {
         $flatData = [];
         foreach ($data as $key => $value) {
             if (is_array($value) && !in_array($key, $excludeKeys)) {
-                $flatData[$key] = $value; // Preserve nested arrays like Distance Details
+                foreach ($value as $subKey => $subValue) {
+                    $flatData[$subKey] = $subValue;
+                }
             } else {
                 $flatData[$key] = $value;
             }
         }
         return $flatData;
     }
-
     private function isValidDate($date)
     {
         if (empty($date)) {
             return false;
         }
-        $dateTime = DateTime::createFromFormat('Y-m-d', $date);
-        if ($dateTime && $dateTime->format('Y-m-d') === $date) {
-            return true;
-        }
-        $dateTime = DateTime::createFromFormat('d-m-Y', $date);
-        if ($dateTime && $dateTime->format('d-m-Y') === $date) {
-            return true;
-        }
-        return false;
+        $timestamp = strtotime($date);
+        return $timestamp !== false && date('Y-m-d', $timestamp) === date('Y-m-d', $timestamp);
     }
     public function moveDataToPunchfile($scanId, $docTypeId)
     {
