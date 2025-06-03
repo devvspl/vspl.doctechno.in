@@ -388,7 +388,7 @@ class Punch_model extends MY_Model
         if ($this->db->table_exists($punchdata_table)) {
             $this->db->select('p.*, e.emp_name')
                 ->from($punchdata_table . ' p')
-                ->join('master_employee e', 'p.employee_name = e.employee_name', 'left')
+                ->join('master_employee e', 'p.employee_name = e.id', 'left')
                 ->where('p.scan_id', $scan_id);
             $query = $this->db->get();
             $result['punchdata'] = $query->num_rows() > 0 ? $query->row_array() : [];
