@@ -462,5 +462,33 @@ class Punch_model extends MY_Model
         return $result;
     }
 
+    private function getCashDepositWithdrawalsData($scan_id, $punchdata_table, $punchdata_details_table)
+    {
+        $result = [
+            'punchdata' => [],
+            'punchdata_details' => []
+        ];
+
+        // Fetch punchdata
+        if ($this->db->table_exists($punchdata_table)) {
+            $this->db->select('p.*')
+                ->from($punchdata_table . ' p')
+                ->where('p.scan_id', $scan_id);
+            $query = $this->db->get();
+            $result['punchdata'] = $query->row_array() ?: [];
+        }
+
+        // Fetch punchdata_details
+        if ($this->db->table_exists($punchdata_details_table)) {
+            $this->db->select('pd.*')
+                ->from($punchdata_details_table . ' pd')
+                ->where('pd.scan_id', $scan_id);
+            $query = $this->db->get();
+            $result['punchdata_details'] = $query->result_array() ?: [];
+        }
+
+        return $result;
+    }
+
 
 }

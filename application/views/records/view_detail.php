@@ -773,40 +773,52 @@ function isDateNull($date)
          <?php } elseif ($doc_type_id == 6) { ?>
             <table class="table borderless">
                <tr>
-                  <td class="text-dark" style="width: 40%;"><b>Type</b></td>
-                  <td>:&emsp;<?= $file_detail->File_Type ?></td>
+                  <td class="text-dark" style="width: 20%;"><b>Type</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['type']) ? htmlspecialchars($file_detail['punchdata']['type']) : '' ?>
+                  </td>
                </tr>
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Bank Name</b></td>
-                  <td>:&emsp;<?= $file_detail->BankName ?></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['bank_name']) ? htmlspecialchars($file_detail['punchdata']['bank_name']) : '' ?>
+                  </td>
                </tr>
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Branch</b></td>
-                  <td>:&emsp;<?= $file_detail->BankAddress ?></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['branch']) ? htmlspecialchars($file_detail['punchdata']['branch']) : '' ?>
+                  </td>
                </tr>
                <tr>
-                  <td class="text-dark" style="width: 20%;"><b> Date</b></td>
-                  <td>:&emsp;<?= date('d-m-Y', strtotime($file_detail->BillDate)) ?></td>
+                  <td class="text-dark" style="width: 20%;"><b>Date</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['date']) && $file_detail['punchdata']['date'] !== '0000-00-00' ? date('d-m-Y', strtotime($file_detail['punchdata']['date'])) : '' ?>
+                  </td>
                </tr>
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Account No.</b></td>
-                  <td>:&emsp;<?= $file_detail->BankAccountNo ?></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['account_no']) ? htmlspecialchars($file_detail['punchdata']['account_no']) : '' ?>
+                  </td>
                </tr>
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Beneficiary Name</b></td>
-                  <td>:&emsp;<?= $file_detail->Related_Person ?></td>
-               </tr>
-               <tr>
-                  <td class="text-dark" style="width: 20%;"><b>Type of Document</b></td>
-                  <td>:&emsp;<?= $file_detail->File_Type ?></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['beneficiary_name']) ? htmlspecialchars($file_detail['punchdata']['beneficiary_name']) : '' ?>
+                  </td>
                </tr>
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Amount</b></td>
-                  <td>:&emsp;<?= $file_detail->Total_Amount ?></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['amount']) ? number_format(floatval($file_detail['punchdata']['amount']), 2) : '0.00' ?>
+                  </td>
                </tr>
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Remark</b></td>
-                  <td>:&emsp;<?= $file_detail->Remark ?></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['remark_comment']) ? htmlspecialchars($file_detail['punchdata']['remark_comment']) : '' ?>
+                  </td>
                </tr>
             </table>
          <?php } elseif ($doc_type_id == 23) { ?>
