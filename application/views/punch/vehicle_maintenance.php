@@ -1,5 +1,5 @@
 <div id="invoice-details" class="tab-content active">
-   <form action="<?= base_url(); ?>form/Vehicle_ctrl/Save_Vehicle_Maintenance" id="punch_form" name="punch_form"
+   <form action="<?= base_url(); ?>Punch/savePunchToDatabase" id="punch_form" name="punch_form"
       method="post" accept-charset="utf-8">
          <input type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id ?>">
          <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $doc_type_id ?>">
@@ -31,16 +31,16 @@
             <div class="col-md-4 form-group">
                <label for="">Invoice No:</label>
                <input type="text" name="InvoiceNo" id="InvoiceNo" class="form-control" required
-                  value="<?= (isset($punch_detail->File_No)) ? $punch_detail->File_No : '' ?>">
+                  value="<?= (isset($punch_detail->invoice_no)) ? $punch_detail->invoice_no : '' ?>">
             </div>
             <div class="form-group col-md-4">
                <label for="">Invoice Date:</label>
                <input type="text" name="Bill_Date" id="Bill_Date" class="form-control datepicker" required
-                  value="<?= (isset($punch_detail->BillDate)) ? date('Y-m-d', strtotime($punch_detail->BillDate)) : '' ?>">
+                  value="<?= (isset($punch_detail->invoice_date)) ? date('Y-m-d', strtotime($punch_detail->invoice_date)) : '' ?>">
             </div>
             <div class="form-group col-md-4">
                <label for="">Vehicle No:</label>
-               <input type="text" name="VehicleRegNo" id="VehicleRegNo" class="form-control" value="<?= (isset($punch_detail->VehicleRegNo)) ? $punch_detail->VehicleRegNo : '' ?>">
+               <input type="text" name="VehicleRegNo" id="VehicleRegNo" class="form-control" value="<?= (isset($punch_detail->vehicle_no)) ? $punch_detail->vehicle_no : '' ?>">
             </div>
             <div class="form-group col-md-6">
                <label for="">Location:</label>
@@ -144,7 +144,7 @@
                      <td colspan="2">
                         <input type="text" name="Sub_Total" id="Sub_Total"
                            class="form-control form-control-sm" readonly
-                           value="<?= (isset($punch_detail->SubTotal)) ? $punch_detail->SubTotal : '' ?>">
+                           value="<?= (isset($punch_detail->sub_total)) ? $punch_detail->sub_total : '' ?>">
                      </td>
                   </tr>
                   <tr>
@@ -152,7 +152,7 @@
                      <td colspan="2">
                         <input type="text" name="Total" id="Total" class="form-control form-control-sm"
                            readonly
-                           value="<?= (isset($punch_detail->Total_Amount)) ? $punch_detail->Total_Amount : '' ?>">
+                           value="<?= (isset($punch_detail->total)) ? $punch_detail->total : '' ?>">
                      </td>
                   </tr>
                   <tr>
@@ -160,11 +160,11 @@
                      <td colspan="6">
                         <input type="text" name="Total_Discount" id="Total_Discount"
                            class="form-control form-control-sm d-inline"
-                           value="<?= (isset($punch_detail->Total_Discount)) ? $punch_detail->Total_Discount : '' ?>"
+                           value="<?= (isset($punch_detail->total_discount)) ? $punch_detail->total_discount : '' ?>"
                            style="width:100px;">
                         <span><input type="radio" name="plus_minus" id="plus" class="plus_minus" <?php
-                           if (isset($punch_detail->Total_Discount)) {
-                           	if ($punch_detail->Grand_Total > $punch_detail->Total_Amount) {
+                           if (isset($punch_detail->total_discount)) {
+                           	if ($punch_detail->grand_total > $punch_detail->total) {
                            		echo "checked";
                            	}
                            }
@@ -172,8 +172,8 @@
                         <label for="plus">Plus</label>
                         </span>
                         <span><input type="radio" name="plus_minus" id="minus" class="plus_minus" <?php
-                           if (isset($punch_detail->Total_Discount)) {
-                           	if ($punch_detail->Grand_Total < $punch_detail->Total_Amount) {
+                           if (isset($punch_detail->total_discount)) {
+                           	if ($punch_detail->grand_total < $punch_detail->total) {
                            		echo "checked";
                            	}
                            } else {
@@ -186,7 +186,7 @@
                   <td colspan="2">
                      <input type="text" name="Grand_Total" id="Grand_Total"
                         class="form-control form-control-sm" readonly
-                        value="<?= (isset($punch_detail->Grand_Total)) ? $punch_detail->Grand_Total : '' ?>">
+                        value="<?= (isset($punch_detail->grand_total)) ? $punch_detail->grand_total : '' ?>">
                   </td>
                   </tr>
                </table>
@@ -196,7 +196,7 @@
             <div class="form-group col-md-12">
                <label for="">Remark / Comment:</label>
                <textarea name="Remark" id="Remark" cols="10" rows="3"
-                  class="form-control"><?= (isset($punch_detail->Remark)) ? $punch_detail->Remark : '' ?></textarea>
+                  class="form-control"><?= (isset($punch_detail->remark_comment)) ? $punch_detail->remark_comment : '' ?></textarea>
             </div>
          </div>
          <div class="box-footer">
@@ -280,11 +280,13 @@
    
    	function getMultiRecord() {
    		var scan_id = $('#scan_id').val();
+           const docTypeId = $("#DocTypeId").val();
    		$.ajax({
-   			url: '<?= base_url() ?>form/InvoiceController/getInvoiceItem',
+   			  "<?= base_url() ?>Punch/getPunchItems",
    			type: 'POST',
    			data: {
-   				scan_id: scan_id
+   				scan_id: scanId,
+         type_id: docTypeId
    			},
    			dataType: 'json',
    			success: function (response) {
