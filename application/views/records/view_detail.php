@@ -3140,60 +3140,88 @@ function isDateNull($date)
          <?php } elseif ($doc_type_id == 50) { ?>
             <table class="table borderless">
                <tr>
-                  <td class="text-dark" style="width: 20%"><b>Company Name</b></td>
-                  <td>: <?= $file_detail->Company ?></td>
+                  <td class="text-dark" style="width: 20%;"><b>Company Name</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['company_name_text']) ? htmlspecialchars($file_detail['punchdata']['company_name_text']) : '' ?>
+                  </td>
                </tr>
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Company Address</b></td>
-                  <td>:&emsp;<?= $file_detail->Related_Address ?></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['company_address']) ? htmlspecialchars($file_detail['punchdata']['company_address']) : '' ?>
+                  </td>
                </tr>
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Vendor Name</b></td>
-                  <td>:&emsp;<?= $file_detail->ToName; ?></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['vendor_name_text']) ? htmlspecialchars($file_detail['punchdata']['vendor_name_text']) : '' ?>
+                  </td>
                </tr>
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Vendor Address</b></td>
-                  <td>:&emsp;<?= $file_detail->AgencyAddress ?></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['vendor_address']) ? htmlspecialchars($file_detail['punchdata']['vendor_address']) : '' ?>
+                  </td>
                </tr>
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Vehicle No</b></td>
-                  <td>:&emsp;<?= $file_detail->VehicleRegNo ?></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['vehicle_no']) ? htmlspecialchars($file_detail['punchdata']['vehicle_no']) : '' ?>
+                  </td>
                </tr>
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Vehicle Type</b></td>
-                  <td>:&emsp;<?= $file_detail->Vehicle_Type ?></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['vehicle_type']) ? htmlspecialchars($file_detail['punchdata']['vehicle_type']) : '' ?>
+                  </td>
                </tr>
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Location</b></td>
-                  <td>:&emsp;<?= $file_detail->Loc_Name; ?></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['location']) ? htmlspecialchars($file_detail['punchdata']['location']) : '' ?>
+                  </td>
                </tr>
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Invoice Date</b></td>
-                  <td>:&emsp;<?= date('d-m-Y', strtotime($file_detail->BillDate)) ?></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['invoice_date']) && $file_detail['punchdata']['invoice_date'] !== '0000-00-00' ? date('d-m-Y', strtotime($file_detail['punchdata']['invoice_date'])) : '' ?>
+                  </td>
                </tr>
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Particular</b></td>
-                  <td>:&emsp;<?= $file_detail->Particular ?></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['particular']) ? htmlspecialchars($file_detail['punchdata']['particular']) : '' ?>
+                  </td>
                </tr>
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Hour</b></td>
-                  <td>:&emsp;<?= $file_detail->Period ?></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['hour']) ? number_format($file_detail['punchdata']['hour'], 2) : '0.00' ?>
+                  </td>
                </tr>
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Trips</b></td>
-                  <td>:&emsp;<?= $file_detail->TotalRunKM ?></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['trips']) ? htmlspecialchars($file_detail['punchdata']['trips']) : '' ?>
+                  </td>
                </tr>
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Rate Per Trip</b></td>
-                  <td>:&emsp;<?= $file_detail->RateOfInterest ?></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['rate_per_trip']) ? number_format($file_detail['punchdata']['rate_per_trip'], 2) : '0.00' ?>
+                  </td>
                </tr>
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Total Amount</b></td>
-                  <td>:&emsp;<?= $file_detail->Total_Amount ?></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['total_amount']) ? number_format($file_detail['punchdata']['total_amount'], 2) : '0.00' ?>
+                  </td>
                </tr>
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Remark</b></td>
-                  <td>:&emsp;<?= $file_detail->Remark ?></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['remark_comment']) ? htmlspecialchars($file_detail['punchdata']['remark_comment']) : '' ?>
+                  </td>
                </tr>
             </table>
          <?php } elseif ($doc_type_id == 51) { ?>
