@@ -404,4 +404,33 @@ class Punch_model extends MY_Model
 
         return $result;
     }
+    private function getVehicleFuelData($scan_id, $punchdata_table, $punchdata_details_table)
+    {
+        $result = [
+            'punchdata' => [],
+            'punchdata_details' => []
+        ];
+
+        // Fetch punchdata with joins to master_firm for vendor_name and billing_to
+        if ($this->db->table_exists($punchdata_table)) {
+            $this->db->select('p.*, v.firm_name AS vendor_name_text, b.firm_name AS billing_to_text')
+                ->from($punchdata_table . ' p')
+                ->join('master_firm v', 'p.vendor_name = v.firm_id AND v.firm_type = "Vendor" AND v.is_deleted = "N"', 'left')
+                ->join('master_firm b', 'p.billing_to = b.firm_id AND b.firm_type = "Company" AND b.is_deleted = "N"', 'left')
+                ->where('p.scan_id', $scan_id);
+            $query = $this->db->get();
+            $result['punchdata'] = $query->row_array() ?: [];
+        }
+
+        // Fetch punchdata_details
+        if ($this->db->table_exists($punchdata_details_table)) {
+            $this->db->select('pd.*')
+                ->from($punchdata_details_table . ' pd')
+                ->where('pd.scan_id', $scan_id);
+            $query = $this->db->get();
+            $result['punchdata_details'] = $query->result_array() ?: [];
+        }
+
+        return $result;
+    }
 }
