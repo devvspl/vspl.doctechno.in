@@ -872,7 +872,7 @@ class Punch_model extends MY_Model
         if ($this->db->table_exists($punchdata_table)) {
             $this->db->select('p.*, b.firm_name AS company_name_text	, v.firm_name AS vendor_name_text')
                 ->from($punchdata_table . ' p')
-                ->join('master_firm b', 'p.billing_to = b.firm_id AND b.firm_type = "Company" AND b.is_deleted = "N"', 'left')
+                ->join('master_firm b', 'p.company_name = b.firm_id AND b.firm_type = "Company" AND b.is_deleted = "N"', 'left')
                 ->join('master_firm v', 'p.vendor_name = v.firm_id AND v.firm_type = "Vendor" AND v.is_deleted = "N"', 'left')
                 ->where('p.scan_id', $scan_id);
             $query = $this->db->get();
