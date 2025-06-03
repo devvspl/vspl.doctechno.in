@@ -2228,34 +2228,29 @@ class Punch extends CI_Controller
             "mobile_no" => $this->db->escape_str($post["mobile_no"] ?? ""),
             "company_name" => $this->db->escape_str($post["company_name"] ?? ""),
             "address" => $this->db->escape_str($post["address"] ?? ""),
-            "cgst_tax" => (float) ($post["Tax"][0] ?? 0.0),
-            "cgst_interest" => (float) ($post["Interest"][0] ?? 0.0),
-            "cgst_penalty" => (float) ($post["Penalty"][0] ?? 0.0),
-            "cgst_fees" => (float) ($post["Fees"][0] ?? 0.0),
-            "cgst_other" => (float) ($post["Other"][0] ?? 0.0),
-            "cgst_total" => (float) ($post["Total"][0] ?? 0.0),
-            "sgst_tax" => (float) ($post["Tax"][1] ?? 0.0),
-            "sgst_interest" => (float) ($post["Interest"][1] ?? 0.0),
-            "sgst_penalty" => (float) ($post["Penalty"][1] ?? 0.0),
-            "sgst_fees" => (float) ($post["Fees"][1] ?? 0.0),
-            "sgst_other" => (float) ($post["Other"][1] ?? 0.0),
-            "sgst_total" => (float) ($post["Total"][1] ?? 0.0),
-            "igst_tax" => (float) ($post["Tax"][2] ?? 0.0),
-            "igst_interest" => (float) ($post["Interest"][2] ?? 0.0),
-            "igst_penalty" => (float) ($post["Penalty"][2] ?? 0.0),
-            "igst_fees" => (float) ($post["Fees"][2] ?? 0.0),
-            "igst_other" => (float) ($post["Other"][2] ?? 0.0),
-            "igst_total" => (float) ($post["Total"][2] ?? 0.0),
-            "cess_tax" => (float) ($post["Tax"][3] ?? 0.0),
-            "cess_interest" => (float) ($post["Interest"][3] ?? 0.0),
-            "cess_penalty" => (float) ($post["Penalty"][3] ?? 0.0),
-            "cess_fees" => (float) ($post["Fees"][3] ?? 0.0),
-            "cess_other" => (float) ($post["Other"][3] ?? 0.0),
-            "cess_total" => (float) ($post["Total"][3] ?? 0.0),
+        
             "total_challan_amount" => (float) ($post["total_challan_amount"] ?? 0.0),
             "remark_comment" => $this->db->escape_str($post["remark_comment"] ?? ""),
             "created_at" => date("Y-m-d H:i:s"),
         ];
+
+        $items = [];
+        if (!empty($post["Particular"]) && is_array($post["Particular"])) {
+            foreach ($post["Particular"] as $key => $Particular) {
+                if (!empty($Particular)) {
+                    $items[] = [
+                        "scan_id" => $scan_id,
+                        "particular" => $this->db->escape_str($Particular),
+                        "tax" => (float) ($post["Tax"][$key] ?? 0.0),
+                        "interest" => (float) ($post["Interest"][$key] ?? 0.0),
+                        "penalty" => (float) ($post["Penalty"][$key] ?? 0.0),
+                        "fees" => (float) ($post["Fees"][$key] ?? 0.0),
+                        "other" => (float) ($post["Other"][$key] ?? 0.0),
+                        "total" => (float) ($post["Total"][$key] ?? 0.0),
+                    ];
+                }
+            }
+        }
 
         return ["main" => $mainData, "items" => []];
     }
@@ -2909,6 +2904,14 @@ class Punch extends CI_Controller
     }
 
     public function getTicketCancellationItems()
+    {
+        $year_id = $this->year_id;
+        $scan_id = (int) $this->input->post("scan_id");
+        $type_id = (int) $this->input->post("type_id");
+        $this->fetchPunchDetails($scan_id, $type_id, $year_id);
+    }
+
+    public function getGSTChalanItems()
     {
         $year_id = $this->year_id;
         $scan_id = (int) $this->input->post("scan_id");

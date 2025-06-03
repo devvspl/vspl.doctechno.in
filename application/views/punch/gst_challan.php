@@ -219,13 +219,11 @@
       timepicker: false,
       format: 'Y-m-d',
    });
-
    getMultiRecord();
-
    function getMultiRecord() {
       var scan_id = $('#scan_id').val();
       $.ajax({
-         url: '<?= base_url() ?>form/Challan_ctrl/getGstItem',
+         url: '<?= base_url() ?>Punch/getGSTChalanItems',
          type: 'POST',
          data: {
             scan_id: scan_id
@@ -234,19 +232,18 @@
          success: function (response) {
             if (response.status == 200) {
                for (var i = 1; i <= 4; i++) {
-                  $("#Particular" + i).val(response.data[i - 1].Particular);
-                  $("#Tax" + i).val(response.data[i - 1].Tax);
-                  $("#Interest" + i).val(response.data[i - 1].Interest);
-                  $("#Penalty" + i).val(response.data[i - 1].Penalty);
-                  $("#Fees" + i).val(response.data[i - 1].Fees);
-                  $("#Other" + i).val(response.data[i - 1].Other);
-                  $("#Total" + i).val(response.data[i - 1].Total);
+                  $("#Particular" + i).val(response.data[i - 1].particular);
+                  $("#Tax" + i).val(response.data[i - 1].tax);
+                  $("#Interest" + i).val(response.data[i - 1].interest);
+                  $("#Penalty" + i).val(response.data[i - 1].penalty);
+                  $("#Fees" + i).val(response.data[i - 1].fees);
+                  $("#Other" + i).val(response.data[i - 1].other);
+                  $("#Total" + i).val(response.data[i - 1].total);
                }
             }
          }
       });
    }
-
    function calculate_subtotal(id) {
       var Tax = $('#Tax' + id).val();
       var Interest = $('#Interest' + id).val();
@@ -273,7 +270,6 @@
       $('#Total' + id).val(Total);
       calculate_total(); //calculate total
    }
-
    function calculate_total() {
       var Total1 = $('#Total1').val();
       var Total2 = $('#Total2').val();
