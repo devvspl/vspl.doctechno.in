@@ -500,10 +500,9 @@ class Extract_model extends CI_Model
                             $detailsData[$requiredField] = in_array($requiredField, ['qty', 'price', 'amount', 'mrp', 'discount_in_mrp']) ? 0.00 : '';
                         }
                     }
-
-
-                    if (!empty($detailsData)) {
-                        if (!$this->db->insert($detailsTable, $detailsData)) {
+                    $detailsDataFiltered = array_intersect_key($detailsData, array_flip($detailsColumns));
+                    if (!empty($detailsDataFiltered)) {
+                        if (!$this->db->insert($detailsTable, $detailsDataFiltered)) {
                             $error = $this->db->error();
                             log_message('error', 'Insert failed: ' . json_encode($error));
                         }
