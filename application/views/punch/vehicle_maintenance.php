@@ -285,7 +285,7 @@
    			url:   "<?= base_url() ?>Punch/getPunchItems",
    			type: 'POST',
    			data: {
-   				scan_id: scanId,
+   				scan_id: scan_id,
          type_id: docTypeId
    			},
    			dataType: 'json',
