@@ -523,7 +523,7 @@
         'Billing_To',
         '<?= base_url("extract/ExtractorController/get_company_options") ?>',
         <?= json_encode($cleanedBuyer) ?>,
-        '<?= isset($punch_detail->To_ID) ? $punch_detail->To_ID : "" ?>'
+        '<?= isset($punch_detail->billing_to) ? $punch_detail->billing_to : "" ?>'
     );
 
 
@@ -531,14 +531,14 @@
         'Vendor_Name',
         '<?= base_url("extract/ExtractorController/get_vendor_options") ?>',
         <?= json_encode($cleanedVendor) ?>,
-        '<?= isset($punch_detail->From_ID) ? $punch_detail->From_ID : "" ?>'
+        '<?= isset($punch_detail->vendor_name) ? $punch_detail->vendor_name : "" ?>'
     );
 
      loadDropdownOptions(
         'Work_Location',
         '<?= base_url("extract/ExtractorController/get_location_options") ?>',
         <?= json_encode($cleanedlocation) ?>,
-        '<?= isset($punch_detail->Loc_Name) ? $punch_detail->Loc_Name : "" ?>'
+        '<?= isset($punch_detail->location) ? $punch_detail->location : "" ?>'
     );
 });
    
