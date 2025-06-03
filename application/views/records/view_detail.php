@@ -1677,89 +1677,134 @@ function isDateNull($date)
          <?php } elseif ($doc_type_id == 28) { ?>
             <table class="table borderless">
                <tr>
-                  <td class="text-dark"><b>Bill No.</b></td>
-                  <td style="width: 33%">:&emsp;<?= $file_detail->File_No ?></td>
-                  <td class="text-dark"><b> Bill Date</b></td>
-                  <td>:&emsp;<?= date('d-m-Y', strtotime($file_detail->BillDate)) ?></td>
+                  <td class="text-dark" style="width: 20%;"><b>Bill No.</b></td>
+                  <td style="width: 30%;">
+                     : <?= isset($file_detail['punchdata']['bill_no']) ? htmlspecialchars($file_detail['punchdata']['bill_no']) : '' ?>
+                  </td>
+                  <td class="text-dark" style="width: 20%;"><b>Bill Date</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['bill_date']) && $file_detail['punchdata']['bill_date'] !== '0000-00-00 00:00:00' ? date('d-m-Y', strtotime($file_detail['punchdata']['bill_date'])) : '' ?>
+                  </td>
                </tr>
                <tr>
-                  <td class="text-dark"><b>Billing Name</b></td>
-                  <td>:&emsp;<?= $file_detail->Company ?></td>
-                  <td class="text-dark"><b>Billing Address</b></td>
-                  <td>:&emsp;<?= $file_detail->Related_Address ?></td>
+                  <td class="text-dark" style="width: 20%;"><b>Billing Name</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['billing_name']) ? htmlspecialchars($file_detail['punchdata']['billing_name']) : '' ?>
+                  </td>
+                  <td class="text-dark" style="width: 20%;"><b>Billing Address</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['billing_address']) ? htmlspecialchars($file_detail['punchdata']['billing_address']) : '' ?>
+                  </td>
                </tr>
                <tr>
-                  <td class="text-dark"><b>Hotel Name</b></td>
-                  <td>:&emsp;<?= $file_detail->Hotel_Name ?></td>
-                  <td class="text-dark"><b>Hotel Address</b></td>
-                  <td>:&emsp;<?= $file_detail->Hotel_Address ?></td>
+                  <td class="text-dark" style="width: 20%;"><b>Hotel Name</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['hotel_name']) ? htmlspecialchars($file_detail['punchdata']['hotel_name']) : '' ?>
+                  </td>
+                  <td class="text-dark" style="width: 20%;"><b>Hotel Address</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['hotel_address']) ? htmlspecialchars($file_detail['punchdata']['hotel_address']) : '' ?>
+                  </td>
                </tr>
                <tr>
-                  <td class="text-dark"><b>Arrival Date /Time</b></td>
-                  <td>:&emsp;<?= $file_detail->FromDateTime ?></td>
-                  <td class="text-dark"><b>Departure Date /Time</b></td>
-                  <td>:&emsp;<?= $file_detail->ToDateTime ?></td>
+                  <td class="text-dark" style="width: 20%;"><b>Check In Date/Time</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['check_in']) && $file_detail['punchdata']['check_in'] !== '0000-00-00 00:00:00' ? date('d-m-Y H:i', strtotime($file_detail['punchdata']['check_in'])) : '' ?>
+                  </td>
+                  <td class="text-dark" style="width: 20%;"><b>Check Out Date/Time</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['check_out']) && $file_detail['punchdata']['check_out'] !== '0000-00-00 00:00:00' ? date('d-m-Y H:i', strtotime($file_detail['punchdata']['check_out'])) : '' ?>
+                  </td>
                </tr>
                <tr>
-                  <td class="text-dark"><b>Duration of Stay</b></td>
-                  <td>:&emsp;<?= $file_detail->Period ?></td>
-                  <td class="text-dark"><b>Room Type</b></td>
-                  <td>:&emsp;<?= $file_detail->TravelClass ?></td>
+                  <td class="text-dark" style="width: 20%;"><b>Duration of Stay</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['duration_of_stay']) ? htmlspecialchars($file_detail['punchdata']['duration_of_stay']) : '' ?>
+                     days</td>
+                  <td class="text-dark" style="width: 20%;"><b>Room Type</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['room_type']) ? htmlspecialchars($file_detail['punchdata']['room_type']) : '' ?>
+                  </td>
                </tr>
                <tr>
-                  <td class="text-dark"><b>Meal Plan</b></td>
-                  <td>:&emsp;<?= $file_detail->Loc_Name ?></td>
-                  <td class="text-dark"><b>Billing Instruction</b></td>
-                  <td>:&emsp;<?= $file_detail->Particular ?></td>
+                  <td class="text-dark" style="width: 20%;"><b>Meal Plan</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['meal_plan']) ? htmlspecialchars($file_detail['punchdata']['meal_plan']) : '' ?>
+                  </td>
+                  <td class="text-dark" style="width: 20%;"><b>Billing Instruction</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['billing_instruction']) ? htmlspecialchars($file_detail['punchdata']['billing_instruction']) : '' ?>
+                  </td>
                </tr>
                <tr>
-                  <td class="text-dark"><b>Room Rate</b></td>
-                  <td>:&emsp;<?= $file_detail->TariffPlan ?></td>
-                  <td class="text-dark"><b>Amount</b></td>
-                  <td>:&emsp;<?= $file_detail->SubTotal ?></td>
+                  <td class="text-dark" style="width: 20%;"><b>Room Rate</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['rate']) ? number_format($file_detail['punchdata']['rate'], 2) : '0.00' ?>
+                  </td>
+                  <td class="text-dark" style="width: 20%;"><b>Amount</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['amount']) ? number_format($file_detail['punchdata']['amount'], 2) : '0.00' ?>
+                  </td>
                </tr>
                <tr>
-                  <td class="text-dark"><b>Other Charge</b></td>
-                  <td>:&emsp;<?= $file_detail->OthCharge_Amount ?></td>
-                  <td class="text-dark"><b>Discount</b></td>
-                  <td>:&emsp;<?= $file_detail->Total_Discount ?></td>
+                  <td class="text-dark" style="width: 20%;"><b>Other Charges</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['other_charges']) ? number_format($file_detail['punchdata']['other_charges'], 2) : '0.00' ?>
+                  </td>
+                  <td class="text-dark" style="width: 20%;"><b>Discount</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['discount']) ? number_format($file_detail['punchdata']['discount'], 2) : '0.00' ?>
+                  </td>
                </tr>
                <tr>
-                  <td class="text-dark"><b>GST</b></td>
-                  <td>:&emsp;<?= $file_detail->GSTIN ?></td>
-                  <td class="text-dark"><b>Total Amount</b></td>
-                  <td>:&emsp;<?= $file_detail->Grand_Total ?></td>
+                  <td class="text-dark" style="width: 20%;"><b>GST</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['gst']) ? number_format($file_detail['punchdata']['gst'], 2) : '0.00' ?>%
+                  </td>
+                  <td class="text-dark" style="width: 20%;"><b>Total Amount</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['grand_total']) ? number_format($file_detail['punchdata']['grand_total'], 2) : '0.00' ?>
+                  </td>
                </tr>
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Location</b></td>
-                  <td>:&emsp;<?= $file_detail->Loc_Name ?></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['location']) ? htmlspecialchars($file_detail['punchdata']['location']) : '' ?>
+                  </td>
                </tr>
-            </table>
-            <table class="table text-center" border="1" style="margin-top:1px;">
-               <thead class="bg-primary">
-                  <th>Employee Name</th>
-                  <th>Emp Code</th>
-               </thead>
-               <tbody>
-                  <?php
-                  if ($doc_type_id == 28) {
-                     $emp_detail = $this->db->query("select * from lodging_employee  where scan_id='$scan_id'")->result();
-                     foreach ($emp_detail as $key => $value) {
-                        ?>
-                        <tr>
-                           <td><?= $value->emp_name ?></td>
-                           <td><?= $value->emp_code ?></td>
-                        </tr>
-                     <?php } ?>
-                  <?php } ?>
-               </tbody>
-            </table>
-            <tabel>
                <tr>
-                  <td class="text-dark"><b>Remark</b></td>
-                  <td>:&emsp;<?= $file_detail->Remark ?></td>
+                  <td colspan="4">
+                     <table class="table borderless text-center">
+                        <thead style="background-color: red; color: white;">
+                           <tr>
+                              <th>Employee Name</th>
+                              <th>Emp Code</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <?php if ($doc_type_id == 28 && !empty($emp_detail)) { ?>
+                              <?php foreach ($emp_detail as $value) { ?>
+                                 <tr>
+                                    <td><?= htmlspecialchars($value->emp_name) ?></td>
+                                    <td><?= htmlspecialchars($value->emp_code) ?></td>
+                                 </tr>
+                              <?php } ?>
+                           <?php } else { ?>
+                              <tr>
+                                 <td colspan="2" style="text-align: center;">No Record Found</td>
+                              </tr>
+                           <?php } ?>
+                        </tbody>
+                     </table>
+                  </td>
                </tr>
-            </tabel>
+               <tr>
+                  <td class="text-dark" style="width: 20%;"><b>Remark</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['remark_comment']) ? htmlspecialchars($file_detail['punchdata']['remark_comment']) : '' ?>
+                  </td>
+               </tr>
+            </table>
          <?php } elseif ($doc_type_id == 27) { ?>
             <table class="table borderless">
                <tr>

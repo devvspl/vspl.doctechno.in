@@ -541,7 +541,6 @@ class Punch extends CI_Controller
             'group_id' => $this->session->userdata('group_id'),
             'doctype' => $DocType,
             'doctype_id' => $DocTypeId,
-            
             'agency_name' => $this->db->escape_str($post['agency_name'] ?? ''),
             'agency_address' => $this->db->escape_str($post['agency_address'] ?? ''),
             'billing_name' => $this->db->escape_str($post['billing_name'] ?? ''),
