@@ -1040,6 +1040,41 @@ class Punch extends CI_Controller
         return ['main' => $mainData, 'items' => []];
     }
 
+    private function processPunchData_43($post)
+    {
+        $scan_id = (int) ($post['scan_id'] ?? 0);
+        $DocTypeId = 43;
+        $DocType = $this->db->escape_str($this->customlib->getDocType($DocTypeId));
+        $mainData = [
+            'scan_id' => $scan_id,
+            'group_id' => $this->session->userdata('group_id'),
+            'doctype' => $DocType,
+            'doctype_id' => $DocTypeId,
+            'location_id' => (int) ($post['location_id'] ?? 0),
+            'vendor_name' => $this->db->escape_str($post['vendor_name'] ?? ''),
+            'billing_to' => $this->db->escape_str($post['billing_to'] ?? ''),
+            'dealer_code' => $this->db->escape_str($post['dealer_code'] ?? ''),
+            'invoice_no' => $this->db->escape_str($post['invoice_no'] ?? ''),
+            'invoice_date' => $this->db->escape_str($post['invoice_date'] ?? ''),
+            'due_date' => $this->db->escape_str($post['due_date'] ?? ''),
+            'location' => $this->db->escape_str($post['location'] ?? ''),
+            'vehicle_no' => $this->db->escape_str($post['vehicle_no'] ?? ''),
+            'description' => $this->db->escape_str($post['description'] ?? ''),
+            'liters' => (float) ($post['liters'] ?? 0.000),
+            'per_liter_rate' => (float) ($post['per_liter_rate'] ?? 0.00),
+            'amount' => (float) ($post['amount'] ?? 0.00),
+            'round_off_value' => (float) ($post['round_off_value'] ?? 0.00),
+            'round_off_type' => $this->db->escape_str($post['round_off_type'] ?? 'Plus'),
+            'grand_total' => (float) ($post['grand_total'] ?? 0.00),
+            'remark_comment' => $this->db->escape_str($post['remark_comment'] ?? ''),
+            'created_by' => $this->session->userdata('user_id'),
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+            'updated_by' => $this->session->userdata('user_id'),
+        ];
+
+        return ['main' => $mainData, 'items' => []];
+    }
 
     private function processPunchData_52($post)
     {
