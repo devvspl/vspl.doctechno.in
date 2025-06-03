@@ -282,7 +282,7 @@
    		var scan_id = $('#scan_id').val();
            const docTypeId = $("#DocTypeId").val();
    		$.ajax({
-   			  "<?= base_url() ?>Punch/getPunchItems",
+   			url:   "<?= base_url() ?>Punch/getPunchItems",
    			type: 'POST',
    			data: {
    				scan_id: scanId,
