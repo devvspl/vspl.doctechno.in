@@ -222,11 +222,13 @@
    getMultiRecord();
    function getMultiRecord() {
       var scan_id = $('#scan_id').val();
+      var DocTypeId = $('#DocTypeId').val();
       $.ajax({
          url: '<?= base_url() ?>Punch/getGSTChalanItems',
          type: 'POST',
          data: {
-            scan_id: scan_id
+            scan_id: scan_id,
+            type_id: DocTypeId
          },
          dataType: 'json',
          success: function (response) {
