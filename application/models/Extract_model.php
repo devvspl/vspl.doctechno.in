@@ -781,7 +781,7 @@ class Extract_model extends CI_Model
         $existingFile = $this->db->where("scan_id", $scanId)->get($punch_table)->row();
         if ($existingFile) {
             $this->db->where("scan_id", $scanId)->update($punch_table, $punchData);
-            $fileID = $existingFile->FileID;
+            $fileID = $existingFile->id;
         } else {
             $this->db->insert($punch_table, $punchData);
             $fileID = $this->db->insert_id();
