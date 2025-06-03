@@ -286,36 +286,52 @@ function isDateNull($date)
          <?php } elseif ($doc_type_id == 31) { ?>
             <table class="table borderless">
                <tr>
-                  <td class="text-dark" style="width: 20%;"><b>Company No.</b></td>
-                  <td>:&emsp;<?= $file_detail->Company ?></td>
+                  <td class="text-dark" style="width: 20%;"><b>Company</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['company_text']) ? htmlspecialchars($file_detail['punchdata']['company_text']) : '' ?>
+                  </td>
                </tr>
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Voucher No.</b></td>
-                  <td>:&emsp;<?= $file_detail->File_No ?></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['voucher_no']) ? htmlspecialchars($file_detail['punchdata']['voucher_no']) : '' ?>
+                  </td>
                </tr>
                <tr>
-                  <td class="text-dark" style="width: 40%;"><b>Voucher Date</b></td>
-                  <td>:&emsp;<?= date('d-m-Y', strtotime($file_detail->RegPurDate)) ?></td>
+                  <td class="text-dark" style="width: 20%;"><b>Voucher Date</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['voucher_date']) && $file_detail['punchdata']['voucher_date'] !== '0000-00-00' ? date('d-m-Y', strtotime($file_detail['punchdata']['voucher_date'])) : '' ?>
+                  </td>
                </tr>
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Location</b></td>
-                  <td>:&emsp;<?= $file_detail->location_id ?></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['location']) ? htmlspecialchars($file_detail['punchdata']['location']) : '' ?>
+                  </td>
                </tr>
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Particular</b></td>
-                  <td>:&emsp;<?= $file_detail->Additional_Exposure ?></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['particular']) ? htmlspecialchars($file_detail['punchdata']['particular']) : '' ?>
+                  </td>
                </tr>
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Vendor</b></td>
-                  <td>:&emsp;<?= $file_detail->Vendor ?></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['vendor_text']) ? htmlspecialchars($file_detail['punchdata']['vendor_text']) : '' ?>
+                  </td>
                </tr>
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Amount</b></td>
-                  <td>:&emsp;<?= $file_detail->TotalAmount ?></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['amount']) ? number_format($file_detail['punchdata']['amount'], 2) : '0.00' ?>
+                  </td>
                </tr>
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Remark</b></td>
-                  <td>:&emsp;<?= $file_detail->Remark ?></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['remark_comment']) ? htmlspecialchars($file_detail['punchdata']['remark_comment']) : '' ?>
+                  </td>
                </tr>
             </table>
          <?php } elseif ($doc_type_id == 32) { ?>
