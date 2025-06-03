@@ -580,7 +580,7 @@ class Extract_model extends CI_Model
         if ($this->db->insert($tableName, $insertData)) {
             // Handle details table
             $detailsTable = "ext_tempdata_{$typeId}_details";
-            if ($this->db->table_exists($detailsTable) && isset($flatData['Distance Details']) && $typeId == 27) {
+            if ($this->db->table_exists($detailsTable) && $typeId == 27 && isset($data['Distance Details']) && is_array($data['Distance Details'])) {
                 // Document type 27 specific handling
                 $this->db->where("scan_id", $scanId)->delete($detailsTable);
                 $detailsColumns = $this->db->list_fields($detailsTable);
@@ -610,12 +610,11 @@ class Extract_model extends CI_Model
             } elseif ($this->db->table_exists($detailsTable)) {
                 // Generic handling for other document types
                 $this->db->where("scan_id", $scanId)->delete($detailsTable);
-                $detailsColumns = $this->db->list_fields($detailsTable);
-
                 foreach ($flatData as $sectionName => $sectionItems) {
                     if (!is_array($sectionItems) || !isset($sectionItems[0]) || !is_array($sectionItems[0])) {
                         continue;
                     }
+                    $detailsColumns = $this->db->list_fields($detailsTable);
                     $mainItems = [];
                     $taxData = ['gst' => null, 'sgst' => null, 'igst' => null, 'cess' => null, 'tax_amount' => 0];
 
