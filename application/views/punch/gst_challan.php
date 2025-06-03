@@ -74,7 +74,7 @@
                <tbody>
                   <tr>
                      <td><input type="text" name="Particular[]" id="Particular1" class="form-control form-control-sm"
-                           value="CGST" readonly></td>
+                           value="CGST" ></td>
                      <td><input type="number" name="Tax[]" id="Tax1" class="form-control form-control-sm"
                            value="<?= (isset($punch_detail->cgst_tax)) ? $punch_detail->cgst_tax : '' ?>"
                            onchange="calculate_subtotal(1)"></td>
@@ -96,7 +96,7 @@
                   </tr>
                   <tr>
                      <td><input type="text" name="Particular[]" id="Particular2" class="form-control form-control-sm"
-                           value="SGST" readonly></td>
+                           value="SGST" ></td>
                      <td><input type="number" name="Tax[]" id="Tax2" class="form-control form-control-sm"
                            value="<?= (isset($punch_detail->sgst_tax)) ? $punch_detail->sgst_tax : '' ?>"
                            onchange="calculate_subtotal(2)"></td>
@@ -118,7 +118,7 @@
                   </tr>
                   <tr>
                      <td><input type="text" name="Particular[]" id="Particular3" class="form-control form-control-sm"
-                           value="IGST" readonly></td>
+                           value="IGST" ></td>
                      <td><input type="number" name="Tax[]" id="Tax3" class="form-control form-control-sm"
                            value="<?= (isset($punch_detail->igst_tax)) ? $punch_detail->igst_tax : '' ?>"
                            onchange="calculate_subtotal(3)"></td>
@@ -140,7 +140,7 @@
                   </tr>
                   <tr>
                      <td><input type="text" name="Particular[]" id="Particular4" class="form-control form-control-sm"
-                           value="Cess" readonly></td>
+                           value="Cess" ></td>
                      <td><input type="number" name="Tax[]" id="Tax4" class="form-control form-control-sm"
                            value="<?= (isset($punch_detail->cess_tax)) ? $punch_detail->cess_tax : '' ?>"
                            onchange="calculate_subtotal(4)"></td>
