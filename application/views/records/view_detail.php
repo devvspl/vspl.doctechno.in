@@ -1761,117 +1761,116 @@ function isDateNull($date)
                </tr>
             </tabel>
          <?php } elseif ($doc_type_id == 27) { ?>
-            <table class="table-bordered">
+            <table class="table borderless">
                <tr>
-                  <td><b>Mode:</b></td>
+                  <td class="text-dark" style="width: 20%;"><b>Mode</b></td>
                   <td>
-                     <?= isset($file_detail['punchdata']['mode']) ? htmlspecialchars($file_detail['punchdata']['mode']) : '' ?>
-                  </td>
-
-               </tr>
-               <tr>
-                  <td><b>Employee Name:</b></td>
-                  <td>
-                     <?= isset($file_detail['punchdata']['emp_name']) ? htmlspecialchars($file_detail['punchdata']['emp_name']) : '' ?>
-                  </td>
-
-               </tr>
-               <tr>
-                  <td><b>Employee Code:</b></td>
-                  <td>
-                     <?= isset($file_detail['punchdata']['emp_code']) ? htmlspecialchars($file_detail['punchdata']['emp_code']) : '' ?>
+                     : <?= isset($file_detail['punchdata']['mode']) ? htmlspecialchars($file_detail['punchdata']['mode']) : '' ?>
                   </td>
                </tr>
                <tr>
-                  <td class="text-dark" style="width: 20%;"><b>Location:</b></td>
+                  <td class="text-dark" style="width: 20%;"><b>Employee Name</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['emp_name']) ? htmlspecialchars($file_detail['punchdata']['emp_name']) : '' ?>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="text-dark" style="width: 20%;"><b>Employee Code</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['emp_code']) ? htmlspecialchars($file_detail['punchdata']['emp_code']) : '' ?>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="text-dark" style="width: 20%;"><b>Location</b></td>
                   <td>
                      : <?= isset($file_detail['punchdata']['location']) ? htmlspecialchars($file_detail['punchdata']['location']) : '' ?>
                   </td>
                </tr>
                <tr>
-                  <td><b>Vehicle No:</b></td>
+                  <td class="text-dark" style="width: 20%;"><b>Vehicle No</b></td>
                   <td>
-                     <?= isset($file_detail['punchdata']['vehicle_no']) ? htmlspecialchars($file_detail['punchdata']['vehicle_no']) : '' ?>
+                     : <?= isset($file_detail['punchdata']['vehicle_no']) ? htmlspecialchars($file_detail['punchdata']['vehicle_no']) : '' ?>
                   </td>
                </tr>
                <tr>
-                  <td><b>Month:</b>
-
+                  <td class="text-dark" style="width: 20%;"><b>Month</b></td>
                   <td>
-                     <?= isset($file_detail['punchdata']['month']) ? htmlspecialchars($file_detail['punchdata']['month']) : '' ?>
+                     : <?= isset($file_detail['punchdata']['month']) ? htmlspecialchars($file_detail['punchdata']['month']) : '' ?>
                   </td>
-
                </tr>
                <tr>
-                  <td><b>Calculation Base:</b></td>
+                  <td class="text-dark" style="width: 20%;"><b>Calculation Base</b></td>
                   <td>
-                     <?= isset($file_detail['punchdata']['calculation_base']) ? htmlspecialchars($file_detail['punchdata']['calculation_base']) : '' ?>
+                     : <?= isset($file_detail['punchdata']['calculation_base']) ? htmlspecialchars($file_detail['punchdata']['calculation_base']) : '' ?>
                   </td>
                </tr>
                <tr>
                   <?php if (isset($file_detail['punchdata']['calculation_base']) && strpos($file_detail['punchdata']['calculation_base'], 'Per KM') !== false) { ?>
-                     <td><b>Per KM Rate:</b></td>
-                     <td colspan="5">
-                        <?= isset($file_detail['punchdata']['per_km_rate']) ? number_format($file_detail['punchdata']['per_km_rate'], 2) : '0.00' ?>
+                     <td class="text-dark" style="width: 20%;"><b>Per KM Rate</b></td>
+                     <td>
+                        : <?= isset($file_detail['punchdata']['per_km_rate']) ? number_format($file_detail['punchdata']['per_km_rate'], 2) : '0.00' ?>
                      </td>
                   <?php } else { ?>
-                     <td><b>Fixed Amount:</b></td>
-                     <td colspan="5">
-                        <?= isset($file_detail['punchdata']['total']) ? number_format($file_detail['punchdata']['total'], 2) : '0.00' ?>
+                     <td class="text-dark" style="width: 20%;"><b>Fixed Amount</b></td>
+                     <td>
+                        : <?= isset($file_detail['punchdata']['total']) ? number_format($file_detail['punchdata']['total'], 2) : '0.00' ?>
                      </td>
                   <?php } ?>
                </tr>
-            </table>
-            <br>
-            <table class="table text-center" border="1" style="margin-top: 1px;">
-               <thead class="bg-primary">
-                  <tr>
-                     <th>Date</th>
-                     <th>Opening Reading</th>
-                     <th>Closing Reading</th>
-                     <th>KM Run</th>
-                     <th>Amount</th>
-                  </tr>
-               </thead>
-               <tbody>
-                  <?php if ($doc_type_id == 27 && !empty($file_detail['punchdata_details'])) { ?>
-                     <tr>
-                        <?php foreach ($file_detail['punchdata_details'] as $detail) { ?>
-                           <td>
-                              <?= isset($detail['travel_date']) && $detail['travel_date'] !== '0000-00-00' ? date('d-m-Y', strtotime($detail['travel_date'])) : '' ?>
-                           </td>
-                           <td><?= isset($detail['opening_reading']) ? number_format($detail['opening_reading'], 1) : '0.0' ?>
-                           </td>
-                           <td><?= isset($detail['closing_reading']) ? number_format($detail['closing_reading'], 1) : '0.0' ?>
-                           </td>
-                           <td><?= isset($detail['total_km']) ? number_format($detail['total_km'], 1) : '0.0' ?></td>
-                           <td><?= isset($detail['amount']) ? number_format($detail['amount'], 2) : '0.00' ?></td>
-                        <?php } ?>
-                     </tr>
-                  <?php } else { ?>
-                     <tr>
-                        <td colspan="5" style="text-align: center;">No Record Found</td>
-                     </tr>
-                  <?php } ?>
-               </tbody>
-            </table>
-            <table class="table">
                <tr>
-                  <td style="text-align: right;"><b>Total KM:</b></td>
-                  <td style="text-align: right;">
-                     <b><?= isset($file_detail['punchdata']['total_km']) ? htmlspecialchars($file_detail['punchdata']['total_km']) : '0' ?></b>
+                  <td colspan="2">
+                     <table class="table borderless text-center">
+                        <thead style="background-color: red; color: white;">
+                           <tr>
+                              <th>Date</th>
+                              <th>Opening Reading</th>
+                              <th>Closing Reading</th>
+                              <th>KM Run</th>
+                              <th>Amount</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <?php if ($doc_type_id == 27 && !empty($file_detail['punchdata_details'])) { ?>
+                              <?php foreach ($file_detail['punchdata_details'] as $detail) { ?>
+                                 <tr>
+                                    <td>
+                                       <?= isset($detail['travel_date']) && $detail['travel_date'] !== '0000-00-00' ? date('d-m-Y', strtotime($detail['travel_date'])) : '' ?>
+                                    </td>
+                                    <td>
+                                       <?= isset($detail['opening_reading']) ? number_format($detail['opening_reading'], 1) : '0.0' ?>
+                                    </td>
+                                    <td>
+                                       <?= isset($detail['closing_reading']) ? number_format($detail['closing_reading'], 1) : '0.0' ?>
+                                    </td>
+                                    <td><?= isset($detail['total_km']) ? number_format($detail['total_km'], 1) : '0.0' ?></td>
+                                    <td><?= isset($detail['amount']) ? number_format($detail['amount'], 2) : '0.00' ?></td>
+                                 </tr>
+                              <?php } ?>
+                           <?php } else { ?>
+                              <tr>
+                                 <td colspan="5" style="text-align: center;">No Record Found</td>
+                              </tr>
+                           <?php } ?>
+                        </tbody>
+                     </table>
                   </td>
                </tr>
                <tr>
-                  <td style="text-align: right;"><b>Total Amount:</b></td>
-                  <td style="text-align: right;">
-                     <b><?= isset($file_detail['punchdata']['total']) ? number_format($file_detail['punchdata']['total'], 2) : '0.00' ?></b>
-                  </td>
-               </tr>
-               <tr>
-                  <td>Remarks:</td>
+                  <td class="text-dark" style="width: 20%;"><b>Total KM</b></td>
                   <td>
-                     <?= isset($file_detail['punchdata']['remark_comment']) ? htmlspecialchars($file_detail['punchdata']['remark_comment']) : '' ?>
+                     : <?= isset($file_detail['punchdata']['total_km']) ? number_format($file_detail['punchdata']['total_km'], 0) : '0' ?>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="text-dark" style="width: 20%;"><b>Total Amount</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['total']) ? number_format($file_detail['punchdata']['total'], 2) : '0.00' ?>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="text-dark" style="width: 20%;"><b>Remarks</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['remark_comment']) ? htmlspecialchars($file_detail['punchdata']['remark_comment']) : '' ?>
                   </td>
                </tr>
             </table>
