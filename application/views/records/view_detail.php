@@ -1157,104 +1157,122 @@ function isDateNull($date)
                </table>
             </div>
          <?php } elseif ($doc_type_id == 44) { ?>
-            <div class="table-responsive">
-               <table class="table-bordered" border="1" style="width: 100%;line-height: 2;">
-                  <tr>
-                     <td colspan="2"><b>Vendor Name:</b></td>
-                     <td colspan="4"><?= $file_detail->FromName; ?></td>
-                  </tr>
-                  <tr>
-                     <td><b>Billing To:</b></td>
-                     <td><?= $file_detail->ToName; ?></td>
-                     <td>Vehicle No</td>
-                     <td><?= $file_detail->VehicleRegNo; ?></td>
-                  </tr>
-                  <tr>
-                     <td><b>Bill No.:</b></td>
-                     <td><?= $file_detail->File_No ?></td>
-                     <td><b>Bill Date:</b></td>
-                     <td><?= date('d-m-Y', strtotime($file_detail->BillDate)); ?></td>
-                     <td><b>Work Location:</b></td>
-                     <td><?= $file_detail->Loc_Name; ?></td>
-                  </tr>
-               </table>
-               <br>
-               <table class="table text-center" border="1" style="margin-top:1px;">
-                  <thead class="bg-primary">
-                     <th>Particular</th>
-                     <th>HSN</th>
-                     <th>Qty.</th>
-                     <th>Unit</th>
-                     <th>MRP</th>
-                     <th>Discount in MRP</th>
-                     <th>Price</th>
-                     <th>Amount</th>
-                     <th>GST</th>
-                     <th>SGST</th>
-                     <th>IGST</th>
-                     <th>Total Amount</th>
-                  </thead>
-                  <tbody>
-                     <?php
-                     if ($doc_type_id == 44) {
-                        $get_invoice_detail = $this->db->query("select invoice_detail.*,master_unit.unit_name from invoice_detail left join master_unit on master_unit.unit_id = invoice_detail.Unit where scan_id='$scan_id'")->result();
-                        foreach ($get_invoice_detail as $key => $value) {
-                           ?>
+            <table class="table borderless">
+               <tr>
+                  <td class="text-dark" style="width: 20%;"><b>Vendor Name</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['vendor_name']) ? htmlspecialchars($file_detail['punchdata']['vendor_name']) : '' ?>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="text-dark" style="width: 20%;"><b>Billing To</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['billing_to']) ? htmlspecialchars($file_detail['punchdata']['billing_to']) : '' ?>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="text-dark" style="width: 20%;"><b>Vehicle No</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['vehicle_no']) ? htmlspecialchars($file_detail['punchdata']['vehicle_no']) : '' ?>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="text-dark" style="width: 20%;"><b>Invoice No.</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['invoice_no']) ? htmlspecialchars($file_detail['punchdata']['invoice_no']) : '' ?>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="text-dark" style="width: 20%;"><b>Invoice Date</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['invoice_date']) && $file_detail['punchdata']['invoice_date'] !== '0000-00-00' ? date('d-m-Y', strtotime($file_detail['punchdata']['invoice_date'])) : '' ?>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="text-dark" style="width: 20%;"><b>Work Location</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['location']) ? htmlspecialchars($file_detail['punchdata']['location']) : '' ?>
+                  </td>
+               </tr>
+               <tr>
+                  <td colspan="2">
+                     <table class="table borderless text-center">
+                        <thead style="background-color: red; color: white;">
                            <tr>
-                              <td><?= $value->Particular ?></td>
-                              <td><?= $value->HSN ?></td>
-                              <td><?= $value->Qty ?></td>
-                              <td><?= $value->unit_name ?></td>
-                              <td><?= $value->MRP ?></td>
-                              <td><?= $value->Discount ?></td>
-                              <td><?= $value->Price ?></td>
-                              <td><?= $value->Amount ?></td>
-                              <td><?= $value->GST ?></td>
-                              <td><?= $value->SGST ?></td>
-                              <td><?= $value->IGST ?></td>
-                              <td><?= $value->Total_Amount ?></td>
+                              <th>Particular</th>
+                              <th>HSN</th>
+                              <th>Qty.</th>
+                              <th>Unit</th>
+                              <th>MRP</th>
+                              <th>Discount in MRP</th>
+                              <th>Price</th>
+                              <th>Amount</th>
+                              <th>GST</th>
+                              <th>SGST</th>
+                              <th>IGST</th>
+                              <th>Total Amount</th>
                            </tr>
-                        <?php } ?>
-                     <?php } else { ?>
-                        <tr>
-                           <td colspan="6" style="text-align: center;">No Record Found</td>
-                        </tr>
-                     <?php } ?>
-                  </tbody>
-               </table>
-               <table class="table">
-                  <tr>
-                     <td colspan="7" style="text-align: right;"><b>Sub Total:</b></td>
-                     <td style="text-align: right;"><b><?= $file_detail->SubTotal; ?></b></td>
-                  </tr>
-                  <tr>
-                     <td colspan="7" style="text-align: right;"><b>Total:</b></td>
-                     <td style="text-align: right;"><b><?= $file_detail->Total_Amount; ?></b></td>
-                  </tr>
-                  <tr>
-                     <td colspan="7" style="text-align: right;"><b>Round Off:</b></td>
-                     <td style="text-align: right;"><b>
-                           ( <?php
-                           if ($file_detail->Grand_Total < $file_detail->Total_Amount) {
-                              echo '-';
-                           } else {
-                              echo '+';
-                           }
-                           ?>
-                           )
-                           <?= $file_detail->Total_Discount; ?></b>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td colspan="7" style="text-align: right;"><b>Grand Total:</b></td>
-                     <td style="text-align: right;"><b><?= $file_detail->Grand_Total; ?></b></td>
-                  </tr>
-                  <tr>
-                     <td>Remarks :</td>
-                     <td><?= $file_detail->Remark ?></td>
-                  </tr>
-               </table>
-            </div>
+                        </thead>
+                        <tbody>
+                           <?php if ($doc_type_id == 44 && !empty($file_detail['punchdata_details'])) { ?>
+                              <?php foreach ($file_detail['punchdata_details'] as $value) { ?>
+                                 <tr>
+                                    <td><?= isset($value['particular']) ? htmlspecialchars($value['particular']) : '' ?></td>
+                                    <td><?= isset($value['hsn']) ? htmlspecialchars($value['hsn']) : '' ?></td>
+                                    <td><?= isset($value['qty']) ? number_format($value['qty'], 0) : '0' ?></td>
+                                    <td><?= isset($value['unit_name']) ? htmlspecialchars($value['unit_name']) : '' ?></td>
+                                    <td><?= isset($value['mrp']) ? number_format($value['mrp'], 2) : '0.00' ?></td>
+                                    <td><?= isset($value['discount']) ? number_format($value['discount'], 2) : '0.00' ?></td>
+                                    <td><?= isset($value['price']) ? number_format($value['price'], 2) : '0.00' ?></td>
+                                    <td><?= isset($value['amount']) ? number_format($value['amount'], 2) : '0.00' ?></td>
+                                    <td><?= isset($value['gst']) ? number_format($value['gst'], 2) : '0.00' ?>%</td>
+                                    <td><?= isset($value['sgst']) ? number_format($value['sgst'], 2) : '0.00' ?>%</td>
+                                    <td><?= isset($value['igst']) ? number_format($value['igst'], 2) : '0.00' ?>%</td>
+                                    <td><?= isset($value['total_amount']) ? number_format($value['total_amount'], 2) : '0.00' ?>
+                                    </td>
+                                 </tr>
+                              <?php } ?>
+                           <?php } else { ?>
+                              <tr>
+                                 <td colspan="12" style="text-align: center;">No Record Found</td>
+                              </tr>
+                           <?php } ?>
+                        </tbody>
+                     </table>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="text-dark" style="width: 20%;"><b>Sub Total</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['sub_total']) ? number_format($file_detail['punchdata']['sub_total'], 2) : '0.00' ?>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="text-dark" style="width: 20%;"><b>Total</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['total']) ? number_format($file_detail['punchdata']['total'], 2) : '0.00' ?>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="text-dark" style="width: 20%;"><b>Round Off</b></td>
+                  <td>
+                     : (<?= isset($file_detail['punchdata']['round_off_type']) && $file_detail['punchdata']['round_off_type'] === 'Minus' ? '-' : '+' ?>)
+                     <?= isset($file_detail['punchdata']['round_off_value']) ? number_format($file_detail['punchdata']['round_off_value'], 2) : '0.00' ?>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="text-dark" style="width: 20%;"><b>Grand Total</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['grand_total']) ? number_format($file_detail['punchdata']['grand_total'], 2) : '0.00' ?>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="text-dark" style="width: 20%;"><b>Remark</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['remark_comment']) ? htmlspecialchars($file_detail['punchdata']['remark_comment']) : '' ?>
+                  </td>
+               </tr>
+            </table>
          <?php } elseif ($doc_type_id == 43) { ?>
             <table class="table borderless">
                <tr>

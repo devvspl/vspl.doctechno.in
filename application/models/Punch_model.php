@@ -748,4 +748,33 @@ class Punch_model extends MY_Model
 
         return $result;
     }
+
+    private function getVehicleMaintenanceData($scan_id, $punchdata_table, $punchdata_details_table)
+    {
+        $result = [
+            'punchdata' => [],
+            'punchdata_details' => []
+        ];
+
+        if ($this->db->table_exists($punchdata_table)) {
+            $this->db->select('p.*, b.firm_name AS billing_to, v.firm_name AS vendor_name')
+                ->from($punchdata_table . ' p')
+                ->join('master_firm b', 'p.billing_to = b.firm_id AND b.firm_type = "Company" AND b.is_deleted = "N"', 'left')
+                ->join('master_firm v', 'p.vendor_name = v.firm_id AND v.firm_type = "Vendor" AND v.is_deleted = "N"', 'left')
+                ->where('p.scan_id', $scan_id);
+            $query = $this->db->get();
+            $result['punchdata'] = $query->row_array() ?: [];
+        }
+
+        if ($this->db->table_exists($punchdata_details_table)) {
+            $this->db->select('pd.particular, pd.hsn, pd.qty, pd.unit, u.unit_name, pd.mrp, pd.discount, pd.price, pd.amount, pd.gst, pd.sgst, pd.igst, pd.total_amount')
+                ->from($punchdata_details_table . ' pd')
+                ->join('master_unit u', 'pd.unit = u.unit_id', 'left')
+                ->where('pd.scan_id', $scan_id);
+            $query = $this->db->get();
+            $result['punchdata_details'] = $query->result_array() ?: [];
+        }
+
+        return $result;
+    }
 }
