@@ -2228,7 +2228,7 @@ class Punch extends CI_Controller
             "mobile_no" => $this->db->escape_str($post["mobile_no"] ?? ""),
             "company_name" => $this->db->escape_str($post["company_name"] ?? ""),
             "address" => $this->db->escape_str($post["address"] ?? ""),
-        
+
             "total_challan_amount" => (float) ($post["total_challan_amount"] ?? 0.0),
             "remark_comment" => $this->db->escape_str($post["remark_comment"] ?? ""),
             "created_at" => date("Y-m-d H:i:s"),
@@ -2252,7 +2252,8 @@ class Punch extends CI_Controller
             }
         }
 
-        return ["main" => $mainData, "items" => []];
+
+       return ["main" => $mainData, "items" => $items];
     }
 
     private function processPunchData_27($post)
