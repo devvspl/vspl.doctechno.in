@@ -642,7 +642,7 @@ class Punch_model extends MY_Model
 
         // Fetch punchdata
         if ($this->db->table_exists($punchdata_table)) {
-            $this->db->select('p.*, e.emp_name')
+            $this->db->select('p.*, p.location As location_text, e.emp_name')
                 ->from($punchdata_table . ' p')
                 ->join('master_employee e', 'p.employee_name = e.id', 'left')
                 ->where('p.scan_id', $scan_id);
