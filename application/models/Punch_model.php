@@ -699,26 +699,22 @@ class Punch_model extends MY_Model
             'punchdata' => [],
             'punchdata_details' => [],
         ];
-
         // Fetch punchdata
         if ($this->db->table_exists($punchdata_table)) {
-            $this->db->select('p.*, h.hotel_name AS hotel_name_text')
+            $this->db->select('p.*, h.hotel_name AS hotel_name_text, e.emp_name')
                 ->from($punchdata_table . ' p')
                ->join('master_hotel h', 'p.hotel_name = h.hotel_id', 'left')
+               ->join('master_employee e', 'p.employee_name = e.id', 'left')
                 ->where('p.scan_id', $scan_id);
             $query = $this->db->get();
             $result['punchdata'] = $query->num_rows() > 0 ? $query->row_array() : [];
         }
-
         // Fetch punchdata_details (if applicable)
         if ($this->db->table_exists($punchdata_details_table)) {
             $this->db->select('pd.*')->from($punchdata_details_table . ' pd')->where('pd.scan_id', $scan_id);
             $query = $this->db->get();
             $result['punchdata_details'] = $query->num_rows() > 0 ? $query->result_array() : [];
         }
-
-
-
         return $result;
     }
 
