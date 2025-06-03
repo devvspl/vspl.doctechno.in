@@ -2451,7 +2451,7 @@ function isDateNull($date)
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Assessment Year</b></td>
                   <td>
-                     : <?= isset($file_detail['punchdata']['assessment_year']) ? htmlspecialchars($file_detail['punchdata']['assessment_year']) : '' ?>
+                     : <?= isset($file_detail['punchdata']['assessment_year_text']) ? htmlspecialchars($file_detail['punchdata']['assessment_year_text']) : '' ?>
                   </td>
                </tr>
                <tr>

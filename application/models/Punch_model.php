@@ -585,9 +585,10 @@ class Punch_model extends MY_Model
 
         // Fetch punchdata with join to master_firm for company
         if ($this->db->table_exists($punchdata_table)) {
-            $this->db->select('p.*, b.firm_name AS company_text')
+            $this->db->select('p.*, b.firm_name AS company_text, y.label AS assessment_year_text')
                 ->from($punchdata_table . ' p')
                 ->join('master_firm b', 'p.company = b.firm_id AND b.firm_type = "Company" AND b.is_deleted = "N"', 'left')
+                ->join('financial_years y', 'p.assessment_year = y.id', 'left')
                 ->where('p.scan_id', $scan_id);
             $query = $this->db->get();
             $result['punchdata'] = $query->row_array() ?: [];
