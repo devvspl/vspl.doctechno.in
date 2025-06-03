@@ -405,7 +405,6 @@ class Punch_model extends MY_Model
 
         return $result;
     }
-
     private function getVehicleFuelData($scan_id, $punchdata_table, $punchdata_details_table)
     {
         $result = [
