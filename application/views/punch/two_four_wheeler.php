@@ -14,7 +14,7 @@
                <?php
                foreach ($employee_list as $key => $value) {
                   $selected = '';
-                  if (isset($punch_detail->EmployeeID) && $punch_detail->EmployeeID == $value['id']) {
+                  if (isset($punch_detail->employee_name) && $punch_detail->employee_name == $value['id']) {
                      $selected = 'selected';
                   }
                   echo '<option value="' . $value['id'] . '" ' . $selected . ' data-code="' . $value['emp_code'] . '">' . $value['emp_name'] . ' - ' . $value['company_code'] . '</option>';
