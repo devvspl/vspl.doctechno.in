@@ -3549,72 +3549,86 @@ function isDateNull($date)
                </tr>
             </table>
          <?php } elseif ($doc_type_id == 55) { ?>
-            <table class="table">
+            <table class="table borderless">
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Agent Name</b></td>
-                  <td>:&emsp;<?= $file_detail->AgentName; ?></td>
-               </tr>
-               <tr>
-                  <td class="text-dark" style="width: 20%;"><b>Date</b></td>
-                  <td>:&emsp;<?= date('d-m-Y', strtotime($file_detail->BillDate)) ?></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['agent_name_text']) ? htmlspecialchars($file_detail['punchdata']['agent_name_text']) : '' ?>
+                  </td>
                </tr>
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Booking Date</b></td>
-                  <td>:&emsp;<?= date('d-m-Y', strtotime($file_detail->BookingDate)) ?></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['booking_date']) && $file_detail['punchdata']['booking_date'] !== '0000-00-00' ? date('d-m-Y', strtotime($file_detail['punchdata']['booking_date'])) : '' ?>
+                  </td>
                </tr>
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Cancelled Date</b></td>
-                  <td>:&emsp;<?= date('d-m-Y', strtotime($file_detail->File_Date)) ?></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['cancelled_date']) && $file_detail['punchdata']['cancelled_date'] !== '0000-00-00' ? date('d-m-Y', strtotime($file_detail['punchdata']['cancelled_date'])) : '' ?>
+                  </td>
+               </tr>
+               <tr>
+                  <td colspan="2">
+                     <table class="table borderless text-center">
+                        <thead style="background-color: red; color: white;">
+                           <tr>
+                              <th>Employee</th>
+                              <th>PNR Number</th>
+                              <th>Amount</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <?php if ($doc_type_id == 55 && !empty($file_detail['punchdata_details'])) { ?>
+                              <?php foreach ($file_detail['punchdata_details'] as $value) { ?>
+                                 <tr>
+                                    <td>
+                                       <?= isset($value['employee_name_text']) ? htmlspecialchars($value['employee_name_text']) : '' ?>
+                                    </td>
+                                    <td><?= isset($value['pnr_number']) ? htmlspecialchars($value['pnr_number']) : '' ?></td>
+                                    <td><?= isset($value['amount']) ? number_format($value['amount'], 2) : '0.00' ?></td>
+                                 </tr>
+                              <?php } ?>
+                           <?php } else { ?>
+                              <tr>
+                                 <td colspan="3" style="text-align: center;">No Record Found</td>
+                              </tr>
+                           <?php } ?>
+                        </tbody>
+                     </table>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="text-dark" style="width: 20%;"><b>Sub Total</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['sub_total']) ? number_format($file_detail['punchdata']['sub_total'], 2) : '0.00' ?>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="text-dark" style="width: 20%;"><b>Cancellation Charge</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['cancellation_charge']) ? number_format($file_detail['punchdata']['cancellation_charge'], 2) : '0.00' ?>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="text-dark" style="width: 20%;"><b>Other Charge</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['other_charges']) ? number_format($file_detail['punchdata']['other_charges'], 2) : '0.00' ?>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="text-dark" style="width: 20%;"><b>Grand Total</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['grand_total']) ? number_format($file_detail['punchdata']['grand_total'], 2) : '0.00' ?>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="text-dark" style="width: 20%;"><b>Remark</b></td>
+                  <td>
+                     : <?= isset($file_detail['punchdata']['remark_comment']) ? htmlspecialchars($file_detail['punchdata']['remark_comment']) : '' ?>
+                  </td>
                </tr>
             </table>
-            <br>
-            <table class="table text-center" border="1" style="margin-top:1px;">
-               <thead class="bg-primary">
-                  <th>Employee</th>
-                  <th>PNR Number</th>
-                  <th>Amount</th>
-               </thead>
-               <tbody>
-                  <?php
-                  if ($doc_type_id == 55) {
-                     $ticket_detail = $this->db->query("select * from ticket_cancellation where scan_id='$scan_id'")->result();
-                     foreach ($ticket_detail as $key => $value) {
-                        ?>
-                        <tr>
-                           <td><?= $value->Emp_Name ?></td>
-                           <td><?= $value->PNR ?></td>
-                           <td><?= $value->Amount ?></td>
-                        </tr>
-                     <?php } ?>
-                  <?php } else { ?>
-                     <tr>
-                        <td colspan="6" style="text-align: center;">No Record Found</td>
-                     </tr>
-                  <?php } ?>
-               </tbody>
-            </table>
-            <table class="table">
-               <tr>
-                  <td colspan="7" style="text-align: right;"><b>Sub Total:</b></td>
-                  <td style="text-align: right;"><b><?= $file_detail->SubTotal; ?></b></td>
-               </tr>
-               <tr>
-                  <td colspan="7" style="text-align: right;"><b>Cancellation Charge:</b></td>
-                  <td style="text-align: right;"><b><?= $file_detail->Total_Discount; ?></b></td>
-               </tr>
-               <tr>
-                  <td colspan="7" style="text-align: right;"><b>Other Charge:</b></td>
-                  <td style="text-align: right;"><b><?= $file_detail->OthCharge_Amount; ?></b></td>
-               </tr>
-               <tr>
-                  <td colspan="7" style="text-align: right;"><b>Grand Total:</b></td>
-                  <td style="text-align: right;"><b><?= $file_detail->Grand_Total; ?></b></td>
-               </tr>
-            </table>
-            <tr>
-               <td>Remarks :</td>
-               <td><?= $file_detail->Remark ?></td>
-            </tr>
          <?php } elseif ($doc_type_id == 56) { ?>
             <div class="table-responsive">
                <table class="table-bordered" border="1" style="width: 100%;line-height: 2;">

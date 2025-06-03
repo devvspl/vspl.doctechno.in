@@ -9,11 +9,11 @@
             <input type="text" name="agent_name" id="agent_name" class="form-control" autocomplete="off"
                value="<?= (isset($punch_detail->agent_name)) ? htmlspecialchars($punch_detail->agent_name) : '' ?>">
          </div>
-         <div class="form-group col-md-3">
+         <!-- <div class="form-group col-md-3">
             <label for="bill_date">Bill Date:</label>
             <input type="text" class="form-control datepicker" id="bill_date" name="bill_date" autocomplete="off"
-               value="<?= (isset($punch_detail->bill_date)) ? date('Y-m-d', strtotime($punch_detail->bill_date)) : '' ?>">
-         </div>
+               value="<?= (isset($punch_detail->booking_date)) ? date('Y-m-d', strtotime($punch_detail->booking_date)) : '' ?>">
+         </div> -->
          <div class="form-group col-md-3">
             <label for="booking_date">Date of Booking:</label>
             <input type="text" name="booking_date" id="booking_date" class="form-control datepicker" autocomplete="off"
