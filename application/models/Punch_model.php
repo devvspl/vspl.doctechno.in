@@ -668,14 +668,14 @@ class Punch_model extends MY_Model
         $result = [
             'punchdata' => [],
             'punchdata_details' => [],
-            'emp_detail' => []
         ];
 
         // Fetch punchdata
         if ($this->db->table_exists($punchdata_table)) {
-            $this->db->select('p.bill_no, p.bill_date, p.billing_name, p.billing_address, p.hotel_name, p.hotel_address, p.billing_instruction, p.booking_id, p.check_in, p.check_out, p.duration_of_stay, p.number_of_rooms, p.room_type, p.meal_plan, p.rate, p.amount, p.other_charges, p.discount, p.gst, p.grand_total, p.location, p.remark_comment')
+            $this->db->select('p.*, b.firm_name AS company_text, h.hotel_name AS hotel_name_text')
                 ->from($punchdata_table . ' p')
                 ->join('master_firm b', 'p.billing_name = b.firm_id AND b.firm_type = "Company" AND b.is_deleted = "N"', 'left')
+                    ->join('master_hotel h', 'p.hotel_name = h.hotel_id', 'left')
                 ->where('p.scan_id', $scan_id);
             $query = $this->db->get();
             $result['punchdata'] = $query->num_rows() > 0 ? $query->row_array() : [];
@@ -683,21 +683,12 @@ class Punch_model extends MY_Model
 
         // Fetch punchdata_details (if applicable)
         if ($this->db->table_exists($punchdata_details_table)) {
-            $this->db->select('pd.*')
-                ->from($punchdata_details_table . ' pd')
-                ->where('pd.scan_id', $scan_id);
+            $this->db->select('pd.*')->from($punchdata_details_table . ' pd')->where('pd.scan_id', $scan_id);
             $query = $this->db->get();
             $result['punchdata_details'] = $query->num_rows() > 0 ? $query->result_array() : [];
         }
 
-        // Fetch employee details
-        if ($this->db->table_exists('lodging_employee')) {
-            $this->db->select('emp_name, emp_code')
-                ->from('lodging_employee')
-                ->where('scan_id', $scan_id);
-            $query = $this->db->get();
-            $result['emp_detail'] = $query->num_rows() > 0 ? $query->result() : [];
-        }
+    
 
         return $result;
     }

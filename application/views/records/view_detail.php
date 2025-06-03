@@ -1689,7 +1689,7 @@ function isDateNull($date)
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Billing Name</b></td>
                   <td>
-                     : <?= isset($file_detail['punchdata']['billing_name']) ? htmlspecialchars($file_detail['punchdata']['billing_name']) : '' ?>
+                     : <?= isset($file_detail['punchdata']['company_text']) ? htmlspecialchars($file_detail['punchdata']['company_text']) : '' ?>
                   </td>
                   <td class="text-dark" style="width: 20%;"><b>Billing Address</b></td>
                   <td>
@@ -1699,7 +1699,7 @@ function isDateNull($date)
                <tr>
                   <td class="text-dark" style="width: 20%;"><b>Hotel Name</b></td>
                   <td>
-                     : <?= isset($file_detail['punchdata']['hotel_name']) ? htmlspecialchars($file_detail['punchdata']['hotel_name']) : '' ?>
+                     : <?= isset($file_detail['punchdata']['hotel_name_text']) ? htmlspecialchars($file_detail['punchdata']['hotel_name_text']) : '' ?>
                   </td>
                   <td class="text-dark" style="width: 20%;"><b>Hotel Address</b></td>
                   <td>
@@ -1782,8 +1782,8 @@ function isDateNull($date)
                            </tr>
                         </thead>
                         <tbody>
-                           <?php if ($doc_type_id == 28 && !empty($emp_detail)) { ?>
-                              <?php foreach ($emp_detail as $value) { ?>
+                           <?php if ($doc_type_id == 28 && !empty($punchdata_details)) { ?>
+                              <?php foreach ($punchdata_details as $value) { ?>
                                  <tr>
                                     <td><?= htmlspecialchars($value->emp_name) ?></td>
                                     <td><?= htmlspecialchars($value->emp_code) ?></td>
