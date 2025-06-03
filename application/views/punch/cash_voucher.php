@@ -97,7 +97,7 @@
       input: false
    });
 
-   $('#Location').select2();
+   $('#location_id').select2();
    $('#CompanyID').select2();
 
    $(document).ready(function() {
