@@ -90,6 +90,29 @@ class ExtractorController extends CI_Controller
         $this->data["main"] = "extract/processed";
         $this->load->view("layout/template", $this->data);
     }
+    public function classificationsRejected()
+    {
+        $this->session->set_userdata("top_menu", "processed");
+        $this->session->set_userdata("sub_menu", "processed");
+        $group_id = $this->input->get("group_id");
+        $location_id = $this->input->get("location_id");
+        $this->data["groups"] = $this->Extract_model->getGroups();
+        $this->data["locations"] = $this->Extract_model->getLocations();
+        $this->data["documents"] = $this->Extract_model->getclassificationsRejectedList($group_id, $location_id);
+        $this->data["main"] = "extract/classifications-rejected";
+        $this->load->view("layout/template", $this->data);
+    }
+
+    public function scanRejectedScanAdmin()
+    {
+        $this->session->set_userdata("top_menu", "processed");
+        $this->session->set_userdata("sub_menu", "processed");
+        $this->data["documents"] = $this->Extract_model->getScanRejectedScanAdminList();
+        $this->data["main"] = "extract/scans-rejected";
+        $this->load->view("layout/template", $this->data);
+    }
+
+
     public function changeRequestList()
     {
         $this->session->set_userdata("top_menu", "change-request");
@@ -219,7 +242,7 @@ class ExtractorController extends CI_Controller
             echo json_encode(["status" => "error", "message" => "Invalid request parameters: scan_id and type_id are required."]);
             return;
         }
-        $data = ['doc_type_id' => $typeId, 'department_id' => $this->input->post("department"), 'sub_department_id' => $this->input->post("subdepartment"), 'bill_approver_id' => $this->input->post("bill_approver"), 'location_id' => $this->input->post("location")];
+        $data = ['is_classified' => 'Y', 'classified_by' => $this->session->userdata('user_id'), 'classified_date' => date('Y-m-d'), 'doc_type_id' => $typeId, 'department_id' => $this->input->post("department"), 'sub_department_id' => $this->input->post("subdepartment"), 'bill_approver_id' => $this->input->post("bill_approver"), 'location_id' => $this->input->post("location")];
         $updateResult = $this->Extract_model->updateDocument($scanId, $data);
         if (!$updateResult) {
             echo json_encode(["status" => "error", "message" => "Failed to update document details."]);

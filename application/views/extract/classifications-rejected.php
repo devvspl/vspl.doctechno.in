@@ -4,11 +4,11 @@
          <div class="col-md-12">
             <div class="box box-primary">
                <div class="box-header with-border">
-                  <h3 class="box-title">List of Classified Files</h3>
+                  <h3 class="box-title">Classifications Rejected Files</h3>
                </div>
                <div class="box-body">
                   <div class="table-responsive mailbox-messages">
-                     <form method="GET" action="<?= base_url('processed'); ?>" style="margin-bottom: 15px;">
+                     <form method="GET" action="<?= base_url('classifications-rejected'); ?>" style="margin-bottom: 15px;">
                         <div class="row mb-3">
                            <div class="col-md-4">
                               <label>Location:</label>
@@ -38,7 +38,9 @@
                               <th class="text-center">Scanned By</th>
                               <th class="text-center">Scan Date</th>
                               <th class="text-center">Bill Approver</th>
-                              <th class="text-center">Approval Date</th>
+                              <th class="text-center">Rejected Date</th>
+                              <th class="text-center">Reject Remark</th>
+                              
                            </tr>
                         </thead>
                         <tbody>
@@ -48,11 +50,12 @@
                                 <td class="text-center"><?= $i++ ?></td>
                                 <td class="text-center"><?= htmlspecialchars($doc->location_name ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
                                 <td class="text-center"><?= htmlspecialchars($doc->document_name ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td class="text-center text-primary"><?= htmlspecialchars($doc->file_type ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td class="text-center"><?= htmlspecialchars($doc->file_type ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
                                 <td class="text-center"><?= htmlspecialchars($doc->scanned_by ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
                                 <td class="text-center"><?= htmlspecialchars($doc->scan_date ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
                                 <td class="text-center"><?= htmlspecialchars($doc->bill_approver_id ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td class="text-center"><?= htmlspecialchars($doc->bill_approved_date ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
+                                 <td class="text-center"><?= htmlspecialchars($doc->bill_approved_date ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td class="text-center"><?= htmlspecialchars($doc->bill_approver_remark ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
                            </tr>
                            <?php endforeach; ?>
                            <?php else : ?>

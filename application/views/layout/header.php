@@ -194,10 +194,7 @@
                                     <a href="<?= base_url(); ?>myscannedfiles"><i class="fa fa-angle-double-right"></i>My
                                        Scanned Files</a>
                                  </li>
-                                 <li class="<?php echo set_Submenu('scan'); ?>">
-                                    <a href="<?= base_url(); ?>edit_bill_approver"><i
-                                          class="fa fa-angle-double-right"></i>Edit Bill Approver Name</a>
-                                 </li>
+                                
                                  <li class="<?php echo set_Submenu('scan'); ?>">
                                     <a href="<?= base_url(); ?>bill_trashed"><i
                                           class="fa fa-angle-double-right"></i>Trashed Bills</a>
@@ -205,7 +202,19 @@
                               </ul>
                            </li>
                         <?php } ?>
+                        <?php if ($_SESSION['role'] == 'bill_approver') { ?>
+                            <li class="treeview <?= set_Topmenu('pending_bill_approve'); ?>">
+                              <a href="<?php echo base_url('pending_bill_approve')?>"> <i class="fa fa-barcode"></i> <span>Pending Bills</span></a>
+                           </li>
+                            <li class="treeview <?= set_Topmenu('reject_bill_approve'); ?>">
+                              <a href="<?php echo base_url('reject_bill_approve')?>"> <i class="fa fa-barcode"></i> <span>Rejected Bills</span></a>
+                           </li>
+                            <li class="treeview <?= set_Topmenu('approved_bill_approve'); ?>">
+                              <a href="<?php echo base_url('approved_bill_approve')?>"> <i class="fa fa-barcode"></i> <span>Approved Bills</span></a>
+                           </li>
+                        <?php } ?>
                         <?php if ($this->customlib->has_permission('Temporary Scan')) { ?>
+                           
                            <li class="treeview <?= set_Topmenu('scan_master'); ?>">
                               <a href="#"> <i class="fa fa-barcode"></i> <span>Scan Document</span> <i
                                     class="fa fa-angle-left pull-right"></i> </a>
@@ -214,10 +223,11 @@
                                     <a href="<?= base_url(); ?>temp_scan"><i class="fa fa-angle-double-right"></i>New
                                        Scan</a>
                                  </li>
-                                 <li class="<?php echo set_Submenu('scan'); ?>">
-                                    <a href="<?= base_url(); ?>edit_bill_approver"><i
-                                          class="fa fa-angle-double-right"></i>Edit Bill Approver Name</a>
+                                  <li class="<?php echo set_Submenu('scan'); ?>">
+                                    <a href="<?= base_url(); ?>rejected_temp_scan"><i class="fa fa-angle-double-right"></i>Rejected
+                                       Scan</a>
                                  </li>
+
                               </ul>
                            </li>
                         <?php } ?>
@@ -235,10 +245,6 @@
                                           class="fa fa-angle-double-right"></i>My Punched Files</a>
                                  </li>
                               </ul>
-                           </li>
-                           <li class="treeview <?= set_Topmenu('entry_confirmation'); ?>">
-                              <a href="<?= base_url(); ?>entry_confirmation"> <i class="fa fa-file"></i> <span>Entry
-                                    Confirmation</span> </a>
                            </li>
                         <?php } ?>
                         <?php if ($this->customlib->has_permission('Finance')) { ?>

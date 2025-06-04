@@ -12,31 +12,6 @@
                      <?php if ($this->session->flashdata('message')) { ?>
                         <?php echo $this->session->flashdata('message') ?>
                      <?php } ?>
-                     <!-- <div class="row">
-                        <div class="col-md-6">
-                           <div class="form-group">
-                              <label for="location">Location <i style="color: red;">*</i></label>
-                              <select name="location" id="location" class="form-control" required>
-                                 <option value="">Select Location</option>
-                                 <?php foreach ($locationlist as $key => $value) { ?>
-                                 <option value="<?= $value['location_id'] ?>">
-                                    <?= $value['location_name'] ?>
-                                 </option>
-                                 <?php } ?>
-                                 <span class="text-danger"><?php echo form_error('location'); ?></span>
-                              </select>
-                           </div>
-                        </div>
-                        <div class="col-md-6">
-                           <div class="form-group">
-                              <label for="bill_approver">Bill Approver <i style="color: red;">*</i></label>
-                              <select name="bill_approver" id="bill_approver" class="form-control" required>
-                                 <option value="">Select Approver</option>
-                                 <span class="text-danger"><?php echo form_error('bill_approver'); ?></span>
-                              </select>
-                           </div>
-                        </div>
-                     </div> -->
                      <div class="form-group mt-3" style="margin-top: 8px;">
                         <input class="filestyle form-control" type='file' name='main_file' id="main_file"
                            accept="image/*,application/pdf">
@@ -51,90 +26,113 @@
          <div class="col-md-8">
             <div class="box box-primary" id="exphead">
                <div class="box-header ptbnull">
-                  <h3 class="box-title titlefix">Latest Scan File <small style="color:red;">(Pending for
-                        Punching)</small></h3>
+                  <h3 class="box-title titlefix">Latest Scan File
+                  </h3>
+                  <div class="box-tools pull-right">
+                     <a href="<?php echo base_url('dashboard')?>" class="btn btn-primary btn-sm">
+                        <i class="fa fa-long-arrow-left"></i> Back
+                     </a>
+                  </div>
                </div>
                <div class="box-body">
                   <div class="table-responsive mailbox-messages">
                      <div class="download_label">Latest Scan File</div>
-                     <table class="table table-striped table-bordered table-hover" id="mytable">
+                     <!-- Filter Dropdown -->
+                     <div class="mb-5">
+                        <a href="?status=all"
+                           class="btn btn-sm <?= $status == 'all' || $status == '' ? 'btn-primary' : 'btn-default' ?>">All</a>
+                        <a href="?status=submitted"
+                           class="btn btn-sm <?= $status == 'submitted' ? 'btn-success' : 'btn-default' ?>">Submitted</a>
+                        <a href="?status=pending"
+                           class="btn btn-sm <?= $status == 'pending' ? 'btn-warning' : 'btn-default' ?>">Pending</a>
+                        <a href="?status=rejected"
+                           class="btn btn-sm <?= $status == 'rejected' ? 'btn-danger' : 'btn-default' ?>">Rejected</a>
+                        <a href="?status=deleted"
+                           class="btn btn-sm <?= $status == 'deleted' ? 'btn-danger' : 'btn-default' ?>">Deleted</a>
+                     </div>
+
+                     <!-- DataTable -->
+                     <table class="table table-striped table-bordered table-hover mt-3" id="scanTable">
                         <thead>
                            <tr>
                               <th>S.No</th>
-                              <!-- <th>Location</th> -->
                               <th>File</th>
+                              <th>Document Name</th>
                               <th>Scan Date</th>
                               <th>Final Submit</th>
+                              <?php if ($status == 'rejected') { ?>
+                                 <th>Reject Remark</th>
+                              <?php } ?>
                               <th class="text-right no-print">Action</th>
                            </tr>
                         </thead>
                         <tbody>
-                           <?php if (empty($my_lastest_scan)) {
-                              ?>
+                           <?php if (empty($my_lastest_scan)) { ?>
                               <tr>
-                                 <td colspan="6" class="text-center">No Record Found</td>
+                                 <td colspan="<?= $status == 'rejected' ? 7 : 6 ?>" class="text-center">No Record Found
+                                 </td>
                               </tr>
-                              <?php
-                           } else {
+                           <?php } else {
                               $count = 1;
-                              foreach ($my_lastest_scan as $row) {
-                                 ?>
+                              foreach ($my_lastest_scan as $row) { ?>
                                  <tr class="text-center">
-                                    <td><?php echo $count++; ?></td>
-                                    <!-- <td class="mailbox-name">
-                                 <?php echo $row['location_name']; ?>
-                              </td> -->
-                                    <td class="mailbox-name">
-                                       <a href="javascript:void(0);" target="popup"
+                                    <td><?= $count++; ?></td>
+                                    <td>
+                                       <a href="javascript:void(0);"
                                           onclick="window.open('<?= $row['file_path'] ?>','popup','width=600,height=600');">
-                                          <?php echo $row['file_name'] ?></a>
+                                          <?= $row['file_name'] ?>
+                                       </a>
                                     </td>
-                                    <td class="mailbox-name">
-                                       <?= date('d-m-Y', strtotime($row['temp_scan_date'])); ?>
-                                    </td>
-                                    <td class="mailbox-name">
+                                    <td><?= $row['document_name'] ?></td>
+                                    <td><?= date('d-m-Y', strtotime($row['temp_scan_date'])); ?></td>
+                                    <td>
                                        <?php if ($row['is_final_submitted'] == 'Y') { ?>
                                           <span class="label label-success">Yes</span>
                                        <?php } else { ?>
                                           <span class="label label-danger">No</span>
                                        <?php } ?>
                                     </td>
-                                    <td class="mailbox-date pull-right no-print">
-                                       <?php if ($row['is_final_submitted'] != 'Y') { ?>
+                                    <?php if ($status == 'rejected') { ?>
+                                       <td>
+                                          <input class="form-control" readonly style="background-color: #e9ecef40;"
+                                             value="<?= $row['temp_scan_reject_remark'] ?>">
+                                       </td>
+                                    <?php } ?>
+                                    <td class="text-right">
+                                       <?php if ($row['is_final_submitted'] != 'Y' || $row['is_temp_scan_rejected'] = 'Y') { ?>
                                           <?php if ($this->customlib->haveSupportFile($row['scan_id']) == 1): ?>
-                                             <a data-toggle="collapse" href="#detail<?= $row['scan_id'] ?>" data-parent="#mytable"
-                                                class="btn btn-info btn-xs" style="cursor: pointer;" title="View Support Files">
+                                             <a data-toggle="collapse" href="#detail<?= $row['scan_id'] ?>"
+                                                class="btn btn-info btn-xs" title="View Support Files">
                                                 <i class="fa fa-eye"></i>
                                              </a>
                                           <?php endif; ?>
                                           <a href="<?= base_url('temp-supporting/' . $row['scan_id']); ?>"
-                                             class="btn btn-warning btn-xs" data-toggle="tooltip" title="Edit">
+                                             class="btn btn-warning btn-xs" title="Edit">
                                              <i class="fa fa-pencil"></i>
                                           </a>
                                           <a href="javascript:void(0);" data-scan_id="<?= $row['scan_id']; ?>"
-                                             class="btn btn-danger btn-xs" id="delete_all" data-toggle="tooltip" title="Delete">
+                                             class="btn btn-danger btn-xs delete-scan" title="Delete">
                                              <i class="fa fa-remove"></i>
                                           </a>
                                        <?php } ?>
                                     </td>
                                  </tr>
-                                 <tr id="detail<?= $row['scan_id'] ?>" class="collapse accordion-collapse"
-                                    style="background-color: #FEF9E7;">
-                                    <td colspan="6" class="">
-                                       <table class="table table-bordered mytable1" id="subtable<?= $row['scan_id'] ?>"
-                                          style="background-color:#FEF9E7;margin-bottom:0px;">
+
+                                 <!-- Support Files Collapse -->
+                                 <tr id="detail<?= $row['scan_id'] ?>" class="collapse" style="background-color: #FEF9E7;">
+                                    <td colspan="<?= $status == 'rejected' ? 7 : 6 ?>">
+                                       <table class="table table-bordered mytable1"
+                                          style="background-color:#FEF9E7;margin-bottom:0;">
                                           <tbody>
                                              <?php
-                                             $sql = "SELECT * FROM support_file WHERE scan_id = '" . $row['scan_id'] . "'";
-                                             $query = $this->db->query($sql);
-                                             $result = $query->result_array();
-                                             foreach ($result as $rec) {
-                                                ?>
+                                             $support = $this->db->query("SELECT * FROM support_file WHERE scan_id = ?", [$row['scan_id']])->result_array();
+                                             foreach ($support as $rec) { ?>
                                                 <tr>
-                                                   <td class="mailbox-name">
-                                                      <a href="javascript:void(0);" target="popup"
+                                                   <td>
+                                                      <a href="javascript:void(0);"
                                                          onclick="window.open('<?= $rec['file_path'] ?>','popup','width=600,height=600');">
-                                                         <?php echo $rec['file_name'] ?></a>
+                                                         <?= $rec['file_name'] ?>
+                                                      </a>
                                                    </td>
                                                 </tr>
                                              <?php } ?>
@@ -142,11 +140,8 @@
                                        </table>
                                     </td>
                                  </tr>
-                                 <?php
-                              }
-                              $count++;
-                           }
-                           ?>
+                              <?php }
+                           } ?>
                         </tbody>
                      </table>
                   </div>
@@ -172,11 +167,10 @@
          }
       });
    });
-
    $(document).ready(function () {
       $("#location").select2();
       $("#bill_approver").select2();
-      $(document).on('click', '#delete_all', function () {
+      $(document).on('click', '.delete-scan', function () {
          var scan_id = $(this).data('scan_id');
          var url = '<?= base_url() ?>Scan/delete_all';
          if (confirm('Are you sure to delete all ?')) {

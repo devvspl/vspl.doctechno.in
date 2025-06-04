@@ -35,8 +35,12 @@
                                     <td class="text-center"><?= htmlspecialchars($doc->scan_date ?? ''); ?></td>
                                     <td class="text-center">
                                        <button class="btn btn-primary btn-sm view-details"
-                                          data-scan-id="<?= $doc->scan_id; ?>">
-                                          Set Document
+                                          data-scan-id="<?= $doc->scan_id; ?>" title="Set Document">
+                                          <i class="fa fa-file-text-o"></i>
+                                       </button>
+                                       <button type="button" class="btn btn-sm btn-danger reject-bill"
+                                          data-id="<?= $doc->scan_id ?>" title="Reject">
+                                          <i class="fa fa-times"></i>
                                        </button>
                                     </td>
                                  </tr>
@@ -70,6 +74,33 @@
       </div>
    </div>
 </div>
+<!-- Redesigned Reject Modal -->
+<div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel"
+   aria-hidden="true" data-backdrop="static">
+   <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content shadow-lg rounded">
+         <div class="modal-header">
+            <h5 class="modal-title" id="rejectModalLabel">Reject Scan</h5>
+            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <div class="modal-body">
+            <input type="hidden" name="scan_id" id="rejectScanId">
+            <div class="form-group">
+               <label for="Reject_Remark" class="font-weight-bold">Rejection Reason <span
+                     class="text-danger">*</span></label>
+               <input type="text" name="Reject_Remark" id="Reject_Remark" class="form-control"
+                  placeholder="Enter reason for rejection" required>
+            </div>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="button" id="reject_btn" class="btn btn-danger">Submit Rejection</button>
+         </div>
+      </div>
+   </div>
+</div>
 <script>
    $(document).ready(function () {
       $("#location_id").select2();
@@ -92,7 +123,6 @@
             },
          });
       });
-
       $(document).on('change', 'select[id^="department_"]', function () {
          var department_id = $(this).val();
          var scan_id = $(this).attr('id').split('_')[1];
@@ -101,7 +131,6 @@
          subdepartment_select.html('<option value="">Select Subdepartment</option>');
          bill_approver_select.html('<option value="">Select Bill Approver</option>');
          if (department_id) {
-            // Fetch Subdepartments
             $.ajax({
                url: '<?= base_url("extract/ExtractorController/getSubdepartments"); ?>',
                type: 'POST',
@@ -145,7 +174,45 @@
             });
          }
       });
-
+      $(document).on("click", ".reject-bill", function () {
+         var scanId = $(this).data('id');
+         $("#rejectScanId").val(scanId);
+         $("#Reject_Remark").val('');
+         $("#Reject_Remark").css('border-color', '');
+         $("#rejectModal").modal("show");
+      });
+      $(document).on("click", "#reject_btn", function () {
+         var scanId = $("#rejectScanId").val();
+         var remark = $("#Reject_Remark").val().trim();
+         var $btn = $(this);
+         if (remark === '') {
+            $("#Reject_Remark").focus().css('border-color', 'red');
+            return;
+         }
+         showLoader();
+         $.ajax({
+            type: "POST",
+            url: "<?= base_url('reject_bill/') ?>" + scanId,
+            data: { Remark: remark },
+            dataType: "json",
+            success: function (response) {
+               hideLoader();
+               if (response.status == 200) {
+                  $("#rejectModal").modal('hide');
+                  showToast('success', 'Bill rejected successfully.');
+                  setTimeout(function () {
+                     window.location.href = "<?= base_url('classification') ?>";
+                  }, 2000);
+               } else {
+                  showToast('error', 'Rejection failed. Try again.');
+               }
+            },
+            error: function () {
+               hideLoader();
+               showToast('error', 'An unexpected error occurred.');
+            }
+         });
+      });
       $(document).on("click", ".extract-btn", function () {
          let $button = $(this);
          let scanId = $button.data("scan-id");

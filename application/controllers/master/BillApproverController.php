@@ -9,7 +9,7 @@ class BillApproverController extends CI_Controller
         $this->logged_in();
         $this->load->database();
         $this->load->model(array('Bill_approver_model', 'Location_model'));
-            $this->year_id = $this->session->userdata('year_id') ?? ($this->db->select('id')->from('financial_years')->where('is_current', 1)->get()->row()->id ?? null);
+        $this->year_id = $this->session->userdata('year_id') ?? ($this->db->select('id')->from('financial_years')->where('is_current', 1)->get()->row()->id ?? null);
     }
     private function check_role($allowed_roles = [])
     {
@@ -129,6 +129,37 @@ class BillApproverController extends CI_Controller
         $this->load->view('layout/template', $this->data);
     }
 
+    public function reject_bill_approve()
+    {
+        $this->db->select('*');
+        $this->db->from("y{$this->year_id}_scan_file");
+        $this->db->join('master_work_location', "master_work_location.location_id = y{$this->year_id}_scan_file.location_id", 'left');
+        $this->db->where('bill_approval_status', 'R');
+        $this->db->where('extract_status', 'Y');
+        $this->db->where('bill_approver_id', $this->session->userdata('user_id'));
+        $bill_list = $this->db->get()->result_array();
+        $this->data['bill_list'] = $bill_list;
+        $this->data['main'] = 'bill_approver/reject_bill_approve';
+        $this->load->view('layout/template', $this->data);
+    }
+
+    public function approved_bill_approve()
+    {
+        $this->db->select('y.*, master_work_location.*, cd.*');
+        $this->db->from("y{$this->year_id}_scan_file AS y");
+        $this->db->join('master_work_location', "master_work_location.location_id = y.location_id", 'left');
+        $this->db->join('core_department cd', 'cd.api_id = y.department_id', 'left');
+        $this->db->where('y.bill_approval_status', 'Y');
+        $this->db->where('y.bill_approver_id', $this->session->userdata('user_id'));
+
+        $bill_list = $this->db->get()->result_array();
+
+        $this->data['bill_list'] = $bill_list;
+        $this->data['main'] = 'bill_approver/approved_bill_approve';
+        $this->load->view('layout/template', $this->data);
+    }
+
+
     public function bill_detail($scan_id)
     {
         $this->check_role(['bill_approver']);
@@ -161,10 +192,16 @@ class BillApproverController extends CI_Controller
     }
     public function reject_bill($scan_id)
     {
+
         $user_id = $this->session->userdata('user_id');
         $Reject_Remark = $this->input->post('Remark');
         $this->db->where('scan_id', $scan_id);
-        $result = $this->db->update("y{$this->year_id}_scan_file", array('bill_approval_status' => 'R', 'bill_approver_id' => $user_id, 'bill_approver_remark' => $Reject_Remark, 'bill_approved_date' => date('Y-m-d')));
+        if ($_SESSION['role'] === 'scan_admin') {
+            $data = array('is_temp_scan_rejected' => 'Y', 'temp_scan_rejected_by' => $user_id, 'temp_scan_reject_remark' => $Reject_Remark, 'temp_scan_reject_date' => date('Y-m-d'));
+        } else {
+            $data = array('bill_approval_status' => 'R', 'bill_approver_id' => $user_id, 'bill_approver_remark' => $Reject_Remark, 'bill_approved_date' => date('Y-m-d'));
+        }
+        $result = $this->db->update("y{$this->year_id}_scan_file", $data);
         if ($result) {
             echo json_encode(array('status' => '200', 'message' => 'Bill Rejected Successfully.'));
         } else {

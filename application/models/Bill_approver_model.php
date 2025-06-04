@@ -101,7 +101,6 @@ class Bill_approver_model extends MY_Model
         sf.scan_id,
         sf.document_name,
         mwl.location_name,
-        CONCAT(scanned_by.first_name, ' ', scanned_by.last_name) AS scanned_by_name,
         sf.scan_date,
         CONCAT(temp_scanned_by.first_name, ' ', temp_scanned_by.last_name) AS temp_scanned_by_name,
         sf.temp_scan_date,
@@ -113,7 +112,6 @@ class Bill_approver_model extends MY_Model
 
         $this->db->from("y{$this->year_id}_scan_file AS sf");
         $this->db->join('master_work_location AS mwl', 'sf.location_id = mwl.location_id', 'left');
-        $this->db->join('users AS scanned_by', 'scanned_by.user_id = sf.scanned_by', 'left');
         $this->db->join('users AS temp_scanned_by', 'temp_scanned_by.user_id = sf.Temp_Scan_By', 'left');
         $this->db->join('core_department AS dept', 'sf.department_id = dept.api_id', 'left');
         $this->db->join('core_sub_department', 'sf.sub_department_id = core_sub_department.api_id', 'left');

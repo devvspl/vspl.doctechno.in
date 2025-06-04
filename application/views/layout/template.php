@@ -7,7 +7,7 @@
 	<title>SnapDoc</title>
 	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 	<meta http-equiv="Cache-control" content="no-cache">
-	<meta name="theme-color" content="#424242"/>
+	<meta name="theme-color" content="#424242" />
 	<link rel="icon" type="image/x-icon" href="<?= base_url(); ?>assets/images/favicon.png">
 
 	<link rel="stylesheet" href="<?= base_url(); ?>assets/bootstrap/css/bootstrap.min.css">
@@ -31,7 +31,7 @@
 	<link href="<?= base_url(); ?>assets/dist/datatables/css/rowReorder.dataTables.min.css" rel="stylesheet">
 
 	<link rel="stylesheet" type="text/css" href="<?= base_url(); ?>assets/dist/css/bootstrap-select.min.css">
-	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/dist/css/dropify.min.css">
 	<link rel="stylesheet" href="<?= base_url(); ?>assets/css/jquery.datetimepicker.min.css">
 	<link rel="stylesheet" href="<?= base_url(); ?>assets/css/jquery.verySimpleImageViewer.css">
@@ -47,9 +47,11 @@
 	<script src="<?= base_url(); ?>assets/js/custom.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
+	<link rel="stylesheet" href="<?= base_url(); ?>assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+
 
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
 
 	<style>
 		.parsley-errors-list {

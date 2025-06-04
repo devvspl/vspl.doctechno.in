@@ -54,9 +54,9 @@ class Bill_approver extends CI_Controller
             $data['username'] = $this->input->post('username');
             $data['password'] = md5($this->input->post('password'));
             $data['role'] = 'bill_approver';
-			$data['location_id'] = is_array($this->input->post('location')) ? implode(',', $this->input->post('location')) : $this->input->post('location');
-			$data['firm_id'] = is_array($this->input->post('firm')) ? implode(',', $this->input->post('firm')) : $this->input->post('firm');
-			$data['department_id'] = is_array($this->input->post('department')) ? implode(',', $this->input->post('department')) : $this->input->post('department');			
+            $data['location_id'] = is_array($this->input->post('location')) ? implode(',', $this->input->post('location')) : $this->input->post('location');
+            $data['firm_id'] = is_array($this->input->post('firm')) ? implode(',', $this->input->post('firm')) : $this->input->post('firm');
+            $data['department_id'] = is_array($this->input->post('department')) ? implode(',', $this->input->post('department')) : $this->input->post('department');
             $data['group_id'] = 0;
             $result = $this->Bill_approver_model->create($data);
             if ($result) {
@@ -90,40 +90,40 @@ class Bill_approver extends CI_Controller
         $this->load->view('layout/template', $this->data);
     }
 
-	function update($id)
-	{
-		$data['user_id'] = $id;
-		$data['first_name'] = $this->input->post('first_name');
-		$data['last_name'] = $this->input->post('last_name');
-		$data['username'] = $this->input->post('username');
-	
-	
-		$location = $this->input->post('location');
-		$data['location_id'] = is_array($location) ? implode(',', $location) : $location;
-		$data['firm_id'] = is_array($this->input->post('firm')) ? implode(',', $this->input->post('firm')) : $this->input->post('firm');
-			$data['department_id'] = is_array($this->input->post('department')) ? implode(',', $this->input->post('department')) : $this->input->post('department');			
-		$data['updated_by'] = $this->session->userdata('user_id');
-		$data['updated_at'] = date('Y-m-d H:i:s');
-	
-		$result = $this->Bill_approver_model->update($data);
-	
-		if ($result) {
-			$this->session->set_flashdata('message', '<p class="text-success text-center">Bill Approver Updated Successfully.</p>');
-			redirect('bill_approver');
-		} else {
-			$this->session->set_flashdata('message', '<p class="text-danger text-center">Something went wrong. Please try again.</p>');
-			redirect('bill_approver');
-		}
-	}
-	
+    function update($id)
+    {
+        $data['user_id'] = $id;
+        $data['first_name'] = $this->input->post('first_name');
+        $data['last_name'] = $this->input->post('last_name');
+        $data['username'] = $this->input->post('username');
+
+
+        $location = $this->input->post('location');
+        $data['location_id'] = is_array($location) ? implode(',', $location) : $location;
+        $data['firm_id'] = is_array($this->input->post('firm')) ? implode(',', $this->input->post('firm')) : $this->input->post('firm');
+        $data['department_id'] = is_array($this->input->post('department')) ? implode(',', $this->input->post('department')) : $this->input->post('department');
+        $data['updated_by'] = $this->session->userdata('user_id');
+        $data['updated_at'] = date('Y-m-d H:i:s');
+
+        $result = $this->Bill_approver_model->update($data);
+
+        if ($result) {
+            $this->session->set_flashdata('message', '<p class="text-success text-center">Bill Approver Updated Successfully.</p>');
+            redirect('bill_approver');
+        } else {
+            $this->session->set_flashdata('message', '<p class="text-danger text-center">Something went wrong. Please try again.</p>');
+            redirect('bill_approver');
+        }
+    }
+
 
     public function pending_bill_approve()
     {
 
         $bill_list = $this->db->where('bill_approval_status', 'N')
             // ->where_in('location_id', $user_location_array)
-           ->join('master_work_location', 'master_work_location.location_id = y{$this->year_id}_scan_file.location_id', 'left')
-			->where('bill_approver_id',$this->session->userdata('user_id'))
+            ->join('master_work_location', 'master_work_location.location_id = y{$this->year_id}_scan_file.location_id', 'left')
+            ->where('bill_approver_id', $this->session->userdata('user_id'))
             ->get("y{$this->year_id}_scan_file")
             ->result_array();
 
@@ -160,7 +160,14 @@ class Bill_approver extends CI_Controller
         $user_id = $this->session->userdata('user_id');
         $Reject_Remark = $this->input->post('Remark');
         $this->db->where('scan_id', $scan_id);
-        $result = $this->db->update("y{$this->year_id}_scan_file", array('bill_approval_status' => 'R', 'bill_approver_id' => $user_id, 'bill_approver_remark' => $Reject_Remark, 'bill_approved_date' => date('Y-m-d')));
+        if ($_SESSION['role'] === 'scan_admin') {
+            $data = array('is_temp_scan_rejected' => 'Y', 'temp_scan_rejected_by' => $user_id, 'temp_scan_reject_remark' => $Reject_Remark, 'temp_scan_reject_date' => date('Y-m-d'));
+        } else {
+            $data = array('bill_approval_status' => 'R', 'bill_approver_id' => $user_id, 'bill_approver_remark' => $Reject_Remark, 'bill_approved_date' => date('Y-m-d'));
+        }
+        $result = $this->db->update("y{$this->year_id}_scan_file", $data);
+        echo $this->db->last_query();
+        exit;
         if ($result) {
             echo json_encode(array('status' => '200', 'message' => 'Bill Rejected Successfully.'));
         } else {
@@ -181,10 +188,11 @@ class Bill_approver extends CI_Controller
             redirect('pending_bill_approve');
         }
     }
-    public function get_departments() {
+    public function get_departments()
+    {
         $company_ids = $this->input->post('company_ids');
         $departments = $this->Bill_approver_model->get_departments_by_company_ids($company_ids);
         echo json_encode($departments);
     }
-    
+
 }

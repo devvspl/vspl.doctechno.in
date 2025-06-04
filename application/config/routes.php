@@ -32,6 +32,8 @@ $route['business_unit'] = 'master/BusinessUnitController';
 $route['business_entity'] = 'master/BusinessEntityController';
 $route['rejection_reason'] = 'master/RejectionReasonController';
 $route['pending_bill_approve'] ='master/BillApproverController/pending_bill_approve';
+$route['reject_bill_approve'] ='master/BillApproverController/reject_bill_approve';
+$route['approved_bill_approve'] ='master/BillApproverController/approved_bill_approve';
 $route['bill_detail/(:any)'] = 'master/BillApproverController/bill_detail/$1';   
 $route['my_approved_bill'] ='master/BillApproverController/my_approved_bill';
 $route['rejected_bill_by_me'] ='master/BillApproverController/rejected_bill_by_me';
@@ -44,6 +46,8 @@ $route['create_account'] = 'master/AccountController/create';
 // >>>>>>>>>>>>>>>>>>>>>>>>> Data Extraction Section <<<<<<<<<<<<<<<<<<<<<<<<< //
 $route['classification'] = 'extract/ExtractorController/classification';
 $route['processed'] = 'extract/ExtractorController/processed';
+$route['classifications-rejected'] = 'extract/ExtractorController/classificationsRejected';
+$route['scan-rejected-scan-admin'] = 'extract/ExtractorController/scanRejectedScanAdmin';
 $route['change-request'] = 'extract/ExtractorController/changeRequestList';
 $route['extraction-queue'] = 'extract/ExtractorController/getQueueList';
 $route['process-queue'] = 'extract/ExtractorController/processQueue';

@@ -49,11 +49,6 @@
                            <?= !empty($bill_detail->file_type) ? $bill_detail->file_type : 'NA' ?>
                         </p>
 
-                        <?php if (!empty($bill_detail->scan_date)): ?>
-                           <p><strong>Scanned By:</strong> <?= $bill_detail->scanned_by_name ?></p>
-                           <p><strong>Scan Date:</strong> <?= $bill_detail->scan_date ?></p>
-                        <?php endif; ?>
-
                         <?php if (!empty($bill_detail->temp_scan_date)): ?>
                            <p><strong>Temp Scanned By:</strong> <?= $bill_detail->temp_scanned_by_name ?></p>
                            <p><strong>Temp Scan Date:</strong> <?= $bill_detail->temp_scan_date ?></p>
@@ -106,7 +101,6 @@
 </div>
 <!-- JS Handling -->
 <script>
-
    $(document).on("click", "#reject_bill_btn", function () {
       var scanId = $(this).data('id');
       $("#rejectScanId").val(scanId);
@@ -136,7 +130,6 @@
             if (response.status == 200) {
                $("#rejectModal").modal('hide');
                showToast('success', 'Bill rejected successfully.');
-
                setTimeout(function () {
                   window.location.href = "<?= base_url('pending_bill_approve') ?>";
                }, 2000);

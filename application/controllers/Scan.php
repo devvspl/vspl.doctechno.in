@@ -29,12 +29,12 @@ class Scan extends CI_Controller
     }
     public function temp_scan()
     {
+        $status = $this->input->get('status');
         $this->session->set_userdata('top_menu', 'scan_master');
         $this->session->set_userdata('sub_menu', 'scan');
         $this->data['main'] = 'scan/temp_scanfile';
-        $this->data['locationlist'] = $this->customlib->getWorkLocationList();
-        $this->data['my_lastest_scan'] = $this->Scan_model->get_my_lastest_temp_scan();
-        $this->data['bill_approver_list'] = $this->customlib->getBillApproverList();
+        $this->data['status'] = $status;
+        $this->data['my_lastest_scan'] = $this->Scan_model->get_my_lastest_temp_scan($status);
         $this->load->view('layout/template', $this->data);
     }
     public function myscannedfiles()
