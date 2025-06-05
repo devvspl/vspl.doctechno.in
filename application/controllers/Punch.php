@@ -70,7 +70,7 @@ class Punch extends CI_Controller
         $this->db->join("master_account_ledger da", "da.id = aii.debit_account_id", "left");
         $this->db->join("master_account_ledger ca", "ca.id = aii.credit_account_id", "left");
         $this->db->join("payment_term_master pm", "pm.id = aii.payment_term_id", "left");
-        $this->db->join("core_function f", "f.api_id = aii.function_id", "left");
+        $this->db->join("core_org_function f", "f.api_id = aii.function_id", "left");
         $this->db->join("core_vertical v", "v.api_id = aii.vertical_id", "left");
         $this->db->join("core_sub_department sd", "sd.api_id = aii.sub_department_id", "left");
         $this->db->join("core_zone z", "z.api_id = aii.zone_id", "left");
