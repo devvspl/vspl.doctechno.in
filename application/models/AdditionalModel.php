@@ -2,7 +2,18 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 
 class AdditionalModel extends CI_Model
-{
+{    protected $year_id;
+    function __construct() {
+         $this->year_id =
+            $this->session->userdata("year_id") ??
+            ($this->db
+                ->select("id")
+                ->from("financial_years")
+                ->where("is_current", 1)
+                ->get()
+                ->row()->id ??
+                null);
+    }
     public function get_autocomplete_list($table, $label_field, $value_field, $query = '', $where = [])
     {
         if (!empty($where)) {
