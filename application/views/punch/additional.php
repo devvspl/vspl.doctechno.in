@@ -341,7 +341,7 @@
                             response(
                                 data.map((account) => {
                                     return {
-                                        label: `${account.account_name} (${account.account_code})`,
+                                        label: `${account.account_name} (${account.focus_code})`,
                                         value: account.account_name,
                                         id: account.id,
                                     };

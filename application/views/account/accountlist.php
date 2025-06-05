@@ -26,8 +26,8 @@
                      </div>
                      <div class="form-group">
                         <label for="exampleInputEmail1">Account Code</label>
-                        <input autofocus="" id="account_code" name="account_code" placeholder="" type="text" class="form-control" value="<?php echo set_value('account_code'); ?>" />
-                        <span class="text-danger"><?php echo form_error('account_code'); ?></span>
+                        <input autofocus="" id="focus_code" name="focus_code" placeholder="" type="text" class="form-control" value="<?php echo set_value('focus_code'); ?>" />
+                        <span class="text-danger"><?php echo form_error('focus_code'); ?></span>
                      </div>
                      <div class="form-group">
                         <label for="exampleInputEmail1">Account Group</label>
@@ -101,7 +101,7 @@
                            <tr>
                               <td><?= $row['id']; ?></td>
                               <td><?= $row['account_name']; ?></td>
-                              <td><?= $row['account_code'] ?></td>
+                              <td><?= $row['focus_code'] ?></td>
                               <td><?= $row['account_group'] ?></td>
                               <td><?= ($row['status'] == 'A') ? 'Active' : 'Deactive' ?></td>
                               <td class="text-right no-print">

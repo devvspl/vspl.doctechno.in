@@ -32,13 +32,13 @@ class Location extends CI_Controller
     {
 
         $this->form_validation->set_rules('location_name', 'Location Name', 'trim|required');
-        $this->form_validation->set_rules('location_code', 'Location Code', 'trim|required');
+        $this->form_validation->set_rules('focus_code', 'Location Code', 'trim|required');
         if ($this->form_validation->run() == false) {
             $this->data['main'] = 'location/locationlist';
             $this->load->view('layout/template', $this->data);
         } else {
             $data['location_name'] = $this->input->post('location_name');
-            $data['location_code'] = $this->input->post('location_code');
+            $data['focus_code'] = $this->input->post('focus_code');
             $data['status'] = $this->input->post('status');
             $data['created_by'] = $this->session->userdata('user_id');
             
@@ -74,7 +74,7 @@ class Location extends CI_Controller
     {
         $data['location_id'] = $id;
         $data['location_name'] = $this->input->post('location_name');
-        $data['location_code'] = $this->input->post('location_code');
+        $data['focus_code'] = $this->input->post('focus_code');
         $data['status'] = $this->input->post('status');
         $data['updated_by'] = $this->session->userdata('user_id');
         $data['updated_at'] = date('Y-m-d H:i:s');

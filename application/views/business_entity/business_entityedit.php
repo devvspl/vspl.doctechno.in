@@ -30,8 +30,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Business Entity Code</label>
-                                <input autofocus="" id="business_entity_code" name="business_entity_code" placeholder="" type="text" class="form-control" value="<?php echo set_value('business_entity_code', $business_entity['business_entity_code']); ?>" />
-                                <span class="text-danger"><?php echo form_error('business_entity_code'); ?></span>
+                                <input autofocus="" id="focus_code" name="focus_code" placeholder="" type="text" class="form-control" value="<?php echo set_value('focus_code', $business_entity['focus_code']); ?>" />
+                                <span class="text-danger"><?php echo form_error('focus_code'); ?></span>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Business Entity Category</label>
@@ -107,7 +107,7 @@
                                                     <?php echo $row['business_entity_name']; ?>
                                                 </td>
                                                 <td class="mailbox-name">
-                                                    <?php echo $row['business_entity_code'] ?>
+                                                    <?php echo $row['focus_code'] ?>
                                                 </td>
                                                 <td class="mailbox-name">
                                                     <?php echo ($row['status'] == 'A') ? 'Active' : 'Deactive' ?>

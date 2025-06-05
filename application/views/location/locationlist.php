@@ -29,9 +29,9 @@
                                 <span class="text-danger"><?php echo form_error('location_name'); ?></span>
                             </div>
                             <div class="form-group">
-                                <label for="location_code">Location Code</label>
-                                <input autofocus="" id="location_code" name="location_code" placeholder="" type="text" class="form-control" value="<?php echo set_value('location_code'); ?>" />
-                                <span class="text-danger"><?php echo form_error('location_code'); ?></span>
+                                <label for="focus_code">Location Code</label>
+                                <input autofocus="" id="focus_code" name="focus_code" placeholder="" type="text" class="form-control" value="<?php echo set_value('focus_code'); ?>" />
+                                <span class="text-danger"><?php echo form_error('focus_code'); ?></span>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Status</label>
@@ -84,7 +84,7 @@
                                                     <?php echo $row['location_name']; ?>
                                                 </td>
                                                 <td class="mailbox-name">
-                                                    <?php echo $row['location_code']; ?>
+                                                    <?php echo $row['focus_code']; ?>
                                                 </td>
                                                 <td class="mailbox-name">
                                                     <?php echo ($row['status'] == 'A') ? 'Active' : 'Deactive' ?>

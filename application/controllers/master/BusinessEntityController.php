@@ -32,7 +32,7 @@ class BusinessEntityController extends CI_Controller
     {
 
         $this->form_validation->set_rules('business_entity_name', 'Business entity Name', 'trim|required');
-        $this->form_validation->set_rules('business_entity_code', 'Business entity Code', 'trim|required');
+        $this->form_validation->set_rules('focus_code', 'Business entity Code', 'trim|required');
         $this->form_validation->set_rules('business_entity_group', 'Business entity group', 'trim|required');
     
         if ($this->form_validation->run() == false) {
@@ -40,7 +40,7 @@ class BusinessEntityController extends CI_Controller
             $this->load->view('layout/template', $this->data);
         } else {
             $data['business_entity_name'] = $this->input->post('business_entity_name');
-            $data['business_entity_code'] = $this->input->post('business_entity_code');
+            $data['focus_code'] = $this->input->post('focus_code');
             $data['business_entity_group'] = $this->input->post('business_entity_group');
             $data['status'] = $this->input->post('status');
             $data['created_by'] = $this->session->userdata('user_id');
@@ -77,7 +77,7 @@ class BusinessEntityController extends CI_Controller
     {
         $data['business_entity_id'] = $id;
         $data['business_entity_name'] = $this->input->post('business_entity_name');
-        $data['business_entity_code'] = $this->input->post('business_entity_code');
+        $data['focus_code'] = $this->input->post('focus_code');
         $data['business_entity_group'] = $this->input->post('business_entity_group');
         $data['status'] = $this->input->post('status');
         $data['updated_by'] = $this->session->userdata('user_id');

@@ -36,7 +36,7 @@ class Account_model extends CI_Model {
         if ($search) {
             $this->db->group_start();
             $this->db->like('account_name', $search);
-            $this->db->or_like('account_code', $search);
+            $this->db->or_like('focus_code', $search);
             $this->db->group_end();
         }
         return $this->db->count_all_results();
@@ -50,7 +50,7 @@ class Account_model extends CI_Model {
         }
         if ($search !== null && $search !== '') {
             $this->db->like('account_name', $search);
-            $this->db->or_like('account_code', $search);
+            $this->db->or_like('focus_code', $search);
         }
         if ($limit !== null && $start !== null) {
             $this->db->limit($limit, $start);

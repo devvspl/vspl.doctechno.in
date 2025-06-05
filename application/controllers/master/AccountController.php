@@ -21,13 +21,13 @@ class AccountController extends CI_Controller {
     }
     public function create() {
         $this->form_validation->set_rules('account_name', 'account name', 'trim|required');
-        $this->form_validation->set_rules('account_code', 'account code', 'trim|required');
+        $this->form_validation->set_rules('focus_code', 'account code', 'trim|required');
         if ($this->form_validation->run() == false) {
             $this->data['main'] = 'account/accountlist';
             $this->load->view('layout/template', $this->data);
         } else {
             $data['account_name'] = $this->input->post('account_name');
-            $data['account_code'] = $this->input->post('account_code');
+            $data['focus_code'] = $this->input->post('focus_code');
             $data['account_group'] = $this->input->post('account_group') ? $this->input->post('account_group') : $data['account_name'];
             $data['status'] = $this->input->post('status');
             $data['created_by'] = $this->session->userdata('user_id');
@@ -57,7 +57,7 @@ class AccountController extends CI_Controller {
     function update($id) {
         $data['account_id'] = $id;
         $data['account_name'] = $this->input->post('account_name');
-        $data['account_code'] = $this->input->post('account_code');
+        $data['focus_code'] = $this->input->post('focus_code');
         $data['status'] = $this->input->post('status');
         $data['updated_by'] = $this->session->userdata('user_id');
         $data['updated_at'] = date('Y-m-d H:i:s');

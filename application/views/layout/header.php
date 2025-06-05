@@ -43,25 +43,29 @@
                               <a href="#"> <i class="fa fa-home ftlayer"></i> <span>Master</span> <i
                                     class="fa fa-angle-left pull-right"></i> </a>
                               <ul class="treeview-menu">
-                                 <li class="<?php echo set_Submenu('account'); ?>">
+                                 <!-- <li class="<?php echo set_Submenu('account'); ?>">
                                     <a href="<?= base_url(); ?>account"><i class="fa fa-angle-double-right"></i>Account</a>
                                  </li>
                                  <li class="<?php echo set_Submenu('activity'); ?>">
                                     <a href="<?= base_url(); ?>activity"><i
                                           class="fa fa-angle-double-right"></i>Activity</a>
+                                 </li> -->
+                                  <li class="<?php echo set_Submenu('account'); ?>">
+                                    <a href="<?= base_url(); ?>account"><i class="fa fa-angle-double-right"></i>Account</a>
                                  </li>
+                                 
                                  <li class="<?php echo set_Submenu('bill_approver'); ?>">
                                     <a href="<?= base_url(); ?>bill_approver"><i class="fa fa-angle-double-right"></i>Bill
                                        Approver</a>
                                  </li>
-                                 <li class="<?php echo set_Submenu('business_entity'); ?>">
+                                <li class="<?php echo set_Submenu('business_entity'); ?>">
                                     <a href="<?= base_url(); ?>business_entity"><i
                                           class="fa fa-angle-double-right"></i>Business Entity</a>
                                  </li>
-                                 <li class="<?php echo set_Submenu('business_unit'); ?>">
+                                 <!--  <li class="<?php echo set_Submenu('business_unit'); ?>">
                                     <a href="<?= base_url(); ?>business_unit"><i
                                           class="fa fa-angle-double-right"></i>Business Unit</a>
-                                 </li>
+                                 </li> -->
                                  <li class="<?php echo set_Submenu('firm'); ?>">
                                     <a href="<?= base_url(); ?>firm"><i class="fa fa-angle-double-right"></i>Company /
                                        Vendor</a>
@@ -104,7 +108,7 @@
                               </ul>
                            </li>
 
-                           <li class="treeview <?= set_Topmenu('reports'); ?>">
+                           <!-- <li class="treeview <?= set_Topmenu('reports'); ?>">
                               <a href="#"> <i class="fa fa-file"></i> <span>Reports</span> <i
                                     class="fa fa-angle-left pull-right"></i> </a>
                               <ul class="treeview-menu">
@@ -135,7 +139,7 @@
                                     </li>
                                  <?php } ?>
                               </ul>
-                           </li>
+                           </li> -->
                         <?php } ?>
                         <?php if ($_SESSION['role'] == 'super_admin' || $_SESSION['role'] == 'scan_admin') { ?>
                            <li class="treeview <?= set_Topmenu('search_master'); ?>">
@@ -301,7 +305,7 @@
                            </li>
                         <?php } ?>
                         <?php if ($this->customlib->has_permission('Search Report') || $_SESSION['role'] == 'admin' || $_SESSION['role'] == 'super_admin') { ?>
-                           <li class="treeview <?= set_Topmenu('search_master'); ?>">
+                           <!-- <li class="treeview <?= set_Topmenu('search_master'); ?>">
                               <a href="#"> <i class="fa fa-search"></i> <span>Search Record</span> <i
                                     class="fa fa-angle-left pull-right"></i> </a>
                               <ul class="treeview-menu">
@@ -314,7 +318,7 @@
                                           class="fa fa-angle-double-right"></i>Search Punch Records</a>
                                  </li>
                               </ul>
-                           </li>
+                           </li> -->
                         <?php } ?>
                         <?php if ($_SESSION['role'] == 'admin') { ?>
                            <li class="treeview <?= set_Topmenu('verification'); ?>">
