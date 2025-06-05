@@ -86,19 +86,60 @@ class AdditionalController extends CI_Controller
     {
         $query = $this->input->post('term');
         $where = ['ledger_type' => 'Cr Ledger'];
-        $result = $this->AdditionalModel->get_autocomplete_list( 'master_account_ledger', 'account_name', 'id', $query, $where);
+        $result = $this->AdditionalModel->get_autocomplete_list('master_account_ledger', 'account_name', 'id', $query, $where);
         echo json_encode($result);
     }
     public function get_debit_accounts()
     {
         $query = $this->input->post('term');
         $where = ['ledger_type' => 'Dr Ledger'];
-        $result = $this->AdditionalModel->get_autocomplete_list( 'master_account_ledger', 'account_name', 'id', $query, $where);
+        $result = $this->AdditionalModel->get_autocomplete_list('master_account_ledger', 'account_name', 'id', $query, $where);
         echo json_encode($result);
     }
-
+    public function get_payment_term()
+    {
+        $query = $this->input->post('term');
+        $result = $this->AdditionalModel->get_autocomplete_list('payment_term_master', 'payment_term_name', 'id', $query);
+        echo json_encode($result);
+    }
+    public function get_function()
+    {
+        $query = $this->input->post('term');
+        $result = $this->AdditionalModel->get_autocomplete_list('core_org_function', 'function_name', 'api_id', $query);
+        echo json_encode($result);
+    }
+    public function get_zone()
+    {
+        $query = $this->input->post('term');
+        $result = $this->AdditionalModel->get_autocomplete_list('core_zone', 'zone_name', 'api_id', $query);
+        echo json_encode($result);
+    }
+    public function get_vertical()
+    {
+        $query = $this->input->post('term');
+        $function_id = $this->input->get('function_id');
+        $where = [];
+        if (!empty($function_id)) {
+            $where['org_function_id'] = $function_id;
+        }
+        $result = $this->AdditionalModel->get_autocomplete_list('core_vertical', 'vertical_name', 'api_id', $query, $where);
+        echo json_encode($result);
+    }
+    public function get_sub_department()
+    {
+        $query = $this->input->post('term');
+        $department_id = $this->input->get('department_id');
+        $where = [];
+        if (!empty($department_id)) {
+            $where['fun_vertical_dept_id'] = $department_id;
+        }
+        $result = $this->AdditionalModel->get_autocomplete_list('core_department', 'department_name', 'api_id', $query, $where);
+        echo json_encode($result);
+    }
     public function store_update()
     {
+        $main_tbl = "y{$this->year_id}_tbl_additional_information";
+        $item_tbl = "y{$this->year_id}_tbl_additional_information_items";
         $this->db->trans_start();
         try {
             $this->form_validation->set_rules('document_number', 'Document Number', 'required');
@@ -128,12 +169,12 @@ class AdditionalController extends CI_Controller
                 }
                 $total_amount = $post['finance_total_Amount'] ?? null;
                 $mainData = ['scan_id' => $scan_id, 'document_no' => $document_no, 'document_date' => $document_date, 'business_entity_id' => $business_entity_id, 'narration' => $narration, 'tds_applicable' => ucfirst(strtolower($tds_applicable)), 'tds_jv_no' => $tds_jv_no, 'tds_section_id' => $tds_section_id, 'tds_percentage' => $tds_percentage, 'tds_amount' => $tds_amount, 'total_amount' => $total_amount];
-                $existing = $this->db->get_where('tbl_additional_information', ['scan_id' => $scan_id])->row();
+                $existing = $this->db->get_where($main_tbl, ['scan_id' => $scan_id])->row();
                 if ($existing) {
-                    $this->db->where('scan_id', $scan_id)->update('tbl_additional_information', $mainData);
+                    $this->db->where('scan_id', $scan_id)->update($main_tbl, $mainData);
                     $mainId = $existing->id;
                 } else {
-                    $this->db->insert('tbl_additional_information', $mainData);
+                    $this->db->insert($main_tbl, $mainData);
                     $mainId = $this->db->insert_id();
                 }
                 if (isset($post['final_submit'])) {
@@ -141,52 +182,35 @@ class AdditionalController extends CI_Controller
                     $this->db->where('scan_id', $scan_id)->update("y{$this->year_id}_scan_file", $updateData);
                 }
                 if (!empty($post['cost_center_id']) && is_array($post['cost_center_id'])) {
-                    $this->db->where('scan_id', $scan_id)->delete('tbl_additional_information_items');
+                    $this->db->where('scan_id', $scan_id)->delete($item_tbl);
                     foreach ($post['cost_center_id'] as $index => $cost_center_id) {
                         if (empty($cost_center_id)) {
                             continue;
                         }
-                        $itemData = ['scan_id' => $scan_id, 'cost_center_id' => $cost_center_id, 'department_id' => $post['department_id'][$index] ?? null, 'business_unit_id' => $post['business_unit_id'][$index] ?? null, 'region_id' => $post['region_id'][$index] ?? null, 'state_id' => $post['state_id'][$index] ?? null, 'location_id' => $post['location_id'][$index] ?? null, 'category_id' => $post['category_id'][$index] ?? null, 'crop_id' => $post['crop_id'][$index] ?? null, 'activity_id' => $post['activity_id'][$index] ?? null, 'debit_account_id' => $post['debit_ac_id'][$index] ?? null, 'payment_term_id' => $post['payment_term_id'][$index] ?? null, 'reference' => $post['reference_no'][$index] ?? null, 'remark' => $post['item_remark'][$index] ?? null, 'amount' => $post['item_total_amount'][$index] ?? null, 'tds_amount' => $post['item_tds_amount'][$index] ?? null,];
-                        $this->db->insert('tbl_additional_information_items', $itemData);
+                        $itemData = ['scan_id' => $scan_id, 'cost_center_id' => $cost_center_id, 'department_id' => $post['department_id'][$index] ?? null, 'business_unit_id' => $post['business_unit_id'][$index] ?? null, 'region_id' => $post['region_id'][$index] ?? null, 'state_id' => $post['state_id'][$index] ?? null, 'location_id' => $post['location_id'][$index] ?? null, 'category_id' => $post['category_id'][$index] ?? null, 'crop_id' => $post['crop_id'][$index] ?? null, 'activity_id' => $post['activity_id'][$index] ?? null, 'debit_account_id' => $post['debit_ac_id'][$index] ?? null, 'credit_account_id' => $post['credit_ac_id'][$index] ?? null, 'payment_term_id' => $post['payment_term_id'][$index] ?? null, 'reference' => $post['reference_no'][$index] ?? null, 'remark' => $post['item_remark'][$index] ?? null, 'amount' => $post['item_total_amount'][$index] ?? null, 'tds_amount' => $post['item_tds_amount'][$index] ?? null, 'reverse_charge' => $post['reverse_charge'][$index] ?? null, 'function_id' => $post['function_id'][$index] ?? null, 'vertical_id' => $post['vertical_id'][$index] ?? null, 'sub_department_id' => $post['sub_department_id'][$index] ?? null, 'zone_id' => $post['zone_id'][$index] ?? null];
+                        $this->db->insert($item_tbl, $itemData);
+                    }
+                }
+                $this->db->trans_complete();
+                if ($this->db->trans_status() === FALSE) {
+                    $this->db->trans_rollback();
+                    $this->session->set_flashdata(['alert_type' => 'danger', 'message' => 'There was an error saving the data.']);
+                    redirect($_SERVER['HTTP_REFERER']);
+                } else {
+                    if (isset($post['final_submit'])) {
+                        $this->session->set_flashdata(['alert_type' => 'success', 'message' => 'File punched successfully!']);
+                        redirect('finance/my-punched-file/all');
+                    } else {
+                        $this->session->set_flashdata(['alert_type' => 'info', 'message' => 'Data saved as draft successfully.']);
+                        redirect($_SERVER['HTTP_REFERER']);
                     }
                 }
             }
-            $this->db->trans_complete();
-            if ($this->db->trans_status() === FALSE) {
-                $this->db->trans_rollback();
-                $this->session->set_flashdata([
-                    'alert_type' => 'danger',
-                    'message' => 'There was an error saving the data.'
-                ]);
-                redirect($_SERVER['HTTP_REFERER']);
-            } else {
-                if (isset($post['final_submit'])) {
-                    $this->session->set_flashdata([
-                        'alert_type' => 'success',
-                        'message' => 'File punched successfully!'
-                    ]);
-                    redirect('finance/my-punched-file/all');
-                } else {
-                    $this->session->set_flashdata([
-                        'alert_type' => 'info',
-                        'message' => 'Data saved as draft successfully.'
-                    ]);
-                    redirect($_SERVER['HTTP_REFERER']);
-                }
-            }
-
-
-
-
         } catch (Exception $e) {
             $this->db->trans_rollback();
-            $this->session->set_flashdata([
-                'alert_type' => 'danger',
-                'message' => 'There was an error saving the data.'
-            ]);
+            $this->session->set_flashdata(['alert_type' => 'danger', 'message' => 'There was an error saving the data.']);
             redirect($_SERVER['HTTP_REFERER']);
         }
     }
-
 }
 ?>

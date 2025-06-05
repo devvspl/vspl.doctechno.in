@@ -282,7 +282,6 @@ class Extract_model extends CI_Model
 
 
     }
-
     public function getChangeRequestList($group_id = null, $location_id = null)
     {
         $this->db->select("s.scan_id, g.group_name, s.extract_status, md.file_type, l.location_name, s.document_name , s.file_path, IF(s.is_temp_scan = 'Y', s.temp_scan_date, s.scan_date) AS scan_date, IF(s.is_temp_scan = 'Y', CONCAT(sb.first_name, ' ', sb.last_name), CONCAT(ba.first_name, ' ', ba.last_name) AS bill_approver_id, s.bill_approved_date");
@@ -412,7 +411,6 @@ class Extract_model extends CI_Model
 
         return $query->num_rows() > 0 ? $query->row()->file_path : null;
     }
-
     public function storeExtractedData($typeId, $scanId, $data)
     {
         $tableName = "ext_tempdata_" . $typeId;
@@ -822,7 +820,6 @@ class Extract_model extends CI_Model
         $this->db->where('fvdm.department_id', $department_id);
         return $this->db->get()->result();
     }
-
     public function getBillApprovers($department_id)
     {
         $this->db->where('role', 'bill_approver');
