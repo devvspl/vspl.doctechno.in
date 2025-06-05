@@ -117,22 +117,14 @@ class AdditionalController extends CI_Controller
     public function get_vertical()
     {
         $query = $this->input->post('term');
-        $function_id = $this->input->get('function_id');
         $where = [];
-        if (!empty($function_id)) {
-            $where['org_function_id'] = $function_id;
-        }
         $result = $this->AdditionalModel->get_autocomplete_list('core_vertical', 'vertical_name', 'api_id', $query, $where);
         echo json_encode($result);
     }
     public function get_sub_department()
     {
         $query = $this->input->post('term');
-        $department_id = $this->input->get('department_id');
         $where = [];
-        if (!empty($department_id)) {
-            $where['fun_vertical_dept_id'] = $department_id;
-        }
         $result = $this->AdditionalModel->get_autocomplete_list('core_department', 'department_name', 'api_id', $query, $where);
         echo json_encode($result);
     }

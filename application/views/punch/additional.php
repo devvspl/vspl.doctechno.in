@@ -603,18 +603,8 @@
         initAutoCompleteInput("#payment_term_" + rowNo, "<?= site_url('get-payment-term') ?>");
         initAutoCompleteInput("#function_" + rowNo, "<?= site_url('get-function') ?>");
         initAutoCompleteInput("#zone_" + rowNo, "<?= site_url('get-zone') ?>");
-
-        // For vertical with dependent value from function
-        let functionId = $("#function_id_" + rowNo).val();
-        console.log("#function_id_" + rowNo);
-        console.log(functionId)
-        let verticalUrl = "<?= site_url('get-vertical') ?>?function_id=" + encodeURIComponent(functionId);
-        initAutoCompleteInput("#vertical_" + rowNo, verticalUrl);
-
-
-        let departmentId = $("#department_id_" + rowNo).val();
-        let sub_departmentUrl = "<?= site_url('get-sub-department') ?>?department_id=" + encodeURIComponent(departmentId);
-        initAutoCompleteInput("#sub_department_" + rowNo, sub_departmentUrl);
+        initAutoCompleteInput("#vertical_" + rowNo, <?= site_url('get-vertical') ?>);
+        initAutoCompleteInput("#sub_department_" + rowNo, <?= site_url('get-sub-department') ?>);
     }
 
 
