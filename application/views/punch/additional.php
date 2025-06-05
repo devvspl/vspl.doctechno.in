@@ -603,8 +603,8 @@
         initAutoCompleteInput("#payment_term_" + rowNo, "<?= site_url('get-payment-term') ?>");
         initAutoCompleteInput("#function_" + rowNo, "<?= site_url('get-function') ?>");
         initAutoCompleteInput("#zone_" + rowNo, "<?= site_url('get-zone') ?>");
-        initAutoCompleteInput("#vertical_" + rowNo, <?= site_url('get-vertical') ?>);
-        initAutoCompleteInput("#sub_department_" + rowNo, <?= site_url('get-sub-department') ?>);
+        initAutoCompleteInput("#vertical_" + rowNo, "<?= site_url('get-vertical') ?>");
+        initAutoCompleteInput("#sub_department_" + rowNo, "<?= site_url('get-sub-department') ?>");
     }
 
 
