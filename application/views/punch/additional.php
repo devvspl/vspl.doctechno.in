@@ -497,18 +497,20 @@
         $(document).on("input", ".amount", function () {
             updateBillAmount();
         });
-        // Add hover event for input fields in rows_container
         $(document).on('mouseenter', '#rows_container input.form-control', function () {
-            $(this).attr('title', $(this).val());
-        }).on('mouseleave', '#rows_container input.form-control', function () {
-            // Optional: Remove title on mouse leave to keep it dynamic
-            $(this).removeAttr('title');
-        });
+        $(this).attr('title', $(this).val() || 'No value'); // Show input value as title, or 'No value' if empty
+        $(this).css('background-color', '#e6f3ff'); // Highlight with light blue background
+        $(this).css('border-color', '#007bff'); // Optional: Add border color for emphasis
+    }).on('mouseleave', '#rows_container input.form-control', function () {
+        $(this).removeAttr('title'); // Remove title on mouse leave
+        $(this).css('background-color', ''); // Reset background
+        $(this).css('border-color', ''); // Reset border
+    });
 
-        // Update title when input value changes
-        $(document).on('input', '#rows_container input.form-control', function () {
-            $(this).attr('title', $(this).val());
-        });
+    // Update title when input value changes
+    $(document).on('input', '#rows_container input.form-control', function () {
+        $(this).attr('title', $(this).val() || 'No value'); // Update title on input change
+    });
         $('input[name="tdsApplicable"]').change(function () {
             if ($("#tdsApplicableYes").is(":checked")) {
                 generateTdsJvNo();
