@@ -116,7 +116,7 @@
                                 <label for="cost_center">Cost Center/Subledger</label>
                                 <input type="text" name="cost_center_name[]" id="cost_center_<?= $index + 1 ?>"
                                     class="form-control autocomplete-cost-center"
-                                    value="<?= isset($item['name']) ? $item['name'] : ''; ?>">
+                                    value="<?= isset($item['cost_center_name']) ? $item['cost_center_name'] : ''; ?>">
                                 <input type="hidden" name="cost_center_id[]" id="cost_center_id_<?= $index + 1 ?>"
                                     value="<?= isset($item['cost_center_id']) ? $item['cost_center_id'] : ''; ?>">
                             </div>
@@ -205,16 +205,18 @@
                                 <label for="vertical">Vertical</label>
                                 <input type="text" name="vertical_name[]" id="vertical_<?= $index + 1 ?>" class="form-control"
                                     value="<?= isset($item['vertical_name']) ? $item['vertical_name'] : ''; ?>">
-                                <input type="hidden" name="vertical_id[]" id="vertical_<?= $index + 1 ?>" class="form-control"
+                                <input type="hidden" name="vertical_id[]" id="vertical_id_<?= $index + 1 ?>"
                                     value="<?= isset($item['vertical_id']) ? $item['vertical_id'] : ''; ?>">
                             </div>
 
                             <!-- Sub Department -->
                             <div class="form-group col-md-3">
                                 <label for="sub_department">Sub Department</label>
-                                <input type="text" name="sub_department[]" id="sub_department_<?= $index + 1 ?>"
-                                    class="form-control"
-                                    value="<?= isset($item['sub_department']) ? $item['sub_department'] : ''; ?>">
+                                <input type="text" name="sub_department[]" id="sub_department_<?= $index + 1 ?>" class="form-control" value="<?= isset($item['sub_department_name']) ? $item['sub_department_name'] : ''; ?>">
+
+                                <input type="hidden" name="sub_department_id[]" id="sub_department_id_<?= $index + 1 ?>"
+                                    value="<?= isset($item['sub_department_id']) ? $item['sub_department_id'] : ''; ?>">
+                                    
                             </div>
 
                             <!-- Zone -->
@@ -222,6 +224,9 @@
                                 <label for="zone">Zone</label>
                                 <input type="text" name="zone[]" id="zone_<?= $index + 1 ?>" class="form-control"
                                     value="<?= isset($item['zone_name']) ? $item['zone_name'] : ''; ?>">
+                             <input type="hidden" name="zone_id[]" id="zone_id_<?= $index + 1 ?>"
+                                    value="<?= isset($item['zone_id']) ? $item['zone_id'] : ''; ?>">
+                                    
                             </div>
 
                             <!-- Debit Account -->
