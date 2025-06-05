@@ -497,6 +497,18 @@
         $(document).on("input", ".amount", function () {
             updateBillAmount();
         });
+        // Add hover event for input fields in rows_container
+        $(document).on('mouseenter', '#rows_container input.form-control', function () {
+            $(this).attr('title', $(this).val());
+        }).on('mouseleave', '#rows_container input.form-control', function () {
+            // Optional: Remove title on mouse leave to keep it dynamic
+            $(this).removeAttr('title');
+        });
+
+        // Update title when input value changes
+        $(document).on('input', '#rows_container input.form-control', function () {
+            $(this).attr('title', $(this).val());
+        });
         $('input[name="tdsApplicable"]').change(function () {
             if ($("#tdsApplicableYes").is(":checked")) {
                 generateTdsJvNo();
