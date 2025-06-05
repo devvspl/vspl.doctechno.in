@@ -498,18 +498,18 @@
             updateBillAmount();
         });
         $(document).on('mouseenter', '#rows_container input.form-control', function () {
-            $(this).attr('title', $(this).val() || 'No value'); // Show input value as title, or 'No value' if empty
-            $(this).css('background-color', '#e6f3ff'); // Highlight with light blue background
-            $(this).css('border-color', '#007bff'); // Optional: Add border color for emphasis
+            $(this).attr('title', $(this).val() || 'No value'); 
+            $(this).css('background-color', '#e6f3ff'); 
+            $(this).css('border-color', '#007bff'); 
         }).on('mouseleave', '#rows_container input.form-control', function () {
-            $(this).removeAttr('title'); // Remove title on mouse leave
-            $(this).css('background-color', ''); // Reset background
-            $(this).css('border-color', ''); // Reset border
+            $(this).removeAttr('title'); 
+            $(this).css('background-color', ''); 
+            $(this).css('border-color', ''); 
         });
 
-        // Update title when input value changes
+        
         $(document).on('input', '#rows_container input.form-control', function () {
-            $(this).attr('title', $(this).val() || 'No value'); // Update title on input change
+            $(this).attr('title', $(this).val() || 'No value'); 
         });
         $(document).on('keydown', '#rows_container input.form-control', function (e) {
             const key = e.which;
@@ -517,18 +517,18 @@
             const rightArrow = 39;
 
             if (key === leftArrow || key === rightArrow) {
-                e.preventDefault(); // Prevent default arrow key behavior (e.g., cursor movement within input)
-                const $inputs = $(this).closest('tr').find('input.form-control'); // Get all inputs in the current row
-                const currentIndex = $inputs.index(this); // Get current input index
+                e.preventDefault(); 
+                const $inputs = $(this).closest('tr').find('input.form-control'); 
+                const currentIndex = $inputs.index(this); 
 
                 let nextIndex;
                 if (key === rightArrow) {
-                    nextIndex = currentIndex + 1 < $inputs.length ? currentIndex + 1 : 0; // Move right, wrap to first
+                    nextIndex = currentIndex + 1 < $inputs.length ? currentIndex + 1 : 0; 
                 } else {
-                    nextIndex = currentIndex - 1 >= 0 ? currentIndex - 1 : $inputs.length - 1; // Move left, wrap to last
+                    nextIndex = currentIndex - 1 >= 0 ? currentIndex - 1 : $inputs.length - 1; 
                 }
 
-                $inputs.eq(nextIndex).focus(); // Focus the next/previous input
+                $inputs.eq(nextIndex).focus(); 
             }
         });
         $('input[name="tdsApplicable"]').change(function () {
