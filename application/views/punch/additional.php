@@ -176,6 +176,14 @@
                                     value="<?= isset($item['debit_account_id']) ? $item['debit_account_id'] : ''; ?>">
                             </div>
                             <div class="form-group col-md-3">
+                                <label for="credit_account">Credit A/C</label>
+                                <input type="text" name="credit_ac[]" id="credit_ac_<?= $index + 1 ?>"
+                                    class="form-control autocomplete-credit-ac"
+                                    value="<?= isset($item['credit_account']) ? $item['credit_account'] : ''; ?>">
+                                <input type="hidden" name="credit_ac_id[]" id="credit_ac_id_<?= $index + 1 ?>"
+                                    value="<?= isset($item['credit_account_id']) ? $item['credit_account_id'] : ''; ?>">
+                            </div>
+                            <div class="form-group col-md-3">
                                 <label for="payment_term">Payment Term</label>
                                 <input type="text" name="payment_term_name[]" id="payment_term_<?= $index + 1 ?>"
                                     class="form-control autocomplete-payment-term"
@@ -266,6 +274,12 @@
                             <label for="debit_ac">Debit A/C</label>
                             <input type="text" name="debit_ac[]" id="debit_ac_1" class="form-control autocomplete-debit-ac">
                             <input type="hidden" name="debit_ac_id[]" id="debit_ac_id_1" value="">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="credit_ac">Credit A/C</label>
+                            <input type="text" name="credit_ac[]" id="credit_ac_1"
+                                class="form-control autocomplete-credit-ac" />
+                            <input type="hidden" name="credit_ac_id[]" id="credit_ac_id_1" value="" />
                         </div>
                         <div class="form-group col-md-3">
                             <label for="payment_term">Payment Term</label>
@@ -446,6 +460,7 @@
         initAutoCompleteInput("#crop_" + rowNo, "<?= site_url('get-crops') ?>");
         initAutoCompleteInput("#activity_" + rowNo, "<?= site_url('get-activities') ?>");
         initAutoCompleteInput("#debit_ac_" + rowNo, "<?= site_url('get-debit-accounts') ?>");
+        initAutoCompleteInput("#credit_ac_" + rowNo, "<?= site_url('get-credit-accounts') ?>");
         initAutoCompleteInput("#payment_term_" + rowNo, "<?= site_url('get-payment-term') ?>");
     }
 
@@ -497,8 +512,6 @@
                 $(this).autocomplete("search", "");
             });
     }
-
-
 
     function updateBillAmount() {
         let total = 0;

@@ -190,6 +190,7 @@ class Extract_model extends CI_Model
         $conditions = [
             "s.document_name !=" => "",
             "s.extract_status" => "P",
+            "s.is_final_submitted" => "Y",
             "s.is_temp_scan_rejected" => "N",
             "s.group_id" => '16',
         ];

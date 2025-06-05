@@ -79,6 +79,7 @@ $route['get-categories'] = 'accounts/AdditionalController/get_categories';
 $route['get-crops'] = 'accounts/AdditionalController/get_crops';
 $route['get-activities'] = 'accounts/AdditionalController/get_activities';
 $route['get-debit-accounts'] = 'accounts/AdditionalController/get_debit_accounts';
+$route['get-credit-accounts'] = 'accounts/AdditionalController/get_credit_accounts';
 $route['get-payment-term'] = 'accounts/AdditionalController/get_payment_term';
 $route['store-additional-detail'] = 'accounts/AdditionalController/store_update';
 $route['finance/bill-approval/(:any)'] = 'punch/my_finance_bill_approval_file/$1';
