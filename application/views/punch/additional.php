@@ -89,370 +89,308 @@
                         value="<?= isset($main_record['tds_amount']) ? $main_record['tds_amount'] : ''; ?>">
                 </div>
             </div>
-            <div id="rows_container">
+            <div id="rows_container" style="overflow-y: auto;float: left;width: 100%;">
                 <?php if (!empty($items)): ?>
-                    <?php foreach ($items as $index => $item): ?>
-                        <div class="row form-row" id="row_<?= $index + 1 ?>" style="padding: 5px;">
-                            <!-- Reverse Charge -->
-                            <div class="form-group col-md-3">
-                                <label for="reverse_charge">Reverse Charge</label>
-                                <input type="text" name="reverse_charge[]" id="reverse_charge_<?= $index + 1 ?>"
-                                    class="form-control"
-                                    value="<?= isset($item['reverse_charge']) ? $item['reverse_charge'] : ''; ?>">
-                            </div>
-
-                            <!-- Department -->
-                            <div class="form-group col-md-3">
-                                <label for="department">Department</label>
-                                <input type="text" name="department_name[]" id="department_<?= $index + 1 ?>"
-                                    class="form-control autocomplete-department"
-                                    value="<?= isset($item['department_name']) ? $item['department_name'] : ''; ?>">
-                                <input type="hidden" name="department_id[]" id="department_id_<?= $index + 1 ?>"
-                                    value="<?= isset($item['department_id']) ? $item['department_id'] : ''; ?>">
-                            </div>
-
-                            <!-- Cost Center -->
-                            <div class="form-group col-md-3">
-                                <label for="cost_center">Cost Center/Subledger</label>
-                                <input type="text" name="cost_center_name[]" id="cost_center_<?= $index + 1 ?>"
-                                    class="form-control autocomplete-cost-center"
-                                    value="<?= isset($item['cost_center_name']) ? $item['cost_center_name'] : ''; ?>">
-                                <input type="hidden" name="cost_center_id[]" id="cost_center_id_<?= $index + 1 ?>"
-                                    value="<?= isset($item['cost_center_id']) ? $item['cost_center_id'] : ''; ?>">
-                            </div>
-
-                            <!-- Business Unit -->
-                            <div class="form-group col-md-3">
-                                <label for="business_unit">Business Unit</label>
-                                <input type="text" name="business_unit_name[]" id="business_unit_<?= $index + 1 ?>"
-                                    class="form-control autocomplete-business-unit"
-                                    value="<?= isset($item['business_unit_name']) ? $item['business_unit_name'] : ''; ?>">
-                                <input type="hidden" name="business_unit_id[]" id="business_unit_id_<?= $index + 1 ?>"
-                                    value="<?= isset($item['business_unit_id']) ? $item['business_unit_id'] : ''; ?>">
-                            </div>
-
-                            <!-- Activity -->
-                            <div class="form-group col-md-3">
-                                <label for="activity">Activity</label>
-                                <input type="text" name="activity_name[]" id="activity_<?= $index + 1 ?>"
-                                    class="form-control autocomplete-activity"
-                                    value="<?= isset($item['activity_name']) ? $item['activity_name'] : ''; ?>">
-                                <input type="hidden" name="activity_id[]" id="activity_id_<?= $index + 1 ?>"
-                                    value="<?= isset($item['activity_id']) ? $item['activity_id'] : ''; ?>">
-                            </div>
-
-                            <!-- Location -->
-                            <div class="form-group col-md-3">
-                                <label for="location">Location</label>
-                                <input type="text" name="location_name[]" id="location_<?= $index + 1 ?>"
-                                    class="form-control autocomplete-location"
-                                    value="<?= isset($item['location_name']) ? $item['location_name'] : ''; ?>">
-                                <input type="hidden" name="location_id[]" id="location_id_<?= $index + 1 ?>"
-                                    value="<?= isset($item['location_id']) ? $item['location_id'] : ''; ?>">
-                            </div>
-
-                            <!-- State -->
-                            <div class="form-group col-md-3">
-                                <label for="state">State</label>
-                                <input type="text" name="state_name[]" id="state_<?= $index + 1 ?>"
-                                    class="form-control autocomplete-state"
-                                    value="<?= isset($item['state_name']) ? $item['state_name'] : ''; ?>">
-                                <input type="hidden" name="state_id[]" id="state_id_<?= $index + 1 ?>"
-                                    value="<?= isset($item['state_id']) ? $item['state_id'] : ''; ?>">
-                            </div>
-
-                            <!-- Category -->
-                            <div class="form-group col-md-3">
-                                <label for="category">Category</label>
-                                <input type="text" name="category_name[]" id="category_<?= $index + 1 ?>"
-                                    class="form-control autocomplete-category"
-                                    value="<?= isset($item['category_name']) ? $item['category_name'] : ''; ?>">
-                                <input type="hidden" name="category_id[]" id="category_id_<?= $index + 1 ?>"
-                                    value="<?= isset($item['category_id']) ? $item['category_id'] : ''; ?>">
-                            </div>
-
-                            <!-- Crop -->
-                            <div class="form-group col-md-3">
-                                <label for="crop">Crop</label>
-                                <input type="text" name="crop_name[]" id="crop_<?= $index + 1 ?>"
-                                    class="form-control autocomplete-crop"
-                                    value="<?= isset($item['crop_name']) ? $item['crop_name'] : ''; ?>">
-                                <input type="hidden" name="crop_id[]" id="crop_id_<?= $index + 1 ?>"
-                                    value="<?= isset($item['crop_id']) ? $item['crop_id'] : ''; ?>">
-                            </div>
-
-                            <!-- Region -->
-                            <div class="form-group col-md-3">
-                                <label for="region">Region</label>
-                                <input type="text" name="region_name[]" id="region_<?= $index + 1 ?>"
-                                    class="form-control autocomplete-region"
-                                    value="<?= isset($item['region_name']) ? $item['region_name'] : ''; ?>">
-                                <input type="hidden" name="region_id[]" id="region_id_<?= $index + 1 ?>"
-                                    value="<?= isset($item['region_id']) ? $item['region_id'] : ''; ?>">
-                            </div>
-
-                            <!-- Function -->
-                            <div class="form-group col-md-3">
-                                <label for="function">Function</label>
-                                <input type="text" name="function_name[]" id="function_<?= $index + 1 ?>" class="form-control"
-                                    value="<?= isset($item['function_name']) ? $item['function_name'] : ''; ?>">
-                                <input type="hidden" name="function_id[]" id="function_id_<?= $index + 1 ?>"
-                                    value="<?= isset($item['function_id']) ? $item['function_id'] : ''; ?>">
-                            </div>
-
-                            <!-- Vertical -->
-                            <div class="form-group col-md-3">
-                                <label for="vertical">Vertical</label>
-                                <input type="text" name="vertical_name[]" id="vertical_<?= $index + 1 ?>" class="form-control"
-                                    value="<?= isset($item['vertical_name']) ? $item['vertical_name'] : ''; ?>">
-                                <input type="hidden" name="vertical_id[]" id="vertical_id_<?= $index + 1 ?>"
-                                    value="<?= isset($item['vertical_id']) ? $item['vertical_id'] : ''; ?>">
-                            </div>
-
-                            <!-- Sub Department -->
-                            <div class="form-group col-md-3">
-                                <label for="sub_department">Sub Department</label>
-                                <input type="text" name="sub_department[]" id="sub_department_<?= $index + 1 ?>" class="form-control" value="<?= isset($item['sub_department_name']) ? $item['sub_department_name'] : ''; ?>">
-
-                                <input type="hidden" name="sub_department_id[]" id="sub_department_id_<?= $index + 1 ?>"
-                                    value="<?= isset($item['sub_department_id']) ? $item['sub_department_id'] : ''; ?>">
-                                    
-                            </div>
-
-                            <!-- Zone -->
-                            <div class="form-group col-md-3">
-                                <label for="zone">Zone</label>
-                                <input type="text" name="zone[]" id="zone_<?= $index + 1 ?>" class="form-control"
-                                    value="<?= isset($item['zone_name']) ? $item['zone_name'] : ''; ?>">
-                             <input type="hidden" name="zone_id[]" id="zone_id_<?= $index + 1 ?>"
-                                    value="<?= isset($item['zone_id']) ? $item['zone_id'] : ''; ?>">
-                                    
-                            </div>
-
-                            <!-- Debit Account -->
-                            <div class="form-group col-md-3">
-                                <label for="debit_account">Debit A/C</label>
-                                <input type="text" name="debit_ac[]" id="debit_ac_<?= $index + 1 ?>"
-                                    class="form-control autocomplete-debit-ac"
-                                    value="<?= isset($item['debit_account']) ? $item['debit_account'] : ''; ?>">
-                                <input type="hidden" name="debit_ac_id[]" id="debit_ac_id_<?= $index + 1 ?>"
-                                    value="<?= isset($item['debit_account_id']) ? $item['debit_account_id'] : ''; ?>">
-                            </div>
-
-                            <!-- Credit Account -->
-                            <div class="form-group col-md-3">
-                                <label for="credit_account">Credit A/C</label>
-                                <input type="text" name="credit_ac[]" id="credit_ac_<?= $index + 1 ?>"
-                                    class="form-control autocomplete-credit-ac"
-                                    value="<?= isset($item['credit_account']) ? $item['credit_account'] : ''; ?>">
-                                <input type="hidden" name="credit_ac_id[]" id="credit_ac_id_<?= $index + 1 ?>"
-                                    value="<?= isset($item['credit_account_id']) ? $item['credit_account_id'] : ''; ?>">
-                            </div>
-
-                            <!-- Amount -->
-                            <div class="form-group col-md-3">
-                                <label for="amount">Amount</label>
-                                <input type="text" name="item_total_amount[]" id="item_total_amount_<?= $index + 1 ?>"
-                                    class="form-control amount" value="<?= isset($item['amount']) ? $item['amount'] : ''; ?>">
-                            </div>
-
-                            <!-- Payment Term -->
-                            <div class="form-group col-md-3">
-                                <label for="payment_term">Payment Term</label>
-                                <input type="text" name="payment_term_name[]" id="payment_term_<?= $index + 1 ?>"
-                                    class="form-control autocomplete-payment-term"
-                                    value="<?= isset($item['payment_term']) ? $item['payment_term'] : ''; ?>">
-                                <input type="hidden" name="payment_term_id[]" id="payment_term_id_<?= $index + 1 ?>"
-                                    value="<?= isset($item['payment_term_id']) ? $item['payment_term_id'] : ''; ?>">
-                            </div>
-
-                            <!-- Reference -->
-                            <div class="form-group col-md-3">
-                                <label for="reference">Reference</label>
-                                <input type="text" name="reference_no[]" id="reference_no_<?= $index + 1 ?>"
-                                    class="form-control" value="<?= isset($item['reference']) ? $item['reference'] : ''; ?>">
-                            </div>
-
-                            <!-- Remark -->
-                            <div class="form-group col-md-3">
-                                <label for="remark">Remark</label>
-                                <input type="text" name="item_remark[]" id="item_remark_<?= $index + 1 ?>" class="form-control"
-                                    value="<?= isset($item['remark']) ? $item['remark'] : ''; ?>">
-                            </div>
-
-                            <!-- TDS Amount -->
-                            <div class="form-group col-md-3">
-                                <label for="tds_amount">TDS Amount</label>
-                                <input type="text" name="item_tds_amount[]" id="item_tds_amount_<?= $index + 1 ?>"
-                                    class="form-control" value="<?= isset($item['tds_amount']) ? $item['tds_amount'] : ''; ?>">
-                            </div>
-
-                            <!-- Remove Button -->
-                            <div class="form-group col-md-9">
-                                <button type="button" style="margin-top: 20px;float: right;"
-                                    class="btn btn-danger btn-sm remove_row">Remove</button>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
+                    <table class="table table-bordered" id="items_table">
+                        <thead>
+                            <tr>
+                                <th>Reverse Charge</th>
+                                <th>Department</th>
+                                <th>Cost/Sub</th>
+                                <th>Business Unit</th>
+                                <th>Activity</th>
+                                <th>Location</th>
+                                <th>State</th>
+                                <th>Category</th>
+                                <th>Crop</th>
+                                <th>Region</th>
+                                <th>Function</th>
+                                <th>Vertical</th>
+                                <th>Sub Department</th>
+                                <th>Zone</th>
+                                <th>Debit A/C</th>
+                                <th>Credit A/C</th>
+                                <th>Amount</th>
+                                <th>Payment Term</th>
+                                <th>Reference</th>
+                                <th>Remark</th>
+                                <th>TDS Amount</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($items as $index => $item): ?>
+                                <tr class="form-row" id="row_<?= $index + 1 ?>">
+                                    <td>
+                                        <input type="text" name="reverse_charge[]" id="reverse_charge_<?= $index + 1 ?>"
+                                            class="form-control"
+                                            value="<?= isset($item['reverse_charge']) ? $item['reverse_charge'] : ''; ?>">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="department_name[]" id="department_<?= $index + 1 ?>"
+                                            class="form-control autocomplete-department"
+                                            value="<?= isset($item['department_name']) ? $item['department_name'] : ''; ?>">
+                                        <input type="hidden" name="department_id[]" id="department_id_<?= $index + 1 ?>"
+                                            value="<?= isset($item['department_id']) ? $item['department_id'] : ''; ?>">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="cost_center_name[]" id="cost_center_<?= $index + 1 ?>"
+                                            class="form-control autocomplete-cost-center"
+                                            value="<?= isset($item['cost_center_name']) ? $item['cost_center_name'] : ''; ?>">
+                                        <input type="hidden" name="cost_center_id[]" id="cost_center_id_<?= $index + 1 ?>"
+                                            value="<?= isset($item['cost_center_id']) ? $item['cost_center_id'] : ''; ?>">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="business_unit_name[]" id="business_unit_<?= $index + 1 ?>"
+                                            class="form-control autocomplete-business-unit"
+                                            value="<?= isset($item['business_unit_name']) ? $item['business_unit_name'] : ''; ?>">
+                                        <input type="hidden" name="business_unit_id[]" id="business_unit_id_<?= $index + 1 ?>"
+                                            value="<?= isset($item['business_unit_id']) ? $item['business_unit_id'] : ''; ?>">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="activity_name[]" id="activity_<?= $index + 1 ?>"
+                                            class="form-control autocomplete-activity"
+                                            value="<?= isset($item['activity_name']) ? $item['activity_name'] : ''; ?>">
+                                        <input type="hidden" name="activity_id[]" id="activity_id_<?= $index + 1 ?>"
+                                            value="<?= isset($item['activity_id']) ? $item['activity_id'] : ''; ?>">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="location_name[]" id="location_<?= $index + 1 ?>"
+                                            class="form-control autocomplete-location"
+                                            value="<?= isset($item['location_name']) ? $item['location_name'] : ''; ?>">
+                                        <input type="hidden" name="location_id[]" id="location_id_<?= $index + 1 ?>"
+                                            value="<?= isset($item['location_id']) ? $item['location_id'] : ''; ?>">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="state_name[]" id="state_<?= $index + 1 ?>"
+                                            class="form-control autocomplete-state"
+                                            value="<?= isset($item['state_name']) ? $item['state_name'] : ''; ?>">
+                                        <input type="hidden" name="state_id[]" id="state_id_<?= $index + 1 ?>"
+                                            value="<?= isset($item['state_id']) ? $item['state_id'] : ''; ?>">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="category_name[]" id="category_<?= $index + 1 ?>"
+                                            class="form-control autocomplete-category"
+                                            value="<?= isset($item['category_name']) ? $item['category_name'] : ''; ?>">
+                                        <input type="hidden" name="category_id[]" id="category_id_<?= $index + 1 ?>"
+                                            value="<?= isset($item['category_id']) ? $item['category_id'] : ''; ?>">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="crop_name[]" id="crop_<?= $index + 1 ?>"
+                                            class="form-control autocomplete-crop"
+                                            value="<?= isset($item['crop_name']) ? $item['crop_name'] : ''; ?>">
+                                        <input type="hidden" name="crop_id[]" id="crop_id_<?= $index + 1 ?>"
+                                            value="<?= isset($item['crop_id']) ? $item['crop_id'] : ''; ?>">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="region_name[]" id="region_<?= $index + 1 ?>"
+                                            class="form-control autocomplete-region"
+                                            value="<?= isset($item['region_name']) ? $item['region_name'] : ''; ?>">
+                                        <input type="hidden" name="region_id[]" id="region_id_<?= $index + 1 ?>"
+                                            value="<?= isset($item['region_id']) ? $item['region_id'] : ''; ?>">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="function_name[]" id="function_<?= $index + 1 ?>"
+                                            class="form-control"
+                                            value="<?= isset($item['function_name']) ? $item['function_name'] : ''; ?>">
+                                        <input type="hidden" name="function_id[]" id="function_id_<?= $index + 1 ?>"
+                                            value="<?= isset($item['function_id']) ? $item['function_id'] : ''; ?>">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="vertical_name[]" id="vertical_<?= $index + 1 ?>"
+                                            class="form-control"
+                                            value="<?= isset($item['vertical_name']) ? $item['vertical_name'] : ''; ?>">
+                                        <input type="hidden" name="vertical_id[]" id="vertical_id_<?= $index + 1 ?>"
+                                            value="<?= isset($item['vertical_id']) ? $item['vertical_id'] : ''; ?>">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="sub_department[]" id="sub_department_<?= $index + 1 ?>"
+                                            class="form-control"
+                                            value="<?= isset($item['sub_department_name']) ? $item['sub_department_name'] : ''; ?>">
+                                        <input type="hidden" name="sub_department_id[]" id="sub_department_id_<?= $index + 1 ?>"
+                                            value="<?= isset($item['sub_department_id']) ? $item['sub_department_id'] : ''; ?>">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="zone[]" id="zone_<?= $index + 1 ?>" class="form-control"
+                                            value="<?= isset($item['zone_name']) ? $item['zone_name'] : ''; ?>">
+                                        <input type="hidden" name="zone_id[]" id="zone_id_<?= $index + 1 ?>"
+                                            value="<?= isset($item['zone_id']) ? $item['zone_id'] : ''; ?>">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="debit_ac[]" id="debit_ac_<?= $index + 1 ?>"
+                                            class="form-control autocomplete-debit-ac"
+                                            value="<?= isset($item['debit_account']) ? $item['debit_account'] : ''; ?>">
+                                        <input type="hidden" name="debit_ac_id[]" id="debit_ac_id_<?= $index + 1 ?>"
+                                            value="<?= isset($item['debit_account_id']) ? $item['debit_account_id'] : ''; ?>">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="credit_ac[]" id="credit_ac_<?= $index + 1 ?>"
+                                            class="form-control autocomplete-credit-ac"
+                                            value="<?= isset($item['credit_account']) ? $item['credit_account'] : ''; ?>">
+                                        <input type="hidden" name="credit_ac_id[]" id="credit_ac_id_<?= $index + 1 ?>"
+                                            value="<?= isset($item['credit_account_id']) ? $item['credit_account_id'] : ''; ?>">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="item_total_amount[]" id="item_total_amount_<?= $index + 1 ?>"
+                                            class="form-control amount"
+                                            value="<?= isset($item['amount']) ? $item['amount'] : ''; ?>">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="payment_term_name[]" id="payment_term_<?= $index + 1 ?>"
+                                            class="form-control autocomplete-payment-term"
+                                            value="<?= isset($item['payment_term']) ? $item['payment_term'] : ''; ?>">
+                                        <input type="hidden" name="payment_term_id[]" id="payment_term_id_<?= $index + 1 ?>"
+                                            value="<?= isset($item['payment_term_id']) ? $item['payment_term_id'] : ''; ?>">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="reference_no[]" id="reference_no_<?= $index + 1 ?>"
+                                            class="form-control"
+                                            value="<?= isset($item['reference']) ? $item['reference'] : ''; ?>">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="item_remark[]" id="item_remark_<?= $index + 1 ?>"
+                                            class="form-control" value="<?= isset($item['remark']) ? $item['remark'] : ''; ?>">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="item_tds_amount[]" id="item_tds_amount_<?= $index + 1 ?>"
+                                            class="form-control"
+                                            value="<?= isset($item['tds_amount']) ? $item['tds_amount'] : ''; ?>">
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm remove_row">Remove</button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
                 <?php else: ?>
-                    <div class="row form-row" id="row_1" style="padding: 5px;">
-                        <!-- Reverse Charge -->
-                        <div class="form-group col-md-3">
-                            <label for="reverse_charge">Reverse Charge</label>
-                            <input type="text" name="reverse_charge[]" id="reverse_charge_1" class="form-control">
-                        </div>
-
-                        <!-- Department -->
-                        <div class="form-group col-md-3">
-                            <label for="department">Department</label>
-                            <input type="text" name="department_name[]" id="department_1"
-                                class="form-control autocomplete-department">
-                            <input type="hidden" name="department_id[]" id="department_id_1">
-                        </div>
-
-                        <!-- Cost Center -->
-                        <div class="form-group col-md-3">
-                            <label for="cost_center">Cost Center/Subledger</label>
-                            <input type="text" name="cost_center_name[]" id="cost_center_1"
-                                class="form-control autocomplete-cost-center">
-                            <input type="hidden" name="cost_center_id[]" id="cost_center_id_1">
-                        </div>
-
-                        <!-- Business Unit -->
-                        <div class="form-group col-md-3">
-                            <label for="business_unit">Business Unit</label>
-                            <input type="text" name="business_unit_name[]" id="business_unit_1"
-                                class="form-control autocomplete-business-unit">
-                            <input type="hidden" name="business_unit_id[]" id="business_unit_id_1">
-                        </div>
-
-                        <!-- Activity -->
-                        <div class="form-group col-md-3">
-                            <label for="activity">Activity</label>
-                            <input type="text" name="activity_name[]" id="activity_1"
-                                class="form-control autocomplete-activity">
-                            <input type="hidden" name="activity_id[]" id="activity_id_1">
-                        </div>
-
-                        <!-- Location -->
-                        <div class="form-group col-md-3">
-                            <label for="location">Location</label>
-                            <input type="text" name="location_name[]" id="location_1"
-                                class="form-control autocomplete-location">
-                            <input type="hidden" name="location_id[]" id="location_id_1">
-                        </div>
-
-                        <!-- State -->
-                        <div class="form-group col-md-3">
-                            <label for="state">State</label>
-                            <input type="text" name="state_name[]" id="state_1" class="form-control autocomplete-state">
-                            <input type="hidden" name="state_id[]" id="state_id_1">
-                        </div>
-
-                        <!-- Category -->
-                        <div class="form-group col-md-3">
-                            <label for="category">Category</label>
-                            <input type="text" name="category_name[]" id="category_1"
-                                class="form-control autocomplete-category">
-                            <input type="hidden" name="category_id[]" id="category_id_1">
-                        </div>
-
-                        <!-- Crop -->
-                        <div class="form-group col-md-3">
-                            <label for="crop">Crop</label>
-                            <input type="text" name="crop_name[]" id="crop_1" class="form-control autocomplete-crop">
-                            <input type="hidden" name="crop_id[]" id="crop_id_1">
-                        </div>
-
-                        <!-- Region -->
-                        <div class="form-group col-md-3">
-                            <label for="region">Region</label>
-                            <input type="text" name="region_name[]" id="region_1" class="form-control autocomplete-region">
-                            <input type="hidden" name="region_id[]" id="region_id_1">
-                        </div>
-
-                        <!-- Function -->
-                        <div class="form-group col-md-3">
-                            <label for="function">Function</label>
-                            <input type="text" name="function_name[]" id="function_1" class="form-control">
-                            <input type="hidden" name="function_id[]" id="function_id_1" class="form-control">
-                        </div>
-
-                        <!-- Vertical -->
-                        <div class="form-group col-md-3">
-                            <label for="vertical">Vertical</label>
-                            <input type="text" name="vertical_name[]" id="vertical_1" class="form-control">
-                            <input type="hidden" name="vertical_id[]" id="vertical_id_1" class="form-control">
-                        </div>
-
-                        <!-- Sub Department -->
-                        <div class="form-group col-md-3">
-                            <label for="sub_department">Sub Department</label>
-                            <input type="text" name="sub_department[]" id="sub_department_1" class="form-control">
-                            <input type="hidden" name="sub_department_id[]" id="sub_department_id_1" class="form-control">
-                        </div>
-
-                        <!-- Zone -->
-                        <div class="form-group col-md-3">
-                            <label for="zone">Zone</label>
-                            <input type="text" name="zone[]" id="zone_1" class="form-control">
-                            <input type="hidden" name="zone_id[]" id="zone_id_1" class="form-control">
-                        </div>
-
-                        <!-- Debit Account -->
-                        <div class="form-group col-md-3">
-                            <label for="debit_account">Debit A/C</label>
-                            <input type="text" name="debit_ac[]" id="debit_ac_1" class="form-control autocomplete-debit-ac">
-                            <input type="hidden" name="debit_ac_id[]" id="debit_ac_id_1">
-                        </div>
-
-                        <!-- Credit Account -->
-                        <div class="form-group col-md-3">
-                            <label for="credit_account">Credit A/C</label>
-                            <input type="text" name="credit_ac[]" id="credit_ac_1"
-                                class="form-control autocomplete-credit-ac">
-                            <input type="hidden" name="credit_ac_id[]" id="credit_ac_id_1">
-                        </div>
-
-                        <!-- Amount -->
-                        <div class="form-group col-md-3">
-                            <label for="amount">Amount</label>
-                            <input type="text" name="item_total_amount[]" id="item_total_amount_1"
-                                class="form-control amount">
-                        </div>
-
-                        <!-- Payment Term -->
-                        <div class="form-group col-md-3">
-                            <label for="payment_term">Payment Term</label>
-                            <input type="text" name="payment_term_name[]" id="payment_term_1"
-                                class="form-control autocomplete-payment-term">
-                            <input type="hidden" name="payment_term_id[]" id="payment_term_id_1">
-                        </div>
-
-                        <!-- Reference -->
-                        <div class="form-group col-md-3">
-                            <label for="reference">Reference</label>
-                            <input type="text" name="reference_no[]" id="reference_no_1" class="form-control">
-                        </div>
-
-                        <!-- Remark -->
-                        <div class="form-group col-md-3">
-                            <label for="remark">Remark</label>
-                            <input type="text" name="item_remark[]" id="item_remark_1" class="form-control">
-                        </div>
-
-                        <!-- TDS Amount -->
-                        <div class="form-group col-md-3">
-                            <label for="tds_amount">TDS Amount</label>
-                            <input type="text" name="item_tds_amount[]" id="item_tds_amount_1" class="form-control">
-                        </div>
-
-                        <!-- Remove Button -->
-                        <div class="form-group col-md-9">
-                            <button type="button" style="margin-top: 20px;float: right;"
-                                class="btn btn-danger btn-sm remove_row">Remove</button>
-                        </div>
-                    </div>
+                    <table class="table table-bordered" id="items_table">
+                        <thead>
+                            <tr>
+                                <th>Reverse Charge</th>
+                                <th>Department</th>
+                                <th>Cost/Sub</th>
+                                <th>Business Unit</th>
+                                <th>Activity</th>
+                                <th>Location</th>
+                                <th>State</th>
+                                <th>Category</th>
+                                <th>Crop</th>
+                                <th>Region</th>
+                                <th>Function</th>
+                                <th>Vertical</th>
+                                <th>Sub Department</th>
+                                <th>Zone</th>
+                                <th>Debit A/C</th>
+                                <th>Credit A/C</th>
+                                <th>Amount</th>
+                                <th>Payment Term</th>
+                                <th>Reference</th>
+                                <th>Remark</th>
+                                <th>TDS Amount</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="form-row" id="row_1">
+                                <td>
+                                    <input type="text" name="reverse_charge[]" id="reverse_charge_1" class="form-control">
+                                </td>
+                                <td>
+                                    <input type="text" name="department_name[]" id="department_1"
+                                        class="form-control autocomplete-department">
+                                    <input type="hidden" name="department_id[]" id="department_id_1">
+                                </td>
+                                <td>
+                                    <input type="text" name="cost_center_name[]" id="cost_center_1"
+                                        class="form-control autocomplete-cost-center">
+                                    <input type="hidden" name="cost_center_id[]" id="cost_center_id_1">
+                                </td>
+                                <td>
+                                    <input type="text" name="business_unit_name[]" id="business_unit_1"
+                                        class="form-control autocomplete-business-unit">
+                                    <input type="hidden" name="business_unit_id[]" id="business_unit_id_1">
+                                </td>
+                                <td>
+                                    <input type="text" name="activity_name[]" id="activity_1"
+                                        class="form-control autocomplete-activity">
+                                    <input type="hidden" name="activity_id[]" id="activity_id_1">
+                                </td>
+                                <td>
+                                    <input type="text" name="location_name[]" id="location_1"
+                                        class="form-control autocomplete-location">
+                                    <input type="hidden" name="location_id[]" id="location_id_1">
+                                </td>
+                                <td>
+                                    <input type="text" name="state_name[]" id="state_1"
+                                        class="form-control autocomplete-state">
+                                    <input type="hidden" name="state_id[]" id="state_id_1">
+                                </td>
+                                <td>
+                                    <input type="text" name="category_name[]" id="category_1"
+                                        class="form-control autocomplete-category">
+                                    <input type="hidden" name="category_id[]" id="category_id_1">
+                                </td>
+                                <td>
+                                    <input type="text" name="crop_name[]" id="crop_1"
+                                        class="form-control autocomplete-crop">
+                                    <input type="hidden" name="crop_id[]" id="crop_id_1">
+                                </td>
+                                <td>
+                                    <input type="text" name="region_name[]" id="region_1"
+                                        class="form-control autocomplete-region">
+                                    <input type="hidden" name="region_id[]" id="region_id_1">
+                                </td>
+                                <td>
+                                    <input type="text" name="function_name[]" id="function_1" class="form-control">
+                                    <input type="hidden" name="function_id[]" id="function_id_1">
+                                </td>
+                                <td>
+                                    <input type="text" name="vertical_name[]" id="vertical_1" class="form-control">
+                                    <input type="hidden" name="vertical_id[]" id="vertical_id_1">
+                                </td>
+                                <td>
+                                    <input type="text" name="sub_department[]" id="sub_department_1" class="form-control">
+                                    <input type="hidden" name="sub_department_id[]" id="sub_department_id_1">
+                                </td>
+                                <td>
+                                    <input type="text" name="zone[]" id="zone_1" class="form-control">
+                                    <input type="hidden" name="zone_id[]" id="zone_id_1">
+                                </td>
+                                <td>
+                                    <input type="text" name="debit_ac[]" id="debit_ac_1"
+                                        class="form-control autocomplete-debit-ac">
+                                    <input type="hidden" name="debit_ac_id[]" id="debit_ac_id_1">
+                                </td>
+                                <td>
+                                    <input type="text" name="credit_ac[]" id="credit_ac_1"
+                                        class="form-control autocomplete-credit-ac">
+                                    <input type="hidden" name="credit_ac_id[]" id="credit_ac_id_1">
+                                </td>
+                                <td>
+                                    <input type="text" name="item_total_amount[]" id="item_total_amount_1"
+                                        class="form-control amount">
+                                </td>
+                                <td>
+                                    <input type="text" name="payment_term_name[]" id="payment_term_1"
+                                        class="form-control autocomplete-payment-term">
+                                    <input type="hidden" name="payment_term_id[]" id="payment_term_id_1">
+                                </td>
+                                <td>
+                                    <input type="text" name="reference_no[]" id="reference_no_1" class="form-control">
+                                </td>
+                                <td>
+                                    <input type="text" name="item_remark[]" id="item_remark_1" class="form-control">
+                                </td>
+                                <td>
+                                    <input type="text" name="item_tds_amount[]" id="item_tds_amount_1" class="form-control">
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-sm remove_row">Remove</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 <?php endif; ?>
             </div>
             <div class="form-group col-md-12" style="margin-top: 5px;">
@@ -521,7 +459,7 @@
             },
         });
         $("#add_row").click(function () {
-            rowCount++;
+            let rowCount = $("#items_table tbody tr").length + 1;
             let newRow = $("#row_1").clone();
             newRow.attr("id", "row_" + rowCount);
 
@@ -544,13 +482,14 @@
             });
 
             newRow.find(".remove_row").show();
-            $("#rows_container").append(newRow);
+            $("#items_table tbody").append(newRow);
 
             initializeAllAutoCompleteInputs(rowCount);
         });
         $(document).on("click", ".remove_row", function () {
-            if ($(".form-row").length > 1) {
-                $(this).closest(".form-row").remove();
+            if ($("#items_table tbody tr").length > 1) {
+                $(this).closest("tr").remove();
+                updateBillAmount();
             } else {
                 alert("At least one row must remain.");
             }
@@ -611,7 +550,6 @@
         initAutoCompleteInput("#vertical_" + rowNo, "<?= site_url('get-vertical') ?>");
         initAutoCompleteInput("#sub_department_" + rowNo, "<?= site_url('get-sub-department') ?>");
     }
-
 
     function initAutoCompleteInput(selector, url, onSelectCallback = null) {
         $(selector)

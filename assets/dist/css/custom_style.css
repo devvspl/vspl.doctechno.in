@@ -96,3 +96,5 @@
     line-height: 20px;
     color: #27ae60;
 }
+
+#items_table input{width: 100px !important;}
