@@ -221,7 +221,7 @@
                             <div class="form-group col-md-3">
                                 <label for="zone">Zone</label>
                                 <input type="text" name="zone[]" id="zone_<?= $index + 1 ?>" class="form-control"
-                                    value="<?= isset($item['zone']) ? $item['zone'] : ''; ?>">
+                                    value="<?= isset($item['zone_name']) ? $item['zone_name'] : ''; ?>">
                             </div>
 
                             <!-- Debit Account -->
