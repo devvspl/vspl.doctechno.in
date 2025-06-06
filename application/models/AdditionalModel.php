@@ -70,7 +70,7 @@ class AdditionalModel extends CI_Model
         $this->db->select('ai.*, be.business_entity_name, td.tds_section_name');
         $this->db->from($main_tbl . ' ai');
         $this->db->join('master_business_entity be', 'be.business_entity_id = ai.business_entity_id', 'left');
-        $this->db->join('master_tds_section td', 'td.tds_section_id = ai.tds_section_id', 'left');
+        $this->db->join('master_tds_sections td', 'td.tds_section_id = ai.tds_section_id', 'left');
         $this->db->where('ai.scan_id', $scan_id);
         $mainRecord = $this->db->get()->row_array();
 
