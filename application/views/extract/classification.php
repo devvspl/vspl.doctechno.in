@@ -218,7 +218,7 @@
          let scanId = $button.data("scan-id");
          let typeId = $("#docType_" + scanId).val();
          let department = $("#department_" + scanId).val();
-         let subdepartment = $("#subdepartment_" + scanId).val(); // Optional
+         let subdepartment = $("#subdepartment_" + scanId).val(); 
          let bill_approver = $("#bill_approver_" + scanId).val();
          let location = $("#location_" + scanId).val();
 

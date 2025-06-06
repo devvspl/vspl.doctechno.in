@@ -59,7 +59,7 @@
          </div>
          <div class="form-group col-md-4">
             <label for="amount">Amount:</label>
-            <input type="number" step="0.01" name="amount" id="amount" class="form-control"
+            <input type="number" step="0.01" name="amount" id="amount" class="form-control final_amount_column"
                value="<?= (isset($punch_detail->amount)) ? htmlspecialchars($punch_detail->amount) : '' ?>">
          </div>
       </div>

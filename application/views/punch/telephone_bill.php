@@ -61,7 +61,7 @@
         </div>
         <div class="form-group col-md-4">
             <label for="total_amount_outstanding">Total Amount Outstanding:</label>
-            <input type="number" step="0.01" name="total_amount_outstanding" id="total_amount_outstanding" class="form-control"
+            <input type="number" step="0.01" name="total_amount_outstanding" id="total_amount_outstanding" class="form-control final_amount_column"
                    value="<?= (isset($punch_detail->total_amount_outstanding)) ? htmlspecialchars($punch_detail->total_amount_outstanding) : '' ?>">
         </div>
         <div class="form-group col-md-4">

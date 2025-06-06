@@ -55,7 +55,7 @@
          </div>
          <div class="col-md-3 form-group" style="float: right;">
             <label for="">Amount:</label>
-            <input type="number" min="1" step="0.1" name="Amount" id="Amount" class="form-control"
+            <input type="number" min="1" step="0.1" name="Amount" id="Amount" class="form-control final_amount_column"
                value="<?= (isset($punch_detail->amount)) ? $punch_detail->amount : '' ?>">
          </div>
       </div>

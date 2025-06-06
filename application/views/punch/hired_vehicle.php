@@ -132,7 +132,7 @@
             </div>
             <div class="form-group col-md-4" style="float: right;">
                <label for="total_amount">Total Amount:</label>
-               <input type="text" name="total_amount" id="total_amount" class="form-control"
+               <input type="text" name="total_amount" id="total_amount" class="form-control final_amount_column"
                   value="<?= (isset($punch_detail->total_amount)) ? $punch_detail->total_amount : '' ?>" 
                   readonly>
             </div>

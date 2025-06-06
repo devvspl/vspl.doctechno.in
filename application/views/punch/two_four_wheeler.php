@@ -135,7 +135,7 @@
             <tr>
                <td colspan="2"></td>
                <td style="text-align: right"><b>Grand Total:</b></td>
-               <td><input type="text" id="Grand_Total" name="Grand_Total" class="form-control"
+               <td><input type="text" id="Grand_Total" name="Grand_Total" class="form-control final_amount_column"
                      value="<?= (isset($punch_detail->grand_total)) ? $punch_detail->grand_total : '' ?>" readonly></td>
             </tr>
          </table>

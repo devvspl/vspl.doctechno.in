@@ -124,7 +124,7 @@
                   <td><input type="number" step="0.01" class="form-control form-control-sm" id="total_km"
                         name="total_km" readonly
                         value="<?= (isset($punch_detail->total_km)) ? $punch_detail->total_km : '' ?>"></td>
-                  <td><input type="number" step="0.01" class="form-control form-control-sm" id="total_amount"
+                  <td><input type="number" step="0.01" class="form-control form-control-sm final_amount_column" id="total_amount"
                         name="total_amount" readonly
                         value="<?= (isset($punch_detail->total)) ? $punch_detail->total : '' ?>"></td>
                   <td></td>

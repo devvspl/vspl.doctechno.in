@@ -162,7 +162,7 @@
                   </tr>
                   <tr>
                      <td colspan="6" style="text-align: right;">Total Challan Amount:</td>
-                     <td><input type="number" id="total_challan_amount" name="total_challan_amount" class="form-control"
+                     <td><input type="number" id="total_challan_amount" name="total_challan_amount" class="form-control final_amount_column"
                            readonly
                            value="<?= (isset($punch_detail->total_challan_amount)) ? $punch_detail->total_challan_amount : '' ?>">
                      </td>

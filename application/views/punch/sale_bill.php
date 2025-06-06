@@ -359,7 +359,7 @@
                   <td colspan="7" style="text-align: right;"><b>Grand Total (₹):</b></td>
                   <td colspan="2">
                      <input type="text" name="Grand_Total" id="Grand_Total"
-                        class="form-control form-control-sm" readonly
+                        class="form-control form-control-sm final_amount_column" readonly
                         value="<?= (isset($punch_detail->Grand_Total)) ? $punch_detail->Grand_Total : '' ?>">
                   </td>
                   </tr>

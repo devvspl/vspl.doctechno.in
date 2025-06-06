@@ -175,7 +175,7 @@
         <div class="col-md-8"></div>
         <div class="form-group col-md-4">
             <label for="total_fare">Total Fare:</label>
-            <input type="number" step="0.01" name="total_fare" id="total_fare" class="form-control" readonly
+            <input type="number" step="0.01" name="total_fare" id="total_fare" class="form-control final_amount_column" readonly
                    value="<?= (isset($punch_detail->total_fare)) ? htmlspecialchars($punch_detail->total_fare) : '' ?>">
         </div>
     </div>

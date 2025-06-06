@@ -108,7 +108,7 @@
                <td></td>
                <td style="text-align: right;">Grand Total:</td>
                <td>
-                  <input type="number" step="0.01" class="form-control" id="grand_total" name="grand_total" readonly
+                  <input type="number" step="0.01" class="form-control final_amount_column" id="grand_total" name="grand_total" readonly
                      value="<?= (isset($punch_detail->grand_total)) ? htmlspecialchars($punch_detail->grand_total) : '' ?>">
                </td>
                <td></td>

@@ -155,7 +155,7 @@
          <div class="col-md-8"></div>
          <div class="form-group col-md-4">
             <label for="total_fare">Total Fare:</label>
-            <input type="text" name="total_fare" id="total_fare" class="form-control form-control-sm"
+            <input type="text" name="total_fare" id="total_fare" class="form-control form-control-sm final_amount_column"
                value="<?= (isset($punch_detail->total_fare)) ? $punch_detail->total_fare : '' ?>">
          </div>
       </div>

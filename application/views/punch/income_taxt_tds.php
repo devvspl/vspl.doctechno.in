@@ -79,7 +79,7 @@
          </div>
          <div class="form-group col-md-3" style="float: right;">
             <label for="amount">Amount:</label>
-            <input type="text" name="amount" id="amount" class="form-control"
+            <input type="text" name="amount" id="amount" class="form-control final_amount_column"
                value="<?= (isset($punch_detail->amount)) ? $punch_detail->amount : '' ?>">
          </div>
       </div>

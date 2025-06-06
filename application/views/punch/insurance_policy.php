@@ -50,7 +50,7 @@
       <div class="row">
          <div class="form-group col-md-3" style="float: right;">
             <label for="premium_amount">Premium Amount:</label>
-            <input type="text" name="premium_amount" id="premium_amount" class="form-control"
+            <input type="text" name="premium_amount" id="premium_amount" class="form-control final_amount_column"
                value="<?= (isset($punch_detail->premium_amount)) ? $punch_detail->premium_amount : '' ?>">
          </div>
       </div>

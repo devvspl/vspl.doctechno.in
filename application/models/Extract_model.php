@@ -813,7 +813,7 @@ class Extract_model extends CI_Model
     public function getSubdepartments($department_id)
     {
         $this->db->distinct();
-        $this->db->select('sd.id, sd.sub_department_name');
+        $this->db->select('sd.id as sub_department_id, sd.sub_department_name');
         $this->db->from('core_fun_vertical_dept_mapping fvdm');
         $this->db->join('core_department_subdepartment_mapping dsm', 'dsm.fun_vertical_dept_id = fvdm.api_id', 'inner');
         $this->db->join('core_sub_department sd', 'sd.id = dsm.sub_department_id', 'inner');

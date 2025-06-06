@@ -45,7 +45,7 @@
             </div>
             <div class="form-group col-md-4">
                <label for="" id="amount_type">Amount:</label>
-               <input type="text" name="Amount" id="Amount" class="form-control" value="<?= (isset($punch_detail->amount)) ? $punch_detail->amount : ''  ?>">
+               <input type="text" name="Amount" id="Amount" class="form-control final_amount_column" value="<?= (isset($punch_detail->amount)) ? $punch_detail->amount : ''  ?>">
             </div>
          </div>
          <div class="row">

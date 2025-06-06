@@ -82,7 +82,7 @@
                </tbody>
                <tr>
                   <td style="text-align: right;"><b>Sub Total:</b></td>
-                  <td><input type="text" class="form-control form-control-sm" id="sub_total" name="sub_total" readonly
+                  <td><input type="text" class="form-control form-control-sm final_amount_column" id="sub_total" name="sub_total" readonly
                         value="<?= (isset($punch_detail->sub_total)) ? $punch_detail->sub_total : '' ?>"></td>
                </tr>
             </table>

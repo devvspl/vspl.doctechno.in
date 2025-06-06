@@ -99,7 +99,7 @@
          </div>
          <div class="col-md-3 form-group">
             <label for="">Payment Amount:</label>
-            <input type="text" name="Payment_Amount" id="Payment_Amount" class="form-control"
+            <input type="text" name="Payment_Amount" id="Payment_Amount" class="form-control final_amount_column"
                value="<?= (isset($punch_detail->payment_amount)) ? $punch_detail->payment_amount : '' ?>">
          </div>
       </div>
