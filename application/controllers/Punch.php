@@ -1706,6 +1706,8 @@ class Punch extends CI_Controller
     public function my_finance_bill_approval_file($finance_punch_status)
     {
         $punch_file_list = $this->Punch_model->get_finance_bill_approval_files($finance_punch_status);
+        echo $this->db->last_query();
+        exit;
         $this->data["my_finance_punched_file"] = $punch_file_list;
         $this->data["main"] = "punch/my_finance_bill_approval_file";
         $this->load->view("layout/template", $this->data);
