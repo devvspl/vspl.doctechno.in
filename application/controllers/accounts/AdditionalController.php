@@ -61,7 +61,7 @@ class AdditionalController extends CI_Controller
     public function get_locations()
     {
         $query = $this->input->post('term');
-        $result = $this->AdditionalModel->get_autocomplete_list('core_city_village', 'city_village_name', 'api_id', $query);
+        $result = $this->AdditionalModel->get_autocomplete_list('master_work_location', 'location_name', 'location_id', $query);
         echo json_encode($result);
     }
     public function get_categories()

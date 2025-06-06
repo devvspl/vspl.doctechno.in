@@ -90,7 +90,7 @@ class AdditionalModel extends CI_Model
         $this->db->join('core_business_unit bu', 'bu.business_unit_id = aii.business_unit_id', 'left');
         $this->db->join('core_region r', 'r.region_id = aii.region_id', 'left');
         $this->db->join('core_state s', 's.state_id = aii.state_id', 'left');
-        $this->db->join('core_city_village l', 'l.location_id = aii.location_id', 'left');
+        $this->db->join('master_work_location l', 'l.location_id = aii.location_id', 'left');
         $this->db->join('master_category c', 'c.category_id = aii.category_id', 'left');
         $this->db->join('core_crop cr', 'cr.crop_id = aii.crop_id', 'left');
         $this->db->join('core_activity a', 'a.api_id = aii.activity_id', 'left');

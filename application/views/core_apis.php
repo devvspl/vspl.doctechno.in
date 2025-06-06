@@ -258,22 +258,22 @@
                             var headerRow = headers.map((h) => `<th>${h}</th>`).join("");
                             $("#apiTableHead").html(headerRow);
 
-                            // Store table name for update
+                            
                             var tableName = button.data("table");
 
-                            // Sort data to show rows with empty/null focus_code at the top
+                            
                             data.sort((a, b) => {
                                 const aIsEmpty = a.focus_code === null || a.focus_code === "";
                                 const bIsEmpty = b.focus_code === null || b.focus_code === "";
-                                if (aIsEmpty && !bIsEmpty) return -1; // a comes first
-                                if (!aIsEmpty && bIsEmpty) return 1;  // b comes first
-                                return 0; // maintain original order for other cases
+                                if (aIsEmpty && !bIsEmpty) return -1; 
+                                if (!aIsEmpty && bIsEmpty) return 1;  
+                                return 0; 
                             });
 
-                            // Count empty or null focus_code values
+                            
                             var emptyFocusCodeCount = data.filter(row => row.focus_code === null || row.focus_code === "").length;
 
-                            // Update modal header with count (red if > 0, default if 0)
+                            
                             if (emptyFocusCodeCount > 0) {
                                 $("#dataTitle").append(` <small style="color: red; background: white; padding: 3px; border-radius: 5px;">Empty/Null focus_code count: ${emptyFocusCodeCount}</small>`);
                             } 
@@ -282,7 +282,7 @@
                                 .map((row, index) => {
                                     return `<tr data-id="${row.id || index}">` + headers.map((h) => {
                                         if (h === "focus_code") {
-                                            // Render input field with empty value if focus_code is null or empty
+                                            
                                             let displayValue = (row[h] !== null && row[h] !== "") ? row[h] : "";
                                             return `<td><input type="text" class="form-control focus-code-input" data-id="${row.id || index}" data-column="${h}" value="${displayValue}"><span class="update-message text-muted small d-block mt-1"></span></td>`;
                                         }
@@ -292,7 +292,7 @@
                                 .join("");
                             $("#apiTableBody").html(rows);
 
-                            // Initialize DataTable with sorting disabled
+                            
                             if ($.fn.DataTable.isDataTable("#apiDataTable")) {
                                 $("#apiDataTable").DataTable().clear().destroy();
                             }
@@ -302,11 +302,11 @@
                                     responsive: true,
                                     autoWidth: false,
                                     pageLength: 10,
-                                    order: [], // Disable initial sorting to preserve custom order
+                                    order: [], 
                                 });
                             }, 100);
 
-                            // Event listener for focus_code input changes
+                            
                             $(".focus-code-input").on("change", function () {
                                 var input = $(this);
                                 var messageSpan = input.next(".update-message");
@@ -314,10 +314,10 @@
                                 var rowId = input.closest("tr").data("id");
                                 var column = input.data("column");
 
-                                // Clear previous message
+                                
                                 messageSpan.text("").removeClass("text-success text-danger");
 
-                                // AJAX call to update the focus_code value
+                                
                                 $.ajax({
                                     url: "<?= base_url('master/CoreController/update_api_data') ?>",
                                     type: "POST",
@@ -335,7 +335,7 @@
                                     success: function (updateResponse) {
                                         if (updateResponse.status === "success") {
                                             messageSpan.text("Focus code updated successfully!").addClass("text-success").removeClass("text-muted");
-                                            // Update count after successful update
+                                            
                                             if (newValue !== "" && !$("#dataTitle").find("small").data("original-count")) {
                                                 emptyFocusCodeCount--;
                                                 $("#dataTitle").find("small").text(`Empty/Null focus_code count: ${emptyFocusCodeCount}`)
@@ -364,7 +364,7 @@
                                     },
                                     complete: function () {
                                         hideLoading(input);
-                                        // Clear message after 5 seconds
+                                        
                                         setTimeout(() => {
                                             messageSpan.text("").removeClass("text-success text-danger");
                                         }, 5000);
@@ -374,7 +374,7 @@
 
                             $("#apiDataModal").modal("show");
                         } else {
-                            // Update header to show count as 0 if no data
+                            
                             $("#dataTitle").append(` <small>Empty/Null focus_code count: 0</small>`);
                             alert("No data found for this API.");
                         }
