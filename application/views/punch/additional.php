@@ -682,57 +682,57 @@
             });
     }
 
-    function updateBillAmount() {
-        
-      
+   function updateBillAmount() {
+    let total = 0;
+    var final_amount = parseFloat($(".final_amount_column").val()) || 0; 
+    $(".amount").each(function () {
+        let value = parseFloat($(this).val()) || 0;
+        total += value;
+    });
 
-        let total = 0;
-        var final_amount = parseFloat($(".final_amount_column").val()) || 0; 
-        $(".amount").each(function () {
-            let value = parseFloat($(this).val()) || 0;
-            total += value;
-        });
+    let TDS_amount = parseFloat($("#tds_amount").val()) || 0; 
+    var maxAllowedAmount = total + TDS_amount;
 
-        let TDS_amount = parseFloat($("#tds_amount").val()) || 0; 
-        var maxAllowedAmount = total + TDS_amount;
+    // Log values to console for debugging
+    console.log("Debug Info:");
+    console.log("final_amount:", final_amount);
+    console.log("total:", total);
+    console.log("TDS_amount:", TDS_amount);
+    console.log("maxAllowedAmount:", maxAllowedAmount);
+    console.log("final_amount === maxAllowedAmount:", final_amount.toFixed(2) === maxAllowedAmount.toFixed(2));
 
-        
-        console.log("Debug Info:");
-        console.log("final_amount:", final_amount);
-        console.log("total:", total);
-        console.log("TDS_amount:", TDS_amount);
-        console.log("maxAllowedAmount:", maxAllowedAmount);
-        console.log("final_amount === maxAllowedAmount:", final_amount.toFixed(2) === maxAllowedAmount.toFixed(2));
+    // Update billAmount field
+    $("#billAmount").val(maxAllowedAmount.toFixed(2));
 
-        
-        $("#billAmount").val(maxAllowedAmount.toFixed(2));
+    // Select buttons by ID
+    var submitButton = $("#fin_final_submit");
+    var draftButton = $("#fin_save_draft");
 
-        
-        var submitButton = $('#fin_final_submit');
-        var draftButton = $('#fin_save_draft"]');
-
-        
-        if (submitButton.length === 0) {
-            console.log("submitButton found:", submitButton);
-        } else {
-            console.error("submitButton not found! Selector: input[name='final_submit']");
-        }
-        if (draftButton.length === 0) {
-            console.error("draftButton not found! Selector: input[name='save_draft']");
-            
-            if (final_amount.toFixed(2) === maxAllowedAmount.toFixed(2)) {
-                submitButton.removeAttr('disabled');
-                draftButton.removeAttr('disabled');
-                console.log("Buttons enabled: final_submit and save_draft");
-            } else {
-                submitButton.attr('disabled', 'disabled');
-                draftButton.attr('disabled', 'disabled');
-                console.log("Buttons disabled: final_submit and save_draft");
-            }
-        }
+    // Debug: Check if buttons exist
+    if (submitButton.length === 0) {
+        console.error("submitButton not found! Selector: #fin_final_submit");
+    } else {
+        console.log("submitButton found:", submitButton);
+    }
+    if (draftButton.length === 0) {
+        console.error("draftButton not found! Selector: #fin_save_draft");
+    } else {
+        console.log("draftButton found:", draftButton);
     }
 
-    function generateTdsJvNo() {
+    // Enable/disable buttons using .attr()
+    if (final_amount.toFixed(2) === maxAllowedAmount.toFixed(2)) {
+        submitButton.removeAttr('disabled');
+        draftButton.removeAttr('disabled');
+        console.log("Buttons enabled: final_submit and save_draft");
+    } else {
+        submitButton.attr('disabled', 'disabled');
+        draftButton.attr('disabled', 'disabled');
+        console.log("Buttons disabled: final_submit and save_draft");
+    }
+}
+
+function generateTdsJvNo() {
         const date = new Date();
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, "0");
