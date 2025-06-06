@@ -715,10 +715,10 @@
         if (submitButton.length === 0) {
             console.log("submitButton found:", submitButton);
         } else {
-            console.error("submitButton not found! Selector: button[name='final_submit']");
+            console.error("submitButton not found! Selector: input[name='final_submit']");
         }
         if (draftButton.length === 0) {
-            console.error("draftButton not found! Selector: button[name='save_draft']");
+            console.error("draftButton not found! Selector: input[name='save_draft']");
             
             if (final_amount.toFixed(2) === maxAllowedAmount.toFixed(2)) {
                 submitButton.removeAttr('disabled');
