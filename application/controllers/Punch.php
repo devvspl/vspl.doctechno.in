@@ -88,8 +88,6 @@ class Punch extends CI_Controller
         $data = $this->getCommonPunchData($scan_id, $doc_type_id, $punch_table);
         $data["user_permission"] = $this->Punch_model->checkUserPermission($this->session->userdata("user_id"));
         $mainRecord = $this->get_additional_information_by_scan_id($scan_id);
-        echo $this->db->last_query();
-        exit;
         if ($mainRecord) {
             $data["main_record"] = $mainRecord;
         } else {
