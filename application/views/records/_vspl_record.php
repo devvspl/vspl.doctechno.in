@@ -36,6 +36,7 @@ $doc_type_id = $this->uri->segment(3);
                             <!-- Document Details Section -->
                             <div class="document-details">
                                 <h5>Document Details</h5>
+
                                 <p><strong>Document Number:</strong>
                                     <?php echo htmlspecialchars($add_file_detail['document_no']); ?></p>
                                 <p><strong>Document Date:</strong>
@@ -43,16 +44,43 @@ $doc_type_id = $this->uri->segment(3);
                                 <p><strong>Business Entity:</strong>
                                     <?php echo htmlspecialchars($add_file_detail['business_entity_name']); ?></p>
                                 <p><strong>Narration:</strong>
-                                    <?php echo htmlspecialchars($add_file_detail['narration']); ?></p>
+                                    <?php echo nl2br(htmlspecialchars($add_file_detail['narration'])); ?></p>
                                 <p><strong>TDS Applicable:</strong>
                                     <?php echo htmlspecialchars($add_file_detail['tds_applicable']); ?></p>
+
+                                <?php if (!empty($add_file_detail['tds_jv_no'])): ?>
+                                    <p><strong>TDS JV No:</strong>
+                                        <?php echo htmlspecialchars($add_file_detail['tds_jv_no']); ?></p>
+                                <?php endif; ?>
+
+                                <?php if (!empty($add_file_detail['tds_section_id'])): ?>
+                                    <p><strong>TDS Section:</strong>
+                                        <?php echo htmlspecialchars($add_file_detail['tds_section_id']); ?></p>
+                                <?php endif; ?>
+
+                                <?php if (!empty($add_file_detail['tds_percentage'])): ?>
+                                    <p><strong>TDS Percentage:</strong>
+                                        <?php echo htmlspecialchars($add_file_detail['tds_percentage']); ?>%</p>
+                                <?php endif; ?>
+
+                                <?php if (!empty($add_file_detail['tds_amount'])): ?>
+                                    <p><strong>TDS Amount:</strong>
+                                        <?php echo number_format($add_file_detail['tds_amount'], 2); ?></p>
+                                <?php endif; ?>
+
                                 <p><strong>Total Amount:</strong>
                                     <?php echo number_format($add_file_detail['total_amount'], 2); ?></p>
                                 <p><strong>Created At:</strong>
                                     <?php echo htmlspecialchars($add_file_detail['created_at']); ?></p>
                                 <p><strong>Updated At:</strong>
                                     <?php echo htmlspecialchars($add_file_detail['updated_at']); ?></p>
+
+                                <?php if (!empty($add_file_detail['section'])): ?>
+                                    <p><strong>Section:</strong>
+                                        <?php echo htmlspecialchars($add_file_detail['section']); ?></p>
+                                <?php endif; ?>
                             </div>
+
                             <!-- Items Table -->
                             <h5>Item Details</h5>
                             <div class="table-responsive">
