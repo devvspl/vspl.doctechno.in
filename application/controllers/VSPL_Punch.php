@@ -2,6 +2,7 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 class VSPL_Punch extends CI_Controller
 {
+     protected $year_id;
     function __construct()
     {
         parent::__construct();
@@ -11,6 +12,15 @@ class VSPL_Punch extends CI_Controller
         $this->load->model('Group_model');
         $this->load->helper('download');
         $this->load->model('Record_model');
+         $this->year_id =
+            $this->session->userdata("year_id") ??
+            ($this->db
+                ->select("id")
+                ->from("financial_years")
+                ->where("is_current", 1)
+                ->get()
+                ->row()->id ??
+                null);
     }
     private function logged_in()
     {
@@ -80,9 +90,9 @@ class VSPL_Punch extends CI_Controller
                 aii.tds_amount AS TDS,
                 ai.tds_percentage AS TDSPer
             FROM
-                y1_tbl_additional_information_items AS aii
-            LEFT JOIN y1_scan_file AS sf ON aii.scan_id = sf.scan_id
-            LEFT JOIN y1_tbl_additional_information AS ai ON aii.scan_id = ai.scan_id
+                y{$year_id}_tbl_additional_information_items AS aii
+            LEFT JOIN y{$year_id}_scan_file AS sf ON aii.scan_id = sf.scan_id
+            LEFT JOIN y{$year_id}_tbl_additional_information AS ai ON aii.scan_id = ai.scan_id
             LEFT JOIN master_business_entity AS be ON be.business_entity_id = ai.business_entity_id
             LEFT JOIN core_department AS cd ON cd.api_id = aii.department_id
             LEFT JOIN master_cost_center AS mcc ON mcc.id = aii.cost_center_id
@@ -112,7 +122,6 @@ class VSPL_Punch extends CI_Controller
         $this->data['main'] = 'vspl/focus_exports';
         $this->load->view('layout/template', $this->data);
     }
-
     public function export_csv()
     {
         $from_date = $this->input->get('from_date') ?? '';
@@ -165,9 +174,9 @@ class VSPL_Punch extends CI_Controller
                 aii.tds_amount AS TDS,
                 ai.tds_percentage AS TDSPer
             FROM
-                y1_tbl_additional_information_items AS aii
-            LEFT JOIN y1_scan_file AS sf ON aii.scan_id = sf.scan_id
-            LEFT JOIN y1_tbl_additional_information AS ai ON aii.scan_id = ai.scan_id
+                y{$year_id}_tbl_additional_information_items AS aii
+            LEFT JOIN y{$year_id}_scan_file AS sf ON aii.scan_id = sf.scan_id
+            LEFT JOIN y{$year_id}_tbl_additional_information AS ai ON aii.scan_id = ai.scan_id
             LEFT JOIN master_business_entity AS be ON be.business_entity_id = ai.business_entity_id
             LEFT JOIN core_department AS cd ON cd.api_id = aii.department_id
             LEFT JOIN master_cost_center AS mcc ON mcc.id = aii.cost_center_id

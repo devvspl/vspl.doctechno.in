@@ -108,7 +108,7 @@
                                                 <td><?php echo htmlspecialchars($row['Date'] ?? ''); ?></td>
                                                 <td><?php echo htmlspecialchars($row['Time'] ?? ''); ?></td>
                                                 <td><?php echo htmlspecialchars($row['Business_Entity'] ?? ''); ?></td>
-                                                <td><?php echo htmlspecialchars($row['sNarration'] ?? ''); ?></td>
+                                                <td><input value="<?php echo htmlspecialchars($row['sNarration'] ?? ''); ?>"></td>
                                                 <td><?php echo htmlspecialchars($row['TDSJVNo'] ?? ''); ?></td>
                                                 <td><?php echo htmlspecialchars($row['ReverseCharge_Yn_'] ?? ''); ?></td>
                                                 <td><?php echo htmlspecialchars($row['BillNo'] ?? ''); ?></td>
