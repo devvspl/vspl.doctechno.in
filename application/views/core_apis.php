@@ -294,7 +294,7 @@
                                 .join("");
                             $("#apiTableBody").html(rows);
 
-                            // Initialize DataTable
+                            // Initialize DataTable with sorting disabled
                             if ($.fn.DataTable.isDataTable("#apiDataTable")) {
                                 $("#apiDataTable").DataTable().clear().destroy();
                             }
@@ -304,6 +304,7 @@
                                     responsive: true,
                                     autoWidth: false,
                                     pageLength: 10,
+                                    order: [], // Disable initial sorting to preserve custom order
                                 });
                             }, 100);
 
