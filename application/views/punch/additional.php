@@ -707,26 +707,37 @@
         // Update billAmount field
         $("#billAmount").val(maxAllowedAmount.toFixed(2));
 
-        // Enable/disable buttons based on final_amount and maxAllowedAmount comparison
+        // Select buttons
         var submitButton = $('button[name="final_submit"]');
         var draftButton = $('button[name="save_draft"]');
-        if (final_amount.toFixed(2) === maxAllowedAmount.toFixed(2)) {
-            submitButton.prop('disabled', false);
-            draftButton.prop('disabled', false);
-            console.log("Buttons enabled: final_submit and save_draft");
-        } else {
-            submitButton.prop('disabled', true);
-            draftButton.prop('disabled', true);
-            console.log("Buttons disabled: final_submit and save_draft");
-        }
-    }
-    function generateTdsJvNo() {
-        const date = new Date();
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, "0");
 
-        const jvNo = "<?php echo $tdsJvNo; ?>";
-        $("#tdsJvNo").val(jvNo);
-    }
+        // Debug: Check if buttons exist
+        if (submitButton.length === 0) {
+            console.log("submitButton found:", submitButton);
+        } else {
+            console.error("submitButton not found! Selector: button[name='final_submit']");
+        }
+        if (draftButton.length === 0) {
+            console.error("draftButton not found! Selector: button[name='save_draft']");
+            // Enable/disable buttons using .attr()
+            if (final_amount.toFixed(2) === maxAllowedAmount.toFixed(2)) {
+                submitButton.removeAttr('disabled');
+                draftButton.removeAttr('disabled');
+                console.log("Buttons enabled: final_submit and save_draft");
+            } else {
+                submitButton.attr('disabled', 'disabled');
+                draftButton.attr('disabled', 'disabled');
+                console.log("Buttons disabled: final_submit and save_draft");
+            }
+        }
+
+        function generateTdsJvNo() {
+            const date = new Date();
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, "0");
+
+            const jvNo = "<?php echo $tdsJvNo; ?>";
+            $("#tdsJvNo").val(jvNo);
+        }
 
 </script>
