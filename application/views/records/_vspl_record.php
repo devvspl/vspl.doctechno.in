@@ -2,6 +2,7 @@
 $scan_id = $this->uri->segment(2);
 $doc_type_id = $this->uri->segment(3);
 ?>
+
 <div class="content-wrapper" style="min-height: 946px;">
     <section class="content">
         <div class="row">
@@ -30,6 +31,32 @@ $doc_type_id = $this->uri->segment(3);
                     <div id="additional-info-content" style="display: none;">
                         <div class="box-body">
                             <h4>Additional Information</h4>
+                            
+                            <!-- Document Details Section -->
+                            <div class="document-details">
+                                <h5>Document Details</h5>
+                                <dl class="dl-horizontal">
+                                    <dt>Document Number</dt>
+                                    <dd><?php echo htmlspecialchars($add_file_detail['document_no']); ?></dd>
+                                    <dt>Document Date</dt>
+                                    <dd><?php echo htmlspecialchars($add_file_detail['document_date']); ?></dd>
+                                    <dt>Business Entity</dt>
+                                    <dd><?php echo htmlspecialchars($add_file_detail['business_entity_name']); ?></dd>
+                                    <dt>Narration</dt>
+                                    <dd><?php echo htmlspecialchars($add_file_detail['narration']); ?></dd>
+                                    <dt>TDS Applicable</dt>
+                                    <dd><?php echo htmlspecialchars($add_file_detail['tds_applicable']); ?></dd>
+                                    <dt>Total Amount</dt>
+                                    <dd><?php echo number_format($add_file_detail['total_amount'], 2); ?></dd>
+                                    <dt>Created At</dt>
+                                    <dd><?php echo htmlspecialchars($add_file_detail['created_at']); ?></dd>
+                                    <dt>Updated At</dt>
+                                    <dd><?php echo htmlspecialchars($add_file_detail['updated_at']); ?></dd>
+                                </dl>
+                            </div>
+
+                            <!-- Items Table -->
+                            <h5>Item Details</h5>
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="items_table">
                                     <thead>
@@ -99,6 +126,7 @@ $doc_type_id = $this->uri->segment(3);
         </div>
     </section>
 </div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const invoiceTab = document.getElementById('invoice-tab');
@@ -148,5 +176,25 @@ $doc_type_id = $this->uri->segment(3);
     .table th, .table td {
         vertical-align: middle;
         text-align: left;
+    }
+
+    .document-details {
+        margin-bottom: 30px;
+    }
+
+    .dl-horizontal dt {
+        float: left;
+        width: 160px;
+        overflow: hidden;
+        clear: left;
+        text-align: right;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-weight: bold;
+    }
+
+    .dl-horizontal dd {
+        margin-left: 180px;
+        margin-bottom: 10px;
     }
 </style>
