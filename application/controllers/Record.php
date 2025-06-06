@@ -2,7 +2,7 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 class Record extends CI_Controller
 {
-	    protected $year_id;
+	protected $year_id;
 	function __construct()
 	{
 		parent::__construct();
@@ -11,7 +11,7 @@ class Record extends CI_Controller
 		$this->load->model('Record_model');
 		$this->load->model('Punch_model');
 		$this->load->model('AdditionalModel');
-		    $this->session->userdata("year_id") ??
+		    $this->year_id =  $this->session->userdata("year_id") ??
             ($this->db
                 ->select("id")
                 ->from("financial_years")
