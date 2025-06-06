@@ -265,8 +265,9 @@
                                 .map((row, index) => {
                                     return `<tr data-id="${row.id || index}">` + headers.map((h) => {
                                         if (h === "focus_code") {
-                                            // Render input field with a span for messages
-                                            return `<td><input type="text" class="form-control focus-code-input" data-id="${row.id || index}" data-column="${h}" value="${row[h] !== null ? row[h] : ''}"><span class="update-message text-muted small d-block mt-1"></span></td>`;
+                                            // Render input field with row index (1-based) if focus_code is null or empty
+                                            let displayValue = (row[h] !== null && row[h] !== "") ? row[h] : (index + 1);
+                                            return `<td><input type="text" class="form-control focus-code-input" data-id="${row.id || index}" data-column="${h}" value="${displayValue}"><span class="update-message text-muted small d-block mt-1"></span></td>`;
                                         }
                                         return `<td>${row[h] !== null ? row[h] : ""}</td>`;
                                     }).join("") + `</tr>`;
@@ -335,7 +336,6 @@
 
                             $("#apiDataModal").modal("show");
                         } else {
-                            // Keep alert for no data case, or replace with a similar UI change if needed
                             alert("No data found for this API.");
                         }
                     },
@@ -347,7 +347,7 @@
                     },
                 });
             });
-            $(".empty-data-btn").click(function () {
+             $(".empty-data-btn").click(function () {
                 var button = $(this);
                 if (!confirm("Are you sure you want to delete all data from this table?")) return;
                 showLoading(button);
