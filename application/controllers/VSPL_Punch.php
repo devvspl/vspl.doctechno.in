@@ -99,9 +99,9 @@ class VSPL_Punch extends CI_Controller
                 aii.tds_amount AS TDS,
                 ai.tds_percentage AS TDSPer
             FROM
-                y{$year_id}_tbl_additional_information_items AS aii
-            LEFT JOIN y{$year_id}_scan_file AS sf ON aii.scan_id = sf.scan_id
-            LEFT JOIN y{$year_id}_tbl_additional_information AS ai ON aii.scan_id = ai.scan_id
+                y{$this->year_id}_tbl_additional_information_items AS aii
+            LEFT JOIN y{$this->year_id}_scan_file AS sf ON aii.scan_id = sf.scan_id
+            LEFT JOIN y{$this->year_id}_tbl_additional_information AS ai ON aii.scan_id = ai.scan_id
             LEFT JOIN master_business_entity AS be ON be.business_entity_id = ai.business_entity_id
             LEFT JOIN core_department AS cd ON cd.api_id = aii.department_id
             LEFT JOIN master_cost_center AS mcc ON mcc.id = aii.cost_center_id
@@ -184,9 +184,9 @@ class VSPL_Punch extends CI_Controller
                 aii.tds_amount AS TDS,
                 ai.tds_percentage AS TDSPer
             FROM
-                y{$year_id}_tbl_additional_information_items AS aii
-            LEFT JOIN y{$year_id}_scan_file AS sf ON aii.scan_id = sf.scan_id
-            LEFT JOIN y{$year_id}_tbl_additional_information AS ai ON aii.scan_id = ai.scan_id
+                y{$this->year_id}_tbl_additional_information_items AS aii
+            LEFT JOIN y{$this->year_id}_scan_file AS sf ON aii.scan_id = sf.scan_id
+            LEFT JOIN y{$this->year_id}_tbl_additional_information AS ai ON aii.scan_id = ai.scan_id
             LEFT JOIN master_business_entity AS be ON be.business_entity_id = ai.business_entity_id
             LEFT JOIN core_department AS cd ON cd.api_id = aii.department_id
             LEFT JOIN master_cost_center AS mcc ON mcc.id = aii.cost_center_id
