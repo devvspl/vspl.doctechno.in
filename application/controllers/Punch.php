@@ -2034,6 +2034,8 @@ class Punch extends CI_Controller
                 "amount" => (float) ($post["Amount"][$i] ?? 0),
             ];
         }
+        $scan_data = ['bill_number' => $this->db->escape_str($post["Vehicle_No"] ?? ""), 'bill_date' => $this->db->escape_str($post["Bill_Date"] ?? "")];
+        $this->updateScanBasicDetail($scan_id, $scan_data);
         return ["main" => $mainData, "items" => $items];
     }
     private function processPunchData_6($post)
@@ -2062,7 +2064,6 @@ class Punch extends CI_Controller
         $items = [];
         return ["main" => $mainData, "items" => $items];
     }
-
     private function processPunchData_7($post)
     {
         $scan_id = (int) ($post["scan_id"] ?? 0);
@@ -2090,7 +2091,6 @@ class Punch extends CI_Controller
         $items = [];
         return ["main" => $mainData, "items" => $items];
     }
-
     private function processPunchData_13($post)
     {
         $scan_id = (int) ($post["scan_id"] ?? 0);
@@ -2159,7 +2159,6 @@ class Punch extends CI_Controller
             "updated_at" => date("Y-m-d H:i:s"),
             "updated_by" => $this->session->userdata("user_id"),
         ];
-
         return ["main" => $mainData, "items" => []];
     }
     private function processPunchData_20($post)
@@ -2269,7 +2268,6 @@ class Punch extends CI_Controller
 
         return ["main" => $mainData, "items" => $items];
     }
-
     private function processPunchData_27($post)
     {
         $scan_id = (int) ($post["scan_id"] ?? 0);
@@ -2439,7 +2437,6 @@ class Punch extends CI_Controller
         $items = [];
         return ["main" => $mainData, "items" => $items];
     }
-
     private function processPunchData_51($post)
     {
         $scan_id = (int) ($post["scan_id"] ?? 0);
@@ -2492,7 +2489,6 @@ class Punch extends CI_Controller
 
         return ["main" => $mainData, "items" => $items];
     }
-
     private function processPunchData_23($post)
     {
         $scan_id = (int) ($post["scan_id"] ?? 0);
@@ -2550,6 +2546,8 @@ class Punch extends CI_Controller
                 "total_amount" => (float) ($post["TAmount"][$i] ?? 0),
             ];
         }
+        $scan_data = ['bill_number' => $this->db->escape_str($post["Bill_No"] ?? ""), 'bill_date' => $this->db->escape_str($post["Bill_Date"] ?? "")];
+        $this->updateScanBasicDetail($scan_id, $scan_data);
         return ["main" => $mainData, "items" => $invoiceDetails];
     }
     private function processPunchData_29($post)
@@ -2673,7 +2671,6 @@ class Punch extends CI_Controller
 
         return ["main" => $mainData, "items" => []];
     }
-
     private function processPunchData_43($post)
     {
         $scan_id = (int) ($post["scan_id"] ?? 0);
@@ -2708,7 +2705,6 @@ class Punch extends CI_Controller
 
         return ["main" => $mainData, "items" => []];
     }
-
     private function processPunchData_44($post)
     {
         $scan_id = (int) ($post["scan_id"] ?? 0);
@@ -2757,7 +2753,6 @@ class Punch extends CI_Controller
         }
         return ["main" => $mainData, "items" => $invoiceDetails];
     }
-
     private function processPunchData_52($post)
     {
         $scan_id = (int) ($post["scan_id"] ?? 0);
@@ -2809,7 +2804,6 @@ class Punch extends CI_Controller
 
         return ["main" => $mainData, "items" => $items];
     }
-
     private function processPunchData_55($post)
     {
         $scan_id = (int) ($post["scan_id"] ?? 0);
@@ -2900,7 +2894,6 @@ class Punch extends CI_Controller
         $type_id = (int) $this->input->post("type_id");
         $this->fetchPunchDetails($scan_id, $type_id, $year_id);
     }
-
     public function getLabourPaymentItems()
     {
         $year_id = $this->year_id;
@@ -2908,7 +2901,6 @@ class Punch extends CI_Controller
         $type_id = (int) $this->input->post("type_id");
         $this->fetchPunchDetails($scan_id, $type_id, $year_id);
     }
-
     public function getReadingItems()
     {
         $year_id = $this->year_id;
@@ -2916,7 +2908,6 @@ class Punch extends CI_Controller
         $type_id = (int) $this->input->post("type_id");
         $this->fetchPunchDetails($scan_id, $type_id, $year_id);
     }
-
     public function getTicketCancellationItems()
     {
         $year_id = $this->year_id;
@@ -2924,7 +2915,6 @@ class Punch extends CI_Controller
         $type_id = (int) $this->input->post("type_id");
         $this->fetchPunchDetails($scan_id, $type_id, $year_id);
     }
-
     public function getGSTChalanItems()
     {
         $year_id = $this->year_id;
@@ -2932,4 +2922,9 @@ class Punch extends CI_Controller
         $type_id = (int) $this->input->post("type_id");
         $this->fetchPunchDetails($scan_id, $type_id, $year_id);
     }
+    public function updateScanBasicDetail($scan_id, $data)
+    {
+        return $this->db->where('scan_id', $scan_id)->update('y' . $this->year_id . '_scan_file', $data);
+    }
+
 }
