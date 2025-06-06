@@ -1898,7 +1898,7 @@ class Punch extends CI_Controller
             $data = [
                 "finance_punch_action_status" => "Y",
                 "finance_punch_action_by" => $this->session->userdata("user_id"),
-                "finance_punch_action_date" => date("Y-m-d H:i:s"),
+                "finance_punch_action_date" => date("Y-m-d"),
             ];
             $this->db->where("scan_id", $scan_id);
             $this->db->update("y{$this->year_id}_scan_file", $data);
@@ -1916,7 +1916,7 @@ class Punch extends CI_Controller
             $data = [
                 "finance_punch_action_status" => "R",
                 "finance_punch_action_by" => $this->session->userdata("user_id"),
-                "finance_punch_action_date" => date("Y-m-d H:i:s"),
+                "finance_punch_action_date" => date("Y-m-d"),
                 "punch_reject_remark" => $punch_reject_remark,
             ];
             $this->db->where("scan_id", $scan_id);
