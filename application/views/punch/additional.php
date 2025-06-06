@@ -410,6 +410,7 @@
 </div>
 <script>
     $(document).ready(function () {
+        updateBillAmount();
         let rowCount = $("#rows_container .form-row").length;
         for (let rowNo = 1; rowNo <= rowCount; rowNo++) {
             initializeAllAutoCompleteInputs(rowNo);
@@ -694,12 +695,12 @@
     var maxAllowedAmount = total + TDS_amount;
 
     // Log values to console for debugging
-    console.log("Debug Info:");
-    console.log("final_amount:", final_amount);
-    console.log("total:", total);
-    console.log("TDS_amount:", TDS_amount);
-    console.log("maxAllowedAmount:", maxAllowedAmount);
-    console.log("final_amount === maxAllowedAmount:", final_amount.toFixed(2) === maxAllowedAmount.toFixed(2));
+    
+    
+    
+    
+    
+    
 
     // Update billAmount field
     $("#billAmount").val(maxAllowedAmount.toFixed(2));
@@ -712,23 +713,23 @@
     if (submitButton.length === 0) {
         console.error("submitButton not found! Selector: #fin_final_submit");
     } else {
-        console.log("submitButton found:", submitButton);
+        
     }
     if (draftButton.length === 0) {
         console.error("draftButton not found! Selector: #fin_save_draft");
     } else {
-        console.log("draftButton found:", draftButton);
+        
     }
 
     // Enable/disable buttons using .attr()
     if (final_amount.toFixed(2) === maxAllowedAmount.toFixed(2)) {
         submitButton.removeAttr('disabled');
         draftButton.removeAttr('disabled');
-        console.log("Buttons enabled: final_submit and save_draft");
+        
     } else {
         submitButton.attr('disabled', 'disabled');
         draftButton.attr('disabled', 'disabled');
-        console.log("Buttons disabled: final_submit and save_draft");
+        
     }
 }
 
