@@ -497,71 +497,89 @@
         $(document).on("input", ".amount", function () {
             updateBillAmount();
         });
-        // Hover and title functionality
-        $(document).on('mouseenter', '#rows_container input.form-control', function () {
-            $(this).attr('title', $(this).val() || 'No value');
+         // Hover and title functionality
+    $(document).on('mouseenter', '#rows_container input.form-control', function () {
+        $(this).attr('title', $(this).val() || 'No value');
+        $(this).css({
+            'background-color': '#e6f3ff',
+            'border-color': '#007bff'
+        });
+    }).on('mouseleave', '#rows_container input.form-control', function () {
+        $(this).removeAttr('title');
+        $(this).css({
+            'background-color': '',
+            'border-color': ''
+        });
+    });
+
+    // Update title on input change
+    $(document).on('input', '#rows_container input.form-control', function () {
+        $(this).attr('title', $(this).val() || 'No value');
+    });
+
+    // Arrow key and Tab navigation with highlight
+    $(document).on('keydown', '#rows_container input.form-control', function (e) {
+        const key = e.which;
+        const leftArrow = 37;
+        const rightArrow = 39;
+        const tabKey = 9;
+
+        if (key === leftArrow || key === rightArrow || key === tabKey) {
+            e.preventDefault(); // Prevent default behavior for arrows and Tab
+            const $inputs = $(this).closest('tr').find('input.form-control');
+            const $allRows = $('#items_table tbody tr');
+            const currentRowIndex = $allRows.index($(this).closest('tr'));
+            const currentIndex = $inputs.index(this);
+
+            // Remove highlight from current input
             $(this).css({
+                'background-color': '',
+                'border-color': ''
+            });
+            $(this).removeAttr('title');
+
+            let $nextInput, nextIndex;
+            if (key === rightArrow || key === tabKey) {
+                nextIndex = currentIndex + 1;
+                if (nextIndex < $inputs.length) {
+                    // Stay in the same row
+                    $nextInput = $inputs.eq(nextIndex);
+                } else {
+                    // Move to the first input of the next row or wrap to first row
+                    const nextRowIndex = (currentRowIndex + 1) % $allRows.length;
+                    $nextInput = $allRows.eq(nextRowIndex).find('input.form-control').first();
+                }
+            } else if (key === leftArrow) {
+                nextIndex = currentIndex - 1;
+                if (nextIndex >= 0) {
+                    // Stay in the same row
+                    $nextInput = $inputs.eq(nextIndex);
+                } else {
+                    // Move to the last input of the previous row or wrap to last row
+                    const prevRowIndex = currentRowIndex - 1 >= 0 ? currentRowIndex - 1 : $allRows.length - 1;
+                    $nextInput = $allRows.eq(prevRowIndex).find('input.form-control').last();
+                }
+            }
+
+            // Focus and highlight the next input
+            $nextInput.focus();
+            $nextInput.css({
                 'background-color': '#e6f3ff',
                 'border-color': '#007bff'
             });
-        }).on('mouseleave', '#rows_container input.form-control', function () {
-            $(this).removeAttr('title');
-            $(this).css({
-                'background-color': '',
-                'border-color': ''
-            });
+            $nextInput.attr('title', $nextInput.val() || 'No value');
+        }
+    });
+
+    // Remove highlight on blur
+    $(document).on('blur', '#rows_container input.form-control', function () {
+        $(this).css({
+            'background-color': '',
+            'border-color': ''
         });
-
-        // Update title on input change
-        $(document).on('input', '#rows_container input.form-control', function () {
-            $(this).attr('title', $(this).val() || 'No value');
-        });
-
-        // Arrow key navigation with highlight
-        $(document).on('keydown', '#rows_container input.form-control', function (e) {
-            const key = e.which;
-            const leftArrow = 37;
-            const rightArrow = 39;
-
-            if (key === leftArrow || key === rightArrow) {
-                e.preventDefault();
-                const $inputs = $(this).closest('tr').find('input.form-control');
-                const currentIndex = $inputs.index(this);
-
-                // Remove highlight from current input
-                $(this).css({
-                    'background-color': '',
-                    'border-color': ''
-                });
-                $(this).removeAttr('title');
-
-                let nextIndex;
-                if (key === rightArrow) {
-                    nextIndex = currentIndex + 1 < $inputs.length ? currentIndex + 1 : 0;
-                } else {
-                    nextIndex = currentIndex - 1 >= 0 ? currentIndex - 1 : $inputs.length - 1;
-                }
-
-                // Focus and highlight the next/previous input
-                const $nextInput = $inputs.eq(nextIndex);
-                $nextInput.focus();
-                $nextInput.css({
-                    'background-color': '#e6f3ff',
-                    'border-color': '#007bff'
-                });
-                $nextInput.attr('title', $nextInput.val() || 'No value');
-            }
-        });
-
-        // Ensure highlight is removed when focus leaves input (e.g., clicking elsewhere)
-        $(document).on('blur', '#rows_container input.form-control', function () {
-            $(this).css({
-                'background-color': '',
-                'border-color': ''
-            });
-            $(this).removeAttr('title');
-        }); 
-        $('input[name="tdsApplicable"]').change(function () {
+        $(this).removeAttr('title');
+    });
+    $('input[name="tdsApplicable"]').change(function () {
             if ($("#tdsApplicableYes").is(":checked")) {
                 generateTdsJvNo();
                 $("#tdsDetailsForm").show();
