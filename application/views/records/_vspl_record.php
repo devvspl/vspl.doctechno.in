@@ -2,7 +2,6 @@
 $scan_id = $this->uri->segment(2);
 $doc_type_id = $this->uri->segment(3);
 ?>
-
 <div class="content-wrapper" style="min-height: 946px;">
     <section class="content">
         <div class="row">
@@ -18,8 +17,7 @@ $doc_type_id = $this->uri->segment(3);
                             ?>
                         </h3>
                         <div class="box-tools pull-right">
-                            <a href="javascript:void(0);" onclick="window.close();" class="btn btn-primary btn-sm"><i
-                                    class="fa fa-long-arrow-left"></i> Back</a>
+                            <a href="javascript:void(0);" onclick="window.close();" class="btn btn-primary btn-sm"><i class="fa fa-long-arrow-left"></i> Back</a>
                         </div>
                     </div>
                     <div class="tabs-container">
@@ -88,8 +86,7 @@ $doc_type_id = $this->uri->segment(3);
                                             <?php endforeach; ?>
                                         <?php else: ?>
                                             <tr>
-                                                <td colspan="21" class="text-center">No additional information available.
-                                                </td>
+                                                <td colspan="21" class="text-center">No additional information available.</td>
                                             </tr>
                                         <?php endif; ?>
                                     </tbody>
@@ -102,7 +99,6 @@ $doc_type_id = $this->uri->segment(3);
         </div>
     </section>
 </div>
-
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const invoiceTab = document.getElementById('invoice-tab');
@@ -149,8 +145,7 @@ $doc_type_id = $this->uri->segment(3);
         margin-top: 20px;
     }
 
-    .table th,
-    .table td {
+    .table th, .table td {
         vertical-align: middle;
         text-align: left;
     }

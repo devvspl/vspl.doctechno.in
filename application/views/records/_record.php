@@ -8,6 +8,7 @@ $doc_type_id = $this->uri->segment(3);
 <div class="content-wrapper" style="min-height: 946px;">
     <section class="content">
         <div class="row">
+            
             <div class="col-md-12">
                 <div class="box box-primary">
                     <div class="box-header with-border">
@@ -20,8 +21,7 @@ $doc_type_id = $this->uri->segment(3);
                             ?>
                         </h3>
                         <div class="box-tools pull-right">
-                            <a href="javascript:void(0);" onclick="window.close();" class="btn btn-primary btn-sm"><i
-                                    class="fa fa-long-arrow-left"></i> Back</a>
+                            <a href="javascript:void(0);" onclick="window.close();" class="btn btn-primary btn-sm"><i class="fa fa-long-arrow-left"></i> Back</a>
                         </div>
                     </div>
                     <?php
