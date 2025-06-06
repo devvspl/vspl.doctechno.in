@@ -311,7 +311,7 @@ class Punch_model extends MY_Model
     }
     public function get_finance_bill_approval_files($finance_punch_status)
     {
-        $this->db->select('*')->from("y{$this->year_id}_scan_file")->where('finance_punch_action_status', 'Y')->where('finance_punch_action_status', $finance_punch_status);
+        $this->db->select('*')->from("y{$this->year_id}_scan_file")->where('finance_punch_status', 'Y')->where('finance_punch_action_status', $finance_punch_status);
         $this->db->order_by('scan_id', 'desc');
         return $this->db->get()->result_array();
     }
