@@ -264,8 +264,10 @@
                             // Count empty or null focus_code values
                             var emptyFocusCodeCount = data.filter(row => row.focus_code === null || row.focus_code === "").length;
 
-                            // Update modal header with count
-                            $("#dataTitle").append(` <small style="color: red;background: white;padding: 3px;border-radius: 5px;">: Empty/Null focus_code count: ${emptyFocusCodeCount}</small>`);
+                            if (emptyFocusCodeCount > 0) {
+                                $("#dataTitle").append(` <small style="color: red;background: white;padding: 3px;border-radius: 5px;">: Empty/Null focus_code count: ${emptyFocusCodeCount}</small>`);
+                            }
+
 
                             var rows = data
                                 .map((row, index) => {
