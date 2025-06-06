@@ -18,7 +18,8 @@ $doc_type_id = $this->uri->segment(3);
                             ?>
                         </h3>
                         <div class="box-tools pull-right">
-                            <a href="javascript:void(0);" onclick="window.close();" class="btn btn-primary btn-sm"><i class="fa fa-long-arrow-left"></i> Back</a>
+                            <a href="javascript:void(0);" onclick="window.close();" class="btn btn-primary btn-sm"><i
+                                    class="fa fa-long-arrow-left"></i> Back</a>
                         </div>
                     </div>
                     <div class="tabs-container">
@@ -31,30 +32,27 @@ $doc_type_id = $this->uri->segment(3);
                     <div id="additional-info-content" style="display: none;">
                         <div class="box-body">
                             <h4>Additional Information</h4>
-                            
+
                             <!-- Document Details Section -->
                             <div class="document-details">
                                 <h5>Document Details</h5>
-                                <dl class="dl-horizontal">
-                                    <dt>Document Number</dt>
-                                    <dd><?php echo htmlspecialchars($add_file_detail['document_no']); ?></dd>
-                                    <dt>Document Date</dt>
-                                    <dd><?php echo htmlspecialchars($add_file_detail['document_date']); ?></dd>
-                                    <dt>Business Entity</dt>
-                                    <dd><?php echo htmlspecialchars($add_file_detail['business_entity_name']); ?></dd>
-                                    <dt>Narration</dt>
-                                    <dd><?php echo htmlspecialchars($add_file_detail['narration']); ?></dd>
-                                    <dt>TDS Applicable</dt>
-                                    <dd><?php echo htmlspecialchars($add_file_detail['tds_applicable']); ?></dd>
-                                    <dt>Total Amount</dt>
-                                    <dd><?php echo number_format($add_file_detail['total_amount'], 2); ?></dd>
-                                    <dt>Created At</dt>
-                                    <dd><?php echo htmlspecialchars($add_file_detail['created_at']); ?></dd>
-                                    <dt>Updated At</dt>
-                                    <dd><?php echo htmlspecialchars($add_file_detail['updated_at']); ?></dd>
-                                </dl>
+                                <p><strong>Document Number:</strong>
+                                    <?php echo htmlspecialchars($add_file_detail['document_no']); ?></p>
+                                <p><strong>Document Date:</strong>
+                                    <?php echo htmlspecialchars($add_file_detail['document_date']); ?></p>
+                                <p><strong>Business Entity:</strong>
+                                    <?php echo htmlspecialchars($add_file_detail['business_entity_name']); ?></p>
+                                <p><strong>Narration:</strong>
+                                    <?php echo htmlspecialchars($add_file_detail['narration']); ?></p>
+                                <p><strong>TDS Applicable:</strong>
+                                    <?php echo htmlspecialchars($add_file_detail['tds_applicable']); ?></p>
+                                <p><strong>Total Amount:</strong>
+                                    <?php echo number_format($add_file_detail['total_amount'], 2); ?></p>
+                                <p><strong>Created At:</strong>
+                                    <?php echo htmlspecialchars($add_file_detail['created_at']); ?></p>
+                                <p><strong>Updated At:</strong>
+                                    <?php echo htmlspecialchars($add_file_detail['updated_at']); ?></p>
                             </div>
-
                             <!-- Items Table -->
                             <h5>Item Details</h5>
                             <div class="table-responsive">
@@ -113,7 +111,8 @@ $doc_type_id = $this->uri->segment(3);
                                             <?php endforeach; ?>
                                         <?php else: ?>
                                             <tr>
-                                                <td colspan="21" class="text-center">No additional information available.</td>
+                                                <td colspan="21" class="text-center">No additional information available.
+                                                </td>
                                             </tr>
                                         <?php endif; ?>
                                     </tbody>
@@ -161,19 +160,20 @@ $doc_type_id = $this->uri->segment(3);
         padding: 10px 20px;
         cursor: pointer;
         font-weight: bold;
-        color: #333;
+        color: #ffffff;
     }
 
     .tabs.active-tab {
-        border-bottom: 2px solid #007bff;
-        color: #007bff;
+        border-bottom: 2px solid #ffffff;
+        color: #ffffff;
     }
 
     .table-responsive {
         margin-top: 20px;
     }
 
-    .table th, .table td {
+    .table th,
+    .table td {
         vertical-align: middle;
         text-align: left;
     }
