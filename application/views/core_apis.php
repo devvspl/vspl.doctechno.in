@@ -261,6 +261,12 @@
                             // Store table name for update
                             var tableName = button.data("table");
 
+                            // Count empty or null focus_code values
+                            var emptyFocusCodeCount = data.filter(row => row.focus_code === null || row.focus_code === "").length;
+
+                            // Update modal header with count
+                            $("#dataTitle").append(` <small>(Empty/Null focus_code count: ${emptyFocusCodeCount})</small>`);
+
                             var rows = data
                                 .map((row, index) => {
                                     return `<tr data-id="${row.id || index}">` + headers.map((h) => {
@@ -317,6 +323,11 @@
                                     success: function (updateResponse) {
                                         if (updateResponse.status === "success") {
                                             messageSpan.text("Focus code updated successfully!").addClass("text-success").removeClass("text-muted");
+                                            // Update count after successful update
+                                            if (newValue !== "" && !$("#dataTitle").find("small").data("original-count")) {
+                                                emptyFocusCodeCount--;
+                                                $("#dataTitle").find("small").text(`(Empty/Null focus_code count: ${emptyFocusCodeCount})`);
+                                            }
                                         } else {
                                             messageSpan.text("Failed to update: " + (updateResponse.message || "Unknown error")).addClass("text-danger").removeClass("text-muted");
                                         }
@@ -336,6 +347,8 @@
 
                             $("#apiDataModal").modal("show");
                         } else {
+                            // Update header to show count as 0 if no data
+                            $("#dataTitle").append(` <small>(Empty/Null focus_code count: 0)</small>`);
                             alert("No data found for this API.");
                         }
                     },
@@ -347,7 +360,7 @@
                     },
                 });
             });
-             $(".empty-data-btn").click(function () {
+            $(".empty-data-btn").click(function () {
                 var button = $(this);
                 if (!confirm("Are you sure you want to delete all data from this table?")) return;
                 showLoading(button);
