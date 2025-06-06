@@ -497,7 +497,7 @@
         $(document).on("input", ".amount", function () {
             updateBillAmount();
         });
-        
+
         $(document).on('mouseenter', '#rows_container input.form-control', function () {
             $(this).attr('title', $(this).val() || 'No value');
             $(this).css({
@@ -512,12 +512,12 @@
             });
         });
 
-        
+
         $(document).on('input', '#rows_container input.form-control', function () {
             $(this).attr('title', $(this).val() || 'No value');
         });
 
-        
+
         $(document).on('keydown', '#rows_container input.form-control', function (e) {
             const key = e.which;
             const leftArrow = 37;
@@ -525,13 +525,13 @@
             const tabKey = 9;
 
             if (key === leftArrow || key === rightArrow || key === tabKey) {
-                e.preventDefault(); 
+                e.preventDefault();
                 const $inputs = $(this).closest('tr').find('input.form-control');
                 const $allRows = $('#items_table tbody tr');
                 const currentRowIndex = $allRows.index($(this).closest('tr'));
                 const currentIndex = $inputs.index(this);
 
-                
+
                 $(this).css({
                     'background-color': '',
                     'border-color': ''
@@ -542,26 +542,26 @@
                 if (key === rightArrow || key === tabKey) {
                     nextIndex = currentIndex + 1;
                     if (nextIndex < $inputs.length) {
-                        
+
                         $nextInput = $inputs.eq(nextIndex);
                     } else {
-                        
+
                         const nextRowIndex = (currentRowIndex + 1) % $allRows.length;
                         $nextInput = $allRows.eq(nextRowIndex).find('input.form-control').first();
                     }
                 } else if (key === leftArrow) {
                     nextIndex = currentIndex - 1;
                     if (nextIndex >= 0) {
-                        
+
                         $nextInput = $inputs.eq(nextIndex);
                     } else {
-                        
+
                         const prevRowIndex = currentRowIndex - 1 >= 0 ? currentRowIndex - 1 : $allRows.length - 1;
                         $nextInput = $allRows.eq(prevRowIndex).find('input.form-control').last();
                     }
                 }
 
-                
+
                 $nextInput.focus();
                 $nextInput.css({
                     'background-color': '#e6f3ff',
@@ -571,7 +571,7 @@
             }
         });
 
-        
+
         $(document).on('blur', '#rows_container input.form-control', function () {
             $(this).css({
                 'background-color': '',
@@ -683,31 +683,43 @@
     }
 
     function updateBillAmount() {
+        // Add debugger to pause execution for inspection
+        debugger;
+
         let total = 0;
-        var final_amount = parseFloat($(".final_amount_column").val()) || 0; 
+        var final_amount = parseFloat($(".final_amount_column").val()) || 0; // Parse final_amount as float
         $(".amount").each(function () {
             let value = parseFloat($(this).val()) || 0;
             total += value;
         });
 
-        let TDS_amount = parseFloat($("#tds_amount").val()) || 0; 
+        let TDS_amount = parseFloat($("#tds_amount").val()) || 0; // Parse TDS_amount as float
         var maxAllowedAmount = total + TDS_amount;
 
-        
+        // Log values to console for debugging
+        console.log("Debug Info:");
+        console.log("final_amount:", final_amount);
+        console.log("total:", total);
+        console.log("TDS_amount:", TDS_amount);
+        console.log("maxAllowedAmount:", maxAllowedAmount);
+        console.log("final_amount === maxAllowedAmount:", final_amount.toFixed(2) === maxAllowedAmount.toFixed(2));
+
+        // Update billAmount field
         $("#billAmount").val(maxAllowedAmount.toFixed(2));
 
-        
+        // Enable/disable buttons based on final_amount and maxAllowedAmount comparison
         var submitButton = $('button[name="final_submit"]');
         var draftButton = $('button[name="save_draft"]');
         if (final_amount.toFixed(2) === maxAllowedAmount.toFixed(2)) {
             submitButton.prop('disabled', false);
             draftButton.prop('disabled', false);
+            console.log("Buttons enabled: final_submit and save_draft");
         } else {
             submitButton.prop('disabled', true);
             draftButton.prop('disabled', true);
+            console.log("Buttons disabled: final_submit and save_draft");
         }
     }
-
     function generateTdsJvNo() {
         const date = new Date();
         const year = date.getFullYear();
