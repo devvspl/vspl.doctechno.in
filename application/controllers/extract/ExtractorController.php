@@ -18,20 +18,20 @@ class ExtractorController extends CI_Controller
     }
     public function update_path()
     {
-        // Load database
+        
         $this->load->database();
 
-        // Get all records from y1_scan_file
+        
         $query = $this->db->select('scan_id, file_path, secondary_file_path')
             ->get('y1_scan_file');
 
-        // Check if records exist
+        
         if ($query->num_rows() > 0) {
             foreach ($query->result() as $row) {
-                // Initialize update data array
+                
                 $update_data = array();
 
-                // Update file_path if it contains 'Uploads'
+                
                 if (!empty($row->file_path)) {
                     $new_file_path = str_replace('Uploads', 'uploads', $row->file_path);
                     if ($new_file_path !== $row->file_path) {
@@ -39,7 +39,7 @@ class ExtractorController extends CI_Controller
                     }
                 }
 
-                // Update secondary_file_path if it contains 'Uploads'
+                
                 if (!empty($row->secondary_file_path)) {
                     $new_secondary_path = str_replace('Uploads', 'uploads', $row->secondary_file_path);
                     if ($new_secondary_path !== $row->secondary_file_path) {
@@ -47,17 +47,17 @@ class ExtractorController extends CI_Controller
                     }
                 }
 
-                // Perform update if there are changes
+                
                 if (!empty($update_data)) {
                     $this->db->where('scan_id', $row->scan_id)
                         ->update('y1_scan_file', $update_data);
                 }
             }
 
-            return true; // Return true if process completed
+            return true; 
         }
 
-        return false; // Return false if no records found
+        return false; 
     }
     public function feilds_mapping()
     {
@@ -497,5 +497,31 @@ class ExtractorController extends CI_Controller
             }
         }
         echo json_encode(['options' => $options]);
+    }
+    public function update_field_mapping()
+    {
+        $this->output->set_content_type('application/json');
+
+        $doctype_id = $this->input->post('doctype_id');
+        $id = $this->input->post('id');
+        $final_amount_column = $this->input->post('final_amount_column');
+
+        
+        if (empty($doctype_id) || empty($id) || !in_array($final_amount_column, ['Yes', 'No'])) {
+            echo json_encode(['status' => 'error', 'message' => 'Invalid input']);
+            return;
+        }
+
+        
+        $this->db->where('id', $id);
+        $this->db->where('doctype_id', $doctype_id); 
+        $update_data = ['final_amount_column' => $final_amount_column];
+        $result = $this->db->update('ext_field_mappings', $update_data);
+
+        if ($result) {
+            echo json_encode(['status' => 'success']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Failed to update final_amount_column']);
+        }
     }
 }
