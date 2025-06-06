@@ -57,7 +57,7 @@ class JournalEntry_ctrl extends CI_Controller
                 $TDS_amount = $this->input->post("TDS_amount");
                 $this->db->trans_start();
                 $this->db->trans_strict(false);
-                $data = ["finance_punch_date" => $punch_date, "business_entity_id" => $business_entity_id, "narration" => $narration, "document_number" => $document_number, "finance_total_Amount" => $finance_total_Amount, "tdsApplicable" => $tdsApplicable, "TDS_JV_no" => $TDS_JV_no, "TDS_section" => $TDS_section, "TDS_percentage" => $TDS_percentage, "TDS_amount" => $TDS_amount, "finance_punched_by" => $this->session->userdata("user_id"),];
+                $data = ["finance_punched_date" => $punch_date, "business_entity_id" => $business_entity_id, "narration" => $narration, "document_number" => $document_number, "finance_total_Amount" => $finance_total_Amount, "tdsApplicable" => $tdsApplicable, "TDS_JV_no" => $TDS_JV_no, "TDS_section" => $TDS_section, "TDS_percentage" => $TDS_percentage, "TDS_amount" => $TDS_amount, "finance_punched_by" => $this->session->userdata("user_id"),];
                 $this->db->where(['scan_id' => $scan_id]);
                 $query = $this->db->update('punchfile', $data);
                 if ($query) {

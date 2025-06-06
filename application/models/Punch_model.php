@@ -201,7 +201,7 @@ class Punch_model extends MY_Model
     }
     public function get_records($limit, $offset, $doctype = null, $search = null, $from_date = null, $to_date = null)
     {
-        $this->db->select(['punchfile.document_number AS DocNo', 'punchfile.finance_punch_date AS Date', "'' AS EmptyField", 'punchfile.account AS CashBankAC', 'master_business_entity.focus_code AS BusinessEntity', 'punchfile.narration AS sNarration', 'punchfile.favouring AS Favouring', 'punchfile.TDS_JV_no AS TDSJVNo', 'master_cost_center.cost_center_name AS CostCenter', 'master_work_location.location_name AS Location', 'master_crop.crop_code AS Crop', 'core_activity.activity_code AS Activity', 'master_state.state_code AS State', 'master_crop_category.crop_category_code AS Category', 'master_region.region_code AS Region', 'master_department.department_code AS Department', 'cash_voucher_items.payment_term AS PMTCategory', 'master_business_unit.business_unit_code AS BusinessUnit', 'master_account_ledger.focus_code AS Account', 'cash_voucher_items.Total_Amount AS TotalAmount', 'cash_voucher_items.ReferenceNo AS Reference', 'cash_voucher_items.Remark AS sRemarks', 'punchfile.TDS_section AS TDS',]);
+        $this->db->select(['punchfile.document_number AS DocNo', 'punchfile.finance_punched_date AS Date', "'' AS EmptyField", 'punchfile.account AS CashBankAC', 'master_business_entity.focus_code AS BusinessEntity', 'punchfile.narration AS sNarration', 'punchfile.favouring AS Favouring', 'punchfile.TDS_JV_no AS TDSJVNo', 'master_cost_center.cost_center_name AS CostCenter', 'master_work_location.location_name AS Location', 'master_crop.crop_code AS Crop', 'core_activity.activity_code AS Activity', 'master_state.state_code AS State', 'master_crop_category.crop_category_code AS Category', 'master_region.region_code AS Region', 'master_department.department_code AS Department', 'cash_voucher_items.payment_term AS PMTCategory', 'master_business_unit.business_unit_code AS BusinessUnit', 'master_account_ledger.focus_code AS Account', 'cash_voucher_items.Total_Amount AS TotalAmount', 'cash_voucher_items.ReferenceNo AS Reference', 'cash_voucher_items.Remark AS sRemarks', 'punchfile.TDS_section AS TDS',]);
         $this->db->from('cash_voucher_items');
         $this->db->join("y{$this->year_id}_scan_file", 'y{$this->year_id}_scan_file.scan_id = cash_voucher_items.scan_id', 'left');
         $this->db->join('punchfile', 'y{$this->year_id}_scan_file.scan_id = punchfile.scan_id', 'left');
@@ -216,7 +216,7 @@ class Punch_model extends MY_Model
         $this->db->join('master_work_location', 'cash_voucher_items.location_id = master_work_location.location_id', 'left');
         $this->db->join('master_region', 'cash_voucher_items.region_id = master_region.region_id', 'left');
         $this->db->join('master_department', 'cash_voucher_items.DepartmentID = master_department.department_id', 'left');
-        $this->db->where(['y{$this->year_id}_scan_file.group_id' => 16, 'y{$this->year_id}_scan_file.finance_punch' => 'Y', 'y{$this->year_id}_scan_file.is_file_approved' => 'Y', 'y{$this->year_id}_scan_file.finance_punch_status' => 'N', 'punchfile.finance_punch_date IS NOT NULL' => null, 'punchfile.finance_punched_by IS NOT NULL' => null,]);
+        $this->db->where(['y{$this->year_id}_scan_file.group_id' => 16, 'y{$this->year_id}_scan_file.finance_punch' => 'Y', 'y{$this->year_id}_scan_file.is_file_approved' => 'Y', 'y{$this->year_id}_scan_file.finance_punch_status' => 'N', 'punchfile.finance_punched_date IS NOT NULL' => null, 'punchfile.finance_punched_by IS NOT NULL' => null,]);
         if (!empty($doctype)) {
             $this->db->where('y{$this->year_id}_scan_file.doc_type_id', $doctype);
         }
@@ -224,10 +224,10 @@ class Punch_model extends MY_Model
             $this->db->like('punchfile.document_number', $search);
         }
         if (!empty($from_date)) {
-            $this->db->where('punchfile.finance_punch_date >=', $from_date);
+            $this->db->where('punchfile.finance_punched_date >=', $from_date);
         }
         if (!empty($to_date)) {
-            $this->db->where('punchfile.finance_punch_date <=', $to_date);
+            $this->db->where('punchfile.finance_punched_date <=', $to_date);
         }
         $this->db->limit($limit, $offset);
         $query = $this->db->get();
@@ -238,7 +238,7 @@ class Punch_model extends MY_Model
         $this->db->from('cash_voucher_items');
         $this->db->join("y{$this->year_id}_scan_file", 'y{$this->year_id}_scan_file.scan_id = cash_voucher_items.scan_id', 'left');
         $this->db->join('punchfile', 'y{$this->year_id}_scan_file.scan_id = punchfile.scan_id', 'left');
-        $this->db->where(['y{$this->year_id}_scan_file.group_id' => 16, 'y{$this->year_id}_scan_file.finance_punch' => 'Y', 'y{$this->year_id}_scan_file.finance_punch_status' => 'N', 'punchfile.finance_punch_date IS NOT NULL' => null, 'punchfile.finance_punched_by IS NOT NULL' => null,]);
+        $this->db->where(['y{$this->year_id}_scan_file.group_id' => 16, 'y{$this->year_id}_scan_file.finance_punch' => 'Y', 'y{$this->year_id}_scan_file.finance_punch_status' => 'N', 'punchfile.finance_punched_date IS NOT NULL' => null, 'punchfile.finance_punched_by IS NOT NULL' => null,]);
         if (!empty($doctype)) {
             $this->db->where('y{$this->year_id}_scan_file.doc_type_id', $doctype);
         }
@@ -246,16 +246,16 @@ class Punch_model extends MY_Model
             $this->db->like('punchfile.document_number', $search);
         }
         if (!empty($from_date)) {
-            $this->db->where('punchfile.finance_punch_date >=', $from_date);
+            $this->db->where('punchfile.finance_punched_date >=', $from_date);
         }
         if (!empty($to_date)) {
-            $this->db->where('punchfile.finance_punch_date <=', $to_date);
+            $this->db->where('punchfile.finance_punched_date <=', $to_date);
         }
         return $this->db->count_all_results();
     }
     public function get_export_data($doctype, $from_date, $to_date)
     {
-        $this->db->select(['punchfile.document_number AS DocNo', 'punchfile.finance_punch_date AS Date', "'' AS EmptyField", 'punchfile.account AS CashBankAC', 'master_business_entity.focus_code AS BusinessEntity', 'punchfile.narration AS sNarration', 'punchfile.favouring AS Favouring', 'punchfile.TDS_JV_no AS TDSJVNo', 'master_cost_center.cost_center_name AS CostCenter', 'master_work_location.location_name AS Location', 'master_crop.crop_code AS Crop', 'core_activity.activity_code AS Activity', 'master_state.state_code AS State', 'master_crop_category.crop_category_code AS Category', 'master_region.region_code AS Region', 'master_department.department_code AS Department', 'cash_voucher_items.payment_term AS PMTCategory', 'master_business_unit.business_unit_code AS BusinessUnit', 'master_account_ledger.focus_code AS Account', 'cash_voucher_items.Total_Amount AS TotalAmount', 'cash_voucher_items.ReferenceNo AS Reference', 'cash_voucher_items.Remark AS sRemarks', 'punchfile.TDS_section AS TDS',]);
+        $this->db->select(['punchfile.document_number AS DocNo', 'punchfile.finance_punched_date AS Date', "'' AS EmptyField", 'punchfile.account AS CashBankAC', 'master_business_entity.focus_code AS BusinessEntity', 'punchfile.narration AS sNarration', 'punchfile.favouring AS Favouring', 'punchfile.TDS_JV_no AS TDSJVNo', 'master_cost_center.cost_center_name AS CostCenter', 'master_work_location.location_name AS Location', 'master_crop.crop_code AS Crop', 'core_activity.activity_code AS Activity', 'master_state.state_code AS State', 'master_crop_category.crop_category_code AS Category', 'master_region.region_code AS Region', 'master_department.department_code AS Department', 'cash_voucher_items.payment_term AS PMTCategory', 'master_business_unit.business_unit_code AS BusinessUnit', 'master_account_ledger.focus_code AS Account', 'cash_voucher_items.Total_Amount AS TotalAmount', 'cash_voucher_items.ReferenceNo AS Reference', 'cash_voucher_items.Remark AS sRemarks', 'punchfile.TDS_section AS TDS',]);
         $this->db->from('cash_voucher_items');
         $this->db->join("y{$this->year_id}_scan_file", 'y{$this->year_id}_scan_file.scan_id = cash_voucher_items.scan_id', 'left');
         $this->db->join('punchfile', 'y{$this->year_id}_scan_file.scan_id = punchfile.scan_id', 'left');
@@ -270,15 +270,15 @@ class Punch_model extends MY_Model
         $this->db->join('master_work_location', 'cash_voucher_items.location_id = master_work_location.location_id', 'left');
         $this->db->join('master_region', 'cash_voucher_items.region_id = master_region.region_id', 'left');
         $this->db->join('master_department', 'cash_voucher_items.DepartmentID = master_department.department_id', 'left');
-        $this->db->where(['y{$this->year_id}_scan_file.group_id' => 16, 'y{$this->year_id}_scan_file.finance_punch' => 'Y', 'y{$this->year_id}_scan_file.is_file_approved' => 'Y', 'y{$this->year_id}_scan_file.finance_punch_status' => 'N', 'punchfile.finance_punch_date IS NOT NULL' => null, 'punchfile.finance_punched_by IS NOT NULL' => null,]);
+        $this->db->where(['y{$this->year_id}_scan_file.group_id' => 16, 'y{$this->year_id}_scan_file.finance_punch' => 'Y', 'y{$this->year_id}_scan_file.is_file_approved' => 'Y', 'y{$this->year_id}_scan_file.finance_punch_status' => 'N', 'punchfile.finance_punched_date IS NOT NULL' => null, 'punchfile.finance_punched_by IS NOT NULL' => null,]);
         if (!empty($doctype)) {
             $this->db->where('y{$this->year_id}_scan_file.doc_type_id', $doctype);
         }
         if (!empty($from_date)) {
-            $this->db->where('punchfile.finance_punch_date >=', $from_date);
+            $this->db->where('punchfile.finance_punched_date >=', $from_date);
         }
         if (!empty($to_date)) {
-            $this->db->where('punchfile.finance_punch_date <=', $to_date);
+            $this->db->where('punchfile.finance_punched_date <=', $to_date);
         }
         $query = $this->db->get();
         return $query->result_array();
@@ -301,9 +301,9 @@ class Punch_model extends MY_Model
         $this->db->select('*')->from("y{$this->year_id}_scan_file")->where('finance_punch_action_status', 'Y')->where('finance_punched_by', $user_id);
         if (!$show_all) {
             if (!empty($from_date) && !empty($to_date)) {
-                $this->db->where('DATE(finance_punch_date) >=', $from_date)->where('DATE(finance_punch_date) <=', $to_date);
+                $this->db->where('DATE(finance_punched_date) >=', $from_date)->where('DATE(finance_punched_date) <=', $to_date);
             } else {
-                $this->db->where('DATE(finance_punch_date)', date('Y-m-d'));
+                $this->db->where('DATE(finance_punched_date)', date('Y-m-d'));
             }
         }
         $this->db->order_by('scan_id', 'desc');

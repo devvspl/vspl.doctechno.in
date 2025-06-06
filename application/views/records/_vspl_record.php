@@ -67,20 +67,14 @@ $doc_type_id = $this->uri->segment(3);
                                     <p><strong>TDS Amount:</strong>
                                         <?php echo number_format($add_file_detail['tds_amount'], 2); ?></p>
                                 <?php endif; ?>
-
                                 <p><strong>Total Amount:</strong>
                                     <?php echo number_format($add_file_detail['total_amount'], 2); ?></p>
-                                <p><strong>Created At:</strong>
-                                    <?php echo htmlspecialchars($add_file_detail['created_at']); ?></p>
-                                <p><strong>Updated At:</strong>
-                                    <?php echo htmlspecialchars($add_file_detail['updated_at']); ?></p>
-
+                    
                                 <?php if (!empty($add_file_detail['section'])): ?>
                                     <p><strong>Section:</strong>
                                         <?php echo htmlspecialchars($add_file_detail['section']); ?></p>
                                 <?php endif; ?>
                             </div>
-
                             <!-- Items Table -->
                             <h5>Item Details</h5>
                             <div class="table-responsive">

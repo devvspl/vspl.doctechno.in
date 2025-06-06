@@ -16,7 +16,7 @@ class VSPL_cash_voucher_ctrl extends CI_Controller
                 $this->db->where(["scan_id" => $scan_id]);
                 $query = $this->db->update("y{$this->year_id}_scan_file", [
                     "finance_punch" => "Y",
-                    "finance_punch_date" => date("Y-m-d"),
+                    "finance_punched_date" => date("Y-m-d"),
                     "finance_punched_by" => $this->session->userdata("user_id"),
                 ]);
                 $this->customlib->update_file_path($scan_id);
@@ -63,7 +63,7 @@ class VSPL_cash_voucher_ctrl extends CI_Controller
                 $TDS_percentage = $this->input->post("TDS_percentage");
                 $TDS_amount = $this->input->post("TDS_amount");
                 $data = [
-                    "finance_punch_date" => $punch_date,
+                    "finance_punched_date" => $punch_date,
                     "business_entity_id" => $business_entity_id,
                     "narration" => $narration,
                     "account" => $account,
