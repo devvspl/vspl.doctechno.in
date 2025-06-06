@@ -122,74 +122,63 @@
                 success: function (response) {
                     let fieldData = JSON.parse(response);
                     let tableHTML = `
-                    <table class="table table-bordered table-striped">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th rowspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Temp Column</th>
-                                <th rowspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Input Type</th>
-                                <th rowspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Select Table</th>
-                                <th rowspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Search Column</th>
-                                <th rowspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Return Column</th>
-                                <th colspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Punch Table</th>
-                                <th rowspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Punch Column</th>
-                                <th rowspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Condition</th>
-                                <th rowspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Final Amt</th>
-                            </tr>
-                        </thead>
-                        <tbody>`;
+                            <table class="table table-bordered table-striped">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th rowspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Temp Column</th>
+                                        <th rowspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Input Type</th>
+                                        <th rowspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Select Table</th>
+                                        <th rowspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Search Column</th>
+                                        <th rowspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Return Column</th>
+                                        <th colspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Punch Table</th>
+                                        <th rowspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Punch Column</th>
+                                        <th rowspan="2" style="text-align: center;align-content: center;border: 1px solid #3e596d45;background-color: #3496ff30;">Condition</th>
+                                    </tr>
+                                </thead>
+                                <tbody>`;
 
                     fieldData.forEach((field, index) => {
                         tableHTML += `
-                        <tr data-id="${field.id || index}">
-                            <td>${field.temp_column || ''}</td>
-                            <td>
-                                <select class="form-control input-type">
-                                    <option value="input" ${field.input_type === "input" ? "selected" : ""}>Input</option>
-                                    <option value="select" ${field.input_type === "select" ? "selected" : ""}>Select</option>
-                                </select>
-                            </td>
-                            <td>
-                                <select class="form-control select-table" ${field.input_type === "select" ? "" : "disabled"}>
-                                    <option value="">-- Select Table --</option>
-                                </select>
-                            </td>
-                            <td>
-                                <select class="form-control relation-column" disabled>
-                                    <option value="">-- Select Column --</option>
-                                </select>
-                            </td>
-                            <td>
-                                <select class="form-control relation-value" disabled>
-                                    <option value="">-- Select Column --</option>
-                                </select>
-                            </td>
-                            <td colspan="2">
-                                <select class="form-control punch-table">
-                                    <option value="">-- Select Table --</option>
-                                </select>
-                            </td>
-                            <td>
-                                <select class="form-control punch-column" disabled>
-                                    <option value="">-- Select Column --</option>
-                                </select>
-                            </td>
-                            <td><input value="${field.add_condition || ''}" class="form-control add-condition"></td>
-                            <td>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input final-amount-radio" type="radio" name="final_amount_column_${doctypeId}" value="Yes" ${field.final_amount_column === "Yes" ? "checked" : ""}>
-                                    <label class="form-check-label">Yes</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input final-amount-radio" type="radio" name="final_amount_column_${doctypeId}" value="No" ${field.final_amount_column !== "Yes" ? "checked" : ""}>
-                                    <label class="form-check-label">No</label>
-                                </div>
-                                <span class="update-message text-muted small d-block mt-1"></span>
-                            </td>
-                        </tr>`;
+                                <tr>
+                                    <td>${field.temp_column || ''}</td>
+                                    <td>
+                                        <select class="form-control input-type">
+                                            <option value="input" ${field.input_type === "input" ? "selected" : ""}>Input</option>
+                                            <option value="select" ${field.input_type === "select" ? "selected" : ""}>Select</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control select-table" ${field.input_type === "select" ? "" : "disabled"}>
+                                            <option value="">-- Select Table --</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control relation-column" disabled>
+                                            <option value="">-- Select Column --</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control relation-value" disabled>
+                                            <option value="">-- Select Column --</option>
+                                        </select>
+                                    </td>
+                                    <td colspan="2">
+                                        <select class="form-control punch-table">
+                                            <option value="">-- Select Table --</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control punch-column" disabled>
+                                            <option value="">-- Select Column --</option>
+                                        </select>
+                                    </td>
+                                    <td><input value="${field.add_condition || ''}" class="form-control add-condition"></td>
+                                </tr>`;
                     });
 
                     tableHTML += `</tbody></table>`;
                     $("#documentDetailsContent").html(tableHTML);
+
 
                     fieldData.forEach((field, idx) => {
                         let row = $("#documentDetailsContent tbody tr").eq(idx);
@@ -197,6 +186,7 @@
                             console.warn("Table row not found for index:", idx);
                             return;
                         }
+
 
                         let punchTable = field.punch_table || "";
                         if (punchTable === null || punchTable.trim() === "") {
@@ -207,6 +197,7 @@
                             }
                         }
 
+
                         let column = field.punch_column || "";
                         if (column === null || column.trim() === "") {
                             column = field.temp_column || "";
@@ -215,128 +206,41 @@
                             }
                         }
 
+
                         if (field.select_table) {
                             let selectTableElement = row.find(".select-table");
                             fetchSelectTable(field.select_table, 'N', selectTableElement);
                         }
+
 
                         if (field.relation_column) {
                             let relationColumnElement = row.find(".relation-column");
                             fetchSelectTableColumns(field.select_table, relationColumnElement, field.relation_column);
                         }
 
+
                         if (field.relation_value) {
                             let relationValueElement = row.find(".relation-value");
                             fetchSelectTableValue(field.select_table, relationValueElement, field.relation_value);
                         }
 
+
                         let punchTableElement = row.find(".punch-table");
                         fetchSelectTable(punchTable, 'Y', punchTableElement);
+
 
                         if (column !== null && column.trim() !== "") {
                             let punchColumnElement = row.find(".punch-column");
                             fetchPunchColumns(punchTable, punchColumnElement, column);
                         }
                     });
-
-                    // Event listener for final_amount_column radio button changes
-                    $(".final-amount-radio").on("change", function () {
-                        let radio = $(this);
-                        let row = radio.closest("tr");
-                        let rowId = row.data("id");
-                        let messageSpan = row.find(".update-message");
-                        let newValue = radio.val();
-                        let allRadios = $(`input[name="final_amount_column_${doctypeId}"]`);
-                        let punchColumnElement = row.find(".punch-column");
-
-                        // Clear previous messages in all rows
-                        $("#documentDetailsContent .update-message").text("").removeClass("text-success text-danger");
-
-                        // If "Yes" is selected, set all other rows to "No" locally and prepare punch column update
-                        let punchColumnValue = newValue === "Yes" ? `Y${doctypeId}` : punchColumnElement.data("original-value") || "";
-
-                        if (newValue === "Yes") {
-                            allRadios.each(function () {
-                                if ($(this).is(radio)) return; // Skip the current radio
-                                $(this).closest("tr").find(`.final-amount-radio[value="No"]`).prop("checked", true);
-                            });
-                        }
-
-                        // Update punch column dropdown in UI
-                        punchColumnElement.html(`<option value="${punchColumnValue}">${punchColumnValue}</option>`);
-                        punchColumnElement.data("original-value", punchColumnValue);
-
-                        // AJAX call to update final_amount_column and punch_column
-                        $.ajax({
-                            url: "<?= base_url('extract/ExtractorController/update_field_mapping') ?>",
-                            type: "POST",
-                            data: {
-                                doctype_id: doctypeId,
-                                id: rowId,
-                                final_amount_column: newValue,
-                                punch_column: punchColumnValue
-                            },
-                            dataType: "json",
-                            beforeSend: function () {
-                                messageSpan.text("Updating...").addClass("text-muted");
-                            },
-                            success: function (updateResponse) {
-                                if (updateResponse.status === "success") {
-                                    messageSpan.text("Final amount updated successfully!").addClass("text-success").removeClass("text-muted");
-                                    // If "Yes" was selected, update other rows to "No" in the backend
-                                    if (newValue === "Yes") {
-                                        let otherRows = $("#documentDetailsContent tbody tr").not(row);
-                                        otherRows.each(function () {
-                                            let otherRowId = $(this).data("id");
-                                            if (otherRowId !== rowId) {
-                                                $.ajax({
-                                                    url: "<?= base_url('extract/ExtractorController/update_field_mapping') ?>",
-                                                    type: "POST",
-                                                    data: {
-                                                        doctype_id: doctypeId,
-                                                        id: otherRowId,
-                                                        final_amount_column: "No"
-                                                    },
-                                                    dataType: "json",
-                                                    success: function () {
-                                                        // No UI update needed since radio buttons are already set
-                                                    },
-                                                    error: function () {
-                                                        console.error("Failed to update other row:", otherRowId);
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    }
-                                } else {
-                                    messageSpan.text("Failed to update: " + (updateResponse.message || "Unknown error")).addClass("text-danger").removeClass("text-muted");
-                                    // Revert radio button and punch column on failure
-                                    radio.prop("checked", false);
-                                    radio.closest("tr").find(`.final-amount-radio[value=${newValue === "Yes" ? "No" : "Yes"}]`).prop("checked", true);
-                                    fetchPunchColumns(punchColumnElement.closest("tr").find(".punch-table").val(), punchColumnElement, punchColumnElement.data("original-value"));
-                                }
-                            },
-                            error: function () {
-                                messageSpan.text("Error updating final amount.").addClass("text-danger").removeClass("text-muted");
-                                // Revert radio button and punch column on failure
-                                radio.prop("checked", false);
-                                radio.closest("tr").find(`.final-amount-radio[value=${newValue === "Yes" ? "No" : "Yes"}]`).prop("checked", true);
-                                fetchPunchColumns(punchColumnElement.closest("tr").find(".punch-table").val(), punchColumnElement, punchColumnElement.data("original-value"));
-                            },
-                            complete: function () {
-                                // Clear message after 5 seconds
-                                setTimeout(() => {
-                                    messageSpan.text("").removeClass("text-success text-danger");
-                                }, 5000);
-                            }
-                        });
-                    });
                 },
                 error: function () {
                     $("#documentDetailsContent").html('<p class="text-danger text-center">Error loading details.</p>');
                 },
             });
-        }); $(document).on("change", ".input-type", function () {
+        });
+        $(document).on("change", ".input-type", function () {
             let selectedType = $(this).val();
             let row = $(this).closest("tr");
             let tableDropdown = row.find(".select-table");
@@ -461,6 +365,7 @@
                 let punchTable = row.find(".punch-table").val();
                 let punchColumn = row.find(".punch-column").val();
                 let addCondition = row.find(".add-condition").val();
+
                 fieldMappings.push({
                     temp_column: tempColumn,
                     input_type: inputType,
