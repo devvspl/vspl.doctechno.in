@@ -247,26 +247,34 @@
                         let messageSpan = row.find(".update-message");
                         let newValue = radio.val();
                         let allRadios = $(`input[name="final_amount_column_${doctypeId}"]`);
+                        let punchColumnElement = row.find(".punch-column");
 
                         // Clear previous messages in all rows
                         $("#documentDetailsContent .update-message").text("").removeClass("text-success text-danger");
 
-                        // If "Yes" is selected, set all other rows to "No" locally
+                        // If "Yes" is selected, set all other rows to "No" locally and prepare punch column update
+                        let punchColumnValue = newValue === "Yes" ? `Y${doctypeId}` : punchColumnElement.data("original-value") || "";
+
                         if (newValue === "Yes") {
                             allRadios.each(function () {
                                 if ($(this).is(radio)) return; // Skip the current radio
-                                $(this).prop("checked", $(this).val() === "No");
+                                $(this).closest("tr").find(`.final-amount-radio[value="No"]`).prop("checked", true);
                             });
                         }
 
-                        // AJAX call to update final_amount_column
+                        // Update punch column dropdown in UI
+                        punchColumnElement.html(`<option value="${punchColumnValue}">${punchColumnValue}</option>`);
+                        punchColumnElement.data("original-value", punchColumnValue);
+
+                        // AJAX call to update final_amount_column and punch_column
                         $.ajax({
                             url: "<?= base_url('extract/ExtractorController/update_field_mapping') ?>",
                             type: "POST",
                             data: {
                                 doctype_id: doctypeId,
                                 id: rowId,
-                                final_amount_column: newValue
+                                final_amount_column: newValue,
+                                punch_column: punchColumnValue
                             },
                             dataType: "json",
                             beforeSend: function () {
@@ -302,16 +310,18 @@
                                     }
                                 } else {
                                     messageSpan.text("Failed to update: " + (updateResponse.message || "Unknown error")).addClass("text-danger").removeClass("text-muted");
-                                    // Revert radio button change on failure
+                                    // Revert radio button and punch column on failure
                                     radio.prop("checked", false);
                                     radio.closest("tr").find(`.final-amount-radio[value=${newValue === "Yes" ? "No" : "Yes"}]`).prop("checked", true);
+                                    fetchPunchColumns(punchColumnElement.closest("tr").find(".punch-table").val(), punchColumnElement, punchColumnElement.data("original-value"));
                                 }
                             },
                             error: function () {
                                 messageSpan.text("Error updating final amount.").addClass("text-danger").removeClass("text-muted");
-                                // Revert radio button change on failure
+                                // Revert radio button and punch column on failure
                                 radio.prop("checked", false);
                                 radio.closest("tr").find(`.final-amount-radio[value=${newValue === "Yes" ? "No" : "Yes"}]`).prop("checked", true);
+                                fetchPunchColumns(punchColumnElement.closest("tr").find(".punch-table").val(), punchColumnElement, punchColumnElement.data("original-value"));
                             },
                             complete: function () {
                                 // Clear message after 5 seconds
@@ -326,8 +336,7 @@
                     $("#documentDetailsContent").html('<p class="text-danger text-center">Error loading details.</p>');
                 },
             });
-        });
-        $(document).on("change", ".input-type", function () {
+        }); $(document).on("change", ".input-type", function () {
             let selectedType = $(this).val();
             let row = $(this).closest("tr");
             let tableDropdown = row.find(".select-table");
