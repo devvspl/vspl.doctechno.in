@@ -730,6 +730,7 @@
                 console.log("Buttons disabled: final_submit and save_draft");
             }
         }
+    }
 
         function generateTdsJvNo() {
             const date = new Date();
