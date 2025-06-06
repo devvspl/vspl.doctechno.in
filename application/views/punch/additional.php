@@ -497,40 +497,70 @@
         $(document).on("input", ".amount", function () {
             updateBillAmount();
         });
+        // Hover and title functionality
         $(document).on('mouseenter', '#rows_container input.form-control', function () {
-            $(this).attr('title', $(this).val() || 'No value'); 
-            $(this).css('background-color', '#e6f3ff'); 
-            $(this).css('border-color', '#007bff'); 
+            $(this).attr('title', $(this).val() || 'No value');
+            $(this).css({
+                'background-color': '#e6f3ff',
+                'border-color': '#007bff'
+            });
         }).on('mouseleave', '#rows_container input.form-control', function () {
-            $(this).removeAttr('title'); 
-            $(this).css('background-color', ''); 
-            $(this).css('border-color', ''); 
+            $(this).removeAttr('title');
+            $(this).css({
+                'background-color': '',
+                'border-color': ''
+            });
         });
 
-        
+        // Update title on input change
         $(document).on('input', '#rows_container input.form-control', function () {
-            $(this).attr('title', $(this).val() || 'No value'); 
+            $(this).attr('title', $(this).val() || 'No value');
         });
+
+        // Arrow key navigation with highlight
         $(document).on('keydown', '#rows_container input.form-control', function (e) {
             const key = e.which;
             const leftArrow = 37;
             const rightArrow = 39;
 
             if (key === leftArrow || key === rightArrow) {
-                e.preventDefault(); 
-                const $inputs = $(this).closest('tr').find('input.form-control'); 
-                const currentIndex = $inputs.index(this); 
+                e.preventDefault();
+                const $inputs = $(this).closest('tr').find('input.form-control');
+                const currentIndex = $inputs.index(this);
+
+                // Remove highlight from current input
+                $(this).css({
+                    'background-color': '',
+                    'border-color': ''
+                });
+                $(this).removeAttr('title');
 
                 let nextIndex;
                 if (key === rightArrow) {
-                    nextIndex = currentIndex + 1 < $inputs.length ? currentIndex + 1 : 0; 
+                    nextIndex = currentIndex + 1 < $inputs.length ? currentIndex + 1 : 0;
                 } else {
-                    nextIndex = currentIndex - 1 >= 0 ? currentIndex - 1 : $inputs.length - 1; 
+                    nextIndex = currentIndex - 1 >= 0 ? currentIndex - 1 : $inputs.length - 1;
                 }
 
-                $inputs.eq(nextIndex).focus(); 
+                // Focus and highlight the next/previous input
+                const $nextInput = $inputs.eq(nextIndex);
+                $nextInput.focus();
+                $nextInput.css({
+                    'background-color': '#e6f3ff',
+                    'border-color': '#007bff'
+                });
+                $nextInput.attr('title', $nextInput.val() || 'No value');
             }
         });
+
+        // Ensure highlight is removed when focus leaves input (e.g., clicking elsewhere)
+        $(document).on('blur', '#rows_container input.form-control', function () {
+            $(this).css({
+                'background-color': '',
+                'border-color': ''
+            });
+            $(this).removeAttr('title');
+        }); 
         $('input[name="tdsApplicable"]').change(function () {
             if ($("#tdsApplicableYes").is(":checked")) {
                 generateTdsJvNo();
