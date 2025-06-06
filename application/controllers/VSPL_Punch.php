@@ -2,7 +2,7 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 class VSPL_Punch extends CI_Controller
 {
-     protected $year_id;
+    protected $year_id;
     function __construct()
     {
         parent::__construct();
@@ -12,7 +12,7 @@ class VSPL_Punch extends CI_Controller
         $this->load->model('Group_model');
         $this->load->helper('download');
         $this->load->model('Record_model');
-         $this->year_id =
+        $this->year_id =
             $this->session->userdata("year_id") ??
             ($this->db
                 ->select("id")
@@ -42,6 +42,15 @@ class VSPL_Punch extends CI_Controller
 
         $from_date = $this->input->get('from_date') ?? '';
         $to_date = $this->input->get('to_date') ?? '';
+
+        // Determine year_id from from_date or current year
+        $year_id = date('Y'); // Default to current year
+        if (!empty($from_date) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $from_date)) {
+            $year = date('Y', strtotime($from_date));
+            // Adjust for financial year (e.g., April to March)
+            $month = date('m', strtotime($from_date));
+            $year_id = ($month < 4) ? $year - 1 : $year;
+        }
 
         // Initialize the WHERE clause
         $where = "sf.finance_punch_action_status = 'Y' AND sf.finance_punch_status = 'Y'";
@@ -122,10 +131,20 @@ class VSPL_Punch extends CI_Controller
         $this->data['main'] = 'vspl/focus_exports';
         $this->load->view('layout/template', $this->data);
     }
+
     public function export_csv()
     {
         $from_date = $this->input->get('from_date') ?? '';
         $to_date = $this->input->get('to_date') ?? '';
+
+        // Determine year_id from from_date or current year
+        $year_id = date('Y'); // Default to current year
+        if (!empty($from_date) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $from_date)) {
+            $year = date('Y', strtotime($from_date));
+            // Adjust for financial year (e.g., April to March)
+            $month = date('m', strtotime($from_date));
+            $year_id = ($month < 4) ? $year - 1 : $year;
+        }
 
         // Initialize the WHERE clause
         $where = "sf.finance_punch_action_status = 'Y' AND sf.finance_punch_status = 'Y'";
