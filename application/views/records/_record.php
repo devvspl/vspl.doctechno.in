@@ -20,7 +20,8 @@ $doc_type_id = $this->uri->segment(3);
                             ?>
                         </h3>
                         <div class="box-tools pull-right">
-                            <a href="javascript:void(0);" onclick="window.close();" class="btn btn-primary btn-sm"><i class="fa fa-long-arrow-left"></i> Back</a>
+                            <a href="javascript:void(0);" onclick="window.close();" class="btn btn-primary btn-sm"><i
+                                    class="fa fa-long-arrow-left"></i> Back</a>
                         </div>
                     </div>
                     <?php
