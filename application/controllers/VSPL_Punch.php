@@ -137,15 +137,6 @@ class VSPL_Punch extends CI_Controller
         $from_date = $this->input->get('from_date') ?? '';
         $to_date = $this->input->get('to_date') ?? '';
 
-        // Determine year_id from from_date or current year
-        $year_id = date('Y'); // Default to current year
-        if (!empty($from_date) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $from_date)) {
-            $year = date('Y', strtotime($from_date));
-            // Adjust for financial year (e.g., April to March)
-            $month = date('m', strtotime($from_date));
-            $year_id = ($month < 4) ? $year - 1 : $year;
-        }
-
         // Initialize the WHERE clause
         $where = "sf.finance_punch_action_status = 'Y' AND sf.finance_punch_status = 'Y'";
         $params = [];
