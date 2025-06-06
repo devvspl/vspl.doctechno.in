@@ -53,7 +53,7 @@ class Punch extends CI_Controller
 
         $this->db->select(
             "aii.*, cc.name as cost_center_name, d.department_name, bu.business_unit_name, r.region_name, s.state_name, " .
-            "l.city_village_name as location_name, c.category_name, cr.crop_name, a.activity_name, " .
+            "l.location_name, c.category_name, cr.crop_name, a.activity_name, " .
             "da.account_name as debit_account, ca.account_name as credit_account, pm.payment_term_name as payment_term, " .
             "f.function_name, v.vertical_name, sd.sub_department_name, z.zone_name"
         );
@@ -63,7 +63,7 @@ class Punch extends CI_Controller
         $this->db->join("core_business_unit bu", "bu.api_id = aii.business_unit_id", "left");
         $this->db->join("core_region r", "r.api_id = aii.region_id", "left");
         $this->db->join("core_state s", "s.api_id = aii.state_id", "left");
-        $this->db->join("core_city_village l", "l.api_id = aii.location_id", "left");
+        $this->db->join("master_work_location l", "l.api_id = aii.location_id", "left");
         $this->db->join("master_category c", "c.category_id = aii.category_id", "left");
         $this->db->join("core_crop cr", "cr.api_id = aii.crop_id", "left");
         $this->db->join("core_activity a", "a.api_id = aii.activity_id", "left");
