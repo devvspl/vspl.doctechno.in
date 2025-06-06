@@ -497,89 +497,89 @@
         $(document).on("input", ".amount", function () {
             updateBillAmount();
         });
-         // Hover and title functionality
-    $(document).on('mouseenter', '#rows_container input.form-control', function () {
-        $(this).attr('title', $(this).val() || 'No value');
-        $(this).css({
-            'background-color': '#e6f3ff',
-            'border-color': '#007bff'
+        
+        $(document).on('mouseenter', '#rows_container input.form-control', function () {
+            $(this).attr('title', $(this).val() || 'No value');
+            $(this).css({
+                'background-color': '#e6f3ff',
+                'border-color': '#007bff'
+            });
+        }).on('mouseleave', '#rows_container input.form-control', function () {
+            $(this).removeAttr('title');
+            $(this).css({
+                'background-color': '',
+                'border-color': ''
+            });
         });
-    }).on('mouseleave', '#rows_container input.form-control', function () {
-        $(this).removeAttr('title');
-        $(this).css({
-            'background-color': '',
-            'border-color': ''
+
+        
+        $(document).on('input', '#rows_container input.form-control', function () {
+            $(this).attr('title', $(this).val() || 'No value');
         });
-    });
 
-    // Update title on input change
-    $(document).on('input', '#rows_container input.form-control', function () {
-        $(this).attr('title', $(this).val() || 'No value');
-    });
+        
+        $(document).on('keydown', '#rows_container input.form-control', function (e) {
+            const key = e.which;
+            const leftArrow = 37;
+            const rightArrow = 39;
+            const tabKey = 9;
 
-    // Arrow key and Tab navigation with highlight
-    $(document).on('keydown', '#rows_container input.form-control', function (e) {
-        const key = e.which;
-        const leftArrow = 37;
-        const rightArrow = 39;
-        const tabKey = 9;
+            if (key === leftArrow || key === rightArrow || key === tabKey) {
+                e.preventDefault(); 
+                const $inputs = $(this).closest('tr').find('input.form-control');
+                const $allRows = $('#items_table tbody tr');
+                const currentRowIndex = $allRows.index($(this).closest('tr'));
+                const currentIndex = $inputs.index(this);
 
-        if (key === leftArrow || key === rightArrow || key === tabKey) {
-            e.preventDefault(); // Prevent default behavior for arrows and Tab
-            const $inputs = $(this).closest('tr').find('input.form-control');
-            const $allRows = $('#items_table tbody tr');
-            const currentRowIndex = $allRows.index($(this).closest('tr'));
-            const currentIndex = $inputs.index(this);
+                
+                $(this).css({
+                    'background-color': '',
+                    'border-color': ''
+                });
+                $(this).removeAttr('title');
 
-            // Remove highlight from current input
+                let $nextInput, nextIndex;
+                if (key === rightArrow || key === tabKey) {
+                    nextIndex = currentIndex + 1;
+                    if (nextIndex < $inputs.length) {
+                        
+                        $nextInput = $inputs.eq(nextIndex);
+                    } else {
+                        
+                        const nextRowIndex = (currentRowIndex + 1) % $allRows.length;
+                        $nextInput = $allRows.eq(nextRowIndex).find('input.form-control').first();
+                    }
+                } else if (key === leftArrow) {
+                    nextIndex = currentIndex - 1;
+                    if (nextIndex >= 0) {
+                        
+                        $nextInput = $inputs.eq(nextIndex);
+                    } else {
+                        
+                        const prevRowIndex = currentRowIndex - 1 >= 0 ? currentRowIndex - 1 : $allRows.length - 1;
+                        $nextInput = $allRows.eq(prevRowIndex).find('input.form-control').last();
+                    }
+                }
+
+                
+                $nextInput.focus();
+                $nextInput.css({
+                    'background-color': '#e6f3ff',
+                    'border-color': '#007bff'
+                });
+                $nextInput.attr('title', $nextInput.val() || 'No value');
+            }
+        });
+
+        
+        $(document).on('blur', '#rows_container input.form-control', function () {
             $(this).css({
                 'background-color': '',
                 'border-color': ''
             });
             $(this).removeAttr('title');
-
-            let $nextInput, nextIndex;
-            if (key === rightArrow || key === tabKey) {
-                nextIndex = currentIndex + 1;
-                if (nextIndex < $inputs.length) {
-                    // Stay in the same row
-                    $nextInput = $inputs.eq(nextIndex);
-                } else {
-                    // Move to the first input of the next row or wrap to first row
-                    const nextRowIndex = (currentRowIndex + 1) % $allRows.length;
-                    $nextInput = $allRows.eq(nextRowIndex).find('input.form-control').first();
-                }
-            } else if (key === leftArrow) {
-                nextIndex = currentIndex - 1;
-                if (nextIndex >= 0) {
-                    // Stay in the same row
-                    $nextInput = $inputs.eq(nextIndex);
-                } else {
-                    // Move to the last input of the previous row or wrap to last row
-                    const prevRowIndex = currentRowIndex - 1 >= 0 ? currentRowIndex - 1 : $allRows.length - 1;
-                    $nextInput = $allRows.eq(prevRowIndex).find('input.form-control').last();
-                }
-            }
-
-            // Focus and highlight the next input
-            $nextInput.focus();
-            $nextInput.css({
-                'background-color': '#e6f3ff',
-                'border-color': '#007bff'
-            });
-            $nextInput.attr('title', $nextInput.val() || 'No value');
-        }
-    });
-
-    // Remove highlight on blur
-    $(document).on('blur', '#rows_container input.form-control', function () {
-        $(this).css({
-            'background-color': '',
-            'border-color': ''
         });
-        $(this).removeAttr('title');
-    });
-    $('input[name="tdsApplicable"]').change(function () {
+        $('input[name="tdsApplicable"]').change(function () {
             if ($("#tdsApplicableYes").is(":checked")) {
                 generateTdsJvNo();
                 $("#tdsDetailsForm").show();
@@ -599,7 +599,7 @@
             }
         });
         $("#billAmount, #tdsPercentage").on("input change", function () {
-            var billAmount = parseFloat("<?= isset($punch_detail->Grand_Total) ? $punch_detail->Grand_Total : 0 ?>");
+            var billAmount = $(".final_amount_column").val();
             var percentage = parseFloat($("#tdsPercentage").val()) || 0;
             var tds_amount = (billAmount * percentage) / 100;
             $("#tds_amount").val(tds_amount.toFixed(2));
@@ -684,14 +684,28 @@
 
     function updateBillAmount() {
         let total = 0;
+        var final_amount = parseFloat($(".final_amount_column").val()) || 0; 
         $(".amount").each(function () {
             let value = parseFloat($(this).val()) || 0;
             total += value;
         });
-        var Grand_Total = parseFloat("<?= isset($punch_detail->Total_Amount) && $punch_detail->Total_Amount ? $punch_detail->Total_Amount : ($punch_detail->Grand_Total ?? 0) ?>");
-        let TDS_amount = $("#tds_amount").val() || 0;
-        var maxAllowedAmount = total + parseFloat(TDS_amount);
+
+        let TDS_amount = parseFloat($("#tds_amount").val()) || 0; 
+        var maxAllowedAmount = total + TDS_amount;
+
+        
         $("#billAmount").val(maxAllowedAmount.toFixed(2));
+
+        
+        var submitButton = $('button[name="final_submit"]');
+        var draftButton = $('button[name="save_draft"]');
+        if (final_amount.toFixed(2) === maxAllowedAmount.toFixed(2)) {
+            submitButton.prop('disabled', false);
+            draftButton.prop('disabled', false);
+        } else {
+            submitButton.prop('disabled', true);
+            draftButton.prop('disabled', true);
+        }
     }
 
     function generateTdsJvNo() {
