@@ -26,7 +26,6 @@ class Record extends CI_Controller
 			redirect('/');
 		}
 	}
-
 	public function get_additional_information_by_scan_id($scan_id)
 	{
 		$main_tbl = "y{$this->year_id}_tbl_additional_information";
@@ -72,7 +71,6 @@ class Record extends CI_Controller
 		$mainRecord["items"] = $items;
 		return $mainRecord;
 	}
-
 	public function index($scan_id, $DocTypeId)
 	{
 		$this->session->set_userdata('top_menu', 'punch_master');
@@ -89,6 +87,9 @@ class Record extends CI_Controller
 		$this->session->set_userdata('sub_menu', 'punch');
 		$this->data['file_detail'] = $this->Punch_model->getPunchDetail($scan_id, $DocTypeId);
 		$this->data['add_file_detail'] = $this->get_additional_information_by_scan_id($scan_id);
+
+		print_r($this->data['add_file_detail']);
+		exit;
 		$this->data['main'] = 'records/_vspl_record';
 		$this->load->view('layout/template', $this->data);
 	}

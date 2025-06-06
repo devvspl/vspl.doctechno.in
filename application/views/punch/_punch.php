@@ -56,7 +56,7 @@
                         <?php endif; ?>
 
 
-                     <?php if (!empty($user_permission) && $user_permission == 'Y') : ?>
+                        <?php if (!empty($user_permission) && $user_permission == 'Y') : ?>
                         <div class="tabs-container">
                            <div class="tabs active-tab" id="invoice-tab">Basic Details</div>
                            <div class="tabs" id="additional-info-tab">Additional Information</div>

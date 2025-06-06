@@ -24,9 +24,9 @@ $doc_type_id = $this->uri->segment(3);
                                     class="fa fa-long-arrow-left"></i> Back</a>
                         </div>
                     </div>
-                    <?php
-                    $this->load->view('records/view_detail');
-                    ?>
+                        <?php
+                        $this->load->view('records/view_detail');
+                        ?>
                 </div>
             </div>
         </div>
