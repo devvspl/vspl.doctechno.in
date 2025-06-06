@@ -29,9 +29,6 @@
                            <button type="submit" id="search" name="search"
                               class="btn btn-primary btn-sm checkbox-toggle "><i class="fa fa-search"></i>
                               Search</button>
-                           <button type="button" id="reset" name="reset" onclick="reloadPage();"
-                              class="btn btn-primary btn-sm checkbox-toggle "><i class="fa fa-refresh"></i>
-                              Reset</button>
                         </div>
                      </div>
                   </div>

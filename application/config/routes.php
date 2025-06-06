@@ -129,6 +129,7 @@ $route['finance_resend_scan/(:any)'] = 'Punch/finance_resend_scan/$1';
 // VSPL Punch
 $route['vspl_file_entry/(:any)/(:any)'] = 'Punch/file_entry/$1/$2'; 
 $route['focus_exports'] = 'VSPL_Punch/focus_exports'; 
+$route['export_csv'] = 'VSPL_Punch/export_csv'; 
 $route['export_cash_payment'] = 'VSPL_Punch/export_cash_payment'; 
 //--------------Finance_Punch File-------------------
 $route['finance_punch'] = 'Finance_Punch';
@@ -170,7 +171,7 @@ $route['journal-entry/get-account-options'] = 'form/JournalEntry_ctrl/getAccount
 $route['temp-files'] = 'TempFilesController/temp_files';
 //Routes for core apis
 
-
+$route['focus-export'] = 'api/Agrisoft_ctrl/set_data';
 
 
 $route['404_override'] = '';
