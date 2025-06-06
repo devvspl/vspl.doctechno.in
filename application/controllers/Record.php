@@ -57,7 +57,7 @@ class Record extends CI_Controller {
 		$this->session->set_userdata('top_menu', 'punch_master');
 		$this->session->set_userdata('sub_menu', 'punch');
 		$this->data['file_detail'] = $this->Punch_model->getPunchDetail($scan_id, $DocTypeId);
-		$this->data['add_file_detail'] = $this->Punch_model->get_additional_information_by_scan_id($scan_id);
+		$this->data['add_file_detail'] = $this->AdditionalModel->get_additional_information_by_scan_id($scan_id);
 		$this->data['main'] = 'records/_vspl_record';
 		$this->load->view('layout/template', $this->data);
 	}
