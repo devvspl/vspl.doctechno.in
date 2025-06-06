@@ -288,12 +288,13 @@
                                     <a href="<?= base_url(); ?>finance/bill-approval/R"><i
                                           class="fa fa-angle-double-right"></i>Rejected</a>
                                  </li>
-                                 <li class="treeview">
-                                    <a href="<?php echo base_url('focus-export')?>"> <i class="fa fa-cogs" aria-hidden="true"></i>
-                                       <span>Focus Export</span> </a>
-                                 </li>
+                                
                               </ul>
                            </li>
+                            <li class="treeview">
+                                    <a href="<?php echo base_url('focus_exports')?>"> <i class="fa fa-cogs" aria-hidden="true"></i>
+                                       <span>Focus Export</span> </a>
+                                 </li>
                         <?php } ?>
 
                         <?php if ($this->customlib->has_permission('Approve')) { ?>
