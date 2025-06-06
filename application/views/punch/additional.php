@@ -402,9 +402,9 @@
         </div>
         <div class="box-footer">
             <button type="reset" class="btn btn-danger">Reset</button>
-            <input type="submit" class="btn btn-info pull-right" style="margin-left: 20px;" name="save_draft"
+            <input type="submit" class="btn btn-info pull-right" id="fin_save_draft"  style="margin-left: 20px;" name="save_draft"
                 value="Save as Draft"></input>
-            <input type="submit" class="btn btn-success pull-right" name="final_submit" value="Final Submit"></input>
+            <input type="submit" class="btn btn-success pull-right" id="fin_final_submit" name="final_submit" value="Final Submit"></input>
         </div>
     </form>
 </div>
@@ -708,8 +708,8 @@
         $("#billAmount").val(maxAllowedAmount.toFixed(2));
 
         
-        var submitButton = $('input[name="final_submit"]');
-        var draftButton = $('input[name="save_draft"]');
+        var submitButton = $('#fin_final_submit');
+        var draftButton = $('#fin_save_draft"]');
 
         
         if (submitButton.length === 0) {
