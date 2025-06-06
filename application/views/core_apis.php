@@ -276,9 +276,7 @@
                             // Update modal header with count (red if > 0, default if 0)
                             if (emptyFocusCodeCount > 0) {
                                 $("#dataTitle").append(` <small style="color: red; background: white; padding: 3px; border-radius: 5px;">Empty/Null focus_code count: ${emptyFocusCodeCount}</small>`);
-                            } else {
-                                $("#dataTitle").append(` <small>Empty/Null focus_code count: 0</small>`);
-                            }
+                            } 
 
                             var rows = data
                                 .map((row, index) => {
