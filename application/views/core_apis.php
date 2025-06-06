@@ -265,14 +265,14 @@
                             var emptyFocusCodeCount = data.filter(row => row.focus_code === null || row.focus_code === "").length;
 
                             // Update modal header with count
-                            $("#dataTitle").append(` <small>(Empty/Null focus_code count: ${emptyFocusCodeCount})</small>`);
+                            $("#dataTitle").append(` <small style="color: red;background: white;padding: 3px;border-radius: 5px;">: Empty/Null focus_code count: ${emptyFocusCodeCount}</small>`);
 
                             var rows = data
                                 .map((row, index) => {
                                     return `<tr data-id="${row.id || index}">` + headers.map((h) => {
                                         if (h === "focus_code") {
-                                            // Render input field with row index (1-based) if focus_code is null or empty
-                                            let displayValue = (row[h] !== null && row[h] !== "") ? row[h] : (index + 1);
+                                            // Render input field with empty value if focus_code is null or empty
+                                            let displayValue = (row[h] !== null && row[h] !== "") ? row[h] : "";
                                             return `<td><input type="text" class="form-control focus-code-input" data-id="${row.id || index}" data-column="${h}" value="${displayValue}"><span class="update-message text-muted small d-block mt-1"></span></td>`;
                                         }
                                         return `<td>${row[h] !== null ? row[h] : ""}</td>`;
