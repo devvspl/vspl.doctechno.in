@@ -2062,6 +2062,8 @@ class Punch extends CI_Controller
             "updated_by" => $this->session->userdata("user_id"),
         ];
         $items = [];
+        $scan_data = ['bill_number' => "", 'bill_date' => $this->db->escape_str($post["Date"] ?? "")];
+        $this->updateScanBasicDetail($scan_id, $scan_data);
         return ["main" => $mainData, "items" => $items];
     }
     private function processPunchData_7($post)
@@ -2089,6 +2091,8 @@ class Punch extends CI_Controller
             "updated_by" => $this->session->userdata("user_id"),
         ];
         $items = [];
+        $scan_data = ['bill_number' => $this->db->escape_str($post["Voucher_No"] ?? ""), 'bill_date' => $this->db->escape_str($post["Voucher_Date"] ?? "")];
+        $this->updateScanBasicDetail($scan_id, $scan_data);
         return ["main" => $mainData, "items" => $items];
     }
     private function processPunchData_13($post)
@@ -2122,6 +2126,8 @@ class Punch extends CI_Controller
             "updated_at" => date("Y-m-d H:i:s"),
             "updated_by" => $this->session->userdata("user_id"),
         ];
+        $scan_data = ['bill_number' => $this->db->escape_str($post["Bill_No"] ?? ""), 'bill_date' => $this->db->escape_str($post["Bill_Date"] ?? "")];
+        $this->updateScanBasicDetail($scan_id, $scan_data);
         $items = [];
         return ["main" => $mainData, "items" => $items];
     }
@@ -2159,6 +2165,8 @@ class Punch extends CI_Controller
             "updated_at" => date("Y-m-d H:i:s"),
             "updated_by" => $this->session->userdata("user_id"),
         ];
+        $scan_data = ['bill_number' => $this->db->escape_str($post["invoice_no"] ?? ""), 'bill_date' => $this->db->escape_str($post["invoice_date"] ?? "")];
+        $this->updateScanBasicDetail($scan_id, $scan_data);
         return ["main" => $mainData, "items" => []];
     }
     private function processPunchData_20($post)
@@ -2188,7 +2196,8 @@ class Punch extends CI_Controller
             "updated_at" => date("Y-m-d H:i:s"),
             "updated_by" => $this->session->userdata("user_id"),
         ];
-
+        $scan_data = ['bill_number' => $this->db->escape_str($post["challan_no"] ?? ""), 'bill_date' => $this->db->escape_str($post["challan_date"] ?? "")];
+        $this->updateScanBasicDetail($scan_id, $scan_data);
         return ["main" => $mainData, "items" => []];
     }
     private function processPunchData_22($post)
@@ -2217,7 +2226,8 @@ class Punch extends CI_Controller
             "updated_at" => date("Y-m-d H:i:s"),
             "updated_by" => $this->session->userdata("user_id"),
         ];
-
+        $scan_data = ['bill_number' => $this->db->escape_str($post["policy_number"] ?? ""), 'bill_date' => $this->db->escape_str($post["policy_date"] ?? "")];
+        $this->updateScanBasicDetail($scan_id, $scan_data);
         return ["main" => $mainData, "items" => []];
     }
     private function processPunchData_46($post)
@@ -2230,7 +2240,6 @@ class Punch extends CI_Controller
             "group_id" => $this->session->userdata("group_id"),
             "doctype" => $DocType,
             "doctype_id" => $DocTypeId,
-
             "cpin" => $this->db->escape_str($post["cpin"] ?? ""),
             "deposit_date" => $this->db->escape_str($post["deposit_date"] ?? ""),
             "cin" => $this->db->escape_str($post["cin"] ?? ""),
@@ -2241,7 +2250,6 @@ class Punch extends CI_Controller
             "mobile_no" => $this->db->escape_str($post["mobile_no"] ?? ""),
             "company_name" => $this->db->escape_str($post["company_name"] ?? ""),
             "address" => $this->db->escape_str($post["address"] ?? ""),
-
             "total_challan_amount" => (float) ($post["total_challan_amount"] ?? 0.0),
             "remark_comment" => $this->db->escape_str($post["remark_comment"] ?? ""),
             "created_at" => date("Y-m-d H:i:s"),
@@ -2265,7 +2273,8 @@ class Punch extends CI_Controller
             }
         }
 
-
+        $scan_data = ['bill_number' => $this->db->escape_str($post["cpin"] ?? ""), 'bill_date' => $this->db->escape_str($post["deposit_date"] ?? "")];
+        $this->updateScanBasicDetail($scan_id, $scan_data);
         return ["main" => $mainData, "items" => $items];
     }
     private function processPunchData_27($post)
@@ -2278,7 +2287,6 @@ class Punch extends CI_Controller
             "group_id" => $this->session->userdata("group_id"),
             "doctype" => $DocType,
             "doctype_id" => $DocTypeId,
-
             "mode" => $this->db->escape_str($post["mode"] ?? ""),
             "location" => $this->db->escape_str($post["location"] ?? ""),
             "employee_name" => $this->db->escape_str($post["employee_name"] ?? ""),
@@ -2311,7 +2319,8 @@ class Punch extends CI_Controller
                 }
             }
         }
-
+        $scan_data = ['bill_number' => "", 'bill_date' => ""];
+        $this->updateScanBasicDetail($scan_id, $scan_data);
         return ["main" => $mainData, "items" => $items];
     }
     private function processPunchData_28($post)
@@ -2365,7 +2374,8 @@ class Punch extends CI_Controller
                 }
             }
         }
-
+        $scan_data = ['bill_number' => $this->db->escape_str($post["bill_no"] ?? ""), 'bill_date' => $this->db->escape_str($post["bill_date"] ?? "")];
+        $this->updateScanBasicDetail($scan_id, $scan_data);
         return ["main" => $mainData, "items" => $items];
     }
     private function processPunchData_47($post)
@@ -2407,7 +2417,8 @@ class Punch extends CI_Controller
                 }
             }
         }
-
+        $scan_data = ['bill_number' => $this->db->escape_str($post["voucher_no"] ?? ""), 'bill_date' => $this->db->escape_str($post["payment_date"] ?? "")];
+        $this->updateScanBasicDetail($scan_id, $scan_data);
         return ["main" => $mainData, "items" => $items];
     }
     private function processPunchData_48($post)
@@ -2435,6 +2446,8 @@ class Punch extends CI_Controller
             "updated_by" => $this->session->userdata("user_id"),
         ];
         $items = [];
+        $scan_data = ['bill_number' => $this->db->escape_str($post["Receipt_No"] ?? ""), 'bill_date' => $this->db->escape_str($post["Receipt_Date"] ?? "")];
+        $this->updateScanBasicDetail($scan_id, $scan_data);
         return ["main" => $mainData, "items" => $items];
     }
     private function processPunchData_51($post)
@@ -2486,7 +2499,8 @@ class Punch extends CI_Controller
                 }
             }
         }
-
+        $scan_data = ['bill_number' => $this->db->escape_str($post["pnr_number"] ?? ""), 'bill_date' => $this->db->escape_str($post["date_of_booking"] ?? "")];
+        $this->updateScanBasicDetail($scan_id, $scan_data);
         return ["main" => $mainData, "items" => $items];
     }
     private function processPunchData_23($post)
@@ -2576,7 +2590,8 @@ class Punch extends CI_Controller
             "updated_at" => date("Y-m-d H:i:s"),
             "updated_by" => $this->session->userdata("user_id"),
         ];
-
+        $scan_data = ['bill_number' => $this->db->escape_str($post["bill_no"] ?? ""), 'bill_date' => $this->db->escape_str($post["bill_date"] ?? "")];
+        $this->updateScanBasicDetail($scan_id, $scan_data);
         return ["main" => $mainData, "items" => []];
     }
     private function processPunchData_31($post)
@@ -2603,7 +2618,8 @@ class Punch extends CI_Controller
             "updated_at" => date("Y-m-d H:i:s"),
             "updated_by" => $this->session->userdata("user_id"),
         ];
-
+        $scan_data = ['bill_number' => $this->db->escape_str($post["voucher_no"] ?? ""), 'bill_date' => $this->db->escape_str($post["voucher_date"] ?? "")];
+        $this->updateScanBasicDetail($scan_id, $scan_data);
         return ["main" => $mainData, "items" => []];
     }
     private function processPunchData_50($post)
@@ -2636,7 +2652,8 @@ class Punch extends CI_Controller
             "updated_at" => date("Y-m-d H:i:s"),
             "updated_by" => $this->session->userdata("user_id"),
         ];
-
+        $scan_data = ['bill_number' => $this->db->escape_str($post["vehicle_no"] ?? ""), 'bill_date' => $this->db->escape_str($post["invoice_date"] ?? "")];
+        $this->updateScanBasicDetail($scan_id, $scan_data);
         return ["main" => $mainData, "items" => []];
     }
     private function processPunchData_42($post)
@@ -2668,7 +2685,8 @@ class Punch extends CI_Controller
             "updated_at" => date("Y-m-d H:i:s"),
             "updated_by" => $this->session->userdata("user_id"),
         ];
-
+        $scan_data = ['bill_number' => $this->db->escape_str($post["invoice_bill_no"] ?? ""), 'bill_date' => $this->db->escape_str($post["bill_invoice_date"] ?? "")];
+        $this->updateScanBasicDetail($scan_id, $scan_data);
         return ["main" => $mainData, "items" => []];
     }
     private function processPunchData_43($post)
@@ -2702,7 +2720,8 @@ class Punch extends CI_Controller
             "updated_at" => date("Y-m-d H:i:s"),
             "updated_by" => $this->session->userdata("user_id"),
         ];
-
+        $scan_data = ['bill_number' => $this->db->escape_str($post["invoice_no"] ?? ""), 'bill_date' => $this->db->escape_str($post["invoice_date"] ?? "")];
+        $this->updateScanBasicDetail($scan_id, $scan_data);
         return ["main" => $mainData, "items" => []];
     }
     private function processPunchData_44($post)
@@ -2751,6 +2770,8 @@ class Punch extends CI_Controller
                 "total_amount" => (float) ($post["TAmount"][$i] ?? 0),
             ];
         }
+        $scan_data = ['bill_number' => $this->db->escape_str($post["InvoiceNo"] ?? ""), 'bill_date' => $this->db->escape_str($post["Bill_Date"] ?? "")];
+        $this->updateScanBasicDetail($scan_id, $scan_data);
         return ["main" => $mainData, "items" => $invoiceDetails];
     }
     private function processPunchData_52($post)
@@ -2801,7 +2822,8 @@ class Punch extends CI_Controller
                 }
             }
         }
-
+        $scan_data = ['bill_number' => $this->db->escape_str($post["pnr_number"] ?? ""), 'bill_date' => $this->db->escape_str($post["date_of_booking"] ?? "")];
+        $this->updateScanBasicDetail($scan_id, $scan_data);
         return ["main" => $mainData, "items" => $items];
     }
     private function processPunchData_55($post)
@@ -2841,6 +2863,9 @@ class Punch extends CI_Controller
                 }
             }
         }
+
+        $scan_data = ['bill_number' => "", 'bill_date' => $this->db->escape_str($post["booking_date"] ?? "")];
+        $this->updateScanBasicDetail($scan_id, $scan_data);
 
         return ["main" => $mainData, "items" => $items];
     }
