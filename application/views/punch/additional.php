@@ -683,20 +683,20 @@
     }
 
     function updateBillAmount() {
-        // Add debugger to pause execution for inspection
-        debugger;
+        
+      
 
         let total = 0;
-        var final_amount = parseFloat($(".final_amount_column").val()) || 0; // Parse final_amount as float
+        var final_amount = parseFloat($(".final_amount_column").val()) || 0; 
         $(".amount").each(function () {
             let value = parseFloat($(this).val()) || 0;
             total += value;
         });
 
-        let TDS_amount = parseFloat($("#tds_amount").val()) || 0; // Parse TDS_amount as float
+        let TDS_amount = parseFloat($("#tds_amount").val()) || 0; 
         var maxAllowedAmount = total + TDS_amount;
 
-        // Log values to console for debugging
+        
         console.log("Debug Info:");
         console.log("final_amount:", final_amount);
         console.log("total:", total);
@@ -704,14 +704,14 @@
         console.log("maxAllowedAmount:", maxAllowedAmount);
         console.log("final_amount === maxAllowedAmount:", final_amount.toFixed(2) === maxAllowedAmount.toFixed(2));
 
-        // Update billAmount field
+        
         $("#billAmount").val(maxAllowedAmount.toFixed(2));
 
-        // Select buttons
-        var submitButton = $('button[name="final_submit"]');
-        var draftButton = $('button[name="save_draft"]');
+        
+        var submitButton = $('input[name="final_submit"]');
+        var draftButton = $('input[name="save_draft"]');
 
-        // Debug: Check if buttons exist
+        
         if (submitButton.length === 0) {
             console.log("submitButton found:", submitButton);
         } else {
@@ -719,7 +719,7 @@
         }
         if (draftButton.length === 0) {
             console.error("draftButton not found! Selector: button[name='save_draft']");
-            // Enable/disable buttons using .attr()
+            
             if (final_amount.toFixed(2) === maxAllowedAmount.toFixed(2)) {
                 submitButton.removeAttr('disabled');
                 draftButton.removeAttr('disabled');
@@ -732,13 +732,13 @@
         }
     }
 
-        function generateTdsJvNo() {
-            const date = new Date();
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, "0");
+    function generateTdsJvNo() {
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
 
-            const jvNo = "<?php echo $tdsJvNo; ?>";
-            $("#tdsJvNo").val(jvNo);
-        }
+        const jvNo = "<?php echo $tdsJvNo; ?>";
+        $("#tdsJvNo").val(jvNo);
+    }
 
 </script>
