@@ -52,6 +52,8 @@ $route['change-request'] = 'extract/ExtractorController/changeRequestList';
 $route['extraction-queue'] = 'extract/ExtractorController/getQueueList';
 $route['process-queue'] = 'extract/ExtractorController/processQueue';
 $route['cron-process-queue'] = 'PublicController/processQueue';
+$route['import-data'] = 'PublicController/importData';
+
 // >>>>>>>>>>>>>>>>>>>>>>>>> Common Section <<<<<<<<<<<<<<<<<<<<<<<<< //
 $route['get-country'] = 'master/CommonController/getCountry';
 $route['get-state'] = 'master/CommonController/getState';
