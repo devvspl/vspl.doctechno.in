@@ -5,12 +5,12 @@
     <div class="row">
         <div class="form-group col-md-4">
             <label for="bill_invoice_date">Bill / Invoice Date:</label>
-            <input type="date" name="bill_invoice_date" id="bill_invoice_date" class="form-control"
+            <input type="date" required name="bill_invoice_date" id="bill_invoice_date" class="form-control"
                    value="<?= (isset($punch_detail->bill_invoice_date)) ? date('Y-m-d', strtotime($punch_detail->bill_invoice_date)) : '' ?>">
         </div>
         <div class="form-group col-md-4">
             <label for="invoice_bill_no">Invoice / Bill No:</label>
-            <input type="text" name="invoice_bill_no" id="invoice_bill_no" class="form-control"
+            <input type="text" required name="invoice_bill_no" id="invoice_bill_no" class="form-control"
                    value="<?= (isset($punch_detail->invoice_bill_no)) ? htmlspecialchars($punch_detail->invoice_bill_no) : '' ?>">
         </div>
         <div class="form-group col-md-4">

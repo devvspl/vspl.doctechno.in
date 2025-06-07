@@ -2461,7 +2461,6 @@ class Punch extends CI_Controller
             "group_id" => $this->session->userdata("group_id"),
             "doctype" => $DocType,
             "doctype_id" => $DocTypeId,
-
             "mode" => $this->db->escape_str($post["mode"] ?? ""),
             "agent_name" => $this->db->escape_str($post["agent_name"] ?? ""),
             "pnr_number" => $this->db->escape_str($post["pnr_number"] ?? ""),
@@ -2633,7 +2632,6 @@ class Punch extends CI_Controller
             "group_id" => $this->session->userdata("group_id"),
             "doctype" => $DocType,
             "doctype_id" => $DocTypeId,
-
             "company_name" => $this->db->escape_str($post["company_name"] ?? ""),
             "company_address" => $this->db->escape_str($post["company_address"] ?? ""),
             "vendor_name" => $this->db->escape_str($post["vendor_name"] ?? ""),
@@ -2667,7 +2665,6 @@ class Punch extends CI_Controller
             "group_id" => $this->session->userdata("group_id"),
             "doctype" => $DocType,
             "doctype_id" => $DocTypeId,
-
             "bill_invoice_date" => $this->db->escape_str($post["bill_invoice_date"] ?? ""),
             "invoice_bill_no" => $this->db->escape_str($post["invoice_bill_no"] ?? ""),
             "biller_name" => $this->db->escape_str($post["biller_name"] ?? ""),

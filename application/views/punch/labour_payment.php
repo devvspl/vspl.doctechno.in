@@ -12,12 +12,12 @@
          <div class="row">
             <div class="form-group col-md-3">
                <label for="voucher_no">Voucher No:</label>
-               <input type="text" name="voucher_no" id="voucher_no" class="form-control"
+               <input type="text" required name="voucher_no" id="voucher_no" class="form-control"
                   value="<?= (isset($punch_detail->voucher_no)) ? $punch_detail->voucher_no : '' ?>">
             </div>
             <div class="form-group col-md-3">
                <label for="payment_date">Payment Date:</label>
-               <input type="date" name="payment_date" id="payment_date" class="form-control"
+               <input type="date"  required name="payment_date" id="payment_date" class="form-control"
                   value="<?= (isset($punch_detail->payment_date)) ? date('Y-m-d', strtotime($punch_detail->payment_date)) : '' ?>">
             </div>
             <div class="form-group col-md-3">

@@ -18,12 +18,12 @@
          </div>
          <div class="form-group col-md-4">
             <label for="">Voucher No:</label>
-            <input type="text" name="Receipt_No" id="Receipt_No" class="form-control"
+            <input type="text" name="Receipt_No" required id="Receipt_No" class="form-control"
                value="<?= (isset($punch_detail->voucher_no)) ? $punch_detail->voucher_no : '' ?>">
          </div>
          <div class="form-group col-md-4">
             <label for="">Date:</label>
-            <input type="text" name="Receipt_Date" id="Receipt_Date" class="form-control datepicker"
+            <input type="text" name="Receipt_Date" required id="Receipt_Date" class="form-control datepicker"
                value="<?= (isset($punch_detail->date)) ? date('Y-m-d', strtotime($punch_detail->date)) : '' ?>">
          </div>
          <div class="col-md-4 form-group">

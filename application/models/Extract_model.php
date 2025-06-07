@@ -325,7 +325,7 @@ class Extract_model extends CI_Model
     }
     public function getDocTypes()
     {
-        return $this->db->where("status", "A")->where_in("type_id", [1, 6, 7, 13, 17, 20, 22, 23, 27, 28, 29, 31, 42, 43, 44, 46, 47, 48, 50, 51, 52, 54, 55, 56, 59])->order_by("file_type", "ASC")->get("master_doctype")->result();
+        return $this->db->where("status", "A")->where_in("type_id", [1, 6, 7, 13, 17, 20, 22, 23, 27, 28, 29, 31, 42, 43, 44, 46, 47, 48, 50, 56])->order_by("file_type", "ASC")->get("master_doctype")->result();
     }
     public function addToQueue($scanId, $typeId)
     {

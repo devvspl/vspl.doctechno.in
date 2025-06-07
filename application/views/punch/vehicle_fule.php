@@ -40,7 +40,7 @@
             </div>
             <div class="form-group col-md-3">
                 <label for="invoice_no">Invoice No:</label> <span class="text-danger">*</span>
-                <input type="text" name="invoice_no" id="invoice_no" class="form-control" required
+                <input type="text"  name="invoice_no" id="invoice_no" class="form-control" required
                        value="<?= (isset($punch_detail->invoice_no)) ? htmlspecialchars($punch_detail->invoice_no) : '' ?>">
             </div>
             <div class="form-group col-md-3">

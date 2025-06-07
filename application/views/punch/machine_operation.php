@@ -41,7 +41,7 @@
     <div class="row">
         <div class="form-group col-md-3">
             <label for="vehicle_no">Vehicle No:</label>
-            <input type="text" name="vehicle_no" id="vehicle_no" class="form-control"
+            <input type="text" required name="vehicle_no" id="vehicle_no" class="form-control"
                    value="<?= (isset($punch_detail->vehicle_no)) ? htmlspecialchars($punch_detail->vehicle_no) : '' ?>">
         </div>
         <div class="form-group col-md-3">
@@ -72,7 +72,7 @@
         </div>
         <div class="form-group col-md-3">
             <label for="invoice_date">Invoice Date:</label>
-            <input type="text" name="invoice_date" id="invoice_date" class="form-control datepicker"
+            <input type="text" required name="invoice_date" id="invoice_date" class="form-control datepicker"
                    value="<?= (isset($punch_detail->invoice_date)) ? date('Y-m-d', strtotime($punch_detail->invoice_date)) : '' ?>">
         </div>
     </div>

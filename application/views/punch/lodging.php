@@ -15,12 +15,12 @@
          </div>
          <div class="form-group col-md-4">
             <label for="bill_no">Bill No:</label>
-            <input type="text" name="bill_no" id="bill_no" class="form-control"
+            <input type="text" name="bill_no" id="bill_no" required class="form-control"
                value="<?= (isset($punch_detail->bill_no)) ? $punch_detail->bill_no : '' ?>">
          </div>
          <div class="form-group col-md-4">
             <label for="bill_date">Bill Date:</label>
-            <input type="text" name="bill_date" id="bill_date" class="form-control datepicker"
+            <input type="text" name="bill_date" required id="bill_date" class="form-control datepicker"
                value="<?= (isset($punch_detail->bill_date)) ? date('Y-m-d', strtotime($punch_detail->bill_date)) : '' ?>"
                autocomplete="off">
          </div>
