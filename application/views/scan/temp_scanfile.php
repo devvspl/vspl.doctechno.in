@@ -99,7 +99,7 @@
                                        </td>
                                     <?php } ?>
                                     <td class="text-right">
-                                       <?php if ($row['is_final_submitted'] != 'Y' || $row['is_temp_scan_rejected'] = 'Y') { ?>
+                                       <?php if ($row['is_final_submitted'] != 'Y' || $row['is_temp_scan_rejected'] === 'Y') { ?>
                                           <?php if ($this->customlib->haveSupportFile($row['scan_id']) == 1): ?>
                                              <a data-toggle="collapse" href="#detail<?= $row['scan_id'] ?>"
                                                 class="btn btn-info btn-xs" title="View Support Files">
