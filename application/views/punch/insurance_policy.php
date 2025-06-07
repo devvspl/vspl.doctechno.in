@@ -16,12 +16,12 @@
          </div>
          <div class="form-group col-md-3">
             <label for="policy_number">Policy Number:</label>
-            <input type="text" name="policy_number" id="policy_number" class="form-control"
+            <input type="text" required name="policy_number" id="policy_number" class="form-control"
                value="<?= (isset($punch_detail->policy_number)) ? $punch_detail->policy_number : '' ?>">
          </div>
          <div class="form-group col-md-3">
             <label for="policy_date">Policy Date:</label>
-            <input type="text" name="policy_date" id="policy_date" class="form-control datepicker"
+            <input type="text" required name="policy_date" id="policy_date" class="form-control datepicker"
                value="<?= (isset($punch_detail->policy_date)) ? date('Y-m-d', strtotime($punch_detail->policy_date)) : '' ?>">
          </div>
       </div>
