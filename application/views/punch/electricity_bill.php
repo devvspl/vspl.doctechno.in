@@ -45,12 +45,12 @@
       <div class="row">
          <div class="form-group col-md-3">
             <label for="">Bill Date:</label>
-            <input type="text" name="Bill_Date" id="Bill_Date" class="form-control datepicker"
+            <input type="text" required name="Bill_Date" id="Bill_Date" class="form-control datepicker"
                value="<?= (isset($punch_detail->bill_date)) ? date('Y-m-d', strtotime($punch_detail->bill_date)) : '' ?>">
          </div>
          <div class="form-group col-md-3">
             <label for="">Bill No:</label>
-            <input type="text" name="Bill_No" id="Bill_No" class="form-control"
+            <input type="text" required name="Bill_No" id="Bill_No" class="form-control"
                value="<?= (isset($punch_detail->bill_no)) ? $punch_detail->bill_no : '' ?>">
          </div>
          <div class="form-group col-md-3">
