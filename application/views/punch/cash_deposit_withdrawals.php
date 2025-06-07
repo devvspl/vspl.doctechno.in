@@ -41,17 +41,17 @@
             <input type="text" name="Branch" id="Branch" class="form-control"
                value="<?= (isset($punch_detail->branch)) ? $punch_detail->branch : '' ?>">
          </div>
-         <div class="form-group col-md-4">
+         <div class="form-group col-md-3">
             <label for="">Account No:</label>
             <input type="text" name="Account_No" id="Account_No" class="form-control"
                value="<?= (isset($punch_detail->account_no)) ? $punch_detail->account_no : '' ?>">
          </div>
-         <div class="form-group col-md-4">
+         <div class="form-group col-md-3">
             <label for="">Beneficiary Name:</label>
             <input type="text" name="Beneficiary_Name" id="Beneficiary_Name" class="form-control"
                value="<?= (isset($punch_detail->beneficiary_name)) ? $punch_detail->beneficiary_name : '' ?>">
          </div>
-         <div class="form-group col-md-4">
+         <div class="form-group col-md-3">
             <label for="" id="amount_type">Amount:</label>
             <input type="text" name="Amount" id="Amount" class="form-control final_amount_column"
                value="<?= (isset($punch_detail->amount)) ? $punch_detail->amount : '' ?>">
