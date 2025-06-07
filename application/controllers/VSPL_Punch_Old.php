@@ -153,76 +153,76 @@ class VSPL_Punch extends CI_Controller
 
         // Fetch data for CSV export
         $query = $this->db->query("
-        SELECT
-            ai.document_no AS DocNo,
-            '' AS Date,
-            '' AS Time,
-            be.focus_code AS Business_Entity,
-            ai.narration AS sNarration,
-            ai.tds_jv_no AS TDSJVNo,
-            aii.reverse_charge AS ReverseCharge_Yn_,
-            sf.bill_number AS BillNo,
-            sf.bill_date AS BillDate,
-            cd.focus_code AS Department,
-            mcc.focus_code AS Cost_Center,
-            cbu.focus_code AS Business_Unit,
-            ca.focus_code AS Activity,
-            mwl.focus_code AS Location,
-            cs.focus_code AS State,
-            cc.focus_code AS Category,
-            ccp.focus_code AS Crop,
-            cr.focus_code AS Region,
-            cof.focus_code AS Function,
-            cv.focus_code AS FC_Vertical,
-            csd.focus_code AS Sub_Department,
-            cz.focus_code AS Zone,
-            mald.focus_code AS DrAccount,
-            malc.focus_code AS CrAccount,
-            aii.amount AS Amount,
-            aii.reference AS Reference,
-            ai.tds_amount AS TDSBillAmount,
-            aii.tds_amount AS TDS,
-            ai.tds_percentage AS TDSPer
-        FROM
-            y{$this->year_id}_tbl_additional_information_items AS aii
-        LEFT JOIN y{$this->year_id}_scan_file AS sf ON aii.scan_id = sf.scan_id
-        LEFT JOIN y{$this->year_id}_tbl_additional_information AS ai ON aii.scan_id = ai.scan_id
-        LEFT JOIN master_business_entity AS be ON be.business_entity_id = ai.business_entity_id
-        LEFT JOIN core_department AS cd ON cd.api_id = aii.department_id
-        LEFT JOIN master_cost_center AS mcc ON mcc.id = aii.cost_center_id
-        LEFT JOIN core_business_unit AS cbu ON cbu.api_id = aii.business_unit_id
-        LEFT JOIN core_activity AS ca ON ca.api_id = aii.activity_id
-        LEFT JOIN master_work_location AS mwl ON mwl.location_id = aii.location_id
-        LEFT JOIN core_state AS cs ON cs.api_id = aii.state_id
-        LEFT JOIN core_category AS cc ON cc.api_id = aii.category_id
-        LEFT JOIN core_crop AS ccp ON ccp.api_id = aii.crop_id
-        LEFT JOIN core_region AS cr ON cr.api_id = aii.region_id
-        LEFT JOIN core_org_function AS cof ON cof.api_id = aii.function_id
-        LEFT JOIN core_vertical AS cv ON cv.api_id = aii.vertical_id
-        LEFT JOIN core_sub_department AS csd ON csd.api_id = aii.sub_department_id
-        LEFT JOIN core_zone AS cz ON cz.api_id = aii.zone_id
-        LEFT JOIN master_account_ledger AS mald ON mald.id = aii.debit_account_id
-        LEFT JOIN master_account_ledger AS malc ON malc.id = aii.credit_account_id
-        WHERE
-            $where
-    ", $params);
+            SELECT
+                ai.document_no AS DocNo,
+                '' AS Date,
+                '' AS Time,
+                be.focus_code AS Business_Entity,
+                ai.narration AS sNarration,
+                ai.tds_jv_no AS TDSJVNo,
+                aii.reverse_charge AS ReverseCharge_Yn_,
+                sf.bill_number AS BillNo,
+                sf.bill_date AS BillDate,
+                cd.focus_code AS Department,
+                mcc.focus_code AS Cost_Center,
+                cbu.focus_code AS Business_Unit,
+                ca.focus_code AS Activity,
+                mwl.focus_code AS Location,
+                cs.focus_code AS State,
+                cc.focus_code AS Category,
+                ccp.focus_code AS Crop,
+                cr.focus_code AS Region,
+                cof.focus_code AS Function,
+                cv.focus_code AS FC_Vertical,
+                csd.focus_code AS Sub_Department,
+                cz.focus_code AS Zone,
+                mald.focus_code AS DrAccount,
+                malc.focus_code AS CrAccount,
+                aii.amount AS Amount,
+                aii.reference AS Reference,
+                ai.tds_amount AS TDSBillAmount,
+                aii.tds_amount AS TDS,
+                ai.tds_percentage AS TDSPer
+            FROM
+                y{$this->year_id}_tbl_additional_information_items AS aii
+            LEFT JOIN y{$this->year_id}_scan_file AS sf ON aii.scan_id = sf.scan_id
+            LEFT JOIN y{$this->year_id}_tbl_additional_information AS ai ON aii.scan_id = ai.scan_id
+            LEFT JOIN master_business_entity AS be ON be.business_entity_id = ai.business_entity_id
+            LEFT JOIN core_department AS cd ON cd.api_id = aii.department_id
+            LEFT JOIN master_cost_center AS mcc ON mcc.id = aii.cost_center_id
+            LEFT JOIN core_business_unit AS cbu ON cbu.api_id = aii.business_unit_id
+            LEFT JOIN core_activity AS ca ON ca.api_id = aii.activity_id
+            LEFT JOIN master_work_location AS mwl ON mwl.location_id = aii.location_id
+            LEFT JOIN core_state AS cs ON cs.api_id = aii.state_id
+            LEFT JOIN core_category AS cc ON cc.api_id = aii.category_id
+            LEFT JOIN core_crop AS ccp ON ccp.api_id = aii.crop_id
+            LEFT JOIN core_region AS cr ON cr.api_id = aii.region_id
+            LEFT JOIN core_org_function AS cof ON cof.api_id = aii.function_id
+            LEFT JOIN core_vertical AS cv ON cv.api_id = aii.vertical_id
+            LEFT JOIN core_sub_department AS csd ON csd.api_id = aii.sub_department_id
+            LEFT JOIN core_zone AS cz ON cz.api_id = aii.zone_id
+            LEFT JOIN master_account_ledger AS mald ON mald.id = aii.debit_account_id
+            LEFT JOIN master_account_ledger AS malc ON malc.id = aii.credit_account_id
+            WHERE
+                $where
+        ", $params);
 
         $results = $query->result_array();
 
-        // Define CSV column headers matching the SQL aliases
+        // Define CSV column headers matching the Excel format
         $headers = [
             'DocNo',
             'Date',
             'Time',
-            'Business_Entity',
+            'Business Entity',
             'sNarration',
             'TDSJVNo',
             'ReverseCharge_Yn_',
             'BillNo',
             'BillDate',
             'Department',
-            'Cost_Center',
-            'Business_Unit',
+            'Cost Center',
+            'Business Unit',
             'Activity',
             'Location',
             'State',
@@ -230,8 +230,8 @@ class VSPL_Punch extends CI_Controller
             'Crop',
             'Region',
             'Function',
-            'FC_Vertical',
-            'Sub_Department',
+            'FC-Vertical',
+            'Sub Department',
             'Zone',
             'DrAccount',
             'CrAccount',
@@ -241,7 +241,6 @@ class VSPL_Punch extends CI_Controller
             'TDS',
             'TDSPer'
         ];
-
         // Prepare CSV content
         $csv_data = [];
         $csv_data[] = implode(',', array_map(function ($header) {
