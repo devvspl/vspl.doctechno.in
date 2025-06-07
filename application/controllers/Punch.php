@@ -2050,6 +2050,7 @@ class Punch extends CI_Controller
             "doctype_id" => $DocTypeId,
             "type" => $this->db->escape_str($post["Type"] ?? ""),
             "date" => $this->db->escape_str($post["Date"] ?? ""),
+            "invoice_number" => $this->db->escape_str($post["invoice_number"] ?? ""),
             "bank_name" => $this->db->escape_str($post["Bank_Name"] ?? ""),
             "branch" => $this->db->escape_str($post["Branch"] ?? ""),
             "account_no" => $this->db->escape_str($post["Account_No"] ?? ""),
@@ -2062,7 +2063,7 @@ class Punch extends CI_Controller
             "updated_by" => $this->session->userdata("user_id"),
         ];
         $items = [];
-        $scan_data = ['bill_number' => "", 'bill_date' => $this->db->escape_str($post["Date"] ?? "")];
+        $scan_data = ['bill_number' => "", 'bill_date' => $this->db->escape_str($post["invoice_number"] ?? "")];
         $this->updateScanBasicDetail($scan_id, $scan_data);
         return ["main" => $mainData, "items" => $items];
     }

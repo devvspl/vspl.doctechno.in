@@ -23,7 +23,11 @@
             </div>
             <div class="col-md-3 form-group">
                <label for="">Date:</label>
-               <input type="date" name="Date" id="Date" class="form-control" value="<?= (isset($punch_detail->date)) ? $punch_detail->date : ''  ?>">
+               <input type="date" required name="Date" id="Date" class="form-control" value="<?= (isset($punch_detail->date)) ? $punch_detail->date : ''  ?>">
+            </div>
+             <div class="col-md-3 form-group">
+               <label for="">Invoice Number:</label>
+               <input type="text" required name="invoice_number" id="invoice_number" class="form-control" value="<?= (isset($punch_detail->invoice_number)) ? $punch_detail->invoice_number : ''  ?>">
             </div>
             <div class="form-group col-md-3">
                <label for="">Bank Name:</label>
