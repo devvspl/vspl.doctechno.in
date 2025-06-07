@@ -53,6 +53,16 @@
          </div>
       </div>
       <div class="row">
+          <div class="form-group col-md-3">
+            <label for="vehicle_no">Voucher No:</label> <span class="text-danger">*</span>
+            <input type="text" name="invoice_number" id="invoice_number" class="form-control" required
+               value="<?= (isset($punch_detail->invoice_number)) ? $punch_detail->invoice_number : '' ?>">
+         </div>
+          <div class="form-group col-md-3">
+            <label for="vehicle_no">Voucher Date:</label> <span class="text-danger">*</span>
+            <input type="date" name="invoice_date" id="invoice_date" class="form-control" required
+               value="<?= (isset($punch_detail->invoice_date)) ? $punch_detail->invoice_date : '' ?>">
+         </div>
          <div class="form-group col-md-3">
             <label for="vehicle_no">Vehicle No:</label> <span class="text-danger">*</span>
             <input type="text" name="vehicle_no" id="vehicle_no" class="form-control" required
