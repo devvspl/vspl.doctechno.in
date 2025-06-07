@@ -74,7 +74,7 @@
                                  <?= !empty($row['bill_approved_date']) ? date('d-m-Y', strtotime($row['bill_approved_date'])) : ''; ?>
                               </td>
                               <td class="mailbox-name">
-                                 <?php echo date('d-m-Y', strtotime($row['punched_date'])) ?>
+                                 <?= !empty($row['punched_date']) ? date('d-m-Y', strtotime($row['punched_date'])) : ''; ?>
                               </td>
                               <?php if ($row['is_file_approved'] == 'Y') { ?>
                               <td class="mailbox-name">
