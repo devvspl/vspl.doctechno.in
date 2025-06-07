@@ -62,12 +62,12 @@
          </div>
          <div class="form-group col-md-3">
             <label for="challan_no">Challan No:</label>
-            <input type="text" name="challan_no" id="challan_no" class="form-control"
+            <input required type="text" name="challan_no" id="challan_no" class="form-control"
                value="<?= (isset($punch_detail->challan_no)) ? $punch_detail->challan_no : '' ?>">
          </div>
          <div class="form-group col-md-3">
             <label for="challan_date">Challan Date:</label>
-            <input type="text" name="challan_date" id="challan_date" class="form-control datepicker"
+            <input required type="text" name="challan_date" id="challan_date" class="form-control datepicker"
                value="<?= (isset($punch_detail->challan_date)) ? date('Y-m-d', strtotime($punch_detail->challan_date)) : '' ?>">
          </div>
       </div>
