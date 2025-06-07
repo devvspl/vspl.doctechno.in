@@ -20,10 +20,21 @@ class Punch_model extends MY_Model
     function vspl_get_file_for_punch()
     {
         $group_id = $this->session->userdata('group_id');
-        $this->db->select('*')->from("y{$this->year_id}_scan_file")->where('is_file_punched', 'Y')->where('is_scan_resend', 'N')->where_in('group_id', $group_id)->where('is_final_submitted', 'Y')->where('finance_punch_action_status', 'N')->where('is_rejected', 'N')->where('finance_punch_action_status', 'N')->where("((location_id IS NOT NULL AND bill_approval_status = 'Y')  OR location_id IS NULL)")->order_by('scan_id', 'ASC');
+        $this->db->select('*')
+            ->from("y{$this->year_id}_scan_file")
+            ->where('is_file_punched', 'Y')
+            ->where('is_scan_resend', 'N')
+            ->where_in('group_id', $group_id)
+            ->where('is_final_submitted', 'Y')
+            ->where('finance_punch_action_status', 'N')
+            ->where('is_rejected', 'N')
+            ->where("((location_id IS NOT NULL AND bill_approval_status = 'Y')  OR location_id IS NULL)")
+            ->order_by('bill_approved_date', 'DESC');
+
         $query = $this->db->get();
         return $query->result_array();
     }
+
     function get_my_permissioned_doctype_list()
     {
         $user_id = $this->session->userdata('user_id');
@@ -651,7 +662,7 @@ class Punch_model extends MY_Model
         return $result;
     }
 
-     private function getTicketCancellationData($scan_id, $punchdata_table, $punchdata_details_table)
+    private function getTicketCancellationData($scan_id, $punchdata_table, $punchdata_details_table)
     {
         $result = ['punchdata' => [], 'punchdata_details' => []];
         if ($this->db->table_exists($punchdata_table)) {
