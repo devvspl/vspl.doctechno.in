@@ -16,11 +16,11 @@
          </div>
          <div class="form-group col-md-4">
             <label for="">Voucher No:</label>
-            <input type="text" name="Voucher_No" id="Voucher_No" class="form-control" value="<?= (isset($punch_detail->voucher_no)) ? $punch_detail->voucher_no : ''  ?>">
+            <input type="text" required name="Voucher_No" id="Voucher_No" class="form-control" value="<?= (isset($punch_detail->voucher_no)) ? $punch_detail->voucher_no : ''  ?>">
          </div>
          <div class="form-group col-md-4">
             <label for="">Voucher Date:</label>
-            <input type="text" name="Voucher_Date" id="Voucher_Date" class="form-control datepicker" value="<?= (isset($punch_detail->voucher_date)) ? date('Y-m-d', strtotime($punch_detail->voucher_date)) : ''  ?>" autocomplete="off">
+            <input type="text" required name="Voucher_Date" id="Voucher_Date" class="form-control datepicker" value="<?= (isset($punch_detail->voucher_date)) ? date('Y-m-d', strtotime($punch_detail->voucher_date)) : ''  ?>" autocomplete="off">
          </div>
          <div class="col-md-4 form-group">
             <label for="">Location:</label>
