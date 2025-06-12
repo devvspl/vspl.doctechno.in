@@ -13,7 +13,33 @@ class AccountController extends CI_Controller {
         }
     }
     public function index() {
-        $this->data['accountlist'] = $this->Account_model->get_account_list();
+        $this->load->library('pagination');
+        $search = $this->input->get('search') ??'';
+        $group = $this->input->get('group') ??'';
+        $total_rows = $this->Account_model->get_account_count($search, $group);
+        $config = array();
+        $config['base_url'] = base_url('master/AccountController/index');
+        $config['total_rows'] = $total_rows;
+        $config['per_page'] = 50;
+        $config['uri_segment'] = 4;
+        $config['full_tag_open'] = '<ul class="pagination">';
+        $config['full_tag_close'] = '</ul>';
+        $config['first_link'] = 'First';
+        $config['last_link'] = 'Last';
+        $config['next_link'] = '»';
+        $config['prev_link'] = '«';
+        $config['cur_tag_open'] = '<li class="active"><a>';
+        $config['cur_tag_close'] = '</a></li>';
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+        $config['reuse_query_string'] = TRUE;
+        $this->pagination->initialize($config);
+        $page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $this->data['accountlist'] = $this->Account_model->get_account_list($config['per_page'], $page, $search, $group);
+        $this->data['pagination'] = $this->pagination->create_links();
+        $this->data['getGroupedData'] = $this->Account_model->getGroupedData();
+        $this->data['search'] = $search;
+        $this->data['selected_group'] = $group;
         $this->session->set_userdata('top_menu', 'master');
         $this->session->set_userdata('sub_menu', 'account');
         $this->data['main'] = 'account/accountlist';

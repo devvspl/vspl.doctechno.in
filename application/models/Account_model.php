@@ -41,30 +41,56 @@ class Account_model extends CI_Model {
         }
         return $this->db->count_all_results();
     }
-    public function get_account_list($limit = null, $start = null, $group = null, $search = null) {
+
+public function getGroupedData() {
+    $this->db->select('account_group, COUNT(*) as total_accounts');
+    $this->db->from('master_account_ledger');
+    $this->db->where('is_deleted', 'N');
+    $this->db->group_by('account_group');
+    $this->db->order_by('account_group', 'ASC');
+    $query = $this->db->get();
+    $result = $query->result_array();
+    log_message('debug', 'Grouped Data: ' . print_r($result, true)); // Debug log
+    return $result;
+}
+
+
+    // Get paginated account list
+    public function get_account_list($limit, $offset, $search = null, $group = null) {
         $this->db->select('*');
-        $this->db->from('master_account_ledger');
-        $this->db->where('is_deleted', 'N');
-        if ($group !== null && $group !== '') {
-            $this->db->where('account_group', $group);
-        }
-        if ($search !== null && $search !== '') {
+        $this->db->from('master_account_ledger'); // Replace 'accounts' with your actual table name
+
+        // Apply search filter if provided
+        if (!empty($search)) {
             $this->db->like('account_name', $search);
             $this->db->or_like('focus_code', $search);
         }
-        if ($limit !== null && $start !== null) {
-            $this->db->limit($limit, $start);
+
+        // Apply group filter if provided
+        if (!empty($group)) {
+            $this->db->where('account_group', $group);
         }
-        $result = $this->db->get()->result_array();
-        return $result;
-    }
-    public function getGroupedData() {
-        $this->db->select('account_group, COUNT(*) as total_accounts');
-        $this->db->from('master_account_ledger');
-        $this->db->where('is_deleted', 'N');
-        $this->db->group_by('account_group');
-        $this->db->order_by('account_group', 'ASC');
+
+        $this->db->limit($limit, $offset);
         $query = $this->db->get();
         return $query->result_array();
+    }
+
+    // Get total number of accounts
+    public function get_account_count($search = null, $group = null) {
+        $this->db->from('master_account_ledger'); // Replace 'accounts' with your actual table name
+
+        // Apply search filter if provided
+        if (!empty($search)) {
+            $this->db->like('account_name', $search);
+            $this->db->or_like('focus_code', $search);
+        }
+
+        // Apply group filter if provided
+        if (!empty($group)) {
+            $this->db->where('account_group', $group);
+        }
+
+        return $this->db->count_all_results();
     }
 }

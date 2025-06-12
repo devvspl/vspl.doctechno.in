@@ -810,16 +810,16 @@ class Extract_model extends CI_Model
         return $this->db->get('core_department')->result();
     }
 
-    public function getSubdepartments($department_id)
-    {
-        $this->db->distinct();
-        $this->db->select('sd.id as sub_department_id, sd.sub_department_name');
-        $this->db->from('core_fun_vertical_dept_mapping fvdm');
-        $this->db->join('core_department_subdepartment_mapping dsm', 'dsm.fun_vertical_dept_id = fvdm.api_id', 'inner');
-        $this->db->join('core_sub_department sd', 'sd.id = dsm.sub_department_id', 'inner');
-        $this->db->where('fvdm.department_id', $department_id);
-        return $this->db->get()->result();
-    }
+        public function getSubdepartments($department_id)
+        {
+            $this->db->distinct();
+            $this->db->select('sd.id as sub_department_id, sd.sub_department_name');
+            $this->db->from('core_fun_vertical_dept_mapping fvdm');
+            $this->db->join('core_department_subdepartment_mapping dsm', 'dsm.fun_vertical_dept_id = fvdm.api_id', 'inner');
+            $this->db->join('core_sub_department sd', 'sd.id = dsm.sub_department_id', 'inner');
+            $this->db->where('fvdm.department_id', $department_id);
+            return $this->db->get()->result();
+        }
     public function getBillApprovers($department_id)
     {
         $this->db->where('role', 'bill_approver');

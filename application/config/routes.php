@@ -27,6 +27,8 @@ $route['hotel'] = 'master/HotelController';
 $route['item'] = 'master/ItemController';
 $route['employee'] = 'master/EmployeeController';
 $route['account'] = 'master/AccountController';
+$route['master/AccountController/index/(:num)'] = 'master/AccountController/index/$1';
+$route['master/AccountController/index'] = 'master/AccountController/index';
 $route['activity'] = 'master/ActivityController';
 $route['business_unit'] = 'master/BusinessUnitController';
 $route['business_entity'] = 'master/BusinessEntityController';
@@ -53,7 +55,6 @@ $route['extraction-queue'] = 'extract/ExtractorController/getQueueList';
 $route['process-queue'] = 'extract/ExtractorController/processQueue';
 $route['cron-process-queue'] = 'PublicController/processQueue';
 $route['import-data'] = 'PublicController/importData';
-
 // >>>>>>>>>>>>>>>>>>>>>>>>> Common Section <<<<<<<<<<<<<<<<<<<<<<<<< //
 $route['get-country'] = 'master/CommonController/getCountry';
 $route['get-state'] = 'master/CommonController/getState';
