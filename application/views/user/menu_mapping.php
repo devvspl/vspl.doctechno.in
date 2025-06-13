@@ -77,7 +77,7 @@ $(document).ready(function() {
             dataType: "json",
             success: function(response) {
                 if (response.status === 'success') {
-                    alert('Permission updated successfully');
+                  //   alert('Permission updated successfully');
                 } else {
                     alert('Failed to update permission');
                 }
