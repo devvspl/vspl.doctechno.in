@@ -52,13 +52,13 @@
 </div>
 
 <script>
-   $(document).ready(function() {
-       $('#menuTable').DataTable({
-           "pageLength": 10,
-           "ordering": false, // Disable ordering if needed
-           "columnDefs": [
-               { "orderable": false, "targets": 1 } // Disable ordering on permissions column
-           ]
-       });
-   });
+   // $(document).ready(function() {
+   //     $('#menuTable').DataTable({
+   //         "pageLength": 10,
+   //         "ordering": false, // Disable ordering if needed
+   //         "columnDefs": [
+   //             { "orderable": false, "targets": 1 } // Disable ordering on permissions column
+   //         ]
+   //     });
+   // });
 </script>
