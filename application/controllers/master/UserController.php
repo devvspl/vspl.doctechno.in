@@ -166,18 +166,36 @@ class UserController extends CI_Controller
     public function saveMenuMapping()
     {
         $permissions = $this->input->post('permissions');
-        if (!empty($permissions)) {
-            foreach ($permissions as $menu_id => $permission_values) {
-                $json_permissions = json_encode($permission_values);
+
+        // Fetch all menu IDs to handle those not sent (i.e., fully unchecked menus)
+        $all_menus = $this->db->get('tbl_menus')->result_array();
+
+        if (!empty($all_menus)) {
+            foreach ($all_menus as $menu) {
+                $menu_id = $menu['id'];
+
+                // If this menu has permissions posted, save them
+                if (isset($permissions[$menu_id])) {
+                    $permission_values = $permissions[$menu_id];
+                    $json_permissions = json_encode($permission_values);
+                } else {
+                    // No permission posted for this menu, means everything is unchecked
+                    $json_permissions = json_encode([]);
+                }
+
+                // Update each menu with its mapped permissions or empty array
                 $this->db->where('id', $menu_id);
                 $this->db->update('tbl_menus', ['permission_ids' => $json_permissions]);
             }
+
             $this->session->set_flashdata('success', 'Menu mapping updated successfully!');
         } else {
-            $this->session->set_flashdata('error', 'No data to update!');
+            $this->session->set_flashdata('error', 'No menus found to update!');
         }
+
         redirect('menu-mapping');
     }
+
     public function activityDepMapping()
     {
         $data['departments'] = $this->get_departments();
