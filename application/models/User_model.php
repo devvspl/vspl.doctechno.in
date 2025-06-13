@@ -1,4 +1,6 @@
 <?php
+
+use function PHPUnit\Framework\returnArgument;
 defined('BASEPATH') or exit('No direct script access allowed');
 class User_model extends MY_Model
 {
@@ -30,22 +32,35 @@ class User_model extends MY_Model
     public function get_user_list($id = null)
     {
         if ($id != null) {
-            $this->db->where('user_id', $id);
-            $result = $this->db->get('users')->row_array();
+            $this->db->select('u.*, r.role_name');
+            $this->db->from('users u');
+            $this->db->join('tbl_roles r', 'u.role_id = r.id', 'left');
+            $this->db->where('u.user_id', $id);
+            $result = $this->db->get()->row_array();
             return $result;
         } else {
-
-            $this->db->select('u.*');
+            $this->db->select('u.*, r.role_name');
             $this->db->from('users u');
+            $this->db->join('tbl_roles r', 'u.role_id = r.id', 'left');
+
             if ($this->session->userdata('role') == 'admin') {
-                $this->db->where('u.created_by =', $this->session->userdata('user_id'));
+                $this->db->where('u.created_by', $this->session->userdata('user_id'));
             }
+
             $this->db->where('u.status', 'A');
             $this->db->where('u.user_id !=', 1);
-            $this->db->where('u.role !=', 'bill_approver');
+
             $result = $this->db->get()->result_array();
             return $result;
         }
+    }
+
+
+
+    public function role_list()
+    {
+
+        return $this->db->where(['status' => 1])->get('tbl_roles')->result_array();
     }
 
     public function delete($id)
@@ -69,34 +84,26 @@ class User_model extends MY_Model
 
     public function update($data)
     {
-        $this->db->trans_start();
-        $this->db->trans_strict(false);
-        $this->db->where('user_id', $data['user_id']);
-        $this->db->update('users', $data);
-        $message = UPDATE_RECORD_CONSTANT . " On  users id " . $data['user_id'];
-        $action = "Update";
-        $record_id = $data['user_id'];
-        $this->log($message, $record_id, $action);
-        $this->db->trans_complete();
-        if ($this->db->trans_status() === false) {
-            $this->db->trans_rollback();
-            return false;
-        } else {
-            return true;
-        }
+        $userId = $data['user_id'];
+        unset($data['user_id']);
+        $this->db->where('user_id', $userId);
+        return $this->db->update('users', $data);
     }
+
 
     public function get_permission_list()
     {
         $this->db->from('permission');
-        $result = $this->db->where('status','A')->get()->result_array();
+        $result = $this->db->where('status', 'A')->get()->result_array();
         return $result;
     }
 
-    public function user_permission_list($id)
+
+    public function user_permission_list($user_id)
     {
-        $result = $this->db->get_where('user_permission', array('user_id' => $id))->result_array();
-        return $result;
+        return $this->db->where('user_id', $user_id)
+            ->get('tbl_user_permissions')
+            ->result_array();
     }
 
     public function set_permission($user_id, $permission_id)
@@ -119,11 +126,11 @@ class User_model extends MY_Model
             return true;
         }
     }
-    
-     public function getUserByGroup($group_id)
+
+    public function getUserByGroup($group_id)
     {
-       // $result = $this->db->get_where('users', array('group_id' => $group_id))->result_array();
-       $result = $this->db->select('*')
+        // $result = $this->db->get_where('users', array('group_id' => $group_id))->result_array();
+        $result = $this->db->select('*')
             ->from('`users` u')
             ->join('user_permission up', 'up.user_id = u.user_id', 'LEFT')
             ->join('permission p', 'p.permission_id = up.permission_id', 'LEFT')

@@ -1,11 +1,3 @@
-<style type="text/css">
-    @media print {
-        .no-print,
-        .no-print * {
-            display: none !important;
-        }
-    }
-</style>
 <div class="content-wrapper" style="min-height: 946px;">
     <section class="content">
         <div class="row">
@@ -14,82 +6,53 @@
                     <div class="box-header with-border">
                         <h3 class="box-title">Add User</h3>
                     </div>
-                    <form id="form1" action="<?= base_url(); ?>master/UserController/create" method="post" accept-charset="utf-8">
+                    <form id="form1" action="<?= base_url(); ?>master/UserController/create" method="post"
+                        accept-charset="utf-8">
                         <div class="box-body">
                             <?php if ($this->session->flashdata('message')) { ?>
                                 <?php echo $this->session->flashdata('message') ?>
                             <?php } ?>
-
                             <div class="form-group">
                                 <label for="first_name">First Name</label>
-                                <input id="first_name" name="first_name" type="text" class="form-control" value="<?php echo set_value('first_name'); ?>" />
+                                <input id="first_name" name="first_name" type="text" class="form-control"
+                                    value="<?php echo set_value('first_name'); ?>" />
                                 <span class="text-danger"><?php echo form_error('first_name'); ?></span>
                             </div>
-
                             <div class="form-group">
                                 <label for="last_name">Last Name</label>
-                                <input id="last_name" name="last_name" type="text" class="form-control" value="<?php echo set_value('last_name'); ?>" />
+                                <input id="last_name" name="last_name" type="text" class="form-control"
+                                    value="<?php echo set_value('last_name'); ?>" />
                                 <span class="text-danger"><?php echo form_error('last_name'); ?></span>
                             </div>
-
-                            <div class="form-group">
-                                <label for="department">Department</label>
-                                <select name="department[]" id="department" class="form-control select2" multiple="multiple">
-                                    <?php foreach ($departments as $dept): ?>
-                                        <option value="<?php echo $dept->api_id; ?>"
-                                            <?php echo (in_array($dept->api_id, (array) set_value('department'))) ? 'selected' : ''; ?>>
-                                            <?php echo $dept->department_name . ' (' . $dept->department_code . ')'; ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
-                                <span class="text-danger"><?php echo form_error('department'); ?></span>
-                            </div>
-
-                            <?php if ($_SESSION['role'] == 'super_admin') { ?>
-                                <div class="form-group">
-                                    <label for="group">Group</label>
-                                    <select name="group" id="group" class="form-control">
-                                        <?php foreach ($grouplist as $row): ?>
-                                            <option value="<?= $row['group_id'] ?>"><?= $row['group_name'] ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                    <span class="text-danger"><?php echo form_error('group'); ?></span>
-                                </div>
-                            <?php } ?>
-
                             <div class="form-group">
                                 <label for="role">Role</label>
                                 <select name="role" id="role" class="form-control">
-                                    <?php if ($_SESSION['role'] == 'admin') { ?>
-                                        <option value="user">User</option>
-                                    <?php } else if ($_SESSION['role'] == 'super_admin') { ?>
-                                        <option value="admin">Admin</option>
-                                        <option value="super_approver">Super Approver</option>
-                                        <option value="super_scan">Super Scanner</option>
-                                        <option value="scan_admin">Scan Admin</option>
-                                    <?php } ?>
+                                    <option value="">---Select Role---</option>
+                                    <?php
+                                    foreach ($role_list as $role) {
+                                        echo "<option value=" . $role['id'] . ">" . $role['role_name'] . "</option>";
+                                    }
+                                    ?>
                                 </select>
                                 <span class="text-danger"><?php echo form_error('role'); ?></span>
                             </div>
-
                             <div class="form-group">
                                 <label for="username">Username</label>
-                                <input id="username" name="username" type="text" class="form-control" value="<?php echo set_value('username'); ?>" />
+                                <input id="username" name="username" type="text" class="form-control"
+                                    value="<?php echo set_value('username'); ?>" />
                                 <span class="text-danger"><?php echo form_error('username'); ?></span>
                             </div>
-
                             <div class="form-group">
                                 <label for="password">Password</label>
-                                <input id="password" name="password" type="password" class="form-control" value="<?php echo set_value('password'); ?>" />
+                                <input id="password" name="password" type="password" class="form-control"
+                                    value="<?php echo set_value('password'); ?>" />
                                 <span class="text-danger"><?php echo form_error('password'); ?></span>
                             </div>
                         </div>
-
                         <div class="box-footer">
                             <button type="submit" class="btn btn-info pull-right">Save</button>
                         </div>
-</form>
-
+                    </form>
                 </div>
             </div>
             <div class="col-md-9">
@@ -111,35 +74,39 @@
                                 </thead>
                                 <tbody>
                                     <?php if (empty($userlist)) {
-                                    ?>
+                                        ?>
                                         <?php
                                     } else {
                                         $count = 1;
                                         foreach ($userlist as $row) {
-                                        ?>
+                                            ?>
                                             <tr>
                                                 <td class="mailbox-name">
                                                     <?php echo $row['first_name'] . ' ' . $row['last_name'] ?>
                                                 </td>
                                                 <td class="mailbox-name">
-                                                    <?php echo $row['role'] ?>
+                                                    <?php echo $row['role_name'] ?>
                                                 </td>
                                                 <td class="mailbox-name">
                                                     <?php echo $row['username'] ?>
                                                 </td>
                                                 <td class="mailbox-date pull-right no-print">
-                                                    <a href="<?= base_url(); ?>master/UserController/permission/<?php echo $row['user_id'] ?>" class="btn btn-default btn-xs">
+                                                    <a href="<?= base_url(); ?>master/UserController/permission/<?php echo $row['user_id'] ?>"
+                                                        class="btn btn-default btn-xs">
                                                         <i class="fa fa-key"></i>
                                                     </a>
-                                                    <a href="<?= base_url(); ?>master/UserController/edit/<?php echo $row['user_id'] ?>" class="btn btn-default btn-xs">
+                                                    <a href="<?= base_url(); ?>master/UserController/edit/<?php echo $row['user_id'] ?>"
+                                                        class="btn btn-default btn-xs">
                                                         <i class="fa fa-pencil"></i>
                                                     </a>
-                                                    <a href="<?= base_url(); ?>user/delete/<?php echo $row['user_id'] ?>" class="btn btn-default btn-xs" onclick="return confirm('Are you sure to delete');">
+                                                    <a href="<?= base_url(); ?>user/delete/<?php echo $row['user_id'] ?>"
+                                                        class="btn btn-default btn-xs"
+                                                        onclick="return confirm('Are you sure to delete');">
                                                         <i class="fa fa-remove"></i>
                                                     </a>
                                                 </td>
                                             </tr>
-                                    <?php
+                                            <?php
                                         }
                                         $count++;
                                     }
@@ -153,16 +120,15 @@
         </div>
     </section>
 </div>
-
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('.example1').DataTable({
             destroy: true,
             pageLength: 12,
         });
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('#department').select2({
-                placeholder: "Select departments"
+                placeholder: ""
             });
         });
     });

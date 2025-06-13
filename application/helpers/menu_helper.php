@@ -1,46 +1,91 @@
-<?php
-
-if (!defined('BASEPATH'))
+<?php if (!defined('BASEPATH'))
     exit('No direct script access allowed');
-if (!function_exists('active_link')) {
-
-    function activate_menu($controller, $action)
+if (!function_exists('get_menu')) {
+    function get_menu($user_id)
     {
-        $CI = get_instance();
-        $method = $CI->router->fetch_method();
-        $class = $CI->router->fetch_class();
-        return ($method == $action && $controller == $class) ? 'active' : '';
-    }
+        $CI =& get_instance();
+        $CI->load->database();
 
-    function set_Topmenu($top_menu_name)
-    {
-       
-        $CI = get_instance();
-        $session_top_menu = $CI->session->userdata('top_menu');
-      
-        if ($session_top_menu == $top_menu_name) {
-            return 'active';
+        if ($user_id == 150) {
+            // Super Admin: See ALL menus
+            $CI->db->select('*');
+            $CI->db->from('tbl_menus');
+            $CI->db->where('is_active', 1);
+            $CI->db->order_by('parent_id ASC, `order` ASC');
+            $query = $CI->db->get();
+            $menus = $query->result_array();
+        } else {
+            // Normal user: get permissions first
+            $CI->db->select('permission_value');
+            $CI->db->from('tbl_user_permissions');
+            $CI->db->where('user_id', $user_id);
+            $CI->db->where('permission_type', 'Permission');
+            $permission_query = $CI->db->get();
+            $permissions = $permission_query->result_array();
+            $user_permissions = array_column($permissions, 'permission_value');
+
+            if (empty($user_permissions)) {
+                return ''; // No menu if no permission
+            }
+
+            // Fetch all menus
+            $CI->db->select('*');
+            $CI->db->from('tbl_menus');
+            $CI->db->where('is_active', 1);
+            $CI->db->order_by('parent_id ASC, `order` ASC');
+            $menu_query = $CI->db->get();
+            $menus_all = $menu_query->result_array();
+
+            // Filter based on user permissions
+            $menus = [];
+            foreach ($menus_all as $menu) {
+                $menu_permissions = json_decode($menu['permission_ids'], true);
+                if (!is_array($menu_permissions))
+                    continue;
+
+                // If user has any required permission
+                if (array_intersect($user_permissions, $menu_permissions)) {
+                    $menus[] = $menu;
+                }
+            }
         }
-        return "";
-    }
 
-    function set_Submenu($sub_menu_name)
-    {
-        $CI = get_instance();
-        $session_sub_menu = $CI->session->userdata('sub_menu');
-        if ($session_sub_menu == $sub_menu_name) {
-            return 'active';
+        // Organize menu by parent_id
+        $menuArr = [];
+        foreach ($menus as $menu) {
+            $menuArr[$menu['parent_id']][] = $menu;
         }
-        return "";
-    }
 
-    function set_SubSubmenu($sub_menu_name)
+        return build_menu($menuArr);
+    }
+    function build_menu($menu, $parent = NULL)
     {
-        $CI = get_instance();
-        $session_sub_menu = $CI->session->userdata('subsub_menu');
-        if ($session_sub_menu == $sub_menu_name) {
-            return 'active';
+        $html = '';
+
+        if (isset($menu[$parent])) {
+            foreach ($menu[$parent] as $item) {
+                $hasChildren = isset($menu[$item['id']]);
+                $icon = !empty($item['icon']) ? '<i class="' . $item['icon'] . '"></i>' : '';
+                $url = ($item['url'] && $item['url'] != '#') ? base_url($item['url']) : '#';
+
+                $html .= '<li class="' . ($hasChildren ? 'treeview' : '') . '">';
+                $html .= '<a href="' . $url . '">' . $icon . ' <span>' . $item['name'] . '</span>';
+                if ($hasChildren) {
+                    $html .= '<i class="fa fa-angle-left pull-right"></i>';
+                }
+                $html .= '</a>';
+
+                if ($hasChildren) {
+                    $html .= '<ul class="treeview-menu">';
+                    $html .= build_menu($menu, $item['id']);
+                    $html .= '</ul>';
+                }
+
+                $html .= '</li>';
+            }
         }
-        return "";
+
+        return $html;
     }
 }
+?>
