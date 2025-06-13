@@ -12,38 +12,37 @@
                   </div>
                </div>
                <div class="box-body">
-                  <form method="post" action="<?= base_url('master/UserController/saveMenuMapping'); ?>">
-                     <table id="menuTable" class="table table-bordered table-striped">
-                        <thead>
+                  <table id="menuTable" class="table table-bordered table-striped">
+                     <thead>
+                        <tr>
+                           <th>Menu Name</th>
+                           <th>Permissions</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <?php foreach($menu_list as $menu): ?>
                            <tr>
-                              <th>Menu Name</th>
-                              <th>Permissions</th>
+                              <td><?= $menu['name']; ?></td>
+                              <td>
+                                 <?php
+                                    $menu_permissions = json_decode($menu['permission_ids'], true);
+                                    if(!is_array($menu_permissions)) $menu_permissions = [];
+                                 ?>
+                                 <?php foreach($permission_list as $perm): ?>
+                                    <label style="margin-right:10px;">
+                                       <input type="checkbox" 
+                                              class="permission-checkbox" 
+                                              data-menu-id="<?= $menu['id']; ?>" 
+                                              data-permission-id="<?= $perm['permission_id']; ?>" 
+                                              <?= in_array($perm['permission_id'], $menu_permissions) ? 'checked' : ''; ?>>
+                                       <?= $perm['permission_name']; ?>
+                                    </label>
+                                 <?php endforeach; ?>
+                              </td>
                            </tr>
-                        </thead>
-                        <tbody>
-                           <?php foreach($menu_list as $menu): ?>
-                              <tr>
-                                 <td><?= $menu['name']; ?></td>
-                                 <td>
-                                    <?php
-                                       $menu_permissions = json_decode($menu['permission_ids'], true);
-                                       if(!is_array($menu_permissions)) $menu_permissions = [];
-                                    ?>
-                                    <?php foreach($permission_list as $perm): ?>
-                                       <label style="margin-right:10px;">
-                                          <input type="checkbox" name="permissions[<?= $menu['id']; ?>][]" value="<?= $perm['permission_id']; ?>"
-                                             <?= in_array($perm['permission_id'], $menu_permissions) ? 'checked' : ''; ?>>
-                                          <?= $perm['permission_name']; ?>
-                                       </label>
-                                    <?php endforeach; ?>
-                                 </td>
-                              </tr>
-                           <?php endforeach; ?>
-                        </tbody>
-                     </table>
-                     <br>
-                     <button style="float: right;" type="submit" class="btn btn-success">Save Mapping</button>
-                  </form>
+                        <?php endforeach; ?>
+                     </tbody>
+                  </table>
                </div>
             </div>
          </div>
@@ -52,13 +51,41 @@
 </div>
 
 <script>
-   $(document).ready(function() {
-       $('#menuTable').DataTable({
-           "pageLength": 10,
-           "ordering": false, // Disable ordering if needed
-           "columnDefs": [
-               { "orderable": false, "targets": 1 } // Disable ordering on permissions column
-           ]
-       });
-   });
+$(document).ready(function() {
+    $('#menuTable').DataTable({
+        "pageLength": 10,
+        "ordering": false,
+        "columnDefs": [
+            { "orderable": false, "targets": 1 }
+        ]
+    });
+
+    // Handle checkbox change
+    $(document).on('change', '.permission-checkbox', function() {
+        var menuId = $(this).data('menu-id');
+        var permissionId = $(this).data('permission-id');
+        var checked = $(this).is(':checked');
+
+        $.ajax({
+            url: "<?= base_url('master/UserController/updateMenuPermission'); ?>",
+            type: "POST",
+            data: {
+                menu_id: menuId,
+                permission_id: permissionId,
+                checked: checked
+            },
+            dataType: "json",
+            success: function(response) {
+                if (response.status === 'success') {
+                    alert('Permission updated successfully');
+                } else {
+                    alert('Failed to update permission');
+                }
+            },
+            error: function() {
+                alert('Error occurred while updating permission');
+            }
+        });
+    });
+});
 </script>

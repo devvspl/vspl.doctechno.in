@@ -163,36 +163,64 @@ class UserController extends CI_Controller
         $this->data['permission_list'] = $this->db->select('permission_id, permission_name')->from('tbl_permissions')->where('status', 1)->get()->result_array();
         $this->load->view('layout/template', $this->data);
     }
+
+    // New method to handle AJAX updates
+    public function updateMenuPermission()
+    {
+        $menu_id = $this->input->post('menu_id');
+        $permission_id = $this->input->post('permission_id');
+        $checked = $this->input->post('checked') === 'true' ? true : false;
+
+        // Fetch current permissions for the menu
+        $menu = $this->db->get_where('tbl_menus', ['id' => $menu_id])->row_array();
+        $menu_permissions = json_decode($menu['permission_ids'], true);
+        if (!is_array($menu_permissions)) {
+            $menu_permissions = [];
+        }
+
+        if ($checked) {
+            // Add permission if checked
+            if (!in_array($permission_id, $menu_permissions)) {
+                $menu_permissions[] = $permission_id;
+            }
+        } else {
+            // Remove permission if unchecked
+            $menu_permissions = array_filter($menu_permissions, function ($id) use ($permission_id) {
+                return $id != $permission_id;
+            });
+            $menu_permissions = array_values($menu_permissions); // Reindex array
+        }
+
+        // Update the menu with new permissions
+        $json_permissions = json_encode($menu_permissions);
+        $this->db->where('id', $menu_id);
+        $this->db->update('tbl_menus', ['permission_ids' => $json_permissions]);
+
+        echo json_encode(['status' => 'success']);
+    }
+
     public function saveMenuMapping()
     {
+        // This method is no longer needed, but keeping it for reference in case you revert
         $permissions = $this->input->post('permissions');
-
-        // Fetch all menu IDs to handle those not sent (i.e., fully unchecked menus)
         $all_menus = $this->db->get('tbl_menus')->result_array();
 
         if (!empty($all_menus)) {
             foreach ($all_menus as $menu) {
                 $menu_id = $menu['id'];
-
-                // If this menu has permissions posted, save them
                 if (isset($permissions[$menu_id])) {
                     $permission_values = $permissions[$menu_id];
                     $json_permissions = json_encode($permission_values);
                 } else {
-                    // No permission posted for this menu, means everything is unchecked
                     $json_permissions = json_encode([]);
                 }
-
-                // Update each menu with its mapped permissions or empty array
                 $this->db->where('id', $menu_id);
                 $this->db->update('tbl_menus', ['permission_ids' => $json_permissions]);
             }
-
             $this->session->set_flashdata('success', 'Menu mapping updated successfully!');
         } else {
             $this->session->set_flashdata('error', 'No menus found to update!');
         }
-
         redirect('menu-mapping');
     }
 
