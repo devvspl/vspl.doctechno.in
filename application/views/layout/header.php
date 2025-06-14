@@ -34,9 +34,10 @@
                <aside class="main-sidebar" id="alert2"
                   style="position:unset;width:auto;padding-top:0px;background-color: transparent;box-shadow: 0 0 0;height:50px;">
                   <?php
-                  $user_id = $this->session->userdata('user_id'); // Get logged-in user ID
+                  $user_id = $this->session->userdata('user_id'); 
+                  $role_id = $this->session->userdata('role_id');
                   $this->load->helper('menu');
-                  $menu = get_menu($user_id);
+                  $menu = get_menu($user_id, $role_id);
                   ?>
 
                   <section class="sidebar" id="sibe-box">

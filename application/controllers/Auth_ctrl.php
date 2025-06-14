@@ -32,6 +32,7 @@ class Auth_ctrl extends CI_Controller
                         'user_id' => $result[0]['user_id'],
                         'name' => $result[0]['first_name'] . ' ' . $result[0]['last_name'],
                         'role' => $result[0]['role'],
+                        'role_id' => $result[0]['role_id'],
                         'username' => $result[0]['username'],
                         'group_id' => $result[0]['group_id'],
                         'authenticated' => true,

@@ -69,7 +69,7 @@ $group_id = $this->uri->segment(4);
 											<td><?= $i; ?></td>
 											<td><a href="javascript:void(0);" target="popup" onclick="window.open('<?= $supporting_file->file_path; ?>','popup','width=600,height=600');"><?= $supporting_file->file_name; ?></a></td>
 											<td><?= ($supporting_file->is_main_file == 'Y') ? 'Main File' : 'Support File'; ?></td>
-											<td><a href="javascript:void(0);" class="btn btn-danger btn-xs" onclick="delete_file(<?= $supporting_file->Support_Id ?>)"><i class="fa fa-trash"></a></td>
+											<td><a href="javascript:void(0);" class="btn btn-danger btn-xs" onclick="delete_file(<?= $supporting_file->support_id ?>)"><i class="fa fa-trash"></a></td>
 										</tr>
 									<?php
 										$i++;

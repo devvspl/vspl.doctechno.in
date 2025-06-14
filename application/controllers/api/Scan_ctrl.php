@@ -143,9 +143,9 @@ class Scan_ctrl extends REST_Controller
 
     function delete_support_post()
     {
-        $Support_Id = $this->post('Support_Id');
+        $support_id = $this->post('support_id');
         $query = $this->db->delete('support_file', array(
-            'Support_Id' => $Support_Id,
+            'support_id' => $support_id,
         ));
         if ($query) {
             $this->response(array('msg' => 'File Deleted successfully.', 'status' => 200), 200);

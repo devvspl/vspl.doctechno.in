@@ -57,7 +57,8 @@
                            </tr>
                         </thead>
                         <tbody>
-                           <?php if (!empty($main_file)): ?>
+                           <?php                        
+                           if (!empty($main_file)): ?>
                            <tr>
                               <td>1</td>
                               <td>
@@ -82,7 +83,7 @@
                               </td>
                               <td><?= ($supporting_file->is_main_file == 'Y') ? 'Main File' : 'Support File'; ?></td>
                               <td>
-                                 <a href="javascript:void(0);" class="btn btn-danger btn-xs" onclick="delete_file(<?= $supporting_file->Support_Id ?>)">
+                                 <a href="javascript:void(0);" class="btn btn-danger btn-xs" onclick="delete_file(<?= $supporting_file->support_id ?>)">
                                  <i class="fa fa-trash"></i>
                                  </a>
                               </td>

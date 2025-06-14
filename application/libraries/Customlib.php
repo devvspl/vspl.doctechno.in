@@ -262,12 +262,12 @@ class Customlib
             $support_file = $this->getSupportFile($scan_id);
             foreach ($support_file as $key => $value) {
                 $SupportFile = $value['file_name'];
-                $Support_Id = $value['Support_Id'];
+                $support_id = $value['support_id'];
                 $Temp_SupportFile = './uploads/temp/' . $SupportFile;
                 rename($Temp_SupportFile, $upload_dir . '/' . $SupportFile);
                 $support_location = base_url() . $upload_dir . '/' . $SupportFile;
                 $support_location1 = $upload_dir . '/' . $SupportFile;
-                $this->CI->db->where('Support_Id', $Support_Id)->update('support_file', ['file_path' => $support_location, 'secondary_file_path' => $support_location1]);
+                $this->CI->db->where('support_id', $support_id)->update('support_file', ['file_path' => $support_location, 'secondary_file_path' => $support_location1]);
             }
         }
     }

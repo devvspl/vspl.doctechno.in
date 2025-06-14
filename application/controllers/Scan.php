@@ -159,7 +159,7 @@ class Scan extends CI_Controller
         $file = $_FILES['support_file']['name'];
         $file_ext = pathinfo($file, PATHINFO_EXTENSION);
         $year = date('Y');
-        $config['upload_path'] = './Uploads/temp/';
+        $config['upload_path'] = './uploads/temp/';
         $config['allowed_types'] = 'jpg|png|jpeg|pdf';
         $config['max_size'] = 8192;
         $var_temp_name = time() . '.' . $file_ext;
@@ -175,7 +175,7 @@ class Scan extends CI_Controller
             }
         } else {
             $this->db->trans_start();
-            $data = ['scan_id' => $scan_id, 'file_name' => $var_temp_name, 'file_extension' => $file_ext, 'file_path' => base_url() . 'Uploads/temp/' . $var_temp_name, 'secondary_file_path' => 'Uploads/temp/' . $var_temp_name];
+            $data = ['scan_id' => $scan_id, 'file_name' => $var_temp_name, 'file_extension' => $file_ext, 'file_path' => base_url() . 'uploads/temp/' . $var_temp_name, 'secondary_file_path' => 'uploads/temp/' . $var_temp_name];
             $this->db->insert('support_file', $data);
             $this->db->trans_complete();
             if ($this->db->trans_status() === FALSE) {
@@ -197,7 +197,7 @@ class Scan extends CI_Controller
         $file = $_FILES['support_file']['name'];
         $file_ext = pathinfo($file, PATHINFO_EXTENSION);
         $year = date('Y');
-        $config['upload_path'] = './Uploads/temp/';
+        $config['upload_path'] = './uploads/temp/';
         $config['allowed_types'] = 'jpg|png|jpeg|pdf';
         $config['max_size'] = 8192;
         $var_temp_name = time() . '.' . $file_ext;
@@ -209,7 +209,7 @@ class Scan extends CI_Controller
             redirect('scan/temp_upload_supporting/' . $scan_id);
         } else {
             $this->db->trans_start();
-            $data = ['scan_id' => $scan_id, 'file_name' => $var_temp_name, 'file_extension' => $file_ext, 'file_path' => base_url() . 'Uploads/temp/' . $var_temp_name, 'secondary_file_path' => 'Uploads/temp/' . $var_temp_name];
+            $data = ['scan_id' => $scan_id, 'file_name' => $var_temp_name, 'file_extension' => $file_ext, 'file_path' => base_url() . 'uploads/temp/' . $var_temp_name, 'secondary_file_path' => 'uploads/temp/' . $var_temp_name];
             $this->db->insert('support_file', $data);
             $this->db->trans_complete();
             if ($this->db->trans_status() === FALSE) {
@@ -240,7 +240,7 @@ class Scan extends CI_Controller
     public function delete_file()
     {
         $id = $this->input->post('id');
-        $this->db->delete('support_file', ['Support_Id' => $id]);
+        $this->db->delete('support_file', ['support_id' => $id]);
         $this->db->trans_complete();
         if ($this->db->trans_status() === false) {
             $this->db->trans_rollback();
