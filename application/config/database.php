@@ -9,7 +9,7 @@ if ($_SERVER['SERVER_NAME'] == 'localhost') {
         'hostname' => 'localhost',
         'username' => 'root',
         'password' => '',
-        'database' => 'vspl_nova',
+        'database' => 'vspl_nova_new',
         'dbdriver' => 'mysqli',
         'dbprefix' => '',
         'pconnect' => false,

@@ -33,3 +33,4 @@ uploads/*
 /tests/results/
 application/config/database.php
 application/config/database.php
+application/config/database.php
