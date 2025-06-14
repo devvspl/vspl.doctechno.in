@@ -32,7 +32,6 @@ class Punch extends CI_Controller
         $this->session->set_userdata("sub_menu", "punch");
         $this->data["main"] = "punch/punchfile";
         $this->data["scanfile_list"] = $this->Punch_model->get_file_for_punch();
-        $this->data["my_doctype_list"] = $this->Punch_model->get_my_permissioned_doctype_list();
         $this->load->view("layout/template", $this->data);
     }
     public function get_additional_information_by_scan_id($scan_id)

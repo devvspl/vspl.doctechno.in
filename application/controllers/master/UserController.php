@@ -160,7 +160,7 @@ class UserController extends CI_Controller
     {
         $this->data['main'] = 'user/menu_mapping';
         $this->data['menu_list'] = $this->db->get('tbl_menus')->result_array();
-        $this->data['permission_list'] = $this->db->select('permission_id, permission_name')->from('tbl_permissions')->where('status', 1)->get()->result_array();
+        $this->data['permission_list'] = $this->db->select('permission_id, permission_name')->from('tbl_permissions')->where('status', 1)->where('permission_id !=', 8)->get()->result_array();
         $this->load->view('layout/template', $this->data);
     }
 

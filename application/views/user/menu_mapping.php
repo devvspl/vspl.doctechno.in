@@ -16,6 +16,7 @@
                      <thead>
                         <tr>
                            <th>Menu Name</th>
+                           <th>URL</th>
                            <th>Permissions</th>
                         </tr>
                      </thead>
@@ -23,6 +24,7 @@
                         <?php foreach($menu_list as $menu): ?>
                            <tr>
                               <td><?= $menu['name']; ?></td>
+                              <td><?= $menu['url']; ?></td>
                               <td>
                                  <?php
                                     $menu_permissions = json_decode($menu['permission_ids'], true);

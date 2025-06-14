@@ -95,7 +95,6 @@
                         <thead>
                             <tr>
                                 <th>Reverse Charge</th>
-                                <th>Department</th>
                                 <th>Cost/Sub</th>
                                 <th>Business Unit</th>
                                 <th>Activity</th>
@@ -106,6 +105,7 @@
                                 <th>Region</th>
                                 <th>Function</th>
                                 <th>Vertical</th>
+                                <th>Department</th>
                                 <th>Sub Department</th>
                                 <th>Zone</th>
                                 <th>Debit A/C</th>
@@ -125,13 +125,6 @@
                                         <input type="text" name="reverse_charge[]" id="reverse_charge_<?= $index + 1 ?>"
                                             class="form-control"
                                             value="<?= isset($item['reverse_charge']) ? $item['reverse_charge'] : ''; ?>">
-                                    </td>
-                                    <td>
-                                        <input type="text" name="department_name[]" id="department_<?= $index + 1 ?>"
-                                            class="form-control autocomplete-department"
-                                            value="<?= isset($item['department_name']) ? $item['department_name'] : ''; ?>">
-                                        <input type="hidden" name="department_id[]" id="department_id_<?= $index + 1 ?>"
-                                            value="<?= isset($item['department_id']) ? $item['department_id'] : ''; ?>">
                                     </td>
                                     <td>
                                         <input type="text" name="cost_center_name[]" id="cost_center_<?= $index + 1 ?>"
@@ -204,6 +197,13 @@
                                             value="<?= isset($item['vertical_id']) ? $item['vertical_id'] : ''; ?>">
                                     </td>
                                     <td>
+                                        <input type="text" name="department_name[]" id="department_<?= $index + 1 ?>"
+                                            class="form-control autocomplete-department"
+                                            value="<?= isset($item['department_name']) ? $item['department_name'] : ''; ?>">
+                                        <input type="hidden" name="department_id[]" id="department_id_<?= $index + 1 ?>"
+                                            value="<?= isset($item['department_id']) ? $item['department_id'] : ''; ?>">
+                                    </td>
+                                    <td>
                                         <input type="text" name="sub_department[]" id="sub_department_<?= $index + 1 ?>"
                                             class="form-control"
                                             value="<?= isset($item['sub_department_name']) ? $item['sub_department_name'] : ''; ?>">
@@ -257,8 +257,11 @@
                                             value="<?= isset($item['tds_amount']) ? $item['tds_amount'] : ''; ?>">
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-danger btn-sm remove_row">Remove</button>
+                                        <button type="button" class="btn btn-danger btn-sm remove_row" title="Remove">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
                                     </td>
+
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -268,7 +271,6 @@
                         <thead>
                             <tr>
                                 <th>Reverse Charge</th>
-                                <th>Department</th>
                                 <th>Cost/Sub</th>
                                 <th>Business Unit</th>
                                 <th>Activity</th>
@@ -279,6 +281,7 @@
                                 <th>Region</th>
                                 <th>Function</th>
                                 <th>Vertical</th>
+                                <th>Department</th>
                                 <th>Sub Department</th>
                                 <th>Zone</th>
                                 <th>Debit A/C</th>
@@ -295,11 +298,6 @@
                             <tr class="form-row" id="row_1">
                                 <td>
                                     <input type="text" name="reverse_charge[]" id="reverse_charge_1" class="form-control">
-                                </td>
-                                <td>
-                                    <input type="text" name="department_name[]" id="department_1"
-                                        class="form-control autocomplete-department">
-                                    <input type="hidden" name="department_id[]" id="department_id_1">
                                 </td>
                                 <td>
                                     <input type="text" name="cost_center_name[]" id="cost_center_1"
@@ -350,6 +348,11 @@
                                     <input type="hidden" name="vertical_id[]" id="vertical_id_1">
                                 </td>
                                 <td>
+                                    <input type="text" name="department_name[]" id="department_1"
+                                        class="form-control autocomplete-department">
+                                    <input type="hidden" name="department_id[]" id="department_id_1">
+                                </td>
+                                <td>
                                     <input type="text" name="sub_department[]" id="sub_department_1" class="form-control">
                                     <input type="hidden" name="sub_department_id[]" id="sub_department_id_1">
                                 </td>
@@ -386,15 +389,22 @@
                                     <input type="text" name="item_tds_amount[]" id="item_tds_amount_1" class="form-control">
                                 </td>
                                 <td>
-                                    <button type="button" class="btn btn-danger btn-sm remove_row">Remove</button>
+                                    <button type="button" class="btn btn-danger btn-sm remove_row" title="Remove">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
                                 </td>
+
                             </tr>
                         </tbody>
                     </table>
                 <?php endif; ?>
             </div>
             <div class="form-group col-md-12" style="margin-top: 5px;">
-                <button type="button" class="btn btn-success" id="add_row">Add Row</button>
+                <button type="button" class="btn btn-success btn-sm" id="add_row"
+                    style="margin-top: 10px;padding: 2px 8px;" title="Add Row">
+                    <i class="fa fa-plus"></i>
+                </button>
+
                 <label style="float: right;">Total: <input type="number" name="finance_total_Amount" readonly
                         id="billAmount" value="<?= isset($main_record) ? $main_record['total_amount'] : ''; ?>"
                         class="form-control" /></label>
@@ -402,344 +412,430 @@
         </div>
         <div class="box-footer">
             <button type="reset" class="btn btn-danger">Reset</button>
-            <input type="submit" class="btn btn-info pull-right" id="fin_save_draft"  style="margin-left: 20px;" name="save_draft"
-                value="Save as Draft"></input>
-            <input type="submit" class="btn btn-success pull-right" id="fin_final_submit" name="final_submit" value="Final Submit"></input>
+            <input type="submit" class="btn btn-info pull-right" id="fin_save_draft" style="margin-left: 20px;"
+                name="save_draft" value="Save as Draft"></input>
+            <input type="submit" class="btn btn-success pull-right" id="fin_final_submit" name="final_submit"
+                value="Final Submit"></input>
         </div>
     </form>
 </div>
 <script>
-    $(document).ready(function () {
-        updateBillAmount();
-        let rowCount = $("#rows_container .form-row").length;
-        for (let rowNo = 1; rowNo <= rowCount; rowNo++) {
-            initializeAllAutoCompleteInputs(rowNo);
-        }
-        initAutoCompleteInput("#business_entity", "<?= site_url('get-business-entities') ?>", function (item) {
-            $("#business_entity").val(item.label);
+$(document).ready(function () {
+    updateBillAmount();
+    let rowCount = $("#rows_container .form-row").length;
+    for (let rowNo = 1; rowNo <= rowCount; rowNo++) {
+        initializeAllAutoCompleteInputs(rowNo);
+        setupDependentFieldListeners(rowNo);
+    }
 
-        });
-        initAutoCompleteInput("#tds_section", "<?= site_url('get-tds-section') ?>", function (item) {
-            $("#tds_section").val(item.label);
-            $("#tds_rate").val(item.rate);
-            $("#tds_section").trigger("change");
-        });
-        $("#account").autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    url: "<?php echo base_url('form/JournalEntry_ctrl/getAllAccountList'); ?>",
-                    type: "GET",
-                    dataType: "json",
-                    data: {
-                        query: request.term,
-                    },
-                    success: function (data) {
-                        if (Array.isArray(data)) {
-                            response(
-                                data.map((account) => {
-                                    return {
-                                        label: `${account.account_name} (${account.focus_code})`,
-                                        value: account.account_name,
-                                        id: account.id,
-                                    };
-                                })
-                            );
-                        } else {
-                            console.error("Expected an array but received:", data);
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error("AJAX error:", status, error);
-                    },
-                });
-            },
-            minLength: 2,
-            select: function (event, ui) {
-                $("#account").val(ui.item.value);
-                return false;
-            },
-        });
-        $("#add_row").click(function () {
-            let rowCount = $("#items_table tbody tr").length + 1;
-            let newRow = $("#row_1").clone();
-            newRow.attr("id", "row_" + rowCount);
+    initAutoCompleteInput("#business_entity", "<?= site_url('get-business-entities') ?>", function (item) {
+        $("#business_entity").val(item.label);
+    });
 
-            newRow.find("input").each(function () {
-                let $this = $(this);
-                let oldId = $this.attr("id");
-                let oldName = $this.attr("name");
+    initAutoCompleteInput("#tds_section", "<?= site_url('get-tds-section') ?>", function (item) {
+        $("#tds_section").val(item.label);
+        $("#tds_rate").val(item.rate);
+        $("#tds_section").trigger("change");
+    });
 
-                if (oldId) {
-                    let newId = oldId.replace(/\d+$/, "") + rowCount;
-                    $this.attr("id", newId);
-                }
-
-                if (oldName) {
-                    let newName = oldName.replace(/\[\d+\]/, "[" + rowCount + "]");
-                    $this.attr("name", newName);
-                }
-
-                $this.val("");
+    $("#account").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "<?php echo base_url('form/JournalEntry_ctrl/getAllAccountList'); ?>",
+                type: "GET",
+                dataType: "json",
+                data: {
+                    query: request.term,
+                },
+                success: function (data) {
+                    if (Array.isArray(data)) {
+                        response(
+                            data.map((account) => {
+                                return {
+                                    label: `${account.account_name} (${account.focus_code})`,
+                                    value: account.account_name,
+                                    id: account.id,
+                                };
+                            })
+                        );
+                    } else {
+                        console.error("Expected an array but received:", data);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX error:", status, error);
+                },
             });
+        },
+        minLength: 2,
+        select: function (event, ui) {
+            $("#account").val(ui.item.value);
+            return false;
+        },
+    });
 
-            newRow.find(".remove_row").show();
-            $("#items_table tbody").append(newRow);
+    $("#add_row").click(function () {
+        let rowCount = $("#items_table tbody tr").length + 1;
+        let newRow = $("#row_1").clone();
+        newRow.attr("id", "row_" + rowCount);
 
-            initializeAllAutoCompleteInputs(rowCount);
-        });
-        $(document).on("click", ".remove_row", function () {
-            if ($("#items_table tbody tr").length > 1) {
-                $(this).closest("tr").remove();
-                updateBillAmount();
-            } else {
-                alert("At least one row must remain.");
+        newRow.find("input").each(function () {
+            let $this = $(this);
+            let oldId = $this.attr("id");
+            let oldName = $this.attr("name");
+
+            if (oldId) {
+                let newId = oldId.replace(/\d+$/, "") + rowCount;
+                $this.attr("id", newId);
             }
-        });
-        $(document).on("input", ".amount", function () {
-            updateBillAmount();
+
+            if (oldName) {
+                let newName = oldName.replace(/\[\d+\]/, "[" + rowCount + "]");
+                $this.attr("name", newName);
+            }
+
+            $this.val("");
         });
 
-        $(document).on('mouseenter', '#rows_container input.form-control', function () {
-            $(this).attr('title', $(this).val() || 'No value');
+        newRow.find(".remove_row").show();
+        $("#items_table tbody").append(newRow);
+
+        initializeAllAutoCompleteInputs(rowCount);
+        setupDependentFieldListeners(rowCount);
+    });
+
+    $(document).on("click", ".remove_row", function () {
+        if ($("#items_table tbody tr").length > 1) {
+            $(this).closest("tr").remove();
+            updateBillAmount();
+        } else {
+            alert("At least one row must remain.");
+        }
+    });
+
+    $(document).on("input", ".amount", function () {
+        updateBillAmount();
+    });
+
+    $(document).on('mouseenter', '#rows_container input.form-control', function () {
+        $(this).attr('title', $(this).val() || 'No value');
+        $(this).css({
+            'background-color': '#e6f3ff',
+            'border-color': '#007bff'
+        });
+    }).on('mouseleave', '#rows_container input.form-control', function () {
+        $(this).removeAttr('title');
+        $(this).css({
+            'background-color': '',
+            'border-color': ''
+        });
+    });
+
+    $(document).on('input', '#rows_container input.form-control', function () {
+        $(this).attr('title', $(this).val() || 'No value');
+    });
+
+    $(document).on('keydown', '#rows_container input.form-control', function (e) {
+        const key = e.which;
+        const leftArrow = 37;
+        const rightArrow = 39;
+        const tabKey = 9;
+
+        if (key === leftArrow || key === rightArrow || key === tabKey) {
+            e.preventDefault();
+            const $inputs = $(this).closest('tr').find('input.form-control');
+            const $allRows = $('#items_table tbody tr');
+            const currentRowIndex = $allRows.index($(this).closest('tr'));
+            const currentIndex = $inputs.index(this);
+
             $(this).css({
+                'background-color': '',
+                'border-color': ''
+            });
+            $(this).removeAttr('title');
+
+            let $nextInput, nextIndex;
+            if (key === rightArrow || key === tabKey) {
+                nextIndex = currentIndex + 1;
+                if (nextIndex < $inputs.length) {
+                    $nextInput = $inputs.eq(nextIndex);
+                } else {
+                    const nextRowIndex = (currentRowIndex + 1) % $allRows.length;
+                    $nextInput = $allRows.eq(nextRowIndex).find('input.form-control').first();
+                }
+            } else if (key === leftArrow) {
+                nextIndex = currentIndex - 1;
+                if (nextIndex >= 0) {
+                    $nextInput = $inputs.eq(nextIndex);
+                } else {
+                    const prevRowIndex = currentRowIndex - 1 >= 0 ? currentRowIndex - 1 : $allRows.length - 1;
+                    $nextInput = $allRows.eq(prevRowIndex).find('input.form-control').last();
+                }
+            }
+
+            $nextInput.focus();
+            $nextInput.css({
                 'background-color': '#e6f3ff',
                 'border-color': '#007bff'
             });
-        }).on('mouseleave', '#rows_container input.form-control', function () {
-            $(this).removeAttr('title');
-            $(this).css({
-                'background-color': '',
-                'border-color': ''
-            });
-        });
-
-
-        $(document).on('input', '#rows_container input.form-control', function () {
-            $(this).attr('title', $(this).val() || 'No value');
-        });
-
-
-        $(document).on('keydown', '#rows_container input.form-control', function (e) {
-            const key = e.which;
-            const leftArrow = 37;
-            const rightArrow = 39;
-            const tabKey = 9;
-
-            if (key === leftArrow || key === rightArrow || key === tabKey) {
-                e.preventDefault();
-                const $inputs = $(this).closest('tr').find('input.form-control');
-                const $allRows = $('#items_table tbody tr');
-                const currentRowIndex = $allRows.index($(this).closest('tr'));
-                const currentIndex = $inputs.index(this);
-
-
-                $(this).css({
-                    'background-color': '',
-                    'border-color': ''
-                });
-                $(this).removeAttr('title');
-
-                let $nextInput, nextIndex;
-                if (key === rightArrow || key === tabKey) {
-                    nextIndex = currentIndex + 1;
-                    if (nextIndex < $inputs.length) {
-
-                        $nextInput = $inputs.eq(nextIndex);
-                    } else {
-
-                        const nextRowIndex = (currentRowIndex + 1) % $allRows.length;
-                        $nextInput = $allRows.eq(nextRowIndex).find('input.form-control').first();
-                    }
-                } else if (key === leftArrow) {
-                    nextIndex = currentIndex - 1;
-                    if (nextIndex >= 0) {
-
-                        $nextInput = $inputs.eq(nextIndex);
-                    } else {
-
-                        const prevRowIndex = currentRowIndex - 1 >= 0 ? currentRowIndex - 1 : $allRows.length - 1;
-                        $nextInput = $allRows.eq(prevRowIndex).find('input.form-control').last();
-                    }
-                }
-
-
-                $nextInput.focus();
-                $nextInput.css({
-                    'background-color': '#e6f3ff',
-                    'border-color': '#007bff'
-                });
-                $nextInput.attr('title', $nextInput.val() || 'No value');
-            }
-        });
-
-
-        $(document).on('blur', '#rows_container input.form-control', function () {
-            $(this).css({
-                'background-color': '',
-                'border-color': ''
-            });
-            $(this).removeAttr('title');
-        });
-        $('input[name="tdsApplicable"]').change(function () {
-            if ($("#tdsApplicableYes").is(":checked")) {
-                generateTdsJvNo();
-                $("#tdsDetailsForm").show();
-            } else {
-                $("#tdsDetailsForm").hide();
-                $("#tdsJvNo").val("");
-            }
-        });
-        $("#tdsSection").on("change", function () {
-            var selectedSection = $(this).val();
-            var sectionDetails = tdsSections.find((section) => section.section === selectedSection);
-
-            if (sectionDetails) {
-                $("#tdsPercentage").val(sectionDetails.rate).trigger("change");
-            } else {
-                $("#tdsPercentage").val("");
-            }
-        });
-        $("#billAmount, #tdsPercentage").on("input change", function () {
-            var billAmount = $(".final_amount_column").val();
-            var percentage = parseFloat($("#tdsPercentage").val()) || 0;
-            var tds_amount = (billAmount * percentage) / 100;
-            $("#tds_amount").val(tds_amount.toFixed(2));
-        });
-        $("#tds_section").change(function () {
-            var tds_section_id = $("#tds_section_id").val();
-            var grand_total = parseFloat($("#Grand_Total").val()) || 0;
-            var tds_rate = parseFloat($("#tds_rate").val()) || 0;
-            $("#tds_percentage").val(tds_rate);
-            var tds_amount = (grand_total * tds_rate) / 100;
-            $("#tds_amount").val(tds_amount.toFixed(2));
-        });
+            $nextInput.attr('title', $nextInput.val() || 'No value');
+        }
     });
+
+    $(document).on('blur', '#rows_container input.form-control', function () {
+        $(this).css({
+            'background-color': '',
+            'border-color': ''
+        });
+        $(this).removeAttr('title');
+    });
+
+    $('input[name="tdsApplicable"]').change(function () {
+        if ($("#tdsApplicableYes").is(":checked")) {
+            generateTdsJvNo();
+            $("#tdsDetailsForm").show();
+        } else {
+            $("#tdsDetailsForm").hide();
+            $("#tdsJvNo").val("");
+        }
+    });
+
+    $("#tdsSection").on("change", function () {
+        var selectedSection = $(this).val();
+        var sectionDetails = tdsSections.find((section) => section.section === selectedSection);
+
+        if (sectionDetails) {
+            $("#tdsPercentage").val(sectionDetails.rate).trigger("change");
+        } else {
+            $("#tdsPercentage").val("");
+        }
+    });
+
+    $("#billAmount, #tdsPercentage").on("input change", function () {
+        var billAmount = parseFloat($(".final_amount_column").val()) || 0;
+        var percentage = parseFloat($("#tdsPercentage").val()) || 0;
+        var tds_amount = (billAmount * percentage) / 100;
+        $("#tds_amount").val(tds_amount.toFixed(2));
+    });
+
+    $("#tds_section").change(function () {
+        var tds_section_id = $("#tds_section_id").val();
+        var grand_total = parseFloat($("#Grand_Total").val()) || 0;
+        var tds_rate = parseFloat($("#tds_rate").val()) || 0;
+        $("#tds_percentage").val(tds_rate);
+        var tds_amount = (grand_total * tds_rate) / 100;
+        $("#tds_amount").val(tds_amount.toFixed(2));
+    });
+
+    function setupDependentFieldListeners(rowNo) {
+        $(document).on('change', `#function_${rowNo}`, function () {
+            const functionId = $(`#function_id_${rowNo}`).val();
+            console.log(`Function changed for row ${rowNo}, functionId:`, functionId); 
+            initAutoCompleteInput(
+                `#vertical_${rowNo}`,
+                "<?= site_url('get-vertical') ?>",
+                null,
+                `function_id_${rowNo}`,
+                functionId
+            );
+            clearField(`#vertical_${rowNo}`, `#vertical_id_${rowNo}`);
+            clearField(`#department_${rowNo}`, `#department_id_${rowNo}`);
+            clearField(`#sub_department_${rowNo}`, `#sub_department_id_${rowNo}`);
+            clearField(`#activity_${rowNo}`, `#activity_id_${rowNo}`);
+        });
+
+        $(document).on('change', `#vertical_${rowNo}`, function () {
+            const verticalId = $(`#vertical_id_${rowNo}`).val();
+            console.log(`Vertical changed for row ${rowNo}, verticalId:`, verticalId); 
+            initAutoCompleteInput(
+                `#department_${rowNo}`,
+                "<?= site_url('get-departments') ?>",
+                null,
+                `vertical_id_${rowNo}`,
+                verticalId
+            );
+            clearField(`#department_${rowNo}`, `#department_id_${rowNo}`);
+            clearField(`#sub_department_${rowNo}`, `#sub_department_id_${rowNo}`);
+            clearField(`#activity_${rowNo}`, `#activity_id_${rowNo}`);
+        });
+
+        $(document).on('change', `#department_${rowNo}`, function () {
+            const departmentId = $(`#department_id_${rowNo}`).val();
+            console.log(`Department changed for row ${rowNo}, departmentId:`, departmentId); 
+            initAutoCompleteInput(
+                `#sub_department_${rowNo}`,
+                "<?= site_url('get-sub-department') ?>",
+                null,
+                `department_id_${rowNo}`,
+                departmentId
+            );
+            initAutoCompleteInput(
+                `#activity_${rowNo}`,
+                "<?= site_url('get-activities') ?>",
+                null,
+                `department_id_${rowNo}`,
+                departmentId
+            );
+            clearField(`#sub_department_${rowNo}`, `#sub_department_id_${rowNo}`);
+            clearField(`#activity_${rowNo}`, `#activity_id_${rowNo}`);
+        });
+
+        $(document).on('change', `#category_${rowNo}`, function () {
+            const categoryId = $(`#category_id_${rowNo}`).val();
+            console.log(`Category changed for row ${rowNo}, categoryId:`, categoryId); 
+            initAutoCompleteInput(
+                `#crop_${rowNo}`,
+                "<?= site_url('get-crops') ?>",
+                null,
+                `category_id_${rowNo}`,
+                categoryId
+            );
+            clearField(`#crop_${rowNo}`, `#crop_id_${rowNo}`);
+        });
+    }
+
+    function clearField(inputSelector, hiddenSelector) {
+        $(inputSelector).val('');
+        $(hiddenSelector).val('');
+    }
 
     function initializeAllAutoCompleteInputs(rowNo) {
-        initAutoCompleteInput("#cost_center_" + rowNo, "<?= site_url('get-cost-centers') ?>");
-        initAutoCompleteInput("#department_" + rowNo, "<?= site_url('get-departments') ?>");
-        initAutoCompleteInput("#business_unit_" + rowNo, "<?= site_url('get-business-units') ?>");
-        initAutoCompleteInput("#region_" + rowNo, "<?= site_url('get-regions') ?>");
-        initAutoCompleteInput("#state_" + rowNo, "<?= site_url('get-states') ?>");
-        initAutoCompleteInput("#location_" + rowNo, "<?= site_url('get-locations') ?>");
-        initAutoCompleteInput("#category_" + rowNo, "<?= site_url('get-categories') ?>");
-        initAutoCompleteInput("#crop_" + rowNo, "<?= site_url('get-crops') ?>");
-        initAutoCompleteInput("#activity_" + rowNo, "<?= site_url('get-activities') ?>");
-        initAutoCompleteInput("#debit_ac_" + rowNo, "<?= site_url('get-debit-accounts') ?>");
-        initAutoCompleteInput("#credit_ac_" + rowNo, "<?= site_url('get-credit-accounts') ?>");
-        initAutoCompleteInput("#payment_term_" + rowNo, "<?= site_url('get-payment-term') ?>");
-        initAutoCompleteInput("#function_" + rowNo, "<?= site_url('get-function') ?>");
-        initAutoCompleteInput("#zone_" + rowNo, "<?= site_url('get-zone') ?>");
-        initAutoCompleteInput("#vertical_" + rowNo, "<?= site_url('get-vertical') ?>");
-        initAutoCompleteInput("#sub_department_" + rowNo, "<?= site_url('get-sub-department') ?>");
+        initAutoCompleteInput(`#cost_center_${rowNo}`, "<?= site_url('get-cost-centers') ?>");
+        initAutoCompleteInput(`#business_unit_${rowNo}`, "<?= site_url('get-business-units') ?>");
+        initAutoCompleteInput(`#region_${rowNo}`, "<?= site_url('get-regions') ?>");
+        initAutoCompleteInput(`#state_${rowNo}`, "<?= site_url('get-states') ?>");
+        initAutoCompleteInput(`#location_${rowNo}`, "<?= site_url('get-locations') ?>");
+        initAutoCompleteInput(`#category_${rowNo}`, "<?= site_url('get-categories') ?>");
+        initAutoCompleteInput(`#debit_ac_${rowNo}`, "<?= site_url('get-debit-accounts') ?>");
+        initAutoCompleteInput(`#credit_ac_${rowNo}`, "<?= site_url('get-credit-accounts') ?>");
+        initAutoCompleteInput(`#payment_term_${rowNo}`, "<?= site_url('get-payment-term') ?>");
+        initAutoCompleteInput(`#function_${rowNo}`, "<?= site_url('get-function') ?>");
+        initAutoCompleteInput(`#zone_${rowNo}`, "<?= site_url('get-zone') ?>");
+
+        const functionId = $(`#function_id_${rowNo}`).val();
+        console.log(`Initial functionId for row ${rowNo}: AAA${functionId}`); 
+        if (functionId) {
+            initAutoCompleteInput(`#vertical_${rowNo}`, "<?= site_url('get-vertical') ?>", null, `function_id_${rowNo}`, functionId);
+        } else {
+            initAutoCompleteInput(`#vertical_${rowNo}`, "<?= site_url('get-vertical') ?>");
+        }
+
+        const verticalId = $(`#vertical_id_${rowNo}`).val();
+        if (verticalId) {
+            initAutoCompleteInput(`#department_${rowNo}`, "<?= site_url('get-departments') ?>", null, `vertical_id_${rowNo}`, verticalId);
+        } else {
+            initAutoCompleteInput(`#department_${rowNo}`, "<?= site_url('get-departments') ?>");
+        }
+
+        const departmentId = $(`#department_id_${rowNo}`).val();
+        if (departmentId) {
+            initAutoCompleteInput(`#sub_department_${rowNo}`, "<?= site_url('get-sub-department') ?>", null, `department_id_${rowNo}`, departmentId);
+            initAutoCompleteInput(`#activity_${rowNo}`, "<?= site_url('get-activities') ?>", null, `department_id_${rowNo}`, departmentId);
+        } else {
+            initAutoCompleteInput(`#sub_department_${rowNo}`, "<?= site_url('get-sub-department') ?>");
+            initAutoCompleteInput(`#activity_${rowNo}`, "<?= site_url('get-activities') ?>");
+        }
+
+        const categoryId = $(`#category_id_${rowNo}`).val();
+        if (categoryId) {
+            initAutoCompleteInput(`#crop_${rowNo}`, "<?= site_url('get-crops') ?>", null, `category_id_${rowNo}`, categoryId);
+        } else {
+            initAutoCompleteInput(`#crop_${rowNo}`, "<?= site_url('get-crops') ?>");
+        }
     }
 
-    function initAutoCompleteInput(selector, url, onSelectCallback = null) {
-        $(selector)
-            .autocomplete({
-                source: function (request, response) {
-                    $.ajax({
-                        url: url,
-                        type: "POST",
-                        dataType: "json",
-                        data: { term: request.term },
-                        success: function (data) {
-                            response(data);
-                        },
-                    });
-                },
-                minLength: 0,
-                appendTo: "body",
-                select: function (event, ui) {
-                    $(this).val(ui.item.label);
-
-                    let currentId = $(this).attr("id");
-                    let hiddenFieldId = currentId;
-
-
-                    if (/\d+$/.test(currentId)) {
-
-                        hiddenFieldId = currentId.replace(/_(\d+)$/, "_id_$1");
-                    } else {
-
-                        hiddenFieldId = currentId + "_id";
+    function initAutoCompleteInput(selector, url, onSelectCallback = null, dependentFieldId = null, dependentFieldValue = null) {
+        $(selector).autocomplete({
+            source: function (request, response) {
+                let data = { term: request.term };
+                if (dependentFieldId && dependentFieldValue) {
+                    data[dependentFieldId.replace(/_id_\d+$/, '')] = dependentFieldValue;
+                }
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    dataType: "json",
+                    data: data,
+                    success: function (data) {
+                        console.log(`Response from ${url}:`, data); 
+                        response(data);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(`AJAX error for ${url}:`, status, error);
                     }
+                });
+            },
+            minLength: 0,
+            appendTo: "body",
+            select: function (event, ui) {
+                console.log(`Selected item for ${selector}:`, ui.item); 
+                $(this).val(ui.item.label);
+                let currentId = $(this).attr("id");
+                let hiddenFieldId = currentId;
 
-                    $("#" + hiddenFieldId).val(ui.item.value);
+                if (/\d+$/.test(currentId)) {
+                    hiddenFieldId = currentId.replace(/_(\d+)$/, "_id_$1");
+                } else {
+                    hiddenFieldId = currentId + "_id";
+                }
 
-                    if (typeof onSelectCallback === "function") {
-                        onSelectCallback(ui.item);
-                    }
+                $(`#${hiddenFieldId}`).val(ui.item.value);
+                console.log(`Updated hidden field ${hiddenFieldId} with value:`, ui.item.value); 
 
-                    return false;
-                },
-                focus: function (event, ui) {
-                    $(this).val(ui.item.label);
-                    return false;
-                },
-            })
-            .focus(function () {
-                $(this).autocomplete("search", "");
-            });
+                if (typeof onSelectCallback === "function") {
+                    onSelectCallback(ui.item);
+                }
+
+                
+                $(this).trigger('change');
+
+                return false;
+            },
+            focus: function (event, ui) {
+                $(this).val(ui.item.label);
+                return false;
+            }
+        }).focus(function () {
+            $(this).autocomplete("search", "");
+        });
     }
 
-   function updateBillAmount() {
-    let total = 0;
-    var final_amount = parseFloat($(".final_amount_column").val()) || 0; 
-    $(".amount").each(function () {
-        let value = parseFloat($(this).val()) || 0;
-        total += value;
-    });
+    function updateBillAmount() {
+        let total = 0;
+        var final_amount = parseFloat($(".final_amount_column").val()) || 0;
+        $(".amount").each(function () {
+            let value = parseFloat($(this).val()) || 0;
+            total += value;
+        });
 
-    let TDS_amount = parseFloat($("#tds_amount").val()) || 0; 
-    var maxAllowedAmount = total + TDS_amount;
+        let TDS_amount = parseFloat($("#tds_amount").val()) || 0;
+        var maxAllowedAmount = total + TDS_amount;
 
-    // Log values to console for debugging
-    
-    
-    
-    
-    
-    
+        $("#billAmount").val(maxAllowedAmount.toFixed(2));
+        var submitButton = $("#fin_final_submit");
+        var draftButton = $("#fin_save_draft");
+        if (submitButton.length === 0) {
+            console.error("submitButton not found! Selector: #fin_final_submit");
+        }
+        if (draftButton.length === 0) {
+            console.error("draftButton not found! Selector: #fin_save_draft");
+        }
 
-    // Update billAmount field
-    $("#billAmount").val(maxAllowedAmount.toFixed(2));
-
-    // Select buttons by ID
-    var submitButton = $("#fin_final_submit");
-    var draftButton = $("#fin_save_draft");
-
-    // Debug: Check if buttons exist
-    if (submitButton.length === 0) {
-        console.error("submitButton not found! Selector: #fin_final_submit");
-    } else {
-        
-    }
-    if (draftButton.length === 0) {
-        console.error("draftButton not found! Selector: #fin_save_draft");
-    } else {
-        
+        if (final_amount.toFixed(2) === maxAllowedAmount.toFixed(2)) {
+            submitButton.removeAttr('disabled');
+            draftButton.removeAttr('disabled');
+        } else {
+            submitButton.attr('disabled', 'disabled');
+            draftButton.attr('disabled', 'disabled');
+        }
     }
 
-    // Enable/disable buttons using .attr()
-    if (final_amount.toFixed(2) === maxAllowedAmount.toFixed(2)) {
-        submitButton.removeAttr('disabled');
-        draftButton.removeAttr('disabled');
-        
-    } else {
-        submitButton.attr('disabled', 'disabled');
-        draftButton.attr('disabled', 'disabled');
-        
-    }
-}
-
-function generateTdsJvNo() {
+    function generateTdsJvNo() {
         const date = new Date();
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, "0");
-
         const jvNo = "<?php echo $tdsJvNo; ?>";
         $("#tdsJvNo").val(jvNo);
     }
-
+});
 </script>

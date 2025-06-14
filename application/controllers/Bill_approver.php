@@ -121,12 +121,10 @@ class Bill_approver extends CI_Controller
     {
 
         $bill_list = $this->db->where('bill_approval_status', 'N')
-            // ->where_in('location_id', $user_location_array)
             ->join('master_work_location', 'master_work_location.location_id = y{$this->year_id}_scan_file.location_id', 'left')
             ->where('bill_approver_id', $this->session->userdata('user_id'))
             ->get("y{$this->year_id}_scan_file")
             ->result_array();
-
         $this->data['bill_list'] = $bill_list;
         $this->data['main'] = 'bill_approver/pending_bill_list';
         $this->load->view('layout/template', $this->data);

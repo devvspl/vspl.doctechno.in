@@ -24,7 +24,6 @@ class Finance_Punch extends CI_Controller
         $this->session->set_userdata("sub_menu", "punch");
         $this->data["main"] = "punch/finance_punchfile";
         $this->data["scanfile_list"] = $this->Punch_model->vspl_get_file_for_punch();
-        $this->data["my_doctype_list"] = $this->Punch_model->get_my_permissioned_doctype_list();
         $this->load->view("layout/template", $this->data);
     }
 

@@ -163,7 +163,13 @@ class Extract_model extends CI_Model
     }
     public function getLocations()
     {
+        $user_id = $this->session->userdata('user_id');
         $this->db->select("location_id, location_name");
+        $this->db->where_in(
+            'location_id',
+            "(SELECT permission_value FROM tbl_user_permissions WHERE user_id = {$user_id} AND permission_type = 'Location')",
+            false
+        );
         $this->db->where("status", "A");
         return $this->db->get("master_work_location")->result();
     }
@@ -325,7 +331,11 @@ class Extract_model extends CI_Model
     }
     public function getDocTypes()
     {
-        return $this->db->where("status", "A")->where_in("type_id", [1, 6, 7, 13, 17, 20, 22, 23, 27, 28, 29, 31, 42, 43, 44, 46, 47, 48, 50, 56])->order_by("file_type", "ASC")->get("master_doctype")->result();
+        $user_id = $this->session->userdata('user_id');
+        $this->db->where("status", "A");
+        $this->db->where_in("type_id", "(SELECT permission_value FROM tbl_user_permissions WHERE user_id = {$user_id} AND permission_type = 'Document')", false);
+        $this->db->order_by("file_type", "ASC");
+        return $this->db->get("master_doctype")->result();
     }
     public function addToQueue($scanId, $typeId)
     {
@@ -807,19 +817,24 @@ class Extract_model extends CI_Model
     }
     public function getDepartments()
     {
+        $user_id = $this->session->userdata('user_id');
+        $this->db->where_in(
+            'api_id',
+            "(SELECT permission_value FROM tbl_user_permissions WHERE user_id = {$user_id} AND permission_type = 'Department')",
+            false
+        );
         return $this->db->get('core_department')->result();
     }
-
-        public function getSubdepartments($department_id)
-        {
-            $this->db->distinct();
-            $this->db->select('sd.id as sub_department_id, sd.sub_department_name');
-            $this->db->from('core_fun_vertical_dept_mapping fvdm');
-            $this->db->join('core_department_subdepartment_mapping dsm', 'dsm.fun_vertical_dept_id = fvdm.api_id', 'inner');
-            $this->db->join('core_sub_department sd', 'sd.id = dsm.sub_department_id', 'inner');
-            $this->db->where('fvdm.department_id', $department_id);
-            return $this->db->get()->result();
-        }
+    public function getSubdepartments($department_id)
+    {
+        $this->db->distinct();
+        $this->db->select('sd.id as sub_department_id, sd.sub_department_name');
+        $this->db->from('core_fun_vertical_dept_mapping fvdm');
+        $this->db->join('core_department_subdepartment_mapping dsm', 'dsm.fun_vertical_dept_id = fvdm.api_id', 'inner');
+        $this->db->join('core_sub_department sd', 'sd.id = dsm.sub_department_id', 'inner');
+        $this->db->where('fvdm.department_id', $department_id);
+        return $this->db->get()->result();
+    }
     public function getBillApprovers($department_id)
     {
         $this->db->where('role', 'bill_approver');

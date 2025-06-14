@@ -4,14 +4,18 @@
          <div class="col-md-12">
             <div class="box box-primary">
                <div class="box-header with-border">
-                  <h3 class="box-title">Pending Bills For Approval</h3>
+                  <h3 class="box-title">Scan Approved Files</h3>
+                   <div class="box-tools pull-right">
+                     <a href="<?= base_url(); ?>dashboard" class="btn btn-primary btn-sm"><i
+                           class="fa fa-long-arrow-left"></i> Back</a>
+                  </div>
                   <?php if ($this->session->flashdata('message')) { ?>
                   <?php echo $this->session->flashdata('message') ?>
                   <?php } ?>
                </div>
                <div class="box-body">
                   <div class="table-responsive mailbox-messages">
-                     <div class="download_label">Pending Bills For Approval</div>
+                     <div class="download_label">Scan Approved Files</div>
                      <table class="table table-striped table-bordered table-hover example">
                         <thead>
                            <tr>

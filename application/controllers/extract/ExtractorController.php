@@ -18,20 +18,20 @@ class ExtractorController extends CI_Controller
     }
     public function update_path()
     {
-        // Load database
+
         $this->load->database();
 
-        // Get all records from y1_scan_file
+
         $query = $this->db->select('scan_id, file_path, secondary_file_path')
             ->get('y1_scan_file');
 
-        // Check if records exist
+
         if ($query->num_rows() > 0) {
             foreach ($query->result() as $row) {
-                // Initialize update data array
+
                 $update_data = array();
 
-                // Update file_path if it contains 'Uploads'
+
                 if (!empty($row->file_path)) {
                     $new_file_path = str_replace('Uploads', 'uploads', $row->file_path);
                     if ($new_file_path !== $row->file_path) {
@@ -39,7 +39,7 @@ class ExtractorController extends CI_Controller
                     }
                 }
 
-                // Update secondary_file_path if it contains 'Uploads'
+
                 if (!empty($row->secondary_file_path)) {
                     $new_secondary_path = str_replace('Uploads', 'uploads', $row->secondary_file_path);
                     if ($new_secondary_path !== $row->secondary_file_path) {
@@ -47,17 +47,17 @@ class ExtractorController extends CI_Controller
                     }
                 }
 
-                // Perform update if there are changes
+
                 if (!empty($update_data)) {
                     $this->db->where('scan_id', $row->scan_id)
                         ->update('y1_scan_file', $update_data);
                 }
             }
 
-            return true; // Return true if process completed
+            return true;
         }
 
-        return false; // Return false if no records found
+        return false;
     }
     public function feilds_mapping()
     {
@@ -238,16 +238,48 @@ class ExtractorController extends CI_Controller
     {
         $scanId = $this->input->post("scan_id");
         $typeId = $this->input->post("type_id");
+        $autoApprove = $this->input->post("auto_approve") === 'true';
+
         if (empty($scanId) || empty($typeId)) {
             echo json_encode(["status" => "error", "message" => "Invalid request parameters: scan_id and type_id are required."]);
             return;
         }
-        $data = ['is_classified' => 'Y', 'classified_by' => $this->session->userdata('user_id'), 'classified_date' => date('Y-m-d'), 'doc_type_id' => $typeId, 'department_id' => $this->input->post("department"), 'sub_department_id' => $this->input->post("subdepartment"), 'bill_approver_id' => $this->input->post("bill_approver"), 'location_id' => $this->input->post("location")];
+
+
+        $data = [
+            'is_classified' => 'Y',
+            'classified_by' => $this->session->userdata('user_id'),
+            'classified_date' => date('Y-m-d'),
+            'doc_type_id' => $typeId,
+            'department_id' => $this->input->post("department"),
+            'sub_department_id' => $this->input->post("subdepartment"),
+            'location_id' => $this->input->post("location")
+        ];
+
+
+        if ($autoApprove) {
+            $data['bill_approval_status'] = 'Y';
+            $data['bill_approver_id'] = 0;
+            $data['bill_approved_date'] = date('Y-m-d');
+        } else {
+            $billApproverId = $this->input->post("bill_approver");
+            if (empty($billApproverId)) {
+                echo json_encode(["status" => "error", "message" => "Bill approver is required unless auto-approve is enabled."]);
+                return;
+            }
+            $data['bill_approver_id'] = $billApproverId;
+
+
+        }
+
+
         $updateResult = $this->Extract_model->updateDocument($scanId, $data);
         if (!$updateResult) {
             echo json_encode(["status" => "error", "message" => "Failed to update document details."]);
             return;
         }
+
+
         $queueResult = $this->Extract_model->addToQueue($scanId, $typeId);
         if ($queueResult) {
             echo json_encode(["status" => "success", "message" => "Document updated and added to queue successfully."]);
@@ -498,5 +530,5 @@ class ExtractorController extends CI_Controller
         }
         echo json_encode(['options' => $options]);
     }
-    
+
 }

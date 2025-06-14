@@ -1,5 +1,5 @@
 <?php if (!defined('BASEPATH'))
-    exit('No direct script access allowed');
+exit('No direct script access allowed');
 if (!function_exists('get_menu')) {
     function get_menu($user_id, $role_id)
     {
@@ -62,7 +62,7 @@ if (!function_exists('get_menu')) {
             foreach ($menu[$parent] as $item) {
                 $hasChildren = isset($menu[$item['id']]);
                 $icon = !empty($item['icon']) ? '<i class="' . $item['icon'] . '"></i>' : '';
-                $url = ($item['url'] && $item['url'] != '#') ? base_url($item['url']) : '#';
+                $url = ($item['url'] && $item['url'] != '#') ? base_url($item['url']) : base_url('');
 
                 $html .= '<li class="' . ($hasChildren ? 'treeview' : '') . '">';
                 $html .= '<a href="' . $url . '">' . $icon . ' <span>' . $item['name'] . '</span>';

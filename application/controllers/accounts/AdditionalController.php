@@ -34,12 +34,6 @@ class AdditionalController extends CI_Controller
         $result = $this->AdditionalModel->get_autocomplete_list('master_cost_center', 'name', 'id', $query);
         echo json_encode($result);
     }
-    public function get_departments()
-    {
-        $query = $this->input->post('term');
-        $result = $this->AdditionalModel->get_autocomplete_list('core_department', 'department_name', 'api_id', $query);
-        echo json_encode($result);
-    }
     public function get_business_units()
     {
         $query = $this->input->post('term');
@@ -117,17 +111,96 @@ class AdditionalController extends CI_Controller
     public function get_vertical()
     {
         $query = $this->input->post('term');
-        $where = [];
-        $result = $this->AdditionalModel->get_autocomplete_list('core_vertical', 'vertical_name', 'api_id', $query, $where);
-        echo json_encode($result);
+        $function_id = $this->input->post('function');
+        $this->db->select('core_vertical.api_id, core_vertical.vertical_name');
+        $this->db->from('core_function_vertical_mapping');
+        $this->db->join('core_vertical', 'core_vertical.api_id = core_function_vertical_mapping.vertical_id', 'LEFT');
+        if ($function_id) {
+            $this->db->where('core_function_vertical_mapping.org_function_id', $function_id);
+        }
+        if (!empty($query)) {
+            $this->db->like('core_vertical.vertical_name', $query);
+        }
+        $this->db->limit(5);
+        $q = $this->db->get();
+        $data = [];
+        foreach ($q->result() as $row) {
+            $data[] = ['label' => $row->vertical_name, 'value' => $row->api_id,];
+        }
+        echo json_encode($data);
     }
+    public function get_departments()
+    {
+        $query = $this->input->post('term');
+        $vertical_id = $this->input->post('vertical');
+
+        $this->db->select('d.api_id AS value, d.department_name AS label');
+        $this->db->from('core_department AS d');
+
+        if ($vertical_id) {
+            $subquery = "(SELECT vfm.api_id FROM core_function_vertical_mapping AS vfm WHERE vfm.vertical_id = " . (int) $vertical_id . ")";
+            $this->db->join('core_fun_vertical_dept_mapping AS vdm', 'd.api_id = vdm.department_id', 'INNER');
+            $this->db->where_in('vdm.function_vertical_id', $subquery, false); // 'false' disables escaping
+        }
+
+        if (!empty($query)) {
+            $this->db->like('d.department_name', $query);
+        }
+
+        $this->db->group_by(['d.api_id', 'd.department_name']);
+        $this->db->limit(5);
+
+        $q = $this->db->get();
+
+
+        $data = [];
+        foreach ($q->result() as $row) {
+            $data[] = [
+                'label' => $row->label,
+                'value' => $row->value,
+            ];
+        }
+
+        echo json_encode($data);
+    }
+
     public function get_sub_department()
     {
         $query = $this->input->post('term');
-        $where = [];
-        $result = $this->AdditionalModel->get_autocomplete_list('core_department', 'department_name', 'api_id', $query, $where);
-        echo json_encode($result);
+        $department_id = $this->input->post('department');
+
+        $this->db->select('sd.api_id AS value, sd.sub_department_name AS label');
+        $this->db->from('core_sub_department AS sd');
+
+        if ($department_id) {
+            $this->db->join('core_department_subdepartment_mapping AS sdm', 'sd.api_id = sdm.sub_department_id', 'INNER');
+
+            // Build subquery as string
+            $subquery = "(SELECT vdm.api_id FROM core_fun_vertical_dept_mapping AS vdm WHERE vdm.department_id = " . (int) $department_id . ")";
+
+            $this->db->where_in('sdm.fun_vertical_dept_id', $subquery, false); // false: don't escape
+        }
+
+        if (!empty($query)) {
+            $this->db->like('sd.sub_department_name', $query);
+        }
+
+        $this->db->group_by(['sd.api_id', 'sd.sub_department_name']);
+        $this->db->limit(5);
+
+        $q = $this->db->get();
+
+        $data = [];
+        foreach ($q->result() as $row) {
+            $data[] = [
+                'label' => $row->label,
+                'value' => $row->value,
+            ];
+        }
+
+        echo json_encode($data);
     }
+
     public function store_update()
     {
         $main_tbl = "y{$this->year_id}_tbl_additional_information";
@@ -170,7 +243,7 @@ class AdditionalController extends CI_Controller
                     $mainId = $this->db->insert_id();
                 }
                 if (isset($post['final_submit'])) {
-                    $updateData = ['finance_punch_action_status' => 'N', 'finance_punch_status'=> 'Y', 'finance_punched_by' => $this->session->userdata('user_id'), 'finance_punched_date' => date('Y-m-d')];
+                    $updateData = ['finance_punch_action_status' => 'N', 'finance_punch_status' => 'Y', 'finance_punched_by' => $this->session->userdata('user_id'), 'finance_punched_date' => date('Y-m-d')];
                     $this->db->where('scan_id', $scan_id)->update("y{$this->year_id}_scan_file", $updateData);
                 }
                 if (!empty($post['cost_center_id']) && is_array($post['cost_center_id'])) {

@@ -4,16 +4,10 @@
          <div class="col-md-12">
             <div class="box box-primary">
                <div class="box-header with-border">
-                  <h3 class="box-title">List of Scanned Files</h3>
+                  <h3 class="box-title">List of Pending Classification</h3>
                </div>
                <div class="box-body">
                   <div class="table-responsive mailbox-messages">
-                     <div class="download_label">Temporary Files</div>
-                     <?php if ($this->session->flashdata('message')): ?>
-                        <div class="alert alert-info">
-                           <?php echo $this->session->flashdata('message'); ?>
-                        </div>
-                     <?php endif; ?>
                      <table class="table table-striped table-hover example">
                         <thead>
                            <tr>
@@ -59,12 +53,13 @@
       </div>
    </section>
 </div>
-<div class="modal fade" id="documentDetailsModal" tabindex="-1" role="dialog">
+<div class="modal fade" id="documentDetailsModal" tabindex="-1" role="dialog" data-backdrop="static"
+   data-keyboard="false">
    <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content">
          <div class="modal-header">
             <h5 class="modal-title">Document Details</h5>
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <button type="button" class="close" data-dismiss="modal">×</button>
          </div>
          <div class="modal-body">
             <div id="documentDetailsContent">
@@ -105,6 +100,7 @@
    $(document).ready(function () {
       $("#location_id").select2();
       $('.select2').select2();
+
       $(".view-details").on("click", function () {
          let scanId = $(this).data("scan-id");
          $("#documentDetailsModal").modal("show");
@@ -117,12 +113,36 @@
             },
             success: function (response) {
                $("#documentDetailsContent").html(response);
+               $("#documentDetailsContent").find("select.select2").select2({
+                  placeholder: "Select an option",
+                  allowClear: true,
+                  width: '100%',
+                  dropdownParent: $("#documentDetailsModal")
+               });
+
+               $("#documentDetailsContent").find("input[id^='autoApprove_']").on("change", function () {
+                  let scanId = $(this).attr('id').split('_')[1];
+                  let $billApproverContainer = $("#billApproverContainer_" + scanId);
+                  if ($(this).is(":checked")) {
+                     $billApproverContainer.hide();
+                  } else {
+                     $billApproverContainer.show();
+
+                     $("#bill_approver_" + scanId).select2({
+                        placeholder: "Select Bill Approver",
+                        allowClear: true,
+                        width: '100%',
+                        dropdownParent: $("#documentDetailsModal")
+                     });
+                  }
+               });
             },
             error: function () {
                $("#documentDetailsContent").html('<p class="text-danger text-center">Error loading details.</p>');
             },
          });
       });
+
       $(document).on('change', 'select[id^="department_"]', function () {
          var department_id = $(this).val();
          var scan_id = $(this).attr('id').split('_')[1];
@@ -142,13 +162,20 @@
                         $('<option>').val(item.sub_department_id).text(item.sub_department_name)
                      );
                   });
+
+                  subdepartment_select.select2({
+                     placeholder: "Select Subdepartment",
+                     allowClear: true,
+                     width: '100%',
+                     dropdownParent: $("#documentDetailsModal")
+                  });
                },
                error: function () {
                   alert('Error fetching subdepartments');
                }
             });
 
-            // Fetch Bill Approvers
+
             $.ajax({
                url: '<?= base_url("extract/ExtractorController/getBillApprovers"); ?>',
                type: 'POST',
@@ -167,6 +194,15 @@
                            )
                      );
                   });
+
+                  if ($("#billApproverContainer_" + scan_id).is(":visible")) {
+                     bill_approver_select.select2({
+                        placeholder: "Select Bill Approver",
+                        allowClear: true,
+                        width: '100%',
+                        dropdownParent: $("#documentDetailsModal")
+                     });
+                  }
                },
                error: function () {
                   alert('Error fetching bill approvers');
@@ -174,6 +210,7 @@
             });
          }
       });
+
       $(document).on("click", ".reject-bill", function () {
          var scanId = $(this).data('id');
          $("#rejectScanId").val(scanId);
@@ -181,6 +218,7 @@
          $("#Reject_Remark").css('border-color', '');
          $("#rejectModal").modal("show");
       });
+
       $(document).on("click", "#reject_btn", function () {
          var scanId = $("#rejectScanId").val();
          var remark = $("#Reject_Remark").val().trim();
@@ -213,14 +251,16 @@
             }
          });
       });
+
       $(document).on("click", ".extract-btn", function () {
          let $button = $(this);
          let scanId = $button.data("scan-id");
          let typeId = $("#docType_" + scanId).val();
          let department = $("#department_" + scanId).val();
-         let subdepartment = $("#subdepartment_" + scanId).val(); 
+         let subdepartment = $("#subdepartment_" + scanId).val();
          let bill_approver = $("#bill_approver_" + scanId).val();
          let location = $("#location_" + scanId).val();
+         let autoApprove = $("#autoApprove_" + scanId).is(":checked");
 
          if (typeId === "") {
             alert("Please select a document type.");
@@ -230,12 +270,14 @@
             alert("Please select a department.");
             return;
          }
-         if (bill_approver === "") {
-            alert("Please select a bill approver.");
-            return;
-         }
+
          if (location === "") {
             alert("Please select a location.");
+            return;
+         }
+
+         if (!autoApprove && bill_approver === "") {
+            alert("Please select a bill approver or enable Auto Approve.");
             return;
          }
 
@@ -248,8 +290,9 @@
                type_id: typeId,
                department: department,
                subdepartment: subdepartment,
-               bill_approver: bill_approver,
-               location: location
+               bill_approver: autoApprove ? null : bill_approver,
+               location: location,
+               auto_approve: autoApprove
             },
             success: function (response) {
                let jsonResponse = JSON.parse(response);

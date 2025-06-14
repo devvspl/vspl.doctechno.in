@@ -109,31 +109,48 @@ class CoreController extends CI_Controller
         $api_url = "https://core.vnrin.in/api/" . $api_end_point;
         $headers = ["api-key: kKvc4n6jT2aaD2E3Ptvj6CxmDnRJdY6B", "Content-Type: application/json"];
         $response = $this->make_api_request($api_url, $headers);
+        if (!$response) {
+            echo json_encode(['status' => 'error', 'message' => "API request failed for $api_end_point."]);
+            return;
+        }
         $data = json_decode($response, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            echo json_encode(['status' => 'error', 'message' => "Invalid JSON response for $api_end_point: " . json_last_error_msg()]);
+            return;
+        }
         if (!empty($data["list"]) && is_array($data["list"])) {
             $api_ids = [];
-            foreach ($data["list"] as &$row) {
-                if (!isset($row['api_id'])) {
-                    $row['api_id'] = $row['id'];
-                    unset($row['id']);
-                }
-                $api_ids[] = $row['api_id'];
-            }
-            $columns = array_keys($data["list"][0]);
-            $this->createOrUpdateTable($table_name, $columns);
+            $processed_data = [];
             foreach ($data["list"] as $row) {
+                $new_row = $row;
+                if (!isset($new_row['api_id'])) {
+                    $new_row['api_id'] = $new_row['id'];
+                    unset($new_row['id']);
+                }
+                $processed_data[$new_row['api_id']] = $new_row;
+                $api_ids[$new_row['api_id']] = $new_row['api_id'];
+            }
+            $processed_data = array_values($processed_data);
+            $api_ids = array_values($api_ids);
+            $columns = array_keys($processed_data[0]);
+            $this->createOrUpdateTable($table_name, $columns);
+            foreach ($processed_data as $row) {
                 $this->db->where('api_id', $row['api_id']);
-                $query = $this->db->get($table_name);
-                if ($query->num_rows() > 0) {
-                    $this->db->where('api_id', $row['api_id']);
-                    $this->db->update($table_name, $row);
-                } else {
-                    $this->db->insert($table_name, $row);
+                $this->db->delete($table_name);
+                if ($this->db->error()['code'] !== 0) {
+                    log_message('error', "Delete failed for api_id {$row['api_id']} in $table_name: " . json_encode($this->db->error()));
+                }
+                $this->db->insert($table_name, $row);
+                if ($this->db->affected_rows() === 0) {
+                    log_message('error', "Insert failed for api_id {$row['api_id']} in $table_name: " . json_encode($this->db->error()));
                 }
             }
             if (!empty($api_ids)) {
                 $this->db->where_not_in('api_id', $api_ids);
                 $this->db->delete($table_name);
+                if ($this->db->error()['code'] !== 0) {
+                    log_message('error', "Delete failed for $table_name: " . json_encode($this->db->error()));
+                }
             }
             echo json_encode(['status' => 'success', 'message' => "Data synced successfully for $api_end_point."]);
         } else {
@@ -148,10 +165,16 @@ class CoreController extends CI_Controller
             foreach ($new_columns as $column) {
                 if ($column !== 'id') {
                     $this->db->query("ALTER TABLE `$table_name` ADD `$column` TEXT NULL");
+                    if ($this->db->error()['code'] !== 0) {
+                        log_message('error', "Failed to add column $column to $table_name: " . json_encode($this->db->error()));
+                    }
                 }
             }
             if (!in_array('api_id', $existing_columns)) {
                 $this->db->query("ALTER TABLE `$table_name` ADD `api_id` INT NOT NULL");
+                if ($this->db->error()['code'] !== 0) {
+                    log_message('error', "Failed to add api_id column to $table_name: " . json_encode($this->db->error()));
+                }
             }
         } else {
             $query = "CREATE TABLE `$table_name` (
@@ -164,6 +187,9 @@ class CoreController extends CI_Controller
             }
             $query = rtrim($query, ', ') . ") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
             $this->db->query($query);
+            if ($this->db->error()['code'] !== 0) {
+                log_message('error', "Failed to create table $table_name: " . json_encode($this->db->error()));
+            }
         }
     }
     public function get_api_data()
@@ -203,7 +229,6 @@ class CoreController extends CI_Controller
             echo json_encode(['status' => 'error', 'message' => 'Table not found.']);
         }
     }
-
     public function update_api_data()
     {
         $this->output->set_content_type('application/json');

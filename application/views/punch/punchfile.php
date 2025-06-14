@@ -1,32 +1,22 @@
-<style>
-    .form-control-sm {
-        display: inline-block;
-        width: 70%;
-        /* height: 0px; */
-        /* padding: 0px 12px; */
-        font-size: 10pt;
-        line-height: 1.42857143;
-        color: #555;
-        background-color: #fff;
-        background-image: none;
-        border: 1px solid #ccc;
-    }
-</style>
 <div class="content-wrapper" style="min-height: 946px;">
     <section class="content">
         <div class="row">
             <div class="col-md-12">
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Punch File</h3>
+                        <h3 class="box-title">Pending for Punch Files</h3>
+                        <div class="box-tools pull-right">
+                            <a href="<?= base_url(); ?>dashboard" class="btn btn-primary btn-sm">
+                                <i class="fa fa-long-arrow-left"></i> Back
+                            </a>
+                        </div>
                     </div>
                     <div class="box-body">
                         <?php if ($this->session->flashdata('message')) { ?>
                             <?php echo $this->session->flashdata('message') ?>
                         <?php } ?>
-
                         <div class="table-responsive mailbox-messages">
-                            <div class="download_label">Latest Scan File</div>
+                            <div class="download_label">Pending for Punch Files</div>
                             <table class="table table-striped table-bordered table-hover example">
                                 <thead>
                                     <tr>
@@ -34,9 +24,6 @@
                                         <th>Location</th>
                                         <th>Document Name</th>
                                         <th>File</th>
-                                        <th>Scanned By</th>
-                                        <th>Scan Date</th>
-                                        <th>Bill Approve Date</th>
                                         <th>Support File</th>
                                         <th>Doc Type</th>
                                         <th>Action</th>
@@ -66,25 +53,6 @@
                                                         <?php echo $row['file_name'] ?></a>
                                                 </td>
                                                 <td class="mailbox-name">
-                                                    <?php
-                                                    if ($row['is_temp_scan'] == 'Y') {
-                                                        $scan_by = $row['temp_scan_by'];
-                                                        $scan_date = $row['temp_scan_date'];
-                                                    } else {
-                                                        $scan_by = $row['scanned_by'];
-                                                        $scan_date = $row['scan_date'];
-                                                    }
-                                                    ?>
-                                                    <?php echo $this->customlib->get_Name($scan_by); ?>
-                                                </td>
-                                                <td class="mailbox-name">
-                                                    <?= !empty($scan_date) ? date('d-m-Y', strtotime($scan_date)) : ''; ?>
-                                                </td>
-                                                <td class="mailbox-name">
-                                                    <?= !empty($row['bill_approved_date']) ? date('d-m-Y', strtotime($row['bill_approved_date'])) : ''; ?>
-                                                </td>
-                                                <td class="mailbox-name">
-
                                                     <?php if ($this->customlib->haveSupportFile($row['scan_id']) == 1) { ?>
                                                         <a href="#" class="btn btn-link btn-xs"
                                                             onclick="getSupportFile(<?= $row['scan_id'] ?>)"><i
@@ -92,22 +60,40 @@
                                                     <?php } ?>
                                                 </td>
                                                 <td class="mailbox-name no-print">
-                                                    <select name="doc_type_id" id="DocType_Id_<?= $row['scan_id'] ?>"
-                                                        class="form-control-sm doc_type_id" disabled
-                                                        onchange="changeDocType(<?= $row['scan_id'] ?>,this.value)">
-                                                        <option value="0">Select</option>
-                                                        <?php
-                                                        foreach ($my_doctype_list as $value) {
-                                                            if ($value['type_id'] == $row['doc_type_id']) {
-                                                                echo "<option value='" . $value['type_id'] . "' selected>" . $value['file_type'] . "</option>";
-                                                            } else {
-                                                                echo "<option value='" . $value['type_id'] . "'>" . $value['file_type'] . "</option>";
-                                                            }
-                                                        }
-                                                        ?>
-                                                    </select>
+                                                    <?php
+                                                    // Define custom classes for each doc_type_id
+                                                    $docTypeClasses = [
+                                                        1 => 'doc-type-1',
+                                                        6 => 'doc-type-6',
+                                                        7 => 'doc-type-7',
+                                                        13 => 'doc-type-13',
+                                                        17 => 'doc-type-17',
+                                                        20 => 'doc-type-20',
+                                                        22 => 'doc-type-22',
+                                                        23 => 'doc-type-23',
+                                                        27 => 'doc-type-27',
+                                                        28 => 'doc-type-28',
+                                                        29 => 'doc-type-29',
+                                                        31 => 'doc-type-31',
+                                                        42 => 'doc-type-42',
+                                                        43 => 'doc-type-43',
+                                                        44 => 'doc-type-44',
+                                                        46 => 'doc-type-46',
+                                                        47 => 'doc-type-47',
+                                                        48 => 'doc-type-48',
+                                                        50 => 'doc-type-50',
+                                                        56 => 'doc-type-56'
+                                                    ];
 
+                                                    $docTypeId = $row['doc_type_id'];
+                                                    $badgeClass = isset($docTypeClasses[$docTypeId]) ? $docTypeClasses[$docTypeId] : 'doc-type-default';
+                                                    ?>
+
+                                                    <span class="badge <?= $badgeClass ?>">
+                                                        <?= $row['doc_type']; ?>
+                                                    </span>
                                                 </td>
+
                                                 <td class="mailbox-name">
 
                                                     <?php if ($row['doc_type_id'] != 0) { ?>
@@ -132,7 +118,6 @@
         </div>
     </section>
 </div>
-
 <div id="SupportFileView" class="modal fade" role="dialog" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modalwrapwidth">
         <div class="modal-content">
@@ -140,7 +125,6 @@
             <div class="scroll-area">
                 <div class="modal-body paddbtop">
                     <div id="detail">
-
                     </div>
                 </div>
             </div>
