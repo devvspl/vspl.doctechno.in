@@ -16,7 +16,6 @@ $route['user'] = 'master/UserController';
 $route['roles'] = 'master/UserController/roles';
 $route['menu-mapping'] = 'master/UserController/menuMapping';
 $route['activity-dep-mapping'] = 'master/UserController/activityDepMapping';
-
 $route['user/delete/(:any)'] = 'master/UserController';
 $route['bill_approver'] = 'master/BillApproverController';
 $route['ledger'] = 'master/LedgerController';
