@@ -67,13 +67,63 @@ class AdditionalController extends CI_Controller
     public function get_crops()
     {
         $query = $this->input->post('term');
-        $result = $this->AdditionalModel->get_autocomplete_list('core_crop', 'crop_name', 'api_id', $query);
-        echo json_encode($result);
+        $vertical = $this->input->post('vertical');
+
+        $this->db->select('api_id, crop_name');
+        $this->db->from('core_crop');
+
+        if (!empty($vertical)) {
+            $this->db->where('vertical_id', $vertical);
+        }
+        if (!empty($query)) {
+            $this->db->like('crop_name', $query);
+        }
+
+        $this->db->limit(5);
+        $q = $this->db->get();
+
+        $data = [];
+        foreach ($q->result() as $row) {
+            $data[] = [
+                'label' => $row->crop_name,
+                'value' => $row->api_id,
+            ];
+        }
+
+        echo json_encode($data);
     }
     public function get_activities()
     {
-        $query = $this->input->post('term');
-        $result = $this->AdditionalModel->get_autocomplete_list('core_activity', 'activity_name', 'api_id', $query);
+        $term = $this->input->post('term'); 
+        $department_id = $this->input->post('department'); 
+
+        $this->db->select('core_activity.api_id AS value, core_activity.activity_name AS label');
+        $this->db->from('core_activity');
+        $this->db->join('tbl_department_activity_mapping', 'tbl_department_activity_mapping.activity_id = core_activity.api_id', 'left');
+        $this->db->where('core_activity.is_active', 1);
+
+        if (!empty($department_id)) {
+            $this->db->where('tbl_department_activity_mapping.department_id', $department_id);
+        }
+
+        if (!empty($term)) {
+            $this->db->like('core_activity.activity_name', $term, 'both');
+        }
+
+        $this->db->limit(5); 
+
+        $query = $this->db->get();
+        $result = [];
+
+        if ($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
+                $result[] = [
+                    'label' => $row->label,
+                    'value' => $row->value
+                ];
+            }
+        }
+
         echo json_encode($result);
     }
     public function get_credit_accounts()
@@ -140,7 +190,7 @@ class AdditionalController extends CI_Controller
         if ($vertical_id) {
             $subquery = "(SELECT vfm.api_id FROM core_function_vertical_mapping AS vfm WHERE vfm.vertical_id = " . (int) $vertical_id . ")";
             $this->db->join('core_fun_vertical_dept_mapping AS vdm', 'd.api_id = vdm.department_id', 'INNER');
-            $this->db->where_in('vdm.function_vertical_id', $subquery, false); // 'false' disables escaping
+            $this->db->where_in('vdm.function_vertical_id', $subquery, false); 
         }
 
         if (!empty($query)) {
@@ -175,10 +225,10 @@ class AdditionalController extends CI_Controller
         if ($department_id) {
             $this->db->join('core_department_subdepartment_mapping AS sdm', 'sd.api_id = sdm.sub_department_id', 'INNER');
 
-            // Build subquery as string
+            
             $subquery = "(SELECT vdm.api_id FROM core_fun_vertical_dept_mapping AS vdm WHERE vdm.department_id = " . (int) $department_id . ")";
 
-            $this->db->where_in('sdm.fun_vertical_dept_id', $subquery, false); // false: don't escape
+            $this->db->where_in('sdm.fun_vertical_dept_id', $subquery, false); 
         }
 
         if (!empty($query)) {

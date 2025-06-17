@@ -3,14 +3,14 @@
         <input type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id ?>">
         <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $doc_type_id ?>">
         <div class="row" style="background-color: #fff;">
-            <div class="form-group col-md-4"
+            <div class="form-group col-md-2"
                 style="background-color: #ffffff;     margin-bottom: 0;padding-bottom: 5px;">
                 <label for="">Document No <span class="text-danger">*</span></label>
                 <input type="text" name="document_number" id="document_number" class="form-control" readonly
                     value="<?= isset($main_record) && isset($main_record['document_no']) ? $main_record['document_no'] : (isset($document_number) ? $document_number : ''); ?>">
 
             </div>
-            <div class="form-group col-md-4"
+            <div class="form-group col-md-2"
                 style="background-color: #ffffff;     margin-bottom: 0;padding-bottom: 5px;">
                 <label for="">Date <span class="text-danger">*</span></label>
                 <input type="text" name="finance_pucnh_date" id="date" class="form-control" readonly value="<?=
@@ -20,13 +20,31 @@
                     ?>">
 
             </div>
-            <div class="form-group col-md-4" style="background-color: #ffffff; margin-bottom: 0; padding-bottom: 5px;">
+            <div class="form-group col-md-2" style="background-color: #ffffff; margin-bottom: 0; padding-bottom: 5px;">
                 <label for="">Business Entity</label>
                 <input type="hidden" id="business_entity_id" name="business_entity_id"
                     value="<?= isset($main_record) ? $main_record['business_entity_id'] : ''; ?>">
                 <input type="text" id="business_entity" name="business_entity" class="form-control"
                     placeholder="Select Business Entity"
                     value="<?= isset($main_record) ? $main_record['business_entity_name'] : ''; ?>">
+            </div>
+            <div class="form-group col-md-3 tds-applicable-group"
+                style="display: flex; flex-direction: column; background-color: #ffffff; margin-bottom: 0; padding-bottom: 5px;">
+                <label for="tdsApplicable" style="margin-bottom: 5px;">TDS Applicable</label>
+
+                <div style="display: flex; gap: 15px;">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="tdsApplicable" id="tdsApplicableYes"
+                            value="Yes" <?= (isset($main_record['tds_applicable']) && $main_record['tds_applicable'] === 'Yes') ? 'checked' : ''; ?>>
+                        <label class="form-check-label" for="tdsApplicableYes">Yes</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="tdsApplicable" id="tdsApplicableNo"
+                            value="No" <?= (isset($main_record['tds_applicable']) && $main_record['tds_applicable'] === 'No') ? 'checked' : ''; ?>>
+                        <label class="form-check-label" for="tdsApplicableNo">No</label>
+                    </div>
+                </div>
             </div>
             <div class="form-group col-md-12" style="background-color: #ffffff; margin-bottom: 0;padding-bottom: 5px;">
 
@@ -35,20 +53,7 @@
                     class="form-control"><?= isset($main_record) && isset($main_record['narration']) ? $main_record['narration'] : (isset($punch_detail) && isset($punch_detail->remark_comment) ? $punch_detail->remark_comment : ''); ?></textarea>
 
             </div>
-            <div class="form-group col-md-12 tds-applicable-group"
-                style="display: flex; gap: 15px; background-color: #ffffff; margin-bottom: 0; padding-bottom: 5px;">
-                <label for="tdsApplicable">TDS Applicable</label>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="tdsApplicable" id="tdsApplicableYes" value="Yes"
-                        <?= (isset($main_record['tds_applicable']) && $main_record['tds_applicable'] === 'Yes') ? 'checked' : ''; ?>>
-                    <label class="form-check-label" for="tdsApplicableYes">Yes</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="tdsApplicable" id="tdsApplicableNo" value="No"
-                        <?= (isset($main_record['tds_applicable']) && $main_record['tds_applicable'] === 'No') ? 'checked' : 'checked'; ?>>
-                    <label class="form-check-label" for="tdsApplicableNo">No</label>
-                </div>
-            </div>
+
 
 
             <?php $tds_display = (isset($main_record) && isset($main_record['tds_applicable']) && $main_record['tds_applicable'] == 'Yes') ? 'block' : 'none'; ?>
@@ -89,7 +94,7 @@
                         value="<?= isset($main_record['tds_amount']) ? $main_record['tds_amount'] : ''; ?>">
                 </div>
             </div>
-            <div id="rows_container" style="overflow-y: auto;float: left;width: 100%;">
+            <div id="rows_container" style="overflow-y: auto;float: left;width: 100%;padding:0 10px;">
                 <?php if (!empty($items)): ?>
                     <table class="table table-bordered" id="items_table">
                         <thead>
@@ -122,9 +127,12 @@
                             <?php foreach ($items as $index => $item): ?>
                                 <tr class="form-row" id="row_<?= $index + 1 ?>">
                                     <td>
-                                        <input type="text" name="reverse_charge[]" id="reverse_charge_<?= $index + 1 ?>"
-                                            class="form-control"
-                                            value="<?= isset($item['reverse_charge']) ? $item['reverse_charge'] : ''; ?>">
+                                        <input type="text" name="reverse_charge[<?= $index ?>]"
+                                            id="reverse_charge_<?= $index ?>" class="form-control"
+                                            value="<?= isset($item['reverse_charge']) ? htmlspecialchars($item['reverse_charge']) : '' ?>">
+                                        <input type="hidden" name="reverse_charge_id[<?= $index ?>]"
+                                            id="reverse_charge_id_<?= $index ?>"
+                                            value="<?= isset($item['reverse_charge']) && $item['reverse_charge'] === 'Yes' ? '1' : (isset($item['reverse_charge']) && $item['reverse_charge'] === 'No' ? '0' : '') ?>">
                                     </td>
                                     <td>
                                         <input type="text" name="cost_center_name[]" id="cost_center_<?= $index + 1 ?>"
@@ -298,6 +306,7 @@
                             <tr class="form-row" id="row_1">
                                 <td>
                                     <input type="text" name="reverse_charge[]" id="reverse_charge_1" class="form-control">
+                                    <input type="hidden" name="reverse_charge_id[]" id="reverse_charge_id_1">
                                 </td>
                                 <td>
                                     <input type="text" name="cost_center_name[]" id="cost_center_1"
@@ -408,6 +417,7 @@
                 <label style="float: right;">Total: <input type="number" name="finance_total_Amount" readonly
                         id="billAmount" value="<?= isset($main_record) ? $main_record['total_amount'] : ''; ?>"
                         class="form-control" /></label>
+                <div id="amount_variation_msg"></div>
             </div>
         </div>
         <div class="box-footer">
@@ -420,422 +430,449 @@
     </form>
 </div>
 <script>
-$(document).ready(function () {
-    updateBillAmount();
-    let rowCount = $("#rows_container .form-row").length;
-    for (let rowNo = 1; rowNo <= rowCount; rowNo++) {
-        initializeAllAutoCompleteInputs(rowNo);
-        setupDependentFieldListeners(rowNo);
-    }
-
-    initAutoCompleteInput("#business_entity", "<?= site_url('get-business-entities') ?>", function (item) {
-        $("#business_entity").val(item.label);
-    });
-
-    initAutoCompleteInput("#tds_section", "<?= site_url('get-tds-section') ?>", function (item) {
-        $("#tds_section").val(item.label);
-        $("#tds_rate").val(item.rate);
-        $("#tds_section").trigger("change");
-    });
-
-    $("#account").autocomplete({
-        source: function (request, response) {
-            $.ajax({
-                url: "<?php echo base_url('form/JournalEntry_ctrl/getAllAccountList'); ?>",
-                type: "GET",
-                dataType: "json",
-                data: {
-                    query: request.term,
-                },
-                success: function (data) {
-                    if (Array.isArray(data)) {
-                        response(
-                            data.map((account) => {
-                                return {
-                                    label: `${account.account_name} (${account.focus_code})`,
-                                    value: account.account_name,
-                                    id: account.id,
-                                };
-                            })
-                        );
-                    } else {
-                        console.error("Expected an array but received:", data);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error("AJAX error:", status, error);
-                },
-            });
-        },
-        minLength: 2,
-        select: function (event, ui) {
-            $("#account").val(ui.item.value);
-            return false;
-        },
-    });
-
-    $("#add_row").click(function () {
-        let rowCount = $("#items_table tbody tr").length + 1;
-        let newRow = $("#row_1").clone();
-        newRow.attr("id", "row_" + rowCount);
-
-        newRow.find("input").each(function () {
-            let $this = $(this);
-            let oldId = $this.attr("id");
-            let oldName = $this.attr("name");
-
-            if (oldId) {
-                let newId = oldId.replace(/\d+$/, "") + rowCount;
-                $this.attr("id", newId);
-            }
-
-            if (oldName) {
-                let newName = oldName.replace(/\[\d+\]/, "[" + rowCount + "]");
-                $this.attr("name", newName);
-            }
-
-            $this.val("");
-        });
-
-        newRow.find(".remove_row").show();
-        $("#items_table tbody").append(newRow);
-
-        initializeAllAutoCompleteInputs(rowCount);
-        setupDependentFieldListeners(rowCount);
-    });
-
-    $(document).on("click", ".remove_row", function () {
-        if ($("#items_table tbody tr").length > 1) {
-            $(this).closest("tr").remove();
-            updateBillAmount();
-        } else {
-            alert("At least one row must remain.");
-        }
-    });
-
-    $(document).on("input", ".amount", function () {
+    $(document).ready(function () {
         updateBillAmount();
-    });
+        let rowCount = $("#rows_container .form-row").length;
+        for (let rowNo = 1; rowNo <= rowCount; rowNo++) {
+            initializeAllAutoCompleteInputs(rowNo);
+            setupDependentFieldListeners(rowNo);
+        }
 
-    $(document).on('mouseenter', '#rows_container input.form-control', function () {
-        $(this).attr('title', $(this).val() || 'No value');
-        $(this).css({
-            'background-color': '#e6f3ff',
-            'border-color': '#007bff'
+        initAutoCompleteInput("#business_entity", "<?= site_url('get-business-entities') ?>", function (item) {
+            $("#business_entity").val(item.label);
         });
-    }).on('mouseleave', '#rows_container input.form-control', function () {
-        $(this).removeAttr('title');
-        $(this).css({
-            'background-color': '',
-            'border-color': ''
+
+        initAutoCompleteInput("#tds_section", "<?= site_url('get-tds-section') ?>", function (item) {
+            $("#tds_section").val(item.label);
+            $("#tds_rate").val(item.rate);
+            $("#tds_section").trigger("change");
         });
-    });
 
-    $(document).on('input', '#rows_container input.form-control', function () {
-        $(this).attr('title', $(this).val() || 'No value');
-    });
+        $("#account").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "<?php echo base_url('form/JournalEntry_ctrl/getAllAccountList'); ?>",
+                    type: "GET",
+                    dataType: "json",
+                    data: {
+                        query: request.term,
+                    },
+                    success: function (data) {
+                        if (Array.isArray(data)) {
+                            response(
+                                data.map((account) => {
+                                    return {
+                                        label: `${account.account_name} (${account.focus_code})`,
+                                        value: account.account_name,
+                                        id: account.id,
+                                    };
+                                })
+                            );
+                        } else {
+                            console.error("Expected an array but received:", data);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("AJAX error:", status, error);
+                    },
+                });
+            },
+            minLength: 2,
+            select: function (event, ui) {
+                $("#account").val(ui.item.value);
+                return false;
+            },
+        });
 
-    $(document).on('keydown', '#rows_container input.form-control', function (e) {
-        const key = e.which;
-        const leftArrow = 37;
-        const rightArrow = 39;
-        const tabKey = 9;
+        $("#add_row").click(function () {
+            let rowCount = $("#items_table tbody tr").length + 1;
+            let newRow = $("#row_1").clone();
+            newRow.attr("id", "row_" + rowCount);
 
-        if (key === leftArrow || key === rightArrow || key === tabKey) {
-            e.preventDefault();
-            const $inputs = $(this).closest('tr').find('input.form-control');
-            const $allRows = $('#items_table tbody tr');
-            const currentRowIndex = $allRows.index($(this).closest('tr'));
-            const currentIndex = $inputs.index(this);
+            newRow.find("input").each(function () {
+                let $this = $(this);
+                let oldId = $this.attr("id");
+                let oldName = $this.attr("name");
 
+                if (oldId) {
+                    let newId = oldId.replace(/\d+$/, "") + rowCount;
+                    $this.attr("id", newId);
+                }
+
+                if (oldName) {
+                    let newName = oldName.replace(/\[\d+\]/, "[" + rowCount + "]");
+                    $this.attr("name", newName);
+                }
+
+                $this.val("");
+            });
+
+            newRow.find(".remove_row").show();
+            $("#items_table tbody").append(newRow);
+
+            initializeAllAutoCompleteInputs(rowCount);
+            setupDependentFieldListeners(rowCount);
+        });
+
+        $(document).on("click", ".remove_row", function () {
+            if ($("#items_table tbody tr").length > 1) {
+                $(this).closest("tr").remove();
+                updateBillAmount();
+            } else {
+                alert("At least one row must remain.");
+            }
+        });
+
+        $(document).on("input", ".amount", function () {
+            updateBillAmount();
+        });
+
+        $(document).on('mouseenter', '#rows_container input.form-control', function () {
+            $(this).attr('title', $(this).val() || 'No value');
+            $(this).css({
+                'background-color': '#e6f3ff',
+                'border-color': '#007bff'
+            });
+        }).on('mouseleave', '#rows_container input.form-control', function () {
+            $(this).removeAttr('title');
+            $(this).css({
+                'background-color': '',
+                'border-color': ''
+            });
+        });
+
+        $(document).on('input', '#rows_container input.form-control', function () {
+            $(this).attr('title', $(this).val() || 'No value');
+        });
+
+        $(document).on('keydown', '#rows_container input.form-control', function (e) {
+            const key = e.which;
+            const leftArrow = 37;
+            const rightArrow = 39;
+            const tabKey = 9;
+
+            if (key === leftArrow || key === rightArrow || key === tabKey) {
+                e.preventDefault();
+                const $inputs = $(this).closest('tr').find('input.form-control');
+                const $allRows = $('#items_table tbody tr');
+                const currentRowIndex = $allRows.index($(this).closest('tr'));
+                const currentIndex = $inputs.index(this);
+
+                $(this).css({
+                    'background-color': '',
+                    'border-color': ''
+                });
+                $(this).removeAttr('title');
+
+                let $nextInput, nextIndex;
+                if (key === rightArrow || key === tabKey) {
+                    nextIndex = currentIndex + 1;
+                    if (nextIndex < $inputs.length) {
+                        $nextInput = $inputs.eq(nextIndex);
+                    } else {
+                        const nextRowIndex = (currentRowIndex + 1) % $allRows.length;
+                        $nextInput = $allRows.eq(nextRowIndex).find('input.form-control').first();
+                    }
+                } else if (key === leftArrow) {
+                    nextIndex = currentIndex - 1;
+                    if (nextIndex >= 0) {
+                        $nextInput = $inputs.eq(nextIndex);
+                    } else {
+                        const prevRowIndex = currentRowIndex - 1 >= 0 ? currentRowIndex - 1 : $allRows.length - 1;
+                        $nextInput = $allRows.eq(prevRowIndex).find('input.form-control').last();
+                    }
+                }
+
+                $nextInput.focus();
+                $nextInput.css({
+                    'background-color': '#e6f3ff',
+                    'border-color': '#007bff'
+                });
+                $nextInput.attr('title', $nextInput.val() || 'No value');
+            }
+        });
+
+        $(document).on('blur', '#rows_container input.form-control', function () {
             $(this).css({
                 'background-color': '',
                 'border-color': ''
             });
             $(this).removeAttr('title');
+        });
 
-            let $nextInput, nextIndex;
-            if (key === rightArrow || key === tabKey) {
-                nextIndex = currentIndex + 1;
-                if (nextIndex < $inputs.length) {
-                    $nextInput = $inputs.eq(nextIndex);
-                } else {
-                    const nextRowIndex = (currentRowIndex + 1) % $allRows.length;
-                    $nextInput = $allRows.eq(nextRowIndex).find('input.form-control').first();
-                }
-            } else if (key === leftArrow) {
-                nextIndex = currentIndex - 1;
-                if (nextIndex >= 0) {
-                    $nextInput = $inputs.eq(nextIndex);
-                } else {
-                    const prevRowIndex = currentRowIndex - 1 >= 0 ? currentRowIndex - 1 : $allRows.length - 1;
-                    $nextInput = $allRows.eq(prevRowIndex).find('input.form-control').last();
-                }
+        $('input[name="tdsApplicable"]').change(function () {
+            if ($("#tdsApplicableYes").is(":checked")) {
+                generateTdsJvNo();
+                $("#tdsDetailsForm").show();
+            } else {
+                $("#tdsDetailsForm").hide();
+                $("#tdsJvNo").val("");
             }
+        });
 
-            $nextInput.focus();
-            $nextInput.css({
-                'background-color': '#e6f3ff',
-                'border-color': '#007bff'
+        $("#tdsSection").on("change", function () {
+            var selectedSection = $(this).val();
+            var sectionDetails = tdsSections.find((section) => section.section === selectedSection);
+
+            if (sectionDetails) {
+                $("#tdsPercentage").val(sectionDetails.rate).trigger("change");
+            } else {
+                $("#tdsPercentage").val("");
+            }
+        });
+
+        $("#billAmount, #tdsPercentage").on("input change", function () {
+            var billAmount = parseFloat($(".final_amount_column").val()) || 0;
+            var percentage = parseFloat($("#tdsPercentage").val()) || 0;
+            var tds_amount = (billAmount * percentage) / 100;
+            $("#tds_amount").val(tds_amount.toFixed(2));
+        });
+
+        $("#tds_section").change(function () {
+            var tds_section_id = $("#tds_section_id").val();
+            var grand_total = parseFloat($("#Grand_Total").val()) || 0;
+            var tds_rate = parseFloat($("#tds_rate").val()) || 0;
+            $("#tds_percentage").val(tds_rate);
+            var tds_amount = (grand_total * tds_rate) / 100;
+            $("#tds_amount").val(tds_amount.toFixed(2));
+        });
+
+        function setupDependentFieldListeners(rowNo) {
+            $(document).on('change', `#function_${rowNo}`, function () {
+                const functionId = $(`#function_id_${rowNo}`).val();
+
+                initAutoCompleteInput(
+                    `#vertical_${rowNo}`,
+                    "<?= site_url('get-vertical') ?>",
+                    null,
+                    `function_id_${rowNo}`,
+                    functionId
+                );
+                clearField(`#vertical_${rowNo}`, `#vertical_id_${rowNo}`);
+                clearField(`#department_${rowNo}`, `#department_id_${rowNo}`);
+                clearField(`#sub_department_${rowNo}`, `#sub_department_id_${rowNo}`);
+                clearField(`#activity_${rowNo}`, `#activity_id_${rowNo}`);
+                clearField(`#crop_${rowNo}`, `#crop_id_${rowNo}`);
             });
-            $nextInput.attr('title', $nextInput.val() || 'No value');
+
+            $(document).on('change', `#vertical_${rowNo}`, function () {
+                const verticalId = $(`#vertical_id_${rowNo}`).val();
+
+                initAutoCompleteInput(
+                    `#department_${rowNo}`,
+                    "<?= site_url('get-departments') ?>",
+                    null,
+                    `vertical_id_${rowNo}`,
+                    verticalId
+                );
+                initAutoCompleteInput(
+                    `#crop_${rowNo}`,
+                    "<?= site_url('get-crops') ?>",
+                    null,
+                    `vertical_id_${rowNo}`,
+                    verticalId
+                );
+                clearField(`#department_${rowNo}`, `#department_id_${rowNo}`);
+                clearField(`#sub_department_${rowNo}`, `#sub_department_id_${rowNo}`);
+                clearField(`#activity_${rowNo}`, `#activity_id_${rowNo}`);
+                clearField(`#crop_${rowNo}`, `#crop_id_${rowNo}`);
+            });
+
+            $(document).on('change', `#department_${rowNo}`, function () {
+                const departmentId = $(`#department_id_${rowNo}`).val();
+
+                initAutoCompleteInput(
+                    `#sub_department_${rowNo}`,
+                    "<?= site_url('get-sub-department') ?>",
+                    null,
+                    `department_id_${rowNo}`,
+                    departmentId
+                );
+                initAutoCompleteInput(
+                    `#activity_${rowNo}`,
+                    "<?= site_url('get-activities') ?>",
+                    null,
+                    `department_id_${rowNo}`,
+                    departmentId
+                );
+                clearField(`#sub_department_${rowNo}`, `#sub_department_id_${rowNo}`);
+                clearField(`#activity_${rowNo}`, `#activity_id_${rowNo}`);
+            });
+
+            $(document).on('change', `#category_${rowNo}`, function () {
+                const categoryId = $(`#category_id_${rowNo}`).val();
+
+                initAutoCompleteInput(
+                    `#crop_${rowNo}`,
+                    "<?= site_url('get-crops') ?>",
+                    null,
+                    `category_id_${rowNo}`,
+                    categoryId
+                );
+                clearField(`#crop_${rowNo}`, `#crop_id_${rowNo}`);
+            });
         }
-    });
-
-    $(document).on('blur', '#rows_container input.form-control', function () {
-        $(this).css({
-            'background-color': '',
-            'border-color': ''
-        });
-        $(this).removeAttr('title');
-    });
-
-    $('input[name="tdsApplicable"]').change(function () {
-        if ($("#tdsApplicableYes").is(":checked")) {
-            generateTdsJvNo();
-            $("#tdsDetailsForm").show();
-        } else {
-            $("#tdsDetailsForm").hide();
-            $("#tdsJvNo").val("");
+        function clearField(inputSelector, hiddenSelector) {
+            $(inputSelector).val('');
+            $(hiddenSelector).val('');
         }
-    });
 
-    $("#tdsSection").on("change", function () {
-        var selectedSection = $(this).val();
-        var sectionDetails = tdsSections.find((section) => section.section === selectedSection);
+        function initializeAllAutoCompleteInputs(rowNo) {
+            initAutoCompleteInput(`#cost_center_${rowNo}`, "<?= site_url('get-cost-centers') ?>");
+            initAutoCompleteInput(`#business_unit_${rowNo}`, "<?= site_url('get-business-units') ?>");
+            initAutoCompleteInput(`#region_${rowNo}`, "<?= site_url('get-regions') ?>");
+            initAutoCompleteInput(`#state_${rowNo}`, "<?= site_url('get-states') ?>");
+            initAutoCompleteInput(`#location_${rowNo}`, "<?= site_url('get-locations') ?>");
+            initAutoCompleteInput(`#category_${rowNo}`, "<?= site_url('get-categories') ?>");
+            initAutoCompleteInput(`#debit_ac_${rowNo}`, "<?= site_url('get-debit-accounts') ?>");
+            initAutoCompleteInput(`#credit_ac_${rowNo}`, "<?= site_url('get-credit-accounts') ?>");
+            initAutoCompleteInput(`#payment_term_${rowNo}`, "<?= site_url('get-payment-term') ?>");
+            initAutoCompleteInput(`#function_${rowNo}`, "<?= site_url('get-function') ?>");
+            initAutoCompleteInput(`#zone_${rowNo}`, "<?= site_url('get-zone') ?>");
+            initAutoCompleteInput(`#reverse_charge_${rowNo}`, null, null, null, null, [
+                { value: "1", label: "Yes" },
+                { value: "0", label: "No" }
+            ]);
 
-        if (sectionDetails) {
-            $("#tdsPercentage").val(sectionDetails.rate).trigger("change");
-        } else {
-            $("#tdsPercentage").val("");
-        }
-    });
 
-    $("#billAmount, #tdsPercentage").on("input change", function () {
-        var billAmount = parseFloat($(".final_amount_column").val()) || 0;
-        var percentage = parseFloat($("#tdsPercentage").val()) || 0;
-        var tds_amount = (billAmount * percentage) / 100;
-        $("#tds_amount").val(tds_amount.toFixed(2));
-    });
-
-    $("#tds_section").change(function () {
-        var tds_section_id = $("#tds_section_id").val();
-        var grand_total = parseFloat($("#Grand_Total").val()) || 0;
-        var tds_rate = parseFloat($("#tds_rate").val()) || 0;
-        $("#tds_percentage").val(tds_rate);
-        var tds_amount = (grand_total * tds_rate) / 100;
-        $("#tds_amount").val(tds_amount.toFixed(2));
-    });
-
-    function setupDependentFieldListeners(rowNo) {
-        $(document).on('change', `#function_${rowNo}`, function () {
             const functionId = $(`#function_id_${rowNo}`).val();
-            console.log(`Function changed for row ${rowNo}, functionId:`, functionId); 
-            initAutoCompleteInput(
-                `#vertical_${rowNo}`,
-                "<?= site_url('get-vertical') ?>",
-                null,
-                `function_id_${rowNo}`,
-                functionId
-            );
-            clearField(`#vertical_${rowNo}`, `#vertical_id_${rowNo}`);
-            clearField(`#department_${rowNo}`, `#department_id_${rowNo}`);
-            clearField(`#sub_department_${rowNo}`, `#sub_department_id_${rowNo}`);
-            clearField(`#activity_${rowNo}`, `#activity_id_${rowNo}`);
-        });
-
-        $(document).on('change', `#vertical_${rowNo}`, function () {
-            const verticalId = $(`#vertical_id_${rowNo}`).val();
-            console.log(`Vertical changed for row ${rowNo}, verticalId:`, verticalId); 
-            initAutoCompleteInput(
-                `#department_${rowNo}`,
-                "<?= site_url('get-departments') ?>",
-                null,
-                `vertical_id_${rowNo}`,
-                verticalId
-            );
-            clearField(`#department_${rowNo}`, `#department_id_${rowNo}`);
-            clearField(`#sub_department_${rowNo}`, `#sub_department_id_${rowNo}`);
-            clearField(`#activity_${rowNo}`, `#activity_id_${rowNo}`);
-        });
-
-        $(document).on('change', `#department_${rowNo}`, function () {
-            const departmentId = $(`#department_id_${rowNo}`).val();
-            console.log(`Department changed for row ${rowNo}, departmentId:`, departmentId); 
-            initAutoCompleteInput(
-                `#sub_department_${rowNo}`,
-                "<?= site_url('get-sub-department') ?>",
-                null,
-                `department_id_${rowNo}`,
-                departmentId
-            );
-            initAutoCompleteInput(
-                `#activity_${rowNo}`,
-                "<?= site_url('get-activities') ?>",
-                null,
-                `department_id_${rowNo}`,
-                departmentId
-            );
-            clearField(`#sub_department_${rowNo}`, `#sub_department_id_${rowNo}`);
-            clearField(`#activity_${rowNo}`, `#activity_id_${rowNo}`);
-        });
-
-        $(document).on('change', `#category_${rowNo}`, function () {
-            const categoryId = $(`#category_id_${rowNo}`).val();
-            console.log(`Category changed for row ${rowNo}, categoryId:`, categoryId); 
-            initAutoCompleteInput(
-                `#crop_${rowNo}`,
-                "<?= site_url('get-crops') ?>",
-                null,
-                `category_id_${rowNo}`,
-                categoryId
-            );
-            clearField(`#crop_${rowNo}`, `#crop_id_${rowNo}`);
-        });
-    }
-
-    function clearField(inputSelector, hiddenSelector) {
-        $(inputSelector).val('');
-        $(hiddenSelector).val('');
-    }
-
-    function initializeAllAutoCompleteInputs(rowNo) {
-        initAutoCompleteInput(`#cost_center_${rowNo}`, "<?= site_url('get-cost-centers') ?>");
-        initAutoCompleteInput(`#business_unit_${rowNo}`, "<?= site_url('get-business-units') ?>");
-        initAutoCompleteInput(`#region_${rowNo}`, "<?= site_url('get-regions') ?>");
-        initAutoCompleteInput(`#state_${rowNo}`, "<?= site_url('get-states') ?>");
-        initAutoCompleteInput(`#location_${rowNo}`, "<?= site_url('get-locations') ?>");
-        initAutoCompleteInput(`#category_${rowNo}`, "<?= site_url('get-categories') ?>");
-        initAutoCompleteInput(`#debit_ac_${rowNo}`, "<?= site_url('get-debit-accounts') ?>");
-        initAutoCompleteInput(`#credit_ac_${rowNo}`, "<?= site_url('get-credit-accounts') ?>");
-        initAutoCompleteInput(`#payment_term_${rowNo}`, "<?= site_url('get-payment-term') ?>");
-        initAutoCompleteInput(`#function_${rowNo}`, "<?= site_url('get-function') ?>");
-        initAutoCompleteInput(`#zone_${rowNo}`, "<?= site_url('get-zone') ?>");
-
-        const functionId = $(`#function_id_${rowNo}`).val();
-        console.log(`Initial functionId for row ${rowNo}: AAA${functionId}`); 
-        if (functionId) {
-            initAutoCompleteInput(`#vertical_${rowNo}`, "<?= site_url('get-vertical') ?>", null, `function_id_${rowNo}`, functionId);
-        } else {
-            initAutoCompleteInput(`#vertical_${rowNo}`, "<?= site_url('get-vertical') ?>");
-        }
-
-        const verticalId = $(`#vertical_id_${rowNo}`).val();
-        if (verticalId) {
-            initAutoCompleteInput(`#department_${rowNo}`, "<?= site_url('get-departments') ?>", null, `vertical_id_${rowNo}`, verticalId);
-        } else {
-            initAutoCompleteInput(`#department_${rowNo}`, "<?= site_url('get-departments') ?>");
-        }
-
-        const departmentId = $(`#department_id_${rowNo}`).val();
-        if (departmentId) {
-            initAutoCompleteInput(`#sub_department_${rowNo}`, "<?= site_url('get-sub-department') ?>", null, `department_id_${rowNo}`, departmentId);
-            initAutoCompleteInput(`#activity_${rowNo}`, "<?= site_url('get-activities') ?>", null, `department_id_${rowNo}`, departmentId);
-        } else {
-            initAutoCompleteInput(`#sub_department_${rowNo}`, "<?= site_url('get-sub-department') ?>");
-            initAutoCompleteInput(`#activity_${rowNo}`, "<?= site_url('get-activities') ?>");
-        }
-
-        const categoryId = $(`#category_id_${rowNo}`).val();
-        if (categoryId) {
-            initAutoCompleteInput(`#crop_${rowNo}`, "<?= site_url('get-crops') ?>", null, `category_id_${rowNo}`, categoryId);
-        } else {
-            initAutoCompleteInput(`#crop_${rowNo}`, "<?= site_url('get-crops') ?>");
-        }
-    }
-
-    function initAutoCompleteInput(selector, url, onSelectCallback = null, dependentFieldId = null, dependentFieldValue = null) {
-        $(selector).autocomplete({
-            source: function (request, response) {
-                let data = { term: request.term };
-                if (dependentFieldId && dependentFieldValue) {
-                    data[dependentFieldId.replace(/_id_\d+$/, '')] = dependentFieldValue;
-                }
-                $.ajax({
-                    url: url,
-                    type: "POST",
-                    dataType: "json",
-                    data: data,
-                    success: function (data) {
-                        console.log(`Response from ${url}:`, data); 
-                        response(data);
-                    },
-                    error: function (xhr, status, error) {
-                        console.error(`AJAX error for ${url}:`, status, error);
-                    }
-                });
-            },
-            minLength: 0,
-            appendTo: "body",
-            select: function (event, ui) {
-                console.log(`Selected item for ${selector}:`, ui.item); 
-                $(this).val(ui.item.label);
-                let currentId = $(this).attr("id");
-                let hiddenFieldId = currentId;
-
-                if (/\d+$/.test(currentId)) {
-                    hiddenFieldId = currentId.replace(/_(\d+)$/, "_id_$1");
-                } else {
-                    hiddenFieldId = currentId + "_id";
-                }
-
-                $(`#${hiddenFieldId}`).val(ui.item.value);
-                console.log(`Updated hidden field ${hiddenFieldId} with value:`, ui.item.value); 
-
-                if (typeof onSelectCallback === "function") {
-                    onSelectCallback(ui.item);
-                }
-
-                
-                $(this).trigger('change');
-
-                return false;
-            },
-            focus: function (event, ui) {
-                $(this).val(ui.item.label);
-                return false;
+            if (functionId) {
+                initAutoCompleteInput(`#vertical_${rowNo}`, "<?= site_url('get-vertical') ?>", null, `function_id_${rowNo}`, functionId);
+            } else {
+                initAutoCompleteInput(`#vertical_${rowNo}`, "<?= site_url('get-vertical') ?>");
             }
-        }).focus(function () {
-            $(this).autocomplete("search", "");
-        });
-    }
 
-    function updateBillAmount() {
-        let total = 0;
-        var final_amount = parseFloat($(".final_amount_column").val()) || 0;
-        $(".amount").each(function () {
-            let value = parseFloat($(this).val()) || 0;
-            total += value;
-        });
+            const verticalId = $(`#vertical_id_${rowNo}`).val();
+            if (verticalId) {
+                initAutoCompleteInput(`#department_${rowNo}`, "<?= site_url('get-departments') ?>", null, `vertical_id_${rowNo}`, verticalId);
+                initAutoCompleteInput(`#crop_${rowNo}`, "<?= site_url('get-crops') ?>", null, `vertical_id_${rowNo}`, verticalId);
+            } else {
+                initAutoCompleteInput(`#department_${rowNo}`, "<?= site_url('get-departments') ?>");
+                initAutoCompleteInput(`#crop_${rowNo}`, "<?= site_url('get-crops') ?>");
+            }
 
-        let TDS_amount = parseFloat($("#tds_amount").val()) || 0;
-        var maxAllowedAmount = total + TDS_amount;
-
-        $("#billAmount").val(maxAllowedAmount.toFixed(2));
-        var submitButton = $("#fin_final_submit");
-        var draftButton = $("#fin_save_draft");
-        if (submitButton.length === 0) {
-            console.error("submitButton not found! Selector: #fin_final_submit");
-        }
-        if (draftButton.length === 0) {
-            console.error("draftButton not found! Selector: #fin_save_draft");
+            const departmentId = $(`#department_id_${rowNo}`).val();
+            if (departmentId) {
+                initAutoCompleteInput(`#sub_department_${rowNo}`, "<?= site_url('get-sub-department') ?>", null, `department_id_${rowNo}`, departmentId);
+                initAutoCompleteInput(`#activity_${rowNo}`, "<?= site_url('get-activities') ?>", null, `department_id_${rowNo}`, departmentId);
+            } else {
+                initAutoCompleteInput(`#sub_department_${rowNo}`, "<?= site_url('get-sub-department') ?>");
+                initAutoCompleteInput(`#activity_${rowNo}`, "<?= site_url('get-activities') ?>");
+            }
         }
 
-        if (final_amount.toFixed(2) === maxAllowedAmount.toFixed(2)) {
-            submitButton.removeAttr('disabled');
-            draftButton.removeAttr('disabled');
-        } else {
-            submitButton.attr('disabled', 'disabled');
-            draftButton.attr('disabled', 'disabled');
-        }
-    }
+        function initAutoCompleteInput(selector, url, onSelectCallback = null, dependentFieldId = null, dependentFieldValue = null, staticData = null) {
+            $(selector).autocomplete({
+                source: function (request, response) {
+                    if (staticData) {
+                        response(staticData.filter(item =>
+                            item.label.toLowerCase().includes(request.term.toLowerCase())
+                        ));
+                    } else {
+                        let data = { term: request.term };
+                        if (dependentFieldId && dependentFieldValue) {
+                            data[dependentFieldId.replace(/_id_\d+$/, '')] = dependentFieldValue;
+                        }
+                        $.ajax({
+                            url: url,
+                            type: "POST",
+                            dataType: "json",
+                            data: data,
+                            success: function (data) {
+                                console.log(`Response from ${url}:`, data);
+                                response(data);
+                            },
+                            error: function (xhr, status, error) {
+                                console.error(`AJAX error for ${url}:`, status, error);
+                            }
+                        });
+                    }
+                },
+                minLength: 0,
+                appendTo: "body",
+                select: function (event, ui) {
+                    console.log(`Selected item for ${selector}:`, ui.item);
+                    $(this).val(ui.item.label);
+                    let currentId = $(this).attr("id");
+                    let hiddenFieldId = currentId;
 
-    function generateTdsJvNo() {
-        const date = new Date();
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const jvNo = "<?php echo $tdsJvNo; ?>";
-        $("#tdsJvNo").val(jvNo);
-    }
-});
+                    if (/\d+$/.test(currentId)) {
+                        hiddenFieldId = currentId.replace(/_(\d+)$/, "_id_$1");
+                    } else {
+                        hiddenFieldId = currentId + "_id";
+                    }
+
+                    $(`#${hiddenFieldId}`).val(ui.item.value);
+                    console.log(`Updated hidden field ${hiddenFieldId} with value:`, ui.item.value);
+
+                    if (typeof onSelectCallback === "function") {
+                        onSelectCallback(ui.item);
+                    }
+
+                    $(this).trigger('change');
+                    return false;
+                },
+                focus: function (event, ui) {
+                    $(this).val(ui.item.label);
+                    return false;
+                }
+            }).focus(function () {
+                $(this).autocomplete("search", "");
+            });
+        }
+        
+        function updateBillAmount() {
+            let total = 0;
+            var final_amount = parseFloat($(".final_amount_column").val()) || 0;
+
+
+            $(".amount").each(function () {
+                let value = parseFloat($(this).val()) || 0;
+                total += value;
+            });
+
+
+            let TDS_amount = parseFloat($("#tds_amount").val()) || 0;
+            var maxAllowedAmount = total + TDS_amount;
+
+
+            $("#billAmount").val(maxAllowedAmount.toFixed(2));
+
+            var submitButton = $("#fin_final_submit");
+            var draftButton = $("#fin_save_draft");
+
+
+            var variation = (final_amount - maxAllowedAmount).toFixed(2);
+            var variationText = (variation >= 0 ? "+" : "") + variation;
+
+
+            $("#amount_variation_msg").remove();
+
+
+            $("#billAmount").after(`<div id="amount_variation_msg" style="color: red; font-size: 12px;">Amount variation: ${variationText}</div>`);
+
+
+            if (final_amount.toFixed(2) === maxAllowedAmount.toFixed(2)) {
+                submitButton.removeAttr('disabled');
+            } else {
+                submitButton.attr('disabled', 'disabled');
+            }
+
+
+            if (maxAllowedAmount > final_amount || maxAllowedAmount < 0) {
+                draftButton.attr('disabled', 'disabled');
+            } else {
+                draftButton.removeAttr('disabled');
+            }
+        }
+
+
+        function generateTdsJvNo() {
+            const date = new Date();
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, "0");
+            const jvNo = "<?php echo $tdsJvNo; ?>";
+            $("#tdsJvNo").val(jvNo);
+        }
+    });
 </script>

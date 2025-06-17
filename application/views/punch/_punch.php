@@ -128,11 +128,13 @@
          border-bottom: 2px solid #00c0ef;
          color: rgb(255, 255, 255);
       }
+
       .scrollable-content {
          max-height: 490px;
          overflow-y: auto;
          padding: 0 0;
       }
+
       .table>tbody>tr>td,
       .table>tbody>tr>th,
       .table>tfoot>tr>td,
@@ -140,7 +142,51 @@
       .table>thead>tr>td,
       .table>thead>tr>th {
          padding: 1px !important;
-        
+
+      }
+
+      .form-control {
+         height: 18px;
+      }
+
+      .ui-widget.ui-widget-content li {
+         margin-bottom: 0 !important;
+         border-bottom: 1px solid #8b8b8bb0 !important;
+         font-size: 10px;
+      }
+
+      textarea.form-control {
+         resize: block;
+      }
+
+      .ui-menu-item {
+         padding: 4px 5px !important;
+         cursor: pointer !important;
+      }
+
+      .compact-radio-group {
+         display: flex;
+         align-items: center;
+         gap: 8px;
+         /* Reduced gap between label and radio buttons */
+      }
+
+      .compact-radio-group label {
+         font-size: 0.85rem;
+         /* Smaller label size */
+         margin-bottom: 0;
+         /* Remove default margin */
+      }
+
+      .form-check-inline {
+         margin-right: 5px;
+         /* Reduced spacing between radio buttons */
+      }
+
+      .form-check-input,
+      .form-check-label {
+         transform: scale(0.8);
+         /* Scale down radio buttons and labels */
       }
    </style>
    <section class="content">

@@ -286,4 +286,11 @@ class UserController extends CI_Controller
 
         echo json_encode(['status' => 'success']);
     }
+
+    public function roles() 
+    {
+        $data['roles'] = $this->db->get('tbl_roles')->result_array();
+        $data['main'] = 'user/roles';
+        $this->load->view('layout/template', $data);
+    }
 }

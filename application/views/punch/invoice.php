@@ -76,23 +76,23 @@
          </div>
       </div>
       <div class="row" style="margin-bottom: 5px;">
-         <div class="form-group col-md-3">
+         <div class="form-group col-md-2">
             <label for="">Dispatch Through:</label>
             <input type="text" name="Dispatch_Trough" id="Dispatch_Trough" class="form-control form-control-sm" value="<?= (isset($punch_detail->dispatch_through)) ? $punch_detail->dispatch_through : '' ?>">
          </div>
-         <div class="form-group col-md-3">
+         <div class="form-group col-md-2">
             <label for="">Delivery Note Date:</label>
             <input type="text" name="Delivery_Note_Date" id="Delivery_Note_Date" class="form-control form-control-sm datepicker" value="<?= formatSafeDate($punch_detail->delivery_note_date ?? '') ?>">
          </div>
-         <div class="form-group col-md-3">
+         <div class="form-group col-md-2">
             <label for="">LR Number:</label>
             <input type="text" name="LR_Number" id="LR_Number" class="form-control form-control-sm" value="<?= (isset($punch_detail->lr_number)) ? $punch_detail->lr_number : '' ?>">
          </div>
-         <div class="form-group col-md-3">
+         <div class="form-group col-md-2">
             <label for="">LR Date:</label>
             <input type="text" name="LR_Date" id="LR_Date" class="form-control form-control-sm datepicker" value="<?= formatSafeDate($punch_detail->lr_date ?? '') ?>" >
          </div>
-         <div class="form-group col-md-3">
+         <div class="form-group col-md-2">
             <label for="">Cartoon Number:</label>
             <input type="text" name="Cartoon_Number" id="Cartoon_Number" class="form-control form-control-sm" value="<?= (isset($punch_detail->cartoon_number)) ? $punch_detail->cartoon_number : '' ?>">
          </div>
@@ -101,27 +101,27 @@
          <div class="" style="overflow-x:scroll;">
             <table class="table" style="width:1600px;max-width:1600px;overflow-x:scroll;">
                <thead style="text-align: center;">
-                  <th style="width: 10px;">#</th>
-                  <th style="width: 420px;">Particular</th>
-                  <th style="width: 100px;">HSN</th>
-                  <th style="width: 100px;">Qty</th>
-                  <th style="width: 150px;">Unit</th>
-                  <th style="width: 150px;">MRP</th>
-                  <th style="width: 100px;">Discount in MRP</th>
-                  <th style="width: 150px;">Price</th>
-                  <th style="width: 180px;">Amount</th>
-                  <th style="width: 80px;">GST %</th>
-                  <th style="width: 80px;">SGST %</th>
-                  <th style="width: 80px;">IGST %</th>
-                  <th style="width: 80px;">Cess %</th>
-                  <th style="width: 120px;">Total Amount</th>
-                  <th style="width: 30px;"></th>
+                  <th style="width: 5px;">#</th>
+                  <th style="width: 30px;">Particular</th>
+                  <th style="width:25px;">HSN</th>
+                  <th style="width:25px;">Qty</th>
+                  <th style="width:25px;">Unit</th>
+                  <th style="width:25px;">MRP</th>
+                  <th style="width:25px;">Dis. in MRP</th>
+                  <th style="width:25px;">Price</th>
+                  <th style="width:25px;">Amount</th>
+                  <th style="width:25px;">GST %</th>
+                  <th style="width:25px;">SGST %</th>
+                  <th style="width:25px;">IGST %</th>
+                  <th style="width:25px;">Cess %</th>
+                  <th style="width: 70px;">Total Amount</th>
+                  <th style="width:25px;"></th>
                </thead>
                <tbody id="multi_record">
                   <tr>
                      <td>1</td>
                      <td>
-                        <select name="Particular[]" id="Particular1" required
+                        <select style="width:50px !important;" name="Particular[]" id="Particular1" required
                            class="form-control form-select form-select-sm particular">
                            <option value="">Select</option>
                            <?php

@@ -13,6 +13,7 @@ $route['get_report_for_super_scanner'] = 'Dashboard/get_report_for_super_scanner
 // >>>>>>>>>>>>>>>>>>>>>>>>> Master Section <<<<<<<<<<<<<<<<<<<<<<<<<<< //
 $route['location'] = 'Location';
 $route['user'] = 'master/UserController';
+$route['roles'] = 'master/UserController/roles';
 $route['menu-mapping'] = 'master/UserController/menuMapping';
 $route['activity-dep-mapping'] = 'master/UserController/activityDepMapping';
 
