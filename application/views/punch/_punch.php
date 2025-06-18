@@ -131,7 +131,7 @@
 
       .scrollable-content {
          max-height: 490px;
-         overflow-y: auto;
+         /* overflow-y: auto; */
          padding: 0 0;
       }
 
