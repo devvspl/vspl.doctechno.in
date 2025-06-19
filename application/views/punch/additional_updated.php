@@ -289,7 +289,7 @@
 
                             <!-- Remove Button -->
                             <div class="form-group col-md-9">
-                                <button type="button" style="margin-top: 20px;float: right;"
+                                <button type="button" style="margin-top: 20px;float: right;padding: 0px 5px;"
                                     class="btn btn-danger btn-sm remove_row">Remove</button>
                             </div>
                         </div>

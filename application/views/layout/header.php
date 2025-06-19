@@ -34,7 +34,7 @@
                <aside class="main-sidebar" id="alert2"
                   style="position:unset;width:auto;padding-top:0px;background-color: transparent;box-shadow: 0 0 0;height:50px;">
                   <?php
-                  $user_id = $this->session->userdata('user_id'); 
+                  $user_id = $this->session->userdata('user_id');
                   $role_id = $this->session->userdata('role_id');
                   $this->load->helper('menu');
                   $menu = get_menu($user_id, $role_id);
@@ -51,7 +51,8 @@
             <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
                <div class="pull-right">
                   <div class="navbar-custom-menu">
-                     <ul class="nav navbar-nav headertopmenu">
+                     <ul class="nav navbar-nav headertopmenu" style="display: flex;">
+                       
                         <li class="dropdown user-menu">
                            <a class="dropdown-toggle" style="padding: 15px 13px;" data-toggle="dropdown" href="#"
                               aria-expanded="false">
@@ -78,6 +79,10 @@
                                  </div>
                               </li>
                            </ul>
+                        </li>
+                         <li>
+                           <a href="javascript:history.back()" style="display: flex;gap: 8px;background-color: #ffffff;align-items: center;color: #1b98ae;/* align-content: center; */" data-toggle="tooltip" title="Go Back"
+                              data-original-title="Back"><i class="fa fa-arrow-left"></i> <span>Back</span></a>
                         </li>
                      </ul>
                   </div>

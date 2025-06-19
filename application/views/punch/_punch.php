@@ -188,35 +188,47 @@
          transform: scale(0.8);
          /* Scale down radio buttons and labels */
       }
+
+      .btn {
+         padding: 2px 10px;
+         font-size: 12px;
+      }
+
+      .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th
+
+ {
+    padding: 5px;
+    line-height: 1.42857143;
+    vertical-align: baseline !important;
+    border-top: 1px solid #ddd;
+}
+
+#multi_record .form-control{
+   padding: 0px 3px;
+
+}
+.select2-container .select2-selection--single .select2-selection__rendered {
+    display: block;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
    </style>
    <section class="content">
       <div class="row">
          <div class="col-md-12">
             <div class="box box-primary">
-               <div class="box-header with-border">
-                  <h3 class="box-title">
-                     Punch File - <?= $doc_type_name; ?>
-                     <?php if (!empty($document_name)): ?>
-                        - (<?= $document_name; ?>)
-                     <?php endif; ?>
-                  </h3>
-                  <div class="box-tools pull-right">
-                     <?php if (!empty($user_permission) && $user_permission == 'N'): ?>
-                        <a href="<?= base_url('punch'); ?>" class="btn btn-primary btn-sm">
-                           <i class="fa fa-long-arrow-left"></i> Back
-                        </a>
-                     <?php endif; ?>
-                     <?php if (!empty($user_permission) && $user_permission == 'Y'): ?>
-                        <a href="<?= base_url('finance_punch'); ?>" class="btn btn-primary btn-sm">
-                           <i class="fa fa-long-arrow-left"></i> Back
-                        </a>
-                     <?php endif; ?>
-                  </div>
-               </div>
                <div class="box-body">
                   <div class="row">
-
                      <div class="col-md-4 section-wrapper">
+                        <h3 class="box-title" style="font-size: 14px;padding-top: 0;margin-top: 0;">
+                           <?= ucfirst($doc_type_name); ?>
+                           <?php if (!empty($document_name)): ?>
+                              - (<?= $document_name; ?>)
+                           <?php endif; ?>
+                        </h3>
                         <div class="col-md-12 section-content">
                            <?php if ($rec->file_extension == 'pdf'): ?>
                               <object data="<?= $rec->file_path ?>" type="" height="490px" width="100%;"></object>
@@ -226,7 +238,7 @@
                               <script>
                                  var curect_file_path = $('#image').val();
                                  $("#imageViewerContainer").verySimpleImageViewer({
-                                    imageSource: curect_file_path,
+                                    imageSource: invoiceImagePath,
                                     frame: ['100%', '100%'],
                                     maxZoom: '900%',
                                     zoomFactor: '10%',
@@ -273,7 +285,7 @@
    </section>
    <script>
       $(document).ready(function () {
-         // Sticky Header Logic
+
          function toggleFixedHeader() {
             if ($(window).scrollTop() > 0) {
                $('body').addClass('fixed');
@@ -282,7 +294,7 @@
             }
          }
 
-         // Fixed Section Logic for col-md-4
+
          var $wrapper = $('.section-wrapper');
          var $section = $wrapper.find('.section-content');
          var $placeholder = $wrapper.find('.placeholder');
@@ -315,23 +327,23 @@
             }
          }
 
-         // Run on page load and after content is fully loaded
+
          $(window).on('load', function () {
             toggleFixedHeader();
             updateSectionState();
          });
 
-         // Run immediately in case 'load' event has already fired
+
          toggleFixedHeader();
          updateSectionState();
 
-         // Run on scroll
+
          $(window).on('scroll', function () {
             toggleFixedHeader();
             updateSectionState();
          });
 
-         // Handle window resize to update width
+
          $(window).on('resize', function () {
             sectionWidth = $wrapper.width();
             if ($section.hasClass('fixed-section')) {
@@ -339,11 +351,11 @@
             }
          });
 
-         // Tab Switching Logic (if needed)
+
          $('.tabs').on('click', function () {
             $('.tabs').removeClass('active-tab');
             $(this).addClass('active-tab');
-            // Add logic to show/hide content based on tab if needed
+
          });
       });
    </script>

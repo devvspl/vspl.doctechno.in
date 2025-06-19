@@ -265,7 +265,8 @@
                                             value="<?= isset($item['tds_amount']) ? $item['tds_amount'] : ''; ?>">
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-danger btn-sm remove_row" title="Remove">
+                                        <button type="button" class="btn btn-danger btn-sm remove_row" style="padding: 0px 5px;"
+                                            title="Remove">
                                             <i class="fa fa-trash"></i>
                                         </button>
                                     </td>
@@ -398,7 +399,8 @@
                                     <input type="text" name="item_tds_amount[]" id="item_tds_amount_1" class="form-control">
                                 </td>
                                 <td>
-                                    <button type="button" class="btn btn-danger btn-sm remove_row" title="Remove">
+                                    <button type="button" class="btn btn-danger btn-sm remove_row" style="padding: 0px 5px;"
+                                        title="Remove">
                                         <i class="fa fa-trash"></i>
                                     </button>
                                 </td>
@@ -410,7 +412,7 @@
             </div>
             <div class="form-group col-md-12" style="margin-top: 5px;">
                 <button type="button" class="btn btn-success btn-sm" id="add_row"
-                    style="margin-top: 10px;padding: 2px 8px;" title="Add Row">
+                    style="margin-top: 10px;padding:0px 5px;" title="Add Row">
                     <i class="fa fa-plus"></i>
                 </button>
 
@@ -820,7 +822,7 @@
                 $(this).autocomplete("search", "");
             });
         }
-        
+
         function updateBillAmount() {
             let total = 0;
             var final_amount = parseFloat($(".final_amount_column").val()) || 0;

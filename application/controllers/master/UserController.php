@@ -233,6 +233,64 @@ class UserController extends CI_Controller
         $this->load->view('layout/template', $data);
     }
 
+    public function tagControl()
+    {
+        $data['departments'] = $this->get_departments();
+        $data['document_type'] = $this->db->select('type_id, file_type')->from('master_doctype')->where_in('type_id', [1, 6, 7, 13, 17, 20, 22, 23, 27, 28, 29, 31, 42, 43, 44, 46, 47, 48, 50, 56])->get()->result_array();
+        $selected_doc_type = $this->input->get('doc_type') ? $this->input->get('doc_type') : 0;
+        $data['selected_doc_type'] = $selected_doc_type;
+        $data['mappings'] = $this->db->from('tbl_tag_control')->where('document_type_id', $selected_doc_type)->get()->result_array();
+        $data['main'] = 'user/tag_control';
+        $this->load->view('layout/template', $data);
+    }
+
+    public function updateTagMapping()
+    {
+        $department_id = $this->input->post('department_id');
+        $document_type_id = $this->input->post('document_type_id');
+        $field = $this->input->post('field');
+        $checked = $this->input->post('checked'); // Already 'Y' or 'N'
+
+        $this->db->trans_start();
+        $data = array(
+            'updated_by' => $this->session->userdata('user_id'),
+            'updated_time' => date('Y-m-d H:i:s'),
+            $field => $checked // Direct assignment
+        );
+
+        // Check if the row exists
+        $existing = $this->db->from('tbl_tag_control')
+            ->where('document_type_id', $document_type_id == '0' ? 0 : $document_type_id)
+            ->where('department_id', $department_id)
+            ->get()->row_array();
+
+        if ($existing) {
+            $this->db->where('document_type_id', $document_type_id == '0' ? 0 : $document_type_id);
+            $this->db->where('department_id', $department_id);
+            $this->db->update('tbl_tag_control', $data);
+        } else {
+            $data['document_type_id'] = $document_type_id == '0' ? 0 : $document_type_id;
+            $data['department_id'] = $department_id;
+
+            // Initialize all other fields to 'N' if inserting a new row
+            $all_fields = ['ledger', 'subledger', 'vertical', 'activity', 'crop', 'business_unit', 'zone', 'region'];
+            foreach ($all_fields as $f) {
+                if ($f !== $field) {
+                    $data[$f] = 'N';
+                }
+            }
+            $this->db->insert('tbl_tag_control', $data);
+        }
+
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE) {
+            echo json_encode(array('status' => 'error'));
+        } else {
+            echo json_encode(array('status' => 'success'));
+        }
+    }
+
     public function get_departments()
     {
         return $this->db->get_where('core_department', ['is_active' => 1])->result_array();
@@ -287,7 +345,7 @@ class UserController extends CI_Controller
         echo json_encode(['status' => 'success']);
     }
 
-    public function roles() 
+    public function roles()
     {
         $data['roles'] = $this->db->get('tbl_roles')->result_array();
         $data['main'] = 'user/roles';
