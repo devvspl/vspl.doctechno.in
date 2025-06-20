@@ -32,7 +32,7 @@
          <nav class="navbar navbar-static-top">
             <style>
                .dropdown-menu {
-                  
+                     width: 200px;
                }
 
                .dropdown-menu .dropdown-menu {
