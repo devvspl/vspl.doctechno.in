@@ -9,7 +9,10 @@ class Scan extends CI_Controller
         $this->logged_in();
         $this->load->database();
         $this->load->model('Scan_model');
-            $this->year_id = $this->session->userdata('year_id') ?? ($this->db->select('id')->from('financial_years')->where('is_current', 1)->get()->row()->id ?? null);
+        $this->load->library('pagination');
+        $this->load->library('csvexport');
+        require_once APPPATH . 'third_party/vendor/autoload.php';
+        $this->year_id = $this->session->userdata('year_id') ?? ($this->db->select('id')->from('financial_years')->where('is_current', 1)->get()->row()->id ?? null);
     }
     private function logged_in()
     {
@@ -30,12 +33,123 @@ class Scan extends CI_Controller
     public function temp_scan()
     {
         $status = $this->input->get('status');
+        $document_name = $this->input->get('document_name');
+        $from_date = $this->input->get('from_date');
+        $to_date = $this->input->get('to_date');
+        $page = $this->input->get('page') ? $this->input->get('page') : 1;
+        $per_page = 10;
+
+
+        $config = [
+            'base_url' => base_url('scan/temp_scan'),
+            'per_page' => $per_page,
+            'total_rows' => $this->Scan_model->get_my_lastest_temp_scan_count($status, $document_name, $from_date, $to_date),
+            'use_page_numbers' => TRUE,
+            'page_query_string' => TRUE,
+            'query_string_segment' => 'page',
+            'full_tag_open' => '<ul class="pagination">',
+            'full_tag_close' => '</ul>',
+            'first_link' => 'First',
+            'first_tag_open' => '<li class="page-item">',
+            'first_tag_close' => '</li>',
+            'last_link' => 'Last',
+            'last_tag_open' => '<li class="page-item">',
+            'last_tag_close' => '</li>',
+            'next_link' => 'Next',
+            'next_tag_open' => '<li class="page-item">',
+            'next_tag_close' => '</li>',
+            'prev_link' => 'Previous',
+            'prev_tag_open' => '<li class="page-item">',
+            'prev_tag_close' => '</li>',
+            'cur_tag_open' => '<li class="page-item active"><a class="page-link">',
+            'cur_tag_close' => '</a></li>',
+            'num_tag_open' => '<li class="page-item">',
+            'num_tag_close' => '</li>',
+            'attributes' => ['class' => 'page-link']
+        ];
+
+
+        if ($status)
+            $config['suffix'] = '&status=' . $status;
+        if ($document_name)
+            $config['suffix'] .= '&document_name=' . urlencode($document_name);
+        if ($from_date)
+            $config['suffix'] .= '&from_date=' . $from_date;
+        if ($to_date)
+            $config['suffix'] .= '&to_date=' . $to_date;
+        $config['first_url'] = base_url('scan/temp_scan') . '?' . http_build_query([
+            'status' => $status,
+            'document_name' => $document_name,
+            'from_date' => $from_date,
+            'to_date' => $to_date
+        ]);
+
+        $this->pagination->initialize($config);
+
         $this->session->set_userdata('top_menu', 'scan_master');
         $this->session->set_userdata('sub_menu', 'scan');
         $this->data['main'] = 'scan/temp_scanfile';
         $this->data['status'] = $status;
-        $this->data['my_lastest_scan'] = $this->Scan_model->get_my_lastest_temp_scan($status);
+        $this->data['document_name'] = $document_name;
+        $this->data['from_date'] = $from_date;
+        $this->data['to_date'] = $to_date;
+        $this->data['my_lastest_scan'] = $this->Scan_model->get_my_lastest_temp_scan($status, $document_name, $from_date, $to_date, $page, $per_page);
+
+        $this->data['pagination'] = $this->pagination->create_links();
         $this->load->view('layout/template', $this->data);
+    }
+
+    public function export($type)
+    {
+
+
+
+
+        $status = $this->input->get('status');
+        $document_name = $this->input->get('document_name');
+        $from_date = $this->input->get('from_date');
+        $to_date = $this->input->get('to_date');
+
+        $data = $this->Scan_model->get_my_lastest_temp_scan($status, $document_name, $from_date, $to_date, 1, 999999);
+
+        if ($type === 'csv') {
+            $filename = 'scan_files_' . date('YmdHis') . '.csv';
+            $headers = ['S.No', 'File Name', 'Document Name', 'Scan Date', 'Final Submit'];
+            if ($status === 'rejected') {
+                $headers[] = 'Reject Remark';
+            }
+
+            $rows = [];
+            $count = 1;
+            foreach ($data as $row) {
+                $row_data = [
+                    $count++,
+                    $row['file_name'],
+                    $row['document_name'],
+                    date('d-m-Y', strtotime($row['temp_scan_date'])),
+                    $row['is_final_submitted'] == 'Y' ? 'Yes' : 'No'
+                ];
+                if ($status === 'rejected') {
+                    $row_data[] = $row['temp_scan_reject_remark'];
+                }
+                $rows[] = $row_data;
+            }
+
+            $this->csvexport->export($filename, $headers, $rows);
+        } elseif ($type === 'pdf') {
+            $this->load->library('pdf');
+            $this->data['my_lastest_scan'] = $data;
+            $this->data['status'] = $status;
+            $html = $this->load->view('scan/export_pdf', $this->data, true);
+
+            $pdf = new \Dompdf\Dompdf();
+            $pdf->loadHtml($html);
+            $pdf->setPaper('A4', 'landscape');
+            $pdf->render();
+            $pdf->stream('scan_files_' . date('YmdHis') . '.pdf', ['Attachment' => true]);
+        } else {
+            show_404();
+        }
     }
     public function myscannedfiles()
     {
@@ -85,50 +199,42 @@ class Scan extends CI_Controller
     }
     public function temp_upload_main()
     {
-        // $this->load->library('form_validation');
-        // $this->form_validation->set_rules('location', 'location_id', 'required|trim');
-        // $this->form_validation->set_rules('bill_approver', 'Bill Approver', 'required|trim');
-        // if ($this->form_validation->run() == false) {
-        //     $this->session->set_flashdata('message', '<div class="alert alert-danger">' . validation_errors() . '</div>');
-        //     redirect('temp_scan');
-        // } else {
-            $Temp_Scan_By = $this->session->userdata('user_id');
-            $location = $this->input->post('location');
-            $bill_approver = $this->input->post('bill_approver');
-            $file = $_FILES['main_file']['name'];
-            $file_ext = pathinfo($file, PATHINFO_EXTENSION);
-            $year = date('Y');
-            $config['upload_path'] = './uploads/temp/';
-            $config['allowed_types'] = 'jpg|png|jpeg|pdf';
-            $config['max_size'] = 8192;
-            $var_temp_name = time() . '.' . $file_ext;
-            $config['file_name'] = $var_temp_name;
-            $this->load->library('upload', $config);
-            if (!$this->upload->do_upload('main_file')) {
-                $error = ['error' => $this->upload->display_errors()];
-                $this->session->set_flashdata('message', '<div class="alert alert-danger">' . $error['error'] . '</div>');
+        $temp_scan_by = $this->session->userdata('user_id');
+        $location = $this->input->post('location');
+        $bill_approver = $this->input->post('bill_approver');
+        $file = $_FILES['main_file']['name'];
+        $file_ext = pathinfo($file, PATHINFO_EXTENSION);
+        $year = date('Y');
+        $config['upload_path'] = './uploads/temp/';
+        $config['allowed_types'] = 'jpg|png|jpeg|pdf';
+        $config['max_size'] = 8192;
+        $var_temp_name = time() . '.' . $file_ext;
+        $config['file_name'] = $var_temp_name;
+        $this->load->library('upload', $config);
+        if (!$this->upload->do_upload('main_file')) {
+            $error = ['error' => $this->upload->display_errors()];
+            $this->session->set_flashdata('message', '<div class="alert alert-danger">' . $error['error'] . '</div>');
+            redirect('temp_scan');
+        } else {
+            $this->db->trans_start();
+            $data = ['group_id' => $this->session->userdata('group_id'), 'location_id' => $location, 'bill_approver_id' => $bill_approver, 'temp_scan_by' => $temp_scan_by, 'is_temp_scan' => 'Y', 'is_scan_complete' => 'N', 'file_name' => $var_temp_name, 'file_extension' => $file_ext, 'file_path' => base_url() . 'uploads/temp/' . $var_temp_name, 'secondary_file_path' => 'uploads/temp/' . $var_temp_name, 'year' => $year, 'temp_scan_date' => date('Y-m-d H:i:s')];
+            $this->db->insert("y{$this->year_id}_scan_file", $data);
+            $insert_id = $this->db->insert_id();
+            $file_org_name = preg_replace('/[^A-Za-z0-9\s\-]/', '', pathinfo($file, PATHINFO_FILENAME));
+            $file_org_name = str_replace(' ', '_', $file_org_name);
+            $formatted_date = date('dmY_His');
+            $document_name = $insert_id . '_' . $temp_scan_by . '_' . ucfirst($file_org_name) . '_' . $formatted_date;
+            $this->db->where('scan_id', $insert_id);
+            $this->db->update("y{$this->year_id}_scan_file", ['document_name' => $document_name]);
+            $this->db->trans_complete();
+            if ($this->db->trans_status() === FALSE) {
+                $this->session->set_flashdata('message', '<div class="alert alert-danger">Failed to upload file due to database error</div>');
                 redirect('temp_scan');
             } else {
-                $this->db->trans_start();
-                $data = ['group_id' => $this->session->userdata('group_id'), 'location_id' => $location, 'bill_approver_id' => $bill_approver, 'temp_scan_by' => $Temp_Scan_By, 'is_temp_scan' => 'Y', 'is_scan_complete' => 'N', 'file_name' => $var_temp_name, 'file_extension' => $file_ext, 'file_path' => base_url() . 'uploads/temp/' . $var_temp_name, 'secondary_file_path' => 'uploads/temp/' . $var_temp_name, 'year' => $year, 'temp_scan_date' => date('Y-m-d H:i:s')];
-                $this->db->insert("y{$this->year_id}_scan_file", $data);
-                $insert_id = $this->db->insert_id();
-                $file_org_name = preg_replace('/[^A-Za-z0-9\s\-]/', '', pathinfo($file, PATHINFO_FILENAME));
-                $file_org_name = str_replace(' ', '_', $file_org_name);
-                $formatted_date = date('d_My_His');
-                $document_name = $insert_id . '_' . ucfirst($file_org_name) . '_' . $formatted_date;
-                $this->db->where('scan_id', $insert_id);
-                $this->db->update("y{$this->year_id}_scan_file", ['document_name' => $document_name]);
-                $this->db->trans_complete();
-                if ($this->db->trans_status() === FALSE) {
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger">Failed to upload file due to database error</div>');
-                    redirect('temp_scan');
-                } else {
-                    $this->session->set_flashdata('message', '<div class="alert alert-success">File Uploaded Successfully</div>');
-                    redirect('scan/temp_upload_supporting/' . $insert_id);
-                }
+                $this->session->set_flashdata('message', '<div class="alert alert-success">File Uploaded Successfully</div>');
+                redirect('scan/temp_upload_supporting/' . $insert_id);
             }
-        // }
+        }
     }
     public function upload_supporting($id)
     {
@@ -392,7 +498,7 @@ class Scan extends CI_Controller
     public function update_document_name($id)
     {
         $user_id = $this->session->userdata('user_id');
-        $document_name  = $this->input->post('document_name');
+        $document_name = $this->input->post('document_name');
         $group_id = $this->input->post('group_id');
         $location = $this->input->post('location');
         $scan_doctype_id = $this->input->post('doctype_id');
@@ -401,7 +507,7 @@ class Scan extends CI_Controller
         $bill_voucher_date_1 = $this->input->post('bill_voucher_date');
         $bill_voucher_date = $this->reformat_date($bill_voucher_date_1);
         $bill_no_voucher_no = $this->input->post('bill_no_voucher_no');
-        $data = ['scanned_by' => $user_id, 'is_scan_complete' => 'Y', 'document_name' => $document_name , 'scan_date' => date('Y-m-d H:i:s'), 'is_final_submitted' => 'Y', 'location_id' => $location, 'scan_doctype_id' => $scan_doctype_id, 'department_id' => $department_id, 'firm_id' => $firm_id, 'bill_voucher_date' => $bill_voucher_date, 'bill_no_voucher_no' => $bill_no_voucher_no,];
+        $data = ['scanned_by' => $user_id, 'is_scan_complete' => 'Y', 'document_name' => $document_name, 'scan_date' => date('Y-m-d H:i:s'), 'is_final_submitted' => 'Y', 'location_id' => $location, 'scan_doctype_id' => $scan_doctype_id, 'department_id' => $department_id, 'firm_id' => $firm_id, 'bill_voucher_date' => $bill_voucher_date, 'bill_no_voucher_no' => $bill_no_voucher_no,];
         $result = $this->db->where('scan_id', $id)->update("y{$this->year_id}_scan_file", $data);
         if ($result) {
             $this->session->set_flashdata('message', '<div class="alert alert-success">Save Successfully</div>');

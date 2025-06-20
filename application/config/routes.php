@@ -49,6 +49,14 @@ $route['employee_import'] = 'master/EmployeeController/employee_import';
 $route['firm_import'] = 'master/FirmController/firm_import';
 $route['core-apis'] = 'master/CoreController/core_apis';
 $route['create_account'] = 'master/AccountController/create';
+// Admin Section
+$route['approval-matrix'] = 'AdminController/approvalMatrix';
+$route['approval-matrix/add'] = 'AdminController/addApprovalMatrix';
+$route['approval-matrix/save'] = 'AdminController/saveApprovalMatrix';
+$route['approval-matrix/delete/(:any)'] = 'AdminController/deleteApprovalMatrix/$1';
+$route['approval-matrix/edit/(:any)'] = 'AdminController/editApprovalMatrix/$1';
+$route['approval-matrix/get-approval-matrix'] = 'AdminController/getApprovalMatrix';
+$route['approval-matrix/get-approval-matrix-by-id/(:any)'] = 'AdminController/getApprovalMatrixById/$1';
 // >>>>>>>>>>>>>>>>>>>>>>>>> Data Extraction Section <<<<<<<<<<<<<<<<<<<<<<<<< //
 $route['classification'] = 'extract/ExtractorController/classification';
 $route['processed'] = 'extract/ExtractorController/processed';

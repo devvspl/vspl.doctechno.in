@@ -5,11 +5,7 @@
             <div class="box box-solid1 box-primary">
                <div class="box-header with-border">
                   <h3 class="box-title"><i class="fa fa-lock"></i> Department Activity Mapping</h3>
-                  <div class="box-tools pull-right">
-                     <a href="<?= base_url(); ?>user" class="btn btn-primary btn-sm">
-                     <i class="fa fa-long-arrow-left"></i> Back
-                     </a>
-                  </div>
+                 
                </div>
                <div class="box-body">
                   <?php if ($this->session->flashdata('msg')): ?>
@@ -61,43 +57,3 @@
       </div>
    </section>
 </div>
-<script>
-   $(document).ready(function() {
-       $('#mappingTable').DataTable({
-           "pageLength": 10,
-           "ordering": false,
-           "searching": true,
-           "paging": true,
-           "info": true,
-             fixedColumns: {
-                leftColumns: 2 
-        }
-       });
-       $('.mapping-checkbox').on('change', function() {
-           var departmentId = $(this).data('department-id');
-           var activityId = $(this).data('activity-id');
-           var checked = $(this).is(':checked');
-   
-           $.ajax({
-               url: "<?= base_url('master/UserController/updateMapping'); ?>",
-               type: "POST",
-               data: {
-                   department_id: departmentId,
-                   activity_id: activityId,
-                   checked: checked
-               },
-               dataType: "json",
-               success: function(response) {
-                   if (response.status === 'success') {
-                      alert('Mapping updated successfully');
-                   } else {
-                       alert('Failed to update mapping');
-                   }
-               },
-               error: function() {
-                   alert('Error occurred while updating mapping');
-               }
-           });
-       });
-   });
-</script>

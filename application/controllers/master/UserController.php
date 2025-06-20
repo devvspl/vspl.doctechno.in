@@ -160,38 +160,41 @@ class UserController extends CI_Controller
     {
         $this->data['main'] = 'user/menu_mapping';
         $this->data['menu_list'] = $this->db->get('tbl_menus')->result_array();
-        $this->data['permission_list'] = $this->db->select('permission_id, permission_name')->from('tbl_permissions')->where('status', 1)->where('permission_id !=', 8)->get()->result_array();
+        $this->data['permission_list'] = $this->db->select('permission_id, permission_name')->from('tbl_permissions')->where('status', 1)->get()->result_array();
         $this->load->view('layout/template', $this->data);
     }
 
-    // New method to handle AJAX updates
+    
     public function updateMenuPermission()
     {
         $menu_id = $this->input->post('menu_id');
         $permission_id = $this->input->post('permission_id');
         $checked = $this->input->post('checked') === 'true' ? true : false;
 
-        // Fetch current permissions for the menu
+        
         $menu = $this->db->get_where('tbl_menus', ['id' => $menu_id])->row_array();
-        $menu_permissions = json_decode($menu['permission_ids'], true);
+
+        
+        $permission_json = $menu['permission_ids'] ?? '[]'; 
+        $menu_permissions = json_decode($permission_json, true);
         if (!is_array($menu_permissions)) {
             $menu_permissions = [];
         }
 
         if ($checked) {
-            // Add permission if checked
+            
             if (!in_array($permission_id, $menu_permissions)) {
                 $menu_permissions[] = $permission_id;
             }
         } else {
-            // Remove permission if unchecked
+            
             $menu_permissions = array_filter($menu_permissions, function ($id) use ($permission_id) {
                 return $id != $permission_id;
             });
-            $menu_permissions = array_values($menu_permissions); // Reindex array
+            $menu_permissions = array_values($menu_permissions); 
         }
 
-        // Update the menu with new permissions
+        
         $json_permissions = json_encode($menu_permissions);
         $this->db->where('id', $menu_id);
         $this->db->update('tbl_menus', ['permission_ids' => $json_permissions]);
@@ -199,9 +202,10 @@ class UserController extends CI_Controller
         echo json_encode(['status' => 'success']);
     }
 
+
     public function saveMenuMapping()
     {
-        // This method is no longer needed, but keeping it for reference in case you revert
+        
         $permissions = $this->input->post('permissions');
         $all_menus = $this->db->get('tbl_menus')->result_array();
 
@@ -249,16 +253,16 @@ class UserController extends CI_Controller
         $department_id = $this->input->post('department_id');
         $document_type_id = $this->input->post('document_type_id');
         $field = $this->input->post('field');
-        $checked = $this->input->post('checked'); // Already 'Y' or 'N'
+        $checked = $this->input->post('checked'); 
 
         $this->db->trans_start();
         $data = array(
             'updated_by' => $this->session->userdata('user_id'),
             'updated_time' => date('Y-m-d H:i:s'),
-            $field => $checked // Direct assignment
+            $field => $checked 
         );
 
-        // Check if the row exists
+        
         $existing = $this->db->from('tbl_tag_control')
             ->where('document_type_id', $document_type_id == '0' ? 0 : $document_type_id)
             ->where('department_id', $department_id)
@@ -272,7 +276,7 @@ class UserController extends CI_Controller
             $data['document_type_id'] = $document_type_id == '0' ? 0 : $document_type_id;
             $data['department_id'] = $department_id;
 
-            // Initialize all other fields to 'N' if inserting a new row
+            
             $all_fields = ['ledger', 'subledger', 'vertical', 'activity', 'crop', 'business_unit', 'zone', 'region'];
             foreach ($all_fields as $f) {
                 if ($f !== $field) {
@@ -325,7 +329,7 @@ class UserController extends CI_Controller
         $this->db->insert('tbl_department_activity_mapping', $data);
     }
 
-    // New method to handle AJAX updates
+    
     public function updateMapping()
     {
         $department_id = $this->input->post('department_id');
@@ -333,10 +337,10 @@ class UserController extends CI_Controller
         $checked = $this->input->post('checked') === 'true' ? true : false;
 
         if ($checked) {
-            // Insert mapping if checked
+            
             $this->insert_mapping($department_id, $activity_id);
         } else {
-            // Delete mapping if unchecked
+            
             $this->db->where('department_id', $department_id);
             $this->db->where('activity_id', $activity_id);
             $this->db->delete('tbl_department_activity_mapping');

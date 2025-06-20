@@ -9,16 +9,13 @@
                <div class="box-body">
                   <div class="table-responsive mailbox-messages">
                      <div class="download_label">Role List</div>
-                     <table class="table">
+                     <table id="rolesTable" class="table">
                         <thead>
                            <tr>
-                              <th>Role ID</th>
-                              <th>Role Name</th>
-                              <th>Description</th>
-                              <th>Status</th>
-                              <th>Created At</th>
-                              <th>Updated At</th>
-
+                              <th style="text-align: left;">Role ID</th>
+                              <th style="text-align: left;">Role Name</th>
+                              <th style="text-align: left;">Description</th>
+                              <th style="text-align: center;">Status</th>
                            </tr>
                         </thead>
                         <tbody>
@@ -33,9 +30,7 @@
                                     <td><?= $row['role_name']; ?></td>
                                     <td><?= $row['description']; ?></td>
                                     <td><?= $row['status'] == 1 ? 'Active' : 'Inactive'; ?></td>
-                                    <td><?= $row['created_at']; ?></td>
-                                    <td><?= $row['updated_at']; ?></td>
-                                   
+                                    
                                  </tr>
                               <?php }
                            } ?>
@@ -48,3 +43,14 @@
       </div>
    </section>
 </div>
+<script>
+   $(document).ready(function () {
+      $('#rolesTable').DataTable({
+         "pageLength": 10,
+         "ordering": false,
+         "columnDefs": [
+            { "orderable": false, "targets": 1 }
+         ]
+      });
+   });
+</script>

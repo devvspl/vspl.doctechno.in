@@ -111,7 +111,7 @@ th {
 	margin: 20px 0;
 	border-radius: 4px;
 	display: flex;
-	gap: 8px;
+	/* gap: 8px; */
 }
 
 .select2-container--default

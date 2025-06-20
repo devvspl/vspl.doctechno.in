@@ -1,7 +1,7 @@
 <div class="content-wrapper" style="min-height: 946px;">
    <section class="content">
       <div class="row">
-         <div class="col-md-5">
+         <div class="col-md-4">
             <div class="box box-primary">
                <div class="box-header with-border">
                   <h3 class="box-title">Upload - Supporting File</h3>
@@ -22,28 +22,11 @@
                </form>
             </div>
          </div>
-         <div class="col-md-7">
+         <div class="col-md-8">
             <div class="box box-primary">
                <div class="box-header with-border">
                   <h3 class="box-title"><?= $this->customlib->getDocumentName($scan_id); ?>
                   </h3>
-                  <div class="box-tools pull-right">
-                     <?php 
-                        if ($this->customlib->has_permission('Temporary Scan')) {
-                        ?>
-                     <a href="<?= base_url(); ?>temp_scan" class="btn btn-primary btn-sm">
-                     <i class="fa fa-long-arrow-left"></i> Back
-                     </a>
-                     <?php 
-                        } else {
-                        ?>
-                     <a href="<?= base_url(); ?>scan" class="btn btn-primary btn-sm">
-                     <i class="fa fa-long-arrow-left"></i> Back
-                     </a>
-                     <?php 
-                        }
-                        ?>
-                  </div>
                </div>
                <div class="bx-body">
                   <div class="table-responsive">

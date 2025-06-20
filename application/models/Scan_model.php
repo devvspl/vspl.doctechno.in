@@ -29,13 +29,14 @@ class Scan_model extends MY_Model
         $result = $this->db->get()->result_array();
         return $result;
     }
-    function get_my_lastest_temp_scan($status)
+    function get_my_lastest_temp_scan($status = null, $document_name = null, $from_date = null, $to_date = null, $page = 1, $per_page = 10)
     {
         $user_id = $this->session->userdata('user_id');
         $this->db->select('*');
         $this->db->from("y{$this->year_id}_scan_file");
         $this->db->where('temp_scan_by', $user_id);
         $this->db->where('temp_scan_date !=', '0000-00-00');
+
         if ($status === 'submitted') {
             $this->db->where('is_final_submitted', 'Y');
         } elseif ($status === 'pending') {
@@ -45,10 +46,55 @@ class Scan_model extends MY_Model
         } elseif ($status === 'deleted') {
             $this->db->where('is_deleted', 'Y');
         }
+
+        if ($document_name) {
+            $this->db->like('document_name', $document_name);
+        }
+
+        if ($from_date) {
+            $this->db->where('DATE(temp_scan_date) >=', date('Y-m-d', strtotime($from_date)));
+        }
+
+        if ($to_date) {
+            $this->db->where('DATE(temp_scan_date) <=', date('Y-m-d', strtotime($to_date)));
+        }
+
         $this->db->order_by('scan_id', 'desc');
+        $this->db->limit($per_page, ($page - 1) * $per_page);
         return $this->db->get()->result_array();
     }
 
+    function get_my_lastest_temp_scan_count($status = null, $document_name = null, $from_date = null, $to_date = null)
+    {
+        $user_id = $this->session->userdata('user_id');
+        $this->db->from("y{$this->year_id}_scan_file");
+        $this->db->where('temp_scan_by', $user_id);
+        $this->db->where('temp_scan_date !=', '0000-00-00');
+
+        if ($status === 'submitted') {
+            $this->db->where('is_final_submitted', 'Y');
+        } elseif ($status === 'pending') {
+            $this->db->where('is_final_submitted', 'N');
+        } elseif ($status === 'rejected') {
+            $this->db->where('is_temp_scan_rejected', 'Y');
+        } elseif ($status === 'deleted') {
+            $this->db->where('is_deleted', 'Y');
+        }
+
+        if ($document_name) {
+            $this->db->like('document_name', $document_name);
+        }
+
+        if ($from_date) {
+            $this->db->where('DATE(temp_scan_date) >=', date('Y-m-d', strtotime($from_date)));
+        }
+
+        if ($to_date) {
+            $this->db->where('DATE(temp_scan_date) <=', date('Y-m-d', strtotime($to_date)));
+        }
+
+        return $this->db->count_all_results();
+    }
 
     function get_my_scanned_files()
     {

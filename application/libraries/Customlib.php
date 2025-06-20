@@ -244,11 +244,12 @@ class Customlib
     {
         $Get_Scan_Detail = $this->getScanData($scan_id);
         $DocType = $Get_Scan_Detail->doc_type;
-        $ScanBY = $Get_Scan_Detail->scanned_by;
         $File = $Get_Scan_Detail->file_name;
         $Year = $Get_Scan_Detail->year;
+        $temp_scan_date = $Get_Scan_Detail->temp_scan_date;
+        $month = date('m', strtotime($temp_scan_date));
         $temp_file = './uploads/temp/' . $File;
-        $upload_dir = 'uploads/' . $ScanBY . '/' . $Year . '/' . $DocType;
+        $upload_dir = 'uploads/' . $Year . '/' . $month . '/' . $DocType;
         if (!is_dir($upload_dir)) {
             mkdir($upload_dir, 0777, true);
         }

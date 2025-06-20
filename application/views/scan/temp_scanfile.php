@@ -26,33 +26,64 @@
          <div class="col-md-8">
             <div class="box box-primary" id="exphead">
                <div class="box-header ptbnull">
-                  <h3 class="box-title titlefix">Latest Scan File
-                  </h3>
+                  <h3 class="box-title titlefix">Latest Scan File</h3>
                   <div class="box-tools pull-right">
-                     <a href="<?php echo base_url('dashboard')?>" class="btn btn-primary btn-sm">
-                        <i class="fa fa-long-arrow-left"></i> Back
-                     </a>
+                     <div class="btn-group">
+                        <button type="button" class="btn btn-primary btn-sm">Get Report</button>
+                        <button type="button" class="btn btn-primary btn-sm dropdown-toggle" style="padding-bottom: 11px;" data-toggle="dropdown">
+                           <span class="caret"></span>
+                           <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                           <li> <a href="<?= base_url('scan/export/csv') . '?' . http_build_query([
+                           'status' => $status,
+                           'document_name' => $document_name,
+                           'from_date' => $from_date,
+                           'to_date' => $to_date
+                        ]) ?>" >Export CSV</a></li>
+                           <li> <a href="<?= base_url('scan/export/pdf') . '?' . http_build_query([
+                           'status' => $status,
+                           'document_name' => $document_name,
+                           'from_date' => $from_date,
+                           'to_date' => $to_date
+                        ]) ?>">Export PDF</a></li>
+                          
+                        </ul>
+                     </div>
                   </div>
                </div>
                <div class="box-body">
                   <div class="table-responsive mailbox-messages">
                      <div class="download_label">Latest Scan File</div>
-                     <!-- Filter Dropdown -->
-                     <div class="mb-5">
-                        <a href="?status=all"
-                           class="btn btn-sm <?= $status == 'all' || $status == '' ? 'btn-primary' : 'btn-default' ?>">All</a>
-                        <a href="?status=submitted"
-                           class="btn btn-sm <?= $status == 'submitted' ? 'btn-success' : 'btn-default' ?>">Submitted</a>
-                        <a href="?status=pending"
-                           class="btn btn-sm <?= $status == 'pending' ? 'btn-warning' : 'btn-default' ?>">Pending</a>
-                        <a href="?status=rejected"
-                           class="btn btn-sm <?= $status == 'rejected' ? 'btn-danger' : 'btn-default' ?>">Rejected</a>
-                        <a href="?status=deleted"
-                           class="btn btn-sm <?= $status == 'deleted' ? 'btn-danger' : 'btn-default' ?>">Deleted</a>
-                     </div>
-
-                     <!-- DataTable -->
-                     <table class="table table-striped table-bordered table-hover mt-3" id="scanTable">
+                     <form method="get" action="<?= base_url('scan/temp_scan') ?>" class="form-inline mb-3">
+                        <div class="form-group mr-2">
+                           <label for="status" class="sr-only">Status</label>
+                           <select name="status" id="status" class="form-control">
+                              <option value="all" <?= $status == 'all' || $status == '' ? 'selected' : '' ?>>All</option>
+                              <option value="submitted" <?= $status == 'submitted' ? 'selected' : '' ?>>Submitted</option>
+                              <option value="pending" <?= $status == 'pending' ? 'selected' : '' ?>>Pending</option>
+                              <option value="rejected" <?= $status == 'rejected' ? 'selected' : '' ?>>Rejected</option>
+                              <option value="deleted" <?= $status == 'deleted' ? 'selected' : '' ?>>Deleted</option>
+                           </select>
+                        </div>
+                        <div class="form-group mr-2">
+                           <label for="document_name" class="sr-only">Document Name</label>
+                           <input type="text" name="document_name" id="document_name" class="form-control"
+                              placeholder="Search Document Name" value="<?= $document_name ?>">
+                        </div>
+                        <div class="form-group mr-2">
+                           <label for="from_date" class="sr-only">From Date</label>
+                           <input type="date" name="from_date" id="from_date" class="form-control"
+                              value="<?= $from_date ?>">
+                        </div>
+                        <div class="form-group mr-2">
+                           <label for="to_date" class="sr-only">To Date</label>
+                           <input type="date" name="to_date" id="to_date" class="form-control" value="<?= $to_date ?>">
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-primary">Search</button>
+                        <a href="<?= base_url('scan/temp_scan') ?>" class="btn btn-sm btn-default ml-2">Reset</a>
+                     </form>
+                     <table class="table table-striped table-bordered table-hover mt-3">
                         <thead>
                            <tr>
                               <th>S.No</th>
@@ -117,8 +148,6 @@
                                        <?php } ?>
                                     </td>
                                  </tr>
-
-                                 <!-- Support Files Collapse -->
                                  <tr id="detail<?= $row['scan_id'] ?>" class="collapse" style="background-color: #FEF9E7;">
                                     <td colspan="<?= $status == 'rejected' ? 7 : 6 ?>">
                                        <table class="table table-bordered mytable1"
@@ -144,6 +173,9 @@
                            } ?>
                         </tbody>
                      </table>
+                     <div class="mt-3">
+                        <?= $pagination ?>
+                     </div>
                   </div>
                </div>
             </div>
@@ -152,24 +184,7 @@
    </section>
 </div>
 <script type="text/javascript">
-   $('#scan_form').on('submit', function (e) {
-      e.preventDefault();
-      var form = this;
-      $.ajax({
-         url: $(form).attr('action'),
-         method: $(form).attr('method'),
-         data: new FormData(form),
-         processData: false,
-         dataType: 'json',
-         contentType: false,
-         success: function (data) {
-            alert(data.message);
-         }
-      });
-   });
    $(document).ready(function () {
-      $("#location").select2();
-      $("#bill_approver").select2();
       $(document).on('click', '.delete-scan', function () {
          var scan_id = $(this).data('scan_id');
          var url = '<?= base_url() ?>Scan/delete_all';
@@ -187,34 +202,6 @@
                   }
                }
             });
-         }
-      });
-      $('#location').change(function () {
-         var location_id = $(this).val();
-         if (location_id !== '') {
-            $.ajax({
-               url: '<?= site_url('Scan/get_bill_approvers') ?>',
-               method: 'POST',
-               data: { location_id: location_id },
-               dataType: 'json',
-               success: function (response) {
-
-                  $('#bill_approver').empty();
-                  $('#bill_approver').append('<option value="">Select Approver</option>');
-
-
-                  $.each(response, function (key, value) {
-                     $('#bill_approver').append('<option value="' + value.user_id + '">' + value.first_name + ' ' + value.last_name + '</option>');
-                  });
-               },
-               error: function () {
-                  alert('Error fetching Bill Approvers.');
-               }
-            });
-         } else {
-
-            $('#bill_approver').empty();
-            $('#bill_approver').append('<option value="">Select Approver</option>');
          }
       });
    });
