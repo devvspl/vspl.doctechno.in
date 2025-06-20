@@ -332,9 +332,14 @@ class Scan extends CI_Controller
         $this->db->trans_start();
         $this->db->trans_strict(false);
         $scan_id = $this->input->post('scan_id');
-        $this->db->delete('support_file', ['scan_id' => $scan_id]);
-        $this->db->delete("y{$this->year_id}_scan_file", ['scan_id' => $scan_id]);
+        $this->db->where('scan_id', $scan_id);
+        $this->db->update('support_file', ['is_deleted' => 'Y']);
+
+        $this->db->where('scan_id', $scan_id);
+        $this->db->update("y{$this->year_id}_scan_file", ['is_deleted' => 'Y']);
+
         $this->db->trans_complete();
+
         if ($this->db->trans_status() === false) {
             $this->db->trans_rollback();
             echo json_encode(['status' => 400]);
@@ -343,6 +348,7 @@ class Scan extends CI_Controller
             echo json_encode(['status' => 200]);
         }
     }
+
     public function delete_file()
     {
         $id = $this->input->post('id');
