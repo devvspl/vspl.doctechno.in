@@ -82,14 +82,26 @@ class ExtractorController extends CI_Controller
     {
         $this->session->set_userdata("top_menu", "processed");
         $this->session->set_userdata("sub_menu", "processed");
-        $group_id = $this->input->get("group_id");
-        $location_id = $this->input->get("location_id");
+
+        $group_id = $this->input->get('group_id') ?? '16'; // Default to 16 as per query
+        $location_id = $this->input->get('location_id');
+        $doc_type_id = $this->input->get('doc_type_id');
+        $department_id = $this->input->get('department_id');
+        $sub_department_id = $this->input->get('sub_department_id');
+
         $this->data["groups"] = $this->Extract_model->getGroups();
         $this->data["locations"] = $this->Extract_model->getLocations();
-        $this->data["documents"] = $this->Extract_model->getProcessedList($group_id, $location_id);
+        $this->data["docTypes"] = $this->Extract_model->getDocTypes();
+        $this->data["departments"] = $this->Extract_model->getDepartments();
+
+        // ✅ FIX: Correct array key to match the view variable
+        $this->data["subdepartments"] = $this->Extract_model->getSubdepartments($department_id);
+
+        $this->data["documents"] = $this->Extract_model->getProcessedList($group_id, $location_id, $doc_type_id, $department_id, $sub_department_id);
         $this->data["main"] = "extract/processed";
         $this->load->view("layout/template", $this->data);
     }
+
     public function classificationsRejected()
     {
         $this->session->set_userdata("top_menu", "processed");
@@ -238,48 +250,25 @@ class ExtractorController extends CI_Controller
     {
         $scanId = $this->input->post("scan_id");
         $typeId = $this->input->post("type_id");
-        $autoApprove = $this->input->post("auto_approve") === 'true';
-
         if (empty($scanId) || empty($typeId)) {
             echo json_encode(["status" => "error", "message" => "Invalid request parameters: scan_id and type_id are required."]);
             return;
         }
-
-
         $data = [
             'is_classified' => 'Y',
             'classified_by' => $this->session->userdata('user_id'),
             'classified_date' => date('Y-m-d'),
             'doc_type_id' => $typeId,
+            'doc_type' => $this->customlib->getDocType($typeId),
             'department_id' => $this->input->post("department"),
             'sub_department_id' => $this->input->post("subdepartment"),
             'location_id' => $this->input->post("location")
         ];
-
-
-        if ($autoApprove) {
-            $data['bill_approval_status'] = 'Y';
-            $data['bill_approver_id'] = 0;
-            $data['bill_approved_date'] = date('Y-m-d');
-        } else {
-            $billApproverId = $this->input->post("bill_approver");
-            if (empty($billApproverId)) {
-                echo json_encode(["status" => "error", "message" => "Bill approver is required unless auto-approve is enabled."]);
-                return;
-            }
-            $data['bill_approver_id'] = $billApproverId;
-
-
-        }
-
-
         $updateResult = $this->Extract_model->updateDocument($scanId, $data);
         if (!$updateResult) {
             echo json_encode(["status" => "error", "message" => "Failed to update document details."]);
             return;
         }
-
-
         $queueResult = $this->Extract_model->addToQueue($scanId, $typeId);
         if ($queueResult) {
             echo json_encode(["status" => "success", "message" => "Document updated and added to queue successfully."]);

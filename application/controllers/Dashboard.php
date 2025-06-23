@@ -85,8 +85,9 @@ class Dashboard extends CI_Controller
             case 'scan_admin':
                 $this->data['main'] = 'dashboard/scan_admin';
                 $counts = $this->Scan_model->get_scan_admin_dashboard_counts($user_id, $group_id, $year_id);
+                $scan_summary = $this->Scan_model->get_scan_summary_by_user($year_id);
                 $this->data = array_merge($this->data, $counts);
-
+                $this->data['scan_summary'] = $scan_summary;
                 break;
             default:
                 $this->data['main'] = 'dashboard/user';

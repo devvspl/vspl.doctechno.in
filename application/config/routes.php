@@ -57,6 +57,8 @@ $route['approval-matrix/delete/(:any)'] = 'AdminController/deleteApprovalMatrix/
 $route['approval-matrix/edit/(:any)'] = 'AdminController/editApprovalMatrix/$1';
 $route['approval-matrix/get-approval-matrix'] = 'AdminController/getApprovalMatrix';
 $route['approval-matrix/get-approval-matrix-by-id/(:any)'] = 'AdminController/getApprovalMatrixById/$1';
+// >>>>>>>>>>>>>>>>>>>>>>>>> Document Classification Section <<<<<<<<<<<<<<<<<<<<<<<<< //
+$route['doc-received'] = 'DocClassifierController/doc_verification';
 // >>>>>>>>>>>>>>>>>>>>>>>>> Data Extraction Section <<<<<<<<<<<<<<<<<<<<<<<<< //
 $route['classification'] = 'extract/ExtractorController/classification';
 $route['processed'] = 'extract/ExtractorController/processed';

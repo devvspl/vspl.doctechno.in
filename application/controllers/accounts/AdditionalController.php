@@ -125,7 +125,7 @@ class AdditionalController extends CI_Controller
         }
 
         echo json_encode($result);
-    }
+    } 
     public function get_credit_accounts()
     {
         $query = $this->input->post('term');

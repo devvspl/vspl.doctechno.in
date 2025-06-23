@@ -4,18 +4,19 @@
          <div class="col-md-12">
             <div class="box box-primary">
                <div class="box-header with-border">
-                  <h3 class="box-title">List of Pending Classification</h3>
+                  <h3 class="box-title">Pending Classification List</h3>
+                  
                </div>
                <div class="box-body">
                   <div class="table-responsive mailbox-messages">
-                     <table class="table table-striped table-hover example">
+                     <table id="classificationTable" class="table table-striped table-hover">
                         <thead>
                            <tr>
-                              <th class="text-center">S No.</th>
-                              <th class="text-center">File Name</th>
-                              <th class="text-center">Scanned By</th>
-                              <th class="text-center">Scan Date</th>
-                              <th class="text-center">Action</th>
+                              <th style="text-align:left">S No.</th>
+                              <th style="text-align:left">Document Name</th>
+                              <th style="text-align:center">Scanned By</th>
+                              <th style="text-align:center">Scan Date</th>
+                              <th style="text-align:center">Action</th>
                            </tr>
                         </thead>
                         <tbody>
@@ -23,11 +24,11 @@
                               <?php $i = 1;
                               foreach ($documents as $doc): ?>
                                  <tr data-scan-id="<?= $doc->scan_id; ?>">
-                                    <td class="text-center"><?= $i++ ?></td>
-                                    <td class="text-center"><?= $doc->document_name ?? ''; ?></td>
-                                    <td class="text-center"><?= htmlspecialchars($doc->scanned_by ?? ''); ?></td>
-                                    <td class="text-center"><?= htmlspecialchars($doc->scan_date ?? ''); ?></td>
-                                    <td class="text-center">
+                                    <td style="text-align:left"><?= $i++ ?></td>
+                                    <td style="text-align:left"><?= $doc->document_name ?? ''; ?></td>
+                                    <td style="text-align:center"><?= htmlspecialchars($doc->scanned_by ?? ''); ?></td>
+                                    <td style="text-align:center"><?= htmlspecialchars($doc->scan_date ?? ''); ?></td>
+                                    <td style="text-align:center">
                                        <button class="btn btn-primary btn-sm view-details"
                                           data-scan-id="<?= $doc->scan_id; ?>" title="Set Document">
                                           <i class="fa fa-file-text-o"></i>
@@ -98,9 +99,25 @@
 </div>
 <script>
    $(document).ready(function () {
+      $("#classificationTable").DataTable({
+         paging: true,
+         searching: true,
+         ordering: true,
+         dom: 'Bfrtip',
+         buttons: [
+            {
+               extend: 'csv',
+               text: '<i class="fa fa-file-text-o"></i> Export',
+               title: 'Pending_Classification_List_' + new Date().toISOString().slice(0, 10),
+               className: 'btn btn-primary btn-sm',
+               exportOptions: {
+                  columns: ':not(:last-child)'
+               }
+            }
+         ]
+      });
       $("#location_id").select2();
       $('.select2').select2();
-
       $(".view-details").on("click", function () {
          let scanId = $(this).data("scan-id");
          $("#documentDetailsModal").modal("show");
@@ -142,7 +159,6 @@
             },
          });
       });
-
       $(document).on('change', 'select[id^="department_"]', function () {
          var department_id = $(this).val();
          var scan_id = $(this).attr('id').split('_')[1];
@@ -210,7 +226,6 @@
             });
          }
       });
-
       $(document).on("click", ".reject-bill", function () {
          var scanId = $(this).data('id');
          $("#rejectScanId").val(scanId);
@@ -218,7 +233,6 @@
          $("#Reject_Remark").css('border-color', '');
          $("#rejectModal").modal("show");
       });
-
       $(document).on("click", "#reject_btn", function () {
          var scanId = $("#rejectScanId").val();
          var remark = $("#Reject_Remark").val().trim();
@@ -251,16 +265,13 @@
             }
          });
       });
-
       $(document).on("click", ".extract-btn", function () {
          let $button = $(this);
          let scanId = $button.data("scan-id");
          let typeId = $("#docType_" + scanId).val();
          let department = $("#department_" + scanId).val();
          let subdepartment = $("#subdepartment_" + scanId).val();
-         let bill_approver = $("#bill_approver_" + scanId).val();
          let location = $("#location_" + scanId).val();
-         let autoApprove = $("#autoApprove_" + scanId).is(":checked");
 
          if (typeId === "") {
             alert("Please select a document type.");
@@ -276,11 +287,6 @@
             return;
          }
 
-         if (!autoApprove && bill_approver === "") {
-            alert("Please select a bill approver or enable Auto Approve.");
-            return;
-         }
-
          $button.prop("disabled", true).text("Please wait...");
          $.ajax({
             url: "<?= base_url('extract/ExtractorController/extractDetails'); ?>",
@@ -290,9 +296,7 @@
                type_id: typeId,
                department: department,
                subdepartment: subdepartment,
-               bill_approver: autoApprove ? null : bill_approver,
                location: location,
-               auto_approve: autoApprove
             },
             success: function (response) {
                let jsonResponse = JSON.parse(response);

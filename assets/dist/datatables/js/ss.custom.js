@@ -7,82 +7,82 @@ $(document).ready(function () {
 		},
 		//responsive: 'false',
 		dom: "Bfrtip",
-		buttons: [
-			{
-				extend: "copyHtml5",
-				text: '<i class="fa fa-files-o"></i>',
-				titleAttr: "Copy",
-				title: $(".download_label").html(),
-				exportOptions: {
-					columns: ["thead th:not(.noExport)"],
-				},
-			},
+		// buttons: [
+		// 	{
+		// 		extend: "copyHtml5",
+		// 		text: '<i class="fa fa-files-o"></i>',
+		// 		titleAttr: "Copy",
+		// 		title: $(".download_label").html(),
+		// 		exportOptions: {
+		// 			columns: ["thead th:not(.noExport)"],
+		// 		},
+		// 	},
 
-			{
-				extend: "excelHtml5",
-				text: '<i class="fa fa-file-excel-o"></i>',
-				titleAttr: "Excel",
+		// 	{
+		// 		extend: "excelHtml5",
+		// 		text: '<i class="fa fa-file-excel-o"></i>',
+		// 		titleAttr: "Excel",
 
-				title: $(".download_label").html(),
-				exportOptions: {
-					columns: ["thead th:not(.noExport)"],
-				},
-			},
+		// 		title: $(".download_label").html(),
+		// 		exportOptions: {
+		// 			columns: ["thead th:not(.noExport)"],
+		// 		},
+		// 	},
 
-			{
-				extend: "csvHtml5",
-				text: '<i class="fa fa-file-text-o"></i>',
-				titleAttr: "CSV",
-				title: $(".download_label").html(),
-				exportOptions: {
-					columns: ["thead th:not(.noExport)"],
-				},
-			},
+		// 	{
+		// 		extend: "csvHtml5",
+		// 		text: '<i class="fa fa-file-text-o"></i>',
+		// 		titleAttr: "CSV",
+		// 		title: $(".download_label").html(),
+		// 		exportOptions: {
+		// 			columns: ["thead th:not(.noExport)"],
+		// 		},
+		// 	},
 
-			{
-				extend: "pdfHtml5",
-				text: '<i class="fa fa-file-pdf-o"></i>',
-				titleAttr: "PDF",
-				title: $(".download_label").html(),
-				exportOptions: {
-					columns: ["thead th:not(.noExport)"],
-				},
-			},
+		// 	{
+		// 		extend: "pdfHtml5",
+		// 		text: '<i class="fa fa-file-pdf-o"></i>',
+		// 		titleAttr: "PDF",
+		// 		title: $(".download_label").html(),
+		// 		exportOptions: {
+		// 			columns: ["thead th:not(.noExport)"],
+		// 		},
+		// 	},
 
-			{
-				extend: "print",
-				text: '<i class="fa fa-print"></i>',
-				titleAttr: "Print",
-				title: $(".download_label").html(),
-				customize: function (win) {
-					$(win.document.body)
-						.find("th")
-						.addClass("display")
-						.css("text-align", "center");
-					$(win.document.body)
-						.find("td")
-						.addClass("display")
-						.css("text-align", "left");
-					$(win.document.body)
-						.find("table")
-						.addClass("display")
-						.css("font-size", "14px");
-					// $(win.document.body).find('table').addClass('display').css('text-align', 'center');
-					$(win.document.body).find("h1").css("text-align", "center");
-				},
-				exportOptions: {
-					columns: ["thead th:not(.noExport)"],
-				},
-			},
+		// 	{
+		// 		extend: "print",
+		// 		text: '<i class="fa fa-print"></i>',
+		// 		titleAttr: "Print",
+		// 		title: $(".download_label").html(),
+		// 		customize: function (win) {
+		// 			$(win.document.body)
+		// 				.find("th")
+		// 				.addClass("display")
+		// 				.css("text-align", "center");
+		// 			$(win.document.body)
+		// 				.find("td")
+		// 				.addClass("display")
+		// 				.css("text-align", "left");
+		// 			$(win.document.body)
+		// 				.find("table")
+		// 				.addClass("display")
+		// 				.css("font-size", "14px");
+		// 			// $(win.document.body).find('table').addClass('display').css('text-align', 'center');
+		// 			$(win.document.body).find("h1").css("text-align", "center");
+		// 		},
+		// 		exportOptions: {
+		// 			columns: ["thead th:not(.noExport)"],
+		// 		},
+		// 	},
 
-			{
-				extend: "colvis",
-				text: '<i class="fa fa-columns"></i>',
-				titleAttr: "Columns",
-				title: $(".download_label").html(),
-				postfixButtons: ["colvisRestore"],
-			},
-		],
+		// 	{
+		// 		extend: "colvis",
+		// 		text: '<i class="fa fa-columns"></i>',
+		// 		titleAttr: "Columns",
+		// 		title: $(".download_label").html(),
+		// 		postfixButtons: ["colvisRestore"],
+		// 	},
+		// ],
 	});
 });
 

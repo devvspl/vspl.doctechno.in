@@ -76,23 +76,6 @@
                         <?php endforeach; ?>
                      </select>
                   </div>
-                  <div class="col-md-6">
-                     <p style="margin-top: 5px;"><strong>Auto Approve:</strong></p>
-                     <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="autoApprove_<?= $document->scan_id; ?>"
-                           name="auto_approve">
-                        <label class="form-check-label" for="autoApprove_<?= $document->scan_id; ?>">Enable Auto
-                           Approve</label>
-                     </div>
-                  </div>
-                  <div class="col-md-6" id="billApproverContainer_<?= $document->scan_id; ?>">
-                     <p style="margin-top: 5px;"><strong>Bill Approver:</strong></p>
-                     <select class="form-control select2" id="bill_approver_<?= $document->scan_id; ?>"
-                        name="bill_approver_id">
-                        <option value="">Select Bill Approver</option>
-                     </select>
-                  </div>
-
                   <div class="col-md-12 text-right mt-3" style="margin-top:20px">
                      <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
                      <button class="btn btn-success extract-btn" data-scan-id="<?= $document->scan_id; ?>">Update</button>
