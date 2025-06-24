@@ -16,7 +16,6 @@
                                 <form action="">
                                     <div class="row">
                                         <div class="col-md-2" style="margin-botton: 10px !important;">
-
                                             <select style="width: 100%;" class="form-control select2 mb-10"
                                                 id="function" name="function">
                                                 <option value="">Select function</option>
@@ -97,6 +96,7 @@
                                             <th>Bill Type</th>
                                             <th>Approver Levels</th>
                                             <th>Status</th>
+                                            <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -114,6 +114,10 @@
                                                         class="label label-<?= ($matrix['status'] ?? '') === '1' ? 'success' : 'danger' ?>">
                                                         <?= htmlspecialchars($matrix['status'] ?? '') ?>
                                                     </span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <a style="padding: 4px 8px" href="<?= base_url('AdminController/editApprovalMatrix/' . $matrix['rule_id']) ?>"
+                                                        class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i></a>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>

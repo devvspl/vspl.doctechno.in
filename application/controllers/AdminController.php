@@ -34,6 +34,27 @@ class AdminController extends CI_Controller
         $this->data['approval_matrices'] = $this->ApprovalMatrixModel->getAllApprovalMatrices();
         $this->load->view('layout/template', $this->data);
     }
+
+    public function addApprovalMatrix()
+    {
+        $this->data['main'] = 'admin/add-approval-matrix';
+        $this->load->view('layout/template', $this->data);
+    }
+
+    public function editApprovalMatrix($id)
+    {
+        $this->data['main'] = 'admin/add-approval-matrix';
+        $this->data['matrix'] = $this->ApprovalMatrixModel->getApprovalMatrixById($id);
+        // echo "<pre>";
+        // print_r($this->data['matrix']);
+        // echo "</pre>";
+        // exit;
+        if (!$this->data['matrix']) {
+            show_error('Approval matrix not found.', 404);
+        }
+        $this->load->view('layout/template', $this->data);
+    }
+
     public function getUniqueLedgers()
     {
         $this->db->select('ledger');
@@ -41,12 +62,6 @@ class AdminController extends CI_Controller
         $this->db->group_by('ledger');
         $query = $this->db->get();
         echo json_encode($query->result());
-    }
-
-    public function addApprovalMatrix()
-    {
-        $this->data['main'] = 'admin/add-approval-matrix';
-        $this->load->view('layout/template', $this->data);
     }
 
     public function getFunction()
@@ -76,7 +91,6 @@ class AdminController extends CI_Controller
         } else {
             echo json_encode([]);
         }
-
     }
 
     public function getDepartment()
@@ -87,7 +101,7 @@ class AdminController extends CI_Controller
             $this->db->select('d.api_id AS value, d.department_name AS label');
             $this->db->from('core_department AS d');
             if ($vertical_id) {
-                $subquery = "(SELECT vfm.api_id FROM core_function_vertical_mapping AS vfm WHERE vfm.vertical_id = " . (int) $vertical_id . " and vfm.org_function_id = " . (int) $function_id . ")";
+                $subquery = "(SELECT vfm.api_id FROM core_function_vertical_mapping AS vfm WHERE vfm.vertical_id = " . (int)$vertical_id . " AND vfm.org_function_id = " . (int)$function_id . ")";
                 $this->db->join('core_fun_vertical_dept_mapping AS vdm', 'd.api_id = vdm.department_id', 'INNER');
                 $this->db->where_in('vdm.function_vertical_id', $subquery, false);
             }
@@ -97,7 +111,6 @@ class AdminController extends CI_Controller
         } else {
             echo json_encode([]);
         }
-
     }
 
     public function getSubDepartment()
@@ -108,19 +121,15 @@ class AdminController extends CI_Controller
             $this->db->from('core_sub_department AS sd');
             if ($department_id) {
                 $this->db->join('core_department_subdepartment_mapping AS sdm', 'sd.api_id = sdm.sub_department_id', 'INNER');
-                $subquery = "(SELECT vdm.api_id FROM core_fun_vertical_dept_mapping AS vdm WHERE vdm.department_id = " . (int) $department_id . ")";
+                $subquery = "(SELECT vdm.api_id FROM core_fun_vertical_dept_mapping AS vdm WHERE vdm.department_id = " . (int)$department_id . ")";
                 $this->db->where_in('sdm.fun_vertical_dept_id', $subquery, false);
             }
-
             $this->db->group_by(['sd.api_id', 'sd.sub_department_name']);
-
             $q = $this->db->get();
             echo json_encode($q->result());
         } else {
             echo json_encode([]);
         }
-
-
     }
 
     public function getCrop()
@@ -155,8 +164,6 @@ class AdminController extends CI_Controller
         } else {
             echo json_encode([]);
         }
-
-
     }
 
     public function getLocation()
@@ -198,12 +205,6 @@ class AdminController extends CI_Controller
         } else {
             echo json_encode([]);
         }
-        $this->db->select('core_zone.api_id, core_zone.zone_name');
-        $this->db->from('core_zone_region_mapping');
-        $this->db->join('core_zone', 'core_zone.api_id = core_zone_region_mapping.zone_id', 'LEFT');
-        $this->db->where('region_id', 1);
-        $q = $this->db->get();
-        echo json_encode($q->result());
     }
 
     public function getBusinessUnit()
@@ -294,9 +295,11 @@ class AdminController extends CI_Controller
             'l3_approver' => $this->input->post('l3_approver'),
             'valid_from' => $this->input->post('valid_from'),
             'valid_to' => $this->input->post('valid_to'),
-            'created_by' => $this->session->userdata('user_id'),
             'updated_by' => $this->session->userdata('user_id')
         ];
+        if (!$this->input->post('id')) {
+            $data['created_by'] = $this->session->userdata('user_id');
+        }
         $id = $this->input->post('id');
         if ($id) {
             $result = $this->ApprovalMatrixModel->updateApprovalMatrix($id, $data);
@@ -313,7 +316,6 @@ class AdminController extends CI_Controller
         }
     }
 
-    // Custom validation for amount range
     public function check_amount_range($max_amount)
     {
         $min_amount = $this->input->post('min_amount');
@@ -324,7 +326,6 @@ class AdminController extends CI_Controller
         return TRUE;
     }
 
-    // Custom validation for date range
     public function check_date_range($valid_to)
     {
         $valid_from = $this->input->post('valid_from');

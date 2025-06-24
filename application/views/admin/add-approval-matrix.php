@@ -4,16 +4,20 @@
             <div class="col-md-12">
                 <div class="box box-primary">
                     <div class="box-header">
-                        <h3 class="box-title"><i class="fa fa-plus"></i> Create New Approval Rule</h3>
+                        <h3 class="box-title"><i class="fa fa-plus"></i><?= isset($matrix) ? 'Edit Approval Rule' : 'Create New Approval Rule' ?>
+                        </h3>
                     </div>
                     <div class="box-body pb-0">
                         <form id="approvalRuleForm">
-                            <input type="hidden" id="id" name="id">
+                            <input type="hidden"
+                                value="<?= isset($matrix['id']) ? htmlspecialchars($matrix['id']) : '' ?>" id="id"
+                                name="id"
+                                value="<?= isset($matrix['rule_id']) ? htmlspecialchars($matrix['rule_id']) : '' ?>">
                             <div class="box mb-0">
                                 <div class="box-header">
-                                    <h4 class="box-title" style="color: #1b98ae;">Core Details: <span
-                                            class="text-muted mb-0" style="font-size: 12px;">Core parameters defining
-                                            the scope and nature of this approval rule.</span></h4>
+                                    <h4 class="box-title" style="color: #1b98ae;">Core Details: <spanclass="text-muted
+                                            mb-0" style="font-size: 12px;">Core parameters defining the scope and nature
+                                            of this approval rule.</span></h4>
                                 </div>
                                 <div class="box-body pb-0">
                                     <div class="row">
@@ -202,7 +206,8 @@
                                                 <label style="width: 20%;font-size: 12px;">Min Amount</label>
                                                 <input style="width: 80%;" type="number" class="form-control"
                                                     id="minAmount" name="min_amount" placeholder="Enter Min Amount"
-                                                    min="0">
+                                                    min="0"
+                                                    value="<?= isset($matrix['amount_min']) ? htmlspecialchars($matrix['amount_min']) : '' ?>">
                                                 <span class="error" id="minAmountError"></span>
                                             </div>
                                         </div>
@@ -212,7 +217,8 @@
                                                 <label style="width: 20%;font-size: 12px;">Max Amount</label>
                                                 <input style="width: 80%;" type="number" class="form-control"
                                                     id="maxAmount" name="max_amount" placeholder="Enter Max Amount"
-                                                    min="0">
+                                                    min="0"
+                                                    value="<?= isset($matrix['amount_max']) ? htmlspecialchars($matrix['amount_max']) : '' ?>">
                                                 <span class="error" id="maxAmountError"></span>
                                             </div>
                                         </div>
@@ -275,8 +281,8 @@
                                             <div class="form-group"
                                                 style="align-items: center;display: flex;gap: 10px;">
                                                 <label style="width: 25%;font-size: 12px;">Valid From</label>
-                                                <input type="date" class="form-control" id="validFrom"
-                                                    name="valid_from">
+                                                <input type="date" class="form-control" id="validFrom" name="valid_from"
+                                                    value="<?= isset($matrix['valid_from']) ? htmlspecialchars($matrix['valid_from']) : '' ?>">
                                                 <span class="error" id="validFromError"></span>
                                             </div>
                                         </div>
@@ -284,7 +290,8 @@
                                             <div class="form-group"
                                                 style="align-items: center;display: flex;gap: 10px;">
                                                 <label style="width: 25%;font-size: 12px;">Valid To</label>
-                                                <input type="date" class="form-control" id="validTo" name="valid_to">
+                                                <input type="date" class="form-control" id="validTo" name="valid_to"
+                                                    value="<?= isset($matrix['valid_to']) ? htmlspecialchars($matrix['valid_to']) : '' ?>">
                                                 <span class="error" id="validToError"></span>
                                             </div>
                                         </div>
@@ -302,218 +309,103 @@
         </div>
     </section>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+
 <script>
     $(document).ready(function () {
         $('.select2').select2({ placeholder: "Select an option", allowClear: true });
 
-        // Populate Function dropdown
-        $.ajax({
-            url: '<?= base_url('AdminController/getFunction') ?>',
-            type: 'POST',
-            dataType: 'json',
-            success: function (data) {
-                let options = '<option value="">Select function</option>';
-                $.each(data, function (i, item) {
-                    options += `<option value="${item.api_id}">${item.function_name}</option>`;
-                });
-                $('#function').html(options);
-            }
-        });
-
-        // Populate Vertical on Function change
-        $('#function').change(function () {
-            let function_id = $(this).val();
+        // Generic function to populate dropdowns
+        function populateDropdown(url, elementId, valueField, textField, data, selectedValue = null, multiple = false) {
             $.ajax({
-                url: '<?= base_url('AdminController/getVertical') ?>',
+                url: url,
                 type: 'POST',
-                data: { function: function_id },
+                data: data,
                 dataType: 'json',
-                success: function (data) {
-                    let options = '<option value="">Select vertical</option>';
-                    $.each(data, function (i, item) {
-                        options += `<option value="${item.api_id}">${item.vertical_name}</option>`;
+                success: function (response) {
+                    let options = `<option value="">Select ${elementId.replace(/([A-Z])/g, ' $1').toLowerCase()}</option>`;
+                    $.each(response, function (i, item) {
+                        options += `<option value="${item[valueField]}">${item[textField]}</option>`;
                     });
-                    $('#vertical').html(options).trigger('change');
+                    $(`#${elementId}`).html(options);
+                    if (selectedValue) {
+                        if (multiple) {
+                            $(`#${elementId}`).val(selectedValue.split(',')).trigger('change');
+                        } else {
+                            $(`#${elementId}`).val(selectedValue).trigger('change');
+                        }
+                    }
+                },
+                error: function () {
+                    console.error(`Failed to load ${elementId} options`);
                 }
             });
+        }
+
+        // Initialize non-dependent dropdowns
+        populateDropdown('<?= base_url('AdminController/getFunction') ?>', 'function', 'api_id', 'function_name', {}, '<?= isset($matrix['function']) ? $matrix['function'] : '' ?>');
+        populateDropdown('<?= base_url('AdminController/getLedger') ?>', 'ledger', 'account_name', 'account_name', {}, '<?= isset($matrix['ledger']) ? $matrix['ledger'] : '' ?>');
+        populateDropdown('<?= base_url('AdminController/getSubledger') ?>', 'subledger', 'id', 'name', {}, '<?= isset($matrix['subledger']) ? $matrix['subledger'] : '' ?>');
+        populateDropdown('<?= base_url('AdminController/getBillType') ?>', 'billType', 'type_id', 'file_type', {}, '<?= isset($matrix['bill_type']) ? $matrix['bill_type'] : '' ?>');
+        populateDropdown('<?= base_url('AdminController/getApprovers') ?>', 'l1Approver', 'user_id', 'full_name', {}, '<?= isset($matrix['l1_approver']) ? $matrix['l1_approver'] : '' ?>');
+        populateDropdown('<?= base_url('AdminController/getApprovers') ?>', 'l2Approver', 'user_id', 'full_name', {}, '<?= isset($matrix['l2_approver']) ? $matrix['l2_approver'] : '' ?>');
+        populateDropdown('<?= base_url('AdminController/getApprovers') ?>', 'l3Approver', 'user_id', 'full_name', {}, '<?= isset($matrix['l3_approver']) ? $matrix['l3_approver'] : '' ?>');
+        populateDropdown('<?= base_url('AdminController/getLocation') ?>', 'location', 'location_id', 'location_name', {}, '<?= isset($matrix['location']) ? $matrix['location'] : '' ?>', true);
+
+        // Handle Function change
+        $('#function').change(function () {
+            let function_id = $(this).val();
+            populateDropdown('<?= base_url('AdminController/getVertical') ?>', 'vertical', 'api_id', 'vertical_name', { function: function_id }, '<?= isset($matrix['vertical']) ? $matrix['vertical'] : '' ?>');
         });
 
-        // Populate Department and Crop on Vertical change
+        // Handle Vertical change
         $('#vertical').change(function () {
             let vertical_id = $(this).val();
             let function_id = $('#function').val();
-            $.ajax({
-                url: '<?= base_url('AdminController/getDepartment') ?>',
-                type: 'POST',
-                data: { vertical: vertical_id, function: function_id },
-                dataType: 'json',
-                success: function (data) {
-                    let options = '<option value="">Select department</option>';
-                    $.each(data, function (i, item) {
-                        options += `<option value="${item.value}">${item.label}</option>`;
-                    });
-                    $('#department').html(options).trigger('change');
-                }
-            });
-            $.ajax({
-                url: '<?= base_url('AdminController/getCrop') ?>',
-                type: 'POST',
-                data: { vertical: vertical_id },
-                dataType: 'json',
-                success: function (data) {
-                    let options = '<option value="">Select crop</option>';
-                    $.each(data, function (i, item) {
-                        options += `<option value="${item.api_id}">${item.crop_name}</option>`;
-                    });
-                    $('#crop').html(options);
-                }
-            });
-            $.ajax({
-                url: '<?= base_url('AdminController/getRegion') ?>',
-                type: 'POST',
-                data: { vertical: vertical_id },
-                dataType: 'json',
-                success: function (data) {
-                    let options = '<option value="">Select region</option>';
-                    $.each(data, function (i, item) {
-                        options += `<option value="${item.api_id}">${item.region_name}</option>`;
-                    });
-                    $('#region').html(options);
-                }
-            });
-            $.ajax({
-                url: '<?= base_url('AdminController/getBusinessUnit') ?>',
-                type: 'POST',
-                data: { vertical: vertical_id },
-                dataType: 'json',
-                success: function (data) {
-                    let options = '<option value="">Select business unit</option>';
-                    $.each(data, function (i, item) {
-                        options += `<option value="${item.api_id}">${item.business_unit_name}</option>`;
-                    });
-                    $('#businessUnit').html(options);
-                }
-            });
+            populateDropdown('<?= base_url('AdminController/getDepartment') ?>', 'department', 'value', 'label', { vertical: vertical_id, function: function_id }, '<?= isset($matrix['department']) ? $matrix['department'] : '' ?>');
+            populateDropdown('<?= base_url('AdminController/getCrop') ?>', 'crop', 'api_id', 'crop_name', { vertical: vertical_id }, '<?= isset($matrix['crop']) ? $matrix['crop'] : '' ?>', true);
+            populateDropdown('<?= base_url('AdminController/getRegion') ?>', 'region', 'api_id', 'region_name', { vertical: vertical_id }, '<?= isset($matrix['region']) ? $matrix['region'] : '' ?>');
+            populateDropdown('<?= base_url('AdminController/getBusinessUnit') ?>', 'businessUnit', 'api_id', 'business_unit_name', { vertical: vertical_id }, '<?= isset($matrix['business_unit']) ? $matrix['business_unit'] : '' ?>');
         });
 
-        // Populate Subdepartment and Activity on Department change
+        // Handle Department change
         $('#department').change(function () {
             let department_id = $(this).val();
-            $.ajax({
-                url: '<?= base_url('AdminController/getSubDepartment') ?>',
-                type: 'POST',
-                data: { department: department_id },
-                dataType: 'json',
-                success: function (data) {
-                    let options = '<option value="">Select sub-department</option>';
-                    $.each(data, function (i, item) {
-                        options += `<option value="${item.value}">${item.label}</option>`;
-                    });
-                    $('#subDepartment').html(options);
-                }
-            });
-            $.ajax({
-                url: '<?= base_url('AdminController/getActivity') ?>',
-                type: 'POST',
-                data: { department: department_id },
-                dataType: 'json',
-                success: function (data) {
-                    let options = '<option value="">Select activity</option>';
-                    $.each(data, function (i, item) {
-                        options += `<option value="${item.value}">${item.label}</option>`;
-                    });
-                    $('#activity').html(options);
-                }
-            });
+            populateDropdown('<?= base_url('AdminController/getSubDepartment') ?>', 'subDepartment', 'value', 'label', { department: department_id }, '<?= isset($matrix['sub_department']) ? $matrix['sub_department'] : '' ?>', true);
+            populateDropdown('<?= base_url('AdminController/getActivity') ?>', 'activity', 'value', 'label', { department: department_id }, '<?= isset($matrix['activity']) ? $matrix['activity'] : '' ?>', true);
         });
 
-        // Populate Location
-        $.ajax({
-            url: '<?= base_url('AdminController/getLocation') ?>',
-            type: 'POST',
-            dataType: 'json',
-            success: function (data) {
-                let options = '<option value="">Select location</option>';
-                $.each(data, function (i, item) {
-                    options += `<option value="${item.location_id}">${item.location_name}</option>`;
-                });
-                $('#location').html(options);
-            }
-        });
-
-        // Populate Zone
+        // Handle Region change
         $('#region').change(function () {
             let region_id = $(this).val();
-            $.ajax({
-                url: '<?= base_url('AdminController/getZone') ?>',
-                data: { region: region_id },
-                type: 'POST',
-                dataType: 'json',
-                success: function (data) {
-                    let options = '<option value="">Select zone</option>';
-                    $.each(data, function (i, item) {
-                        options += `<option value="${item.api_id}">${item.zone_name}</option>`;
-                    });
-                    $('#zone').html(options);
-                }
-            });
+            populateDropdown('<?= base_url('AdminController/getZone') ?>', 'zone', 'api_id', 'zone_name', { region: region_id }, '<?= isset($matrix['zone']) ? $matrix['zone'] : '' ?>');
         });
 
-        // Populate Ledger
-        $.ajax({
-            url: '<?= base_url('AdminController/getLedger') ?>',
-            type: 'POST',
-            dataType: 'json',
-            success: function (data) {
-                let options = '<option value="">Select ledger</option>';
-                $.each(data, function (i, item) {
-                    options += `<option value="${item.account_name}">${item.account_name}</option>`;
-                });
-                $('#ledger').html(options);
-            }
-        });
+        // Trigger onchange events for edit mode
+        <?php if (isset($matrix)): ?>
+            // Trigger Function change to load Vertical
+            setTimeout(function () {
+                $('#function').val('<?= $matrix['function'] ?>').trigger('change');
+            }, 500);
 
-        // Populate Subledger
-        $.ajax({
-            url: '<?= base_url('AdminController/getSubledger') ?>',
-            type: 'POST',
-            dataType: 'json',
-            success: function (data) {
-                let options = '<option value="">Select subledger</option>';
-                $.each(data, function (i, item) {
-                    options += `<option value="${item.id}">${item.name}</option>`;
-                });
-                $('#subledger').html(options);
-            }
-        });
+            // Trigger Vertical change to load Department, Crop, Region, Business Unit
+            setTimeout(function () {
+                $('#vertical').val('<?= $matrix['vertical'] ?>').trigger('change');
+            }, 1000);
 
-        // Populate Bill Type
-        $.ajax({
-            url: '<?= base_url('AdminController/getBillType') ?>',
-            type: 'POST',
-            dataType: 'json',
-            success: function (data) {
-                let options = '<option value="">Select bill type</option>';
-                $.each(data, function (i, item) {
-                    options += `<option value="${item.type_id}">${item.file_type}</option>`;
-                });
-                $('#billType').html(options);
-            }
-        });
+            // Trigger Department change to load Sub-Department, Activity
+            setTimeout(function () {
+                $('#department').val('<?= $matrix['department'] ?>').trigger('change');
+            }, 1500);
 
-        // Populate Approvers
-        $.ajax({
-            url: '<?= base_url('AdminController/getApprovers') ?>',
-            type: 'POST',
-            dataType: 'json',
-            success: function (data) {
-                let options = '<option value="">Select approver</option>';
-                $.each(data, function (i, item) {
-                    options += `<option value="${item.user_id}">${item.full_name}</option>`;
-                });
-                $('#l1Approver, #l2Approver, #l3Approver').html(options);
-            }
-        });
+            // Trigger Region change to load Zone
+            setTimeout(function () {
+                $('#region').val('<?= $matrix['region'] ?>').trigger('change');
+            }, 2000);
+        <?php endif; ?>
 
         // Form submission
         $('#approvalRuleForm').submit(function (e) {
@@ -526,7 +418,7 @@
                 success: function (response) {
                     if (response.status === 'success') {
                         alert(response.message);
-                        resetForm();
+                        window.location.href = '<?= base_url('AdminController/approvalMatrix') ?>';
                     } else {
                         $('.error').text('');
                         $.each(response.errors, function (field, error) {
@@ -544,6 +436,7 @@
             $('#approvalRuleForm')[0].reset();
             $('.select2').val('').trigger('change');
             $('.error').text('');
+            $('#id').val('');
         }
     });
 </script>
