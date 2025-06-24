@@ -100,27 +100,38 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php foreach ($approval_matrices as $matrix): ?>
-                                            <tr class="matrix-row">
-                                                <td><?= htmlspecialchars($matrix['rule_id'] ?? '') ?></td>
-                                                <td><?= htmlspecialchars($matrix['function_name'] ?? '') ?></td>
-                                                <td><?= htmlspecialchars($matrix['department_name'] ?? '') ?></td>
-                                                <td><?= htmlspecialchars($matrix['ledger'] ?? '') ?></td>
-                                                <td><?= htmlspecialchars($matrix['amount_range'] ?? '') ?></td>
-                                                <td><?= htmlspecialchars($matrix['bill_type'] ?? '') ?></td>
-                                                <td><?= htmlspecialchars($matrix['approver_levels'] ?? '') ?></td>
-                                                <td>
-                                                    <span
-                                                        class="label label-<?= ($matrix['status'] ?? '') === '1' ? 'success' : 'danger' ?>">
-                                                        <?= htmlspecialchars($matrix['status'] ?? '') ?>
-                                                    </span>
-                                                </td>
-                                                <td class="text-center">
-                                                    <a style="padding: 4px 8px" href="<?= base_url('AdminController/editApprovalMatrix/' . $matrix['rule_id']) ?>"
-                                                        class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i></a>
-                                                </td>
+                                        <?php
+                                        if (!empty($approval_matrices)) {
+                                            foreach ($approval_matrices as $matrix): ?>
+                                                <tr class="matrix-row">
+                                                    <td><?= htmlspecialchars($matrix['rule_id'] ?? '') ?></td>
+                                                    <td><?= htmlspecialchars($matrix['function_name'] ?? '') ?></td>
+                                                    <td><?= htmlspecialchars($matrix['department_name'] ?? '') ?></td>
+                                                    <td><?= htmlspecialchars($matrix['ledger'] ?? '') ?></td>
+                                                    <td><?= htmlspecialchars($matrix['amount_range'] ?? '') ?></td>
+                                                    <td><?= htmlspecialchars($matrix['bill_type'] ?? '') ?></td>
+                                                    <td><?= htmlspecialchars($matrix['approver_levels'] ?? '') ?></td>
+                                                    <td>
+                                                        <span
+                                                            class="label label-<?= ($matrix['status'] ?? '') === '1' ? 'success' : 'danger' ?>">
+                                                            <?= htmlspecialchars($matrix['status'] ?? '') ?>
+                                                        </span>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <a style="padding: 4px 8px"
+                                                            href="<?= base_url('AdminController/editApprovalMatrix/' . ($matrix['rule_id'] ?? '')) ?>"
+                                                            class="btn btn-sm btn-primary">
+                                                            <i class="fa fa-pencil"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            <?php
+                                            endforeach;
+                                        } else { ?>
+                                            <tr>
+                                                <td colspan="9" class="text-center">No records found.</td>
                                             </tr>
-                                        <?php endforeach; ?>
+                                        <?php } ?>
                                     </tbody>
                                 </table>
                             </div>
