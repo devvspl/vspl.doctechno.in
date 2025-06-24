@@ -15,14 +15,14 @@
                             <div class="col-md-12">
                                 <form action="">
                                     <div class="row">
-                                        <div class="col-md-2" style="margin-botton: 10px !important;">
+                                        <div class="col-md-2" style="margin-bottom: 5px;">
                                             <select style="width: 100%;" class="form-control select2 mb-10"
                                                 id="function" name="function">
                                                 <option value="">Select function</option>
                                             </select>
                                             <span class="error" id="functionError"></span>
                                         </div>
-                                        <div class="col-md-2" style="margin-botton: 10px !important;">
+                                        <div class="col-md-2" style="margin-bottom: 5px;">
 
                                             <select style="width: 100%;" class="form-control select2 mb-10"
                                                 id="vertical" name="vertical">
@@ -30,7 +30,7 @@
                                             </select>
                                             <span class="error" id="verticalError"></span>
                                         </div>
-                                        <div class="col-md-2" style="margin-botton: 10px !important;">
+                                        <div class="col-md-2" style="margin-bottom: 5px;">
 
                                             <select style="width: 100%;" class="form-control select2 mb-10"
                                                 id="department" name="department">
@@ -38,7 +38,7 @@
                                             </select>
                                             <span class="error" id="departmentError"></span>
                                         </div>
-                                        <div class="col-md-2" style="margin-botton: 10px !important;">
+                                        <div class="col-md-2" style="margin-bottom: 5px;">
 
                                             <select style="width: 100%;" class="form-control select2 mb-10" id="region"
                                                 name="region">
@@ -46,7 +46,7 @@
                                             </select>
                                             <span class="error" id="regionError"></span>
                                         </div>
-                                        <div class="col-md-2" style="margin-botton: 10px !important;">
+                                        <div class="col-md-2" style="margin-bottom: 5px;">
 
                                             <select style="width: 100%;" class="form-control select2 mb-10" id="zone"
                                                 name="zone">
@@ -54,7 +54,7 @@
                                             </select>
                                             <span class="error" id="zoneError"></span>
                                         </div>
-                                        <div class="col-md-2" style="margin-botton: 10px !important;">
+                                        <div class="col-md-2" style="margin-bottom: 5px;">
 
                                             <select style="width: 100%;" class="form-control select2 mb-10"
                                                 id="businessUnit" name="business_unit">
@@ -62,7 +62,7 @@
                                             </select>
                                             <span class="error" id="businessUnitError"></span>
                                         </div>
-                                        <div class="col-md-2" style="margin-botton: 10px !important;">
+                                        <div class="col-md-2" style="margin-bottom: 5px;">
 
                                             <select style="width: 100%;" class="form-control select2 mb-10"
                                                 id="billType" name="bill_type">
@@ -70,7 +70,7 @@
                                             </select>
                                             <span class="error" id="billTypeError"></span>
                                         </div>
-                                        <div class="col-md-2" style="margin-botton: 10px !important;">
+                                        <div class="col-md-2" style="margin-bottom: 5px;">
 
                                             <select style="width: 100%;" class="form-control select2 mb-10"
                                                 id="location" name="location">
