@@ -14,15 +14,15 @@
                                     <?php echo $this->session->flashdata('message'); ?>
                                 </div>
                             <?php endif; ?>
-                            <table class="table table-striped table-hover example">
+                            <table id="scanRejectedTable" class="table table-striped table-hover">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">S No.</th>
-                                        <th class="text-center">File Name</th>
-                                        <th class="text-center">Scanned By</th>
-                                        <th class="text-center">Scan Date</th>
-                                        <th class="text-center">Reject Remark</th>
-                                        <th class="text-center">Reject Date</th>
+                                        <th style="text-align: left;">S No.</th>
+                                        <th style="text-align: left;">File Name</th>
+                                        <th style="text-align: center;">Scanned By</th>
+                                        <th style="text-align: center;">Scan Date</th>
+                                        <th style="text-align: center;">Reject Remark</th>
+                                        <th style="text-align: center;">Reject Date</th>
 
                                     </tr>
                                 </thead>
@@ -31,18 +31,23 @@
                                         <?php $i = 1;
                                         foreach ($documents as $doc): ?>
                                             <tr data-scan-id="<?= $doc->scan_id; ?>">
-                                                <td class="text-center"><?= $i++ ?></td>
-                                                <td class="text-center"><?= $doc->document_name ?? ''; ?></td>
-                                                <td class="text-center"><?= htmlspecialchars($doc->scanned_by ?? ''); ?></td>
-                                                <td class="text-center"><?= htmlspecialchars($doc->scan_date ?? ''); ?></td>
-                                                <td class="text-center">
-                                                    <?= htmlspecialchars($doc->temp_scan_reject_remark ?? ''); ?></td>
-                                                    <td class="text-center"><?= htmlspecialchars($doc->temp_scan_reject_date ?? ''); ?></td>
+                                                <td style="text-align: left;"><?= $i++ ?></td>
+                                                <td style="text-align: left;"><?= $doc->document_name ?? ''; ?></td>
+                                                <td style="text-align: center;"><?= htmlspecialchars($doc->scanned_by ?? ''); ?>
+                                                </td>
+                                                <td style="text-align: center;"><?= htmlspecialchars($doc->scan_date ?? ''); ?>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <?= htmlspecialchars($doc->temp_scan_reject_remark ?? ''); ?>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <?= htmlspecialchars($doc->temp_scan_reject_date ?? ''); ?>
+                                                </td>
                                             </tr>
                                         <?php endforeach; ?>
                                     <?php else: ?>
                                         <tr>
-                                            <td colspan="10" class="text-center">No records found</td>
+                                            <td colspan="6" style="text-align: center;">No records found</td>
                                         </tr>
                                     <?php endif; ?>
                                 </tbody>
@@ -54,3 +59,23 @@
         </div>
     </section>
 </div>
+<script>
+  $(document).ready(function() {
+    $("#scanRejectedTable").DataTable({
+        paging: true,
+        searching: true,
+        ordering: true,
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'csv',
+                text: '<i class="fa fa-file-text-o"></i> Export',
+                title: 'Scan_Rejected_List_' + new Date().toISOString().split('T')[0],
+                className: 'btn btn-primary btn-sm',
+                exportOptions: {
+                    columns: ':visible:not(.noExport)'
+                }
+            }
+        ]
+    });
+});</script>
