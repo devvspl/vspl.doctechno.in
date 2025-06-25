@@ -97,6 +97,8 @@
                                         <th style="text-align: center;">Sub Department</th>
                                         <th style="text-align: center;">Location</th>
                                         <th style="text-align: center;">Classified Date</th>
+                                        <th style="text-align: center;">Received Fill Date</th>
+                                        <th style="text-align: center;">Document Received Date</th>
                                         <th style="text-align: center;">File Received</th>
                                     </tr>
                                 </thead>
@@ -121,6 +123,12 @@
                                                 </td>
                                                 <td style="text-align: center;">
                                                     <?= htmlspecialchars($doc->classified_date ?? '') ?>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <?= htmlspecialchars($doc->verified_date ?? '') ?>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <?= htmlspecialchars($doc->document_received_date ?? '') ?>
                                                 </td>
                                                 <td style="text-align: center;">
                                                     <?php

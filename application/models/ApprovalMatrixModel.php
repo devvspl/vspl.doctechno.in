@@ -68,7 +68,7 @@ class ApprovalMatrixModel extends CI_Model
         $query = $this->db->get();
         return $query->result_array();
     }
-    
+
     public function insertApprovalMatrix($data)
     {
         return $this->db->insert('tbl_approval_matrix', $data);

@@ -167,6 +167,8 @@ class Extract_model extends CI_Model {
         s.document_name,
         s.file_path,
         s.classified_date,
+        s.verified_date,
+        s.document_received_date,
         s.is_document_verified,
         IF(s.is_temp_scan = 'Y', s.temp_scan_date, s.scan_date) AS scan_date,
         IF(s.is_temp_scan = 'Y', CONCAT(sb.first_name, ' ', sb.last_name), CONCAT(ba.first_name, ' ', ba.last_name)) AS scanned_by

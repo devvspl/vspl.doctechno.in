@@ -294,7 +294,6 @@ class Scan_model extends MY_Model {
         $rejected = $this->db->count_all_results();
         $this->db->from($table);
         $this->db->where('document_name !=', '');
-        $this->db->where('extract_status', 'Y');
         $this->db->where('is_classified', 'Y');
         $this->db->where('classified_by', $user_id);
         $this->db->where('bill_approval_status', 'R');
@@ -302,7 +301,6 @@ class Scan_model extends MY_Model {
         $classified_rejected = $this->db->count_all_results();
         $this->db->from($table);
         $this->db->where('document_name !=', '');
-        $this->db->where('extract_status', 'Y');
         $this->db->where('is_classified', 'Y');
         $this->db->where('classified_by', $user_id);
         $this->db->where('is_document_verified', 'Y');
@@ -310,7 +308,6 @@ class Scan_model extends MY_Model {
         $document_verified_count = $this->db->count_all_results();
         $this->db->from($table);
         $this->db->where('document_name !=', '');
-        $this->db->where('extract_status', 'Y');
         $this->db->where('is_classified', 'Y');
         $this->db->where('classified_by', $user_id);
         $this->db->where('is_document_verified', 'N');
