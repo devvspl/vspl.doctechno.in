@@ -60,22 +60,22 @@
     </section>
 </div>
 <script>
-  $(document).ready(function() {
-    $("#scanRejectedTable").DataTable({
-        paging: true,
-        searching: true,
-        ordering: true,
-        dom: 'Bfrtip',
-        buttons: [
-            {
-                extend: 'csv',
-                text: '<i class="fa fa-file-text-o"></i> Export',
-                title: 'Scan_Rejected_List_' + new Date().toISOString().split('T')[0],
-                className: 'btn btn-primary btn-sm',
-                exportOptions: {
-                    columns: ':visible:not(.noExport)'
+    $(document).ready(function () {
+        $("#scanRejectedTable").DataTable({
+            paging: true,
+            searching: true,
+            ordering: true,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'csv',
+                    text: '<i class="fa fa-file-text-o"></i> Export',
+                    title: 'Scan_Rejected_List_' + new Date().toISOString().split('T')[0],
+                    className: 'btn btn-primary btn-sm',
+                    exportOptions: {
+                        columns: ':visible:not(.noExport)'
+                    }
                 }
-            }
-        ]
-    });
-});</script>
+            ]
+        });
+    });</script>
