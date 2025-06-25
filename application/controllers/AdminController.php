@@ -30,8 +30,21 @@ class AdminController extends CI_Controller
 
     public function approvalMatrix()
     {
+        // Extract filter parameters from GET
+        $filters = [
+            'function' => $this->input->get('function', TRUE),
+            'vertical' => $this->input->get('vertical', TRUE),
+            'department' => $this->input->get('department', TRUE),
+            'region' => $this->input->get('region', TRUE),
+            'zone' => $this->input->get('zone', TRUE),
+            'business_unit' => $this->input->get('business_unit', TRUE),
+            'bill_type' => $this->input->get('bill_type', TRUE),
+            'location' => $this->input->get('location', TRUE)
+        ];
+
         $this->data['main'] = 'admin/approval-matrix';
-        $this->data['approval_matrices'] = $this->ApprovalMatrixModel->getAllApprovalMatrices();
+        $this->data['approval_matrices'] = $this->ApprovalMatrixModel->getAllApprovalMatrices($filters);
+        $this->data['filters'] = $filters; // Pass filters to view for pre-selection
         $this->load->view('layout/template', $this->data);
     }
 
@@ -101,7 +114,7 @@ class AdminController extends CI_Controller
             $this->db->select('d.api_id AS value, d.department_name AS label');
             $this->db->from('core_department AS d');
             if ($vertical_id) {
-                $subquery = "(SELECT vfm.api_id FROM core_function_vertical_mapping AS vfm WHERE vfm.vertical_id = " . (int)$vertical_id . " AND vfm.org_function_id = " . (int)$function_id . ")";
+                $subquery = "(SELECT vfm.api_id FROM core_function_vertical_mapping AS vfm WHERE vfm.vertical_id = " . (int) $vertical_id . " AND vfm.org_function_id = " . (int) $function_id . ")";
                 $this->db->join('core_fun_vertical_dept_mapping AS vdm', 'd.api_id = vdm.department_id', 'INNER');
                 $this->db->where_in('vdm.function_vertical_id', $subquery, false);
             }
@@ -121,7 +134,7 @@ class AdminController extends CI_Controller
             $this->db->from('core_sub_department AS sd');
             if ($department_id) {
                 $this->db->join('core_department_subdepartment_mapping AS sdm', 'sd.api_id = sdm.sub_department_id', 'INNER');
-                $subquery = "(SELECT vdm.api_id FROM core_fun_vertical_dept_mapping AS vdm WHERE vdm.department_id = " . (int)$department_id . ")";
+                $subquery = "(SELECT vdm.api_id FROM core_fun_vertical_dept_mapping AS vdm WHERE vdm.department_id = " . (int) $department_id . ")";
                 $this->db->where_in('sdm.fun_vertical_dept_id', $subquery, false);
             }
             $this->db->group_by(['sd.api_id', 'sd.sub_department_name']);

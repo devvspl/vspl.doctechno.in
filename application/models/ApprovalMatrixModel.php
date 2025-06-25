@@ -3,7 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class ApprovalMatrixModel extends CI_Model
 {
-    public function getAllApprovalMatrices()
+    public function getAllApprovalMatrices($filters = [])
     {
         $this->db->select("
             tam.id AS rule_id,
@@ -26,7 +26,10 @@ class ApprovalMatrixModel extends CI_Model
             tam.sub_department,
             tam.zone,
             tam.region,
-            tam.bill_type
+            tam.bill_type,
+            tam.vertical,
+            tam.business_unit,
+            tam.location
         ");
         $this->db->from('tbl_approval_matrix AS tam');
         $this->db->join('core_org_function AS cof', 'cof.api_id = tam.function', 'LEFT');
@@ -35,9 +38,37 @@ class ApprovalMatrixModel extends CI_Model
         $this->db->join('users AS u1', 'u1.user_id = tam.l1_approver', 'LEFT');
         $this->db->join('users AS u2', 'u2.user_id = tam.l2_approver', 'LEFT');
         $this->db->join('users AS u3', 'u3.user_id = tam.l3_approver', 'LEFT');
+
+        // Apply filters
+        if (!empty($filters['function'])) {
+            $this->db->where('tam.function', $filters['function']);
+        }
+        if (!empty($filters['vertical'])) {
+            $this->db->where('tam.vertical', $filters['vertical']);
+        }
+        if (!empty($filters['department'])) {
+            $this->db->where('tam.department', $filters['department']);
+        }
+        if (!empty($filters['region'])) {
+            $this->db->where('tam.region', $filters['region']);
+        }
+        if (!empty($filters['zone'])) {
+            $this->db->where('tam.zone', $filters['zone']);
+        }
+        if (!empty($filters['business_unit'])) {
+            $this->db->where('tam.business_unit', $filters['business_unit']);
+        }
+        if (!empty($filters['bill_type'])) {
+            $this->db->where('tam.bill_type', $filters['bill_type']);
+        }
+        if (!empty($filters['location'])) {
+            $this->db->where('FIND_IN_SET(' . $this->db->escape($filters['location']) . ', tam.location)');
+        }
+
         $query = $this->db->get();
         return $query->result_array();
     }
+    
     public function insertApprovalMatrix($data)
     {
         return $this->db->insert('tbl_approval_matrix', $data);
