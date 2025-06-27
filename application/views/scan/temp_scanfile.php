@@ -30,24 +30,25 @@
                   <div class="box-tools pull-right">
                      <div class="btn-group">
                         <button type="button" class="btn btn-primary btn-sm">Get Report</button>
-                        <button type="button" class="btn btn-primary btn-sm dropdown-toggle" style="padding-bottom: 11px;" data-toggle="dropdown">
+                        <button type="button" class="btn btn-primary btn-sm dropdown-toggle"
+                           style="padding-bottom: 11px;" data-toggle="dropdown">
                            <span class="caret"></span>
                            <span class="sr-only">Toggle Dropdown</span>
                         </button>
                         <ul class="dropdown-menu" role="menu">
                            <li> <a href="<?= base_url('scan/export/csv') . '?' . http_build_query([
-                           'status' => $status,
-                           'document_name' => $document_name,
-                           'from_date' => $from_date,
-                           'to_date' => $to_date
-                        ]) ?>" >Export CSV</a></li>
+                              'status' => $status,
+                              'document_name' => $document_name,
+                              'from_date' => $from_date,
+                              'to_date' => $to_date
+                           ]) ?>">Export CSV</a></li>
                            <li> <a href="<?= base_url('scan/export/pdf') . '?' . http_build_query([
-                           'status' => $status,
-                           'document_name' => $document_name,
-                           'from_date' => $from_date,
-                           'to_date' => $to_date
-                        ]) ?>">Export PDF</a></li>
-                          
+                              'status' => $status,
+                              'document_name' => $document_name,
+                              'from_date' => $from_date,
+                              'to_date' => $to_date
+                           ]) ?>">Export PDF</a></li>
+
                         </ul>
                      </div>
                   </div>
@@ -131,20 +132,37 @@
                                     <?php } ?>
                                     <td class="text-right">
                                        <?php if ($row['is_final_submitted'] != 'Y' || $row['is_temp_scan_rejected'] === 'Y') { ?>
+
                                           <?php if ($this->customlib->haveSupportFile($row['scan_id']) == 1): ?>
                                              <a data-toggle="collapse" href="#detail<?= $row['scan_id'] ?>"
                                                 class="btn btn-info btn-xs" title="View Support Files">
                                                 <i class="fa fa-eye"></i>
                                              </a>
                                           <?php endif; ?>
-                                          <a href="<?= base_url('temp-supporting/' . $row['scan_id']); ?>"
-                                             class="btn btn-warning btn-xs" title="Edit">
-                                             <i class="fa fa-pencil"></i>
-                                          </a>
-                                          <a href="javascript:void(0);" data-scan_id="<?= $row['scan_id']; ?>"
-                                             class="btn btn-danger btn-xs delete-scan" title="Delete">
-                                             <i class="fa fa-remove"></i>
-                                          </a>
+                                          <?php
+                                          $is_final_submitted = $row['is_final_submitted'];
+                                          $is_temp_scan_rejected = $row['is_temp_scan_rejected'];
+                                          $is_deleted = $row['is_deleted'];
+                                          // Decide whether to show Edit/Delete
+                                          $showEditDelete = false;
+                                          if ($is_deleted !== 'Y') {
+                                             if ($is_temp_scan_rejected === 'Y') {
+                                                $showEditDelete = true;
+                                             } elseif ($is_final_submitted === 'N') {
+                                                $showEditDelete = true;
+                                             }
+                                          }
+                                          if ($showEditDelete): ?>
+                                             <a href="<?= base_url('temp-supporting/' . $row['scan_id']); ?>"
+                                                class="btn btn-warning btn-xs" title="Edit">
+                                                <i class="fa fa-pencil"></i>
+                                             </a>
+                                             <a href="javascript:void(0);" data-scan_id="<?= $row['scan_id']; ?>"
+                                                class="btn btn-danger btn-xs delete-scan" title="Delete">
+                                                <i class="fa fa-remove"></i>
+                                             </a>
+                                          <?php endif; ?>
+
                                        <?php } ?>
                                     </td>
                                  </tr>

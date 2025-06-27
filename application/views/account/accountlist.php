@@ -76,17 +76,17 @@
                               placeholder="Account name or code"
                               value="<?= isset($search) ? htmlspecialchars($search) : '' ?>" />
                         </div>
-                        <button type="submit" class="btn btn-info" style="margin-left: 10px;">Search</button>
+                        <button type="submit" class="btn btn-sm btn-info" style="margin-left: 10px;">Search</button>
                      </form>
                      <!-- Account List Table -->
                      <table class="table">
                         <thead>
                            <tr>
-                              <th>Account Id</th>
-                              <th>Account</th>
-                              <th>Ledger Type</th>
-                              <th>Focus Code</th>
-                              <th>Group</th>
+                              <th style="text-align:left">Account Id</th>
+                              <th style="text-align:left">Account</th>
+                              <th style="text-align:center">Ledger Type</th>
+                              <th style="text-align:center">Focus Code</th>
+                              <th style="text-align:center">Group</th>
                               <!-- <th class="text-right no-print">Action</th> -->
                            </tr>
                         </thead>
@@ -98,11 +98,11 @@
                            <?php } else {
                               foreach ($accountlist as $row) { ?>
                                  <tr>
-                                    <td><?= $row['id']; ?></td>
-                                    <td><?= $row['account_name']; ?></td>
-                                     <td><?= $row['ledger_type']; ?></td>
-                                    <td><?= $row['focus_code'] ?></td>
-                                    <td><?= $row['account_group'] ?></td>
+                                    <td  style="text-align:left"><?= $row['id']; ?></td>
+                                    <td  style="text-align:left"><?= $row['account_name']; ?></td>
+                                    <td  style="text-align:center"><?= $row['ledger_type']; ?></td>
+                                    <td  style="text-align:center"><?= $row['focus_code'] ?></td>
+                                    <td  style="text-align:center"><?= $row['account_group'] ?></td>
                                
                                     <!-- <td class="text-right no-print">
                                        <a href="<?= base_url('account/edit/' . $row['id']) ?>" class="btn btn-default btn-xs">

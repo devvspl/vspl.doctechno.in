@@ -63,7 +63,7 @@
                     <div class="box-body">
                         <div class="table-responsive mailbox-messages">
                             <div class="download_label">User List</div>
-                            <table class="table table-striped table-bordered table-hover example1">
+                            <table id="usersTable" class="table table-striped table-bordered table-hover">
                                 <thead>
                                     <tr>
                                         <th>Name</th>
@@ -122,10 +122,26 @@
 </div>
 <script>
     $(document).ready(function () {
-        $('.example1').DataTable({
-            destroy: true,
-            pageLength: 12,
+        $('#usersTable').DataTable({
+            "ordering": false,
+            "columnDefs": [
+                { "orderable": false, "targets": 1 }
+            ],
+            dom: 'Bfrtip',
+            pageLength: 10,
+            buttons: [
+                {
+                    extend: 'csv',
+                    text: '<i class="fa fa-file-text-o"></i> Export',
+                    title: 'Users_List_' + new Date().toISOString().slice(0, 10),
+                    className: 'btn btn-primary btn-sm',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    }
+                }
+            ]
         });
+
         $(document).ready(function () {
             $('#department').select2({
                 placeholder: ""

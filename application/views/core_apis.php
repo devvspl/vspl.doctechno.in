@@ -5,23 +5,19 @@
                 <div class="box box-primary">
                     <div class="box-header with-border">
                         <h3 class="box-title">Core API's</h3>
+                        <div class="box-tools">
+                            <button id="fetchApis" class="btn btn-sm btn-primary">Fetch APIs</button>
+                            <button id="syncApis" class="btn btn-sm btn-success">Sync APIs</button>
+                        </div>
                     </div>
                     <div class="box-body">
                         <div class="table-responsive mailbox-messages">
-                            <div class="d-flex justify-content-between">
-                                <div class="download_label">Core API's</div>
-                                <button id="fetchApis" class="btn btn-primary">Fetch APIs</button>
-                                <button id="syncApis" class="btn btn-success">Sync APIs</button>
-                            </div>
-                            <?php if ($this->session->flashdata('message')): ?>
-                                <div class="alert alert-info"><?php echo $this->session->flashdata('message'); ?></div>
-                            <?php endif; ?>
                             <div id="syncedDataList"
                                 style="display:none; margin-bottom: 10px; margin-top: 10px; padding: 10px; border: 1px solid #ccc; background: #f9f9f9;">
                                 <strong>Synced Data:</strong>
                                 <div id="syncList"></div>
                             </div>
-                            <table class="table table-striped table-hover example mt-3">
+                            <table id="coreAPITable" class="table table-striped table-hover mt-3">
                                 <thead>
                                     <tr>
                                         <th>S No.</th>
@@ -46,31 +42,32 @@
                                                 <td><?php echo htmlspecialchars($api["description"] ?? ''); ?></td>
                                                 <td><?php echo htmlspecialchars($api["table_name"]); ?></td>
                                                 <td><?php echo $api["parameters"]; ?></td>
-                                                <td>
+                                                <td style="display: flex;justify-content: center;gap: 2px;">
                                                     <button class="btn btn-info btn-sm sync-api-btn"
                                                         data-parameters="<?php echo htmlspecialchars($api['parameters'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
                                                         data-api="<?php echo htmlspecialchars($api['api_end_point'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
                                                         data-table="<?php echo htmlspecialchars($api['table_name'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
                                                         title="Sync API Data">
-                                                        Sync
+                                                        <i class="fa fa fa-refresh"></i>
                                                     </button>
 
                                                     <button class="btn btn-secondary btn-sm view-data-btn"
                                                         data-table="<?php echo htmlspecialchars($api['table_name']); ?>"
                                                         data-api="<?php echo htmlspecialchars($api['api_end_point']); ?>"
                                                         title="View API Data" style="background-color: #1873e3;color: white;">
-                                                        View
+                                                        <i class="fa fa-eye"></i>
                                                     </button>
-                                                    <!--<button class="btn btn-warning btn-sm empty-data-btn" -->
-                                                    <!--   data-table="<?php echo htmlspecialchars($api["table_name"]); ?>" -->
-                                                    <!--   title="Empty API Table"> -->
-                                                    <!--Empty-->
-                                                    <!--</button>-->
-                                                    <!--<button class="btn btn-danger btn-sm drop-api-btn" -->
-                                                    <!--   data-table="<?php echo htmlspecialchars($api["table_name"]); ?>" -->
-                                                    <!--   title="Drop API Table"> -->
-                                                    <!--Drop -->
-                                                    <!--</button>-->
+
+                                                    <!-- <button class="btn btn-warning btn-sm empty-data-btn"
+                                                            data-table="<?php echo htmlspecialchars($api["table_name"]); ?>"
+                                                            title="Empty API Table">
+                                                        <i class="fa fa-paint-brush"></i> 
+                                                    </button>
+                                                    <button class="btn btn-danger btn-sm drop-api-btn"
+                                                            data-table="<?php echo htmlspecialchars($api["table_name"]); ?>"
+                                                            title="Drop API Table">
+                                                        <i class="fa fa-times-circle"></i> 
+                                                    </button> -->
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
@@ -109,12 +106,31 @@
     <script>
         $(document).ready(function () {
             function showLoading(button) {
-                button.prop("disabled", true).data("original-text", button.text()).text("Wait...");
+                // button.prop("disabled", true).data("original-text", button.text()).text("Wait...");
             }
 
             function hideLoading(button) {
-                button.prop("disabled", false).text(button.data("original-text"));
+                // button.prop("disabled", false).text(button.data("original-text"));
             }
+
+            $("#coreAPITable").DataTable({
+                paging: true,
+                searching: true,
+                ordering: true,
+                dom: 'Bfrtip',
+                pageLength: 10,
+                buttons: [
+                    {
+                        extend: 'csv',
+                        text: '<i class="fa fa-file-text-o"></i> Export',
+                        title: 'Pending_Classification_List_' + new Date().toISOString().slice(0, 10),
+                        className: 'btn btn-primary btn-sm',
+                        exportOptions: {
+                            columns: ':not(:last-child)'
+                        }
+                    }
+                ]
+            });
 
             $("#fetchApis").click(function () {
                 var button = $(this);
@@ -258,31 +274,31 @@
                             var headerRow = headers.map((h) => `<th>${h}</th>`).join("");
                             $("#apiTableHead").html(headerRow);
 
-                            
+
                             var tableName = button.data("table");
 
-                            
+
                             data.sort((a, b) => {
                                 const aIsEmpty = a.focus_code === null || a.focus_code === "";
                                 const bIsEmpty = b.focus_code === null || b.focus_code === "";
-                                if (aIsEmpty && !bIsEmpty) return -1; 
-                                if (!aIsEmpty && bIsEmpty) return 1;  
-                                return 0; 
+                                if (aIsEmpty && !bIsEmpty) return -1;
+                                if (!aIsEmpty && bIsEmpty) return 1;
+                                return 0;
                             });
 
-                            
+
                             var emptyFocusCodeCount = data.filter(row => row.focus_code === null || row.focus_code === "").length;
 
-                            
+
                             if (emptyFocusCodeCount > 0) {
                                 $("#dataTitle").append(` <small style="color: red; background: white; padding: 3px; border-radius: 5px;">Empty/Null focus_code count: ${emptyFocusCodeCount}</small>`);
-                            } 
+                            }
 
                             var rows = data
                                 .map((row, index) => {
                                     return `<tr data-id="${row.id || index}">` + headers.map((h) => {
                                         if (h === "focus_code") {
-                                            
+
                                             let displayValue = (row[h] !== null && row[h] !== "") ? row[h] : "";
                                             return `<td><input type="text" class="form-control focus-code-input" data-id="${row.id || index}" data-column="${h}" value="${displayValue}"><span class="update-message text-muted small d-block mt-1"></span></td>`;
                                         }
@@ -292,7 +308,7 @@
                                 .join("");
                             $("#apiTableBody").html(rows);
 
-                            
+
                             if ($.fn.DataTable.isDataTable("#apiDataTable")) {
                                 $("#apiDataTable").DataTable().clear().destroy();
                             }
@@ -302,11 +318,11 @@
                                     responsive: true,
                                     autoWidth: false,
                                     pageLength: 10,
-                                    order: [], 
+                                    order: [],
                                 });
                             }, 100);
 
-                            
+
                             $(".focus-code-input").on("change", function () {
                                 var input = $(this);
                                 var messageSpan = input.next(".update-message");
@@ -314,10 +330,10 @@
                                 var rowId = input.closest("tr").data("id");
                                 var column = input.data("column");
 
-                                
+
                                 messageSpan.text("").removeClass("text-success text-danger");
 
-                                
+
                                 $.ajax({
                                     url: "<?= base_url('master/CoreController/update_api_data') ?>",
                                     type: "POST",
@@ -335,7 +351,7 @@
                                     success: function (updateResponse) {
                                         if (updateResponse.status === "success") {
                                             messageSpan.text("Focus code updated successfully!").addClass("text-success").removeClass("text-muted");
-                                            
+
                                             if (newValue !== "" && !$("#dataTitle").find("small").data("original-count")) {
                                                 emptyFocusCodeCount--;
                                                 $("#dataTitle").find("small").text(`Empty/Null focus_code count: ${emptyFocusCodeCount}`)
@@ -364,7 +380,7 @@
                                     },
                                     complete: function () {
                                         hideLoading(input);
-                                        
+
                                         setTimeout(() => {
                                             messageSpan.text("").removeClass("text-success text-danger");
                                         }, 5000);
@@ -374,7 +390,7 @@
 
                             $("#apiDataModal").modal("show");
                         } else {
-                            
+
                             $("#dataTitle").append(` <small>Empty/Null focus_code count: 0</small>`);
                             alert("No data found for this API.");
                         }
@@ -387,6 +403,7 @@
                     },
                 });
             });
+
             $(".empty-data-btn").click(function () {
                 var button = $(this);
                 if (!confirm("Are you sure you want to delete all data from this table?")) return;

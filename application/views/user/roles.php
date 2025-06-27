@@ -30,7 +30,7 @@
                                     <td><?= $row['role_name']; ?></td>
                                     <td><?= $row['description']; ?></td>
                                     <td><?= $row['status'] == 1 ? 'Active' : 'Inactive'; ?></td>
-                                    
+
                                  </tr>
                               <?php }
                            } ?>
@@ -50,7 +50,21 @@
          "ordering": false,
          "columnDefs": [
             { "orderable": false, "targets": 1 }
+         ],
+         dom: 'Bfrtip',
+         pageLength: 10,
+         buttons: [
+            {
+               extend: 'csv',
+               text: '<i class="fa fa-file-text-o"></i> Export',
+               title: 'Role_List_' + new Date().toISOString().slice(0, 10),
+               className: 'btn btn-primary btn-sm',
+               exportOptions: {
+                  columns: ':not(:last-child)'
+               }
+            }
          ]
+
       });
    });
 </script>

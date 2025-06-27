@@ -1,15 +1,18 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-class Extract_model extends CI_Model {
+class Extract_model extends CI_Model
+{
     protected $year_id;
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->database();
-        $this->year_id = $this->session->userdata('year_id') ??($this->db->select('id')->from('financial_years')->where('is_current', 1)->get()->row()->id??null);
+        $this->year_id = $this->session->userdata('year_id') ?? ($this->db->select('id')->from('financial_years')->where('is_current', 1)->get()->row()->id ?? null);
     }
-    public function getApiList() {
+    public function getApiList()
+    {
         $api_list = $this->db->get("ext_master_api_control")->result_array();
-        foreach ($api_list as & $api) {
+        foreach ($api_list as &$api) {
             $doctype_id = $api['doctype_id'];
             $tableName = "ext_tempdata_" . $doctype_id . "_details";
             $query = $this->db->query("SHOW TABLES LIKE '{$tableName}'");
@@ -17,7 +20,8 @@ class Extract_model extends CI_Model {
         }
         return $api_list;
     }
-    public function getFieldDetails($doctype_id, $has_items_feild) {
+    public function getFieldDetails($doctype_id, $has_items_feild)
+    {
         $tableName = "";
         if ($has_items_feild == "N") {
             $tableName = "ext_tempdata_" . $doctype_id;
@@ -32,12 +36,13 @@ class Extract_model extends CI_Model {
                 continue;
             }
             $mapping = $this->db->get_where("ext_field_mappings", ["doctype_id" => $doctype_id, "temp_column" => $row->Field, 'has_items_feild' => $has_items_feild])->row_array();
-            $columns[] = ["temp_column" => $row->Field, "input_type" => $mapping["input_type"]??"", "select_table" => $mapping["select_table"]??"", "relation_column" => $mapping["relation_column"]??"", "relation_value" => $mapping["relation_value"]??"", "punch_table" => $mapping["punch_table"]??"", "punch_column" => $mapping["punch_column"]??"", "add_condition" => $mapping["add_condition"]??"", ];
+            $columns[] = ["temp_column" => $row->Field, "input_type" => $mapping["input_type"] ?? "", "select_table" => $mapping["select_table"] ?? "", "relation_column" => $mapping["relation_column"] ?? "", "relation_value" => $mapping["relation_value"] ?? "", "punch_table" => $mapping["punch_table"] ?? "", "punch_column" => $mapping["punch_column"] ?? "", "add_condition" => $mapping["add_condition"] ?? "",];
         }
         echo json_encode($columns);
         exit;
     }
-    public function getAllTablesList($punchOnly) {
+    public function getAllTablesList($punchOnly)
+    {
         $tablePrefix = "y{$this->year_id}_punchdata_";
         $query = $this->db->query("SHOW TABLES");
         $tables = [];
@@ -55,16 +60,17 @@ class Extract_model extends CI_Model {
         }
         return $tables;
     }
-    public function saveFieldMappingsValue($doctype_id, $has_items_feild, $fieldMappings, $table) {
-        $defaultMappings = [["has_items_feild" => $has_items_feild, "temp_column" => "scan_id", "input_type" => "input", "select_table" => null, "relation_column" => null, "relation_value" => null, "punch_table" => $table, "punch_column" => "scan_id", ], ["has_items_feild" => $has_items_feild, "temp_column" => "group_id", "input_type" => "input", "select_table" => null, "relation_column" => null, "relation_value" => null, "punch_table" => $table, "punch_column" => "group_id", ], ];
-        $allMappings = array_merge($defaultMappings, $fieldMappings??[]);
+    public function saveFieldMappingsValue($doctype_id, $has_items_feild, $fieldMappings, $table)
+    {
+        $defaultMappings = [["has_items_feild" => $has_items_feild, "temp_column" => "scan_id", "input_type" => "input", "select_table" => null, "relation_column" => null, "relation_value" => null, "punch_table" => $table, "punch_column" => "scan_id",], ["has_items_feild" => $has_items_feild, "temp_column" => "group_id", "input_type" => "input", "select_table" => null, "relation_column" => null, "relation_value" => null, "punch_table" => $table, "punch_column" => "group_id",],];
+        $allMappings = array_merge($defaultMappings, $fieldMappings ?? []);
         $errors = [];
         $this->db->where(["doctype_id" => $doctype_id, "has_items_feild" => $has_items_feild])->delete("ext_field_mappings");
         foreach ($allMappings as $field) {
             if (empty($field["punch_table"]) || empty($field["punch_column"])) {
                 continue;
             }
-            $data = ["doctype_id" => $doctype_id, "has_items_feild" => $has_items_feild, "temp_column" => $field["temp_column"], "input_type" => $field["input_type"], "select_table" => $field["select_table"]??null, "relation_column" => $field["relation_column"]??null, "relation_value" => $field["relation_value"]??null, "punch_table" => $field["punch_table"], "punch_column" => $field["punch_column"], "add_condition" => $field["add_condition"]??null, "created_at" => date("Y-m-d H:i:s"), "updated_at" => date("Y-m-d H:i:s"), ];
+            $data = ["doctype_id" => $doctype_id, "has_items_feild" => $has_items_feild, "temp_column" => $field["temp_column"], "input_type" => $field["input_type"], "select_table" => $field["select_table"] ?? null, "relation_column" => $field["relation_column"] ?? null, "relation_value" => $field["relation_value"] ?? null, "punch_table" => $field["punch_table"], "punch_column" => $field["punch_column"], "add_condition" => $field["add_condition"] ?? null, "created_at" => date("Y-m-d H:i:s"), "updated_at" => date("Y-m-d H:i:s"),];
             if (!$this->db->insert("ext_field_mappings", $data)) {
                 $errors[] = "Failed to insert mapping for column: " . $field["temp_column"];
             }
@@ -75,7 +81,8 @@ class Extract_model extends CI_Model {
             return ["status" => "error", "message" => "Some field mappings failed to save.", "errors" => $errors];
         }
     }
-    public function getTableColumnsList($table) {
+    public function getTableColumnsList($table)
+    {
         $query = $this->db->query("SHOW COLUMNS FROM `$table`");
         $columns = [];
         foreach ($query->result() as $row) {
@@ -83,19 +90,22 @@ class Extract_model extends CI_Model {
         }
         return $columns;
     }
-    public function getGroups() {
+    public function getGroups()
+    {
         $this->db->select("group_id, group_name");
         $this->db->where("is_deleted", "N");
         return $this->db->where('group_id', 16)->get("master_group")->result();
     }
-    public function getLocations() {
+    public function getLocations()
+    {
         $user_id = $this->session->userdata('user_id');
         $this->db->select("location_id, location_name");
         $this->db->where_in('location_id', "(SELECT permission_value FROM tbl_user_permissions WHERE user_id = {$user_id} AND permission_type = 'Location')", false);
         $this->db->where("status", "A");
         return $this->db->get("master_work_location")->result();
     }
-    public function getClassificationList($group_id = null, $location_id = null) {
+    public function getClassificationList($group_id = null, $location_id = null)
+    {
         $table = "y{$this->year_id}_scan_file";
         $this->db->select('permission_value as department_id');
         $this->db->from('tbl_user_permissions');
@@ -136,7 +146,7 @@ class Extract_model extends CI_Model {
         $this->db->join("master_group g", "g.group_id = s.group_id", "left");
         $this->db->join("users ba", "ba.user_id = s.bill_approver_id", "left");
         $this->db->join("users sb", "sb.user_id = s.Temp_Scan_By", "left");
-        $conditions = ["s.document_name !=" => "", "s.extract_status" => "P", "s.is_final_submitted" => "Y", "s.is_temp_scan_rejected" => "N", "s.group_id" => '16', ];
+        $conditions = ["s.document_name !=" => "", "s.extract_status" => "P", "s.is_final_submitted" => "Y", "s.is_temp_scan_rejected" => "N", "s.group_id" => '16',];
         $this->db->where($conditions);
         if (!empty($permitted_temp_scan_by)) {
             $this->db->where_in("s.Temp_Scan_By", $permitted_temp_scan_by);
@@ -155,7 +165,8 @@ class Extract_model extends CI_Model {
         $this->db->order_by('s.scan_id', 'DESC');
         return $this->db->get()->result();
     }
-    public function getProcessedList($group_id = null, $location_id = null, $doc_type_id = null, $department_id = null, $sub_department_id = null, $is_verified = null) {
+    public function getProcessedList($group_id = null, $location_id = null, $doc_type_id = null, $department_id = null, $sub_department_id = null, $is_verified = null)
+    {
         $this->db->select("
         s.scan_id,
         g.group_name,
@@ -205,7 +216,8 @@ class Extract_model extends CI_Model {
         }
         return $this->db->get()->result();
     }
-    public function getclassificationsRejectedList($group_id = null, $location_id = null) {
+    public function getclassificationsRejectedList($group_id = null, $location_id = null)
+    {
         $this->db->select("
         s.scan_id,
         s.bill_approved_date,
@@ -241,7 +253,8 @@ class Extract_model extends CI_Model {
         $this->db->where("s.group_id", '16');
         return $this->db->get()->result();
     }
-    public function getChangeRequestList($group_id = null, $location_id = null) {
+    public function getChangeRequestList($group_id = null, $location_id = null)
+    {
         $this->db->select("s.scan_id, g.group_name, s.extract_status, md.file_type, l.location_name, s.document_name , s.file_path, IF(s.is_temp_scan = 'Y', s.temp_scan_date, s.scan_date) AS scan_date, IF(s.is_temp_scan = 'Y', CONCAT(sb.first_name, ' ', sb.last_name), CONCAT(ba.first_name, ' ', ba.last_name) AS bill_approver_id, s.bill_approved_date");
         $this->db->from("y{$this->year_id}_scan_file s");
         $this->db->join("master_group g", "g.group_id = s.group_id", "left");
@@ -260,7 +273,8 @@ class Extract_model extends CI_Model {
         }
         return $this->db->get()->result();
     }
-    public function getDocumentDetails($scanId) {
+    public function getDocumentDetails($scanId)
+    {
         $this->db->select("
         s.scan_id,
         s.doc_type_id,
@@ -287,22 +301,25 @@ class Extract_model extends CI_Model {
         $this->db->where("s.scan_id", $scanId);
         return $this->db->get()->row();
     }
-    public function getDocTypes() {
+    public function getDocTypes()
+    {
         $user_id = $this->session->userdata('user_id');
         $this->db->where("status", "A");
         $this->db->where_in("type_id", "(SELECT permission_value FROM tbl_user_permissions WHERE user_id = {$user_id} AND permission_type = 'Document')", false);
         $this->db->order_by("file_type", "ASC");
         return $this->db->get("master_doctype")->result();
     }
-    public function addToQueue($scanId, $typeId) {
+    public function addToQueue($scanId, $typeId)
+    {
         $existing = $this->db->where(['scan_id' => $scanId, 'status' => 'pending'])->get('tbl_queues')->row();
         if ($existing) {
             return false;
         }
-        $data = ['scan_id' => $scanId, 'type_id' => $typeId, 'status' => 'pending', 'created_at' => date('Y-m-d H:i:s'), 'created_by' => $this->session->userdata('user_id') ];
+        $data = ['scan_id' => $scanId, 'type_id' => $typeId, 'status' => 'pending', 'created_at' => date('Y-m-d H:i:s'), 'created_by' => $this->session->userdata('user_id')];
         return $this->db->insert('tbl_queues', $data);
     }
-    public function getQueueList() {
+    public function getQueueList()
+    {
         $this->db->select('q.*, s.document_name , md.file_type');
         $this->db->from('tbl_queues q');
         $this->db->join("y{$this->year_id}_scan_file s", "s.scan_id = q.scan_id");
@@ -312,24 +329,28 @@ class Extract_model extends CI_Model {
         $this->db->order_by('q.created_at', 'ASC');
         return $this->db->get()->result();
     }
-    public function removeFromQueue($queueId) {
+    public function removeFromQueue($queueId)
+    {
         $this->db->where('id', $queueId);
         return $this->db->delete('tbl_queues');
     }
-    public function updateQueueStatus($queueId, $status, $result = null) {
-        $data = ['status' => $status, 'completed_at' => date('Y-m-d H:i:s') ];
+    public function updateQueueStatus($queueId, $status, $result = null)
+    {
+        $data = ['status' => $status, 'completed_at' => date('Y-m-d H:i:s')];
         if ($result !== null) {
             $data['result'] = $result;
         }
         $this->db->where('id', $queueId);
         return $this->db->update('tbl_queues', $data);
     }
-    public function getNextQueueItem() {
+    public function getNextQueueItem()
+    {
         $this->db->where('status', 'pending');
         $this->db->order_by('created_at', 'ASC');
         return $this->db->get('tbl_queues')->row();
     }
-    public function getAllPendingQueueItems($id = null) {
+    public function getAllPendingQueueItems($id = null)
+    {
         $this->db->where('status', 'pending');
         if (!empty($id)) {
             $this->db->where('id', $id);
@@ -337,15 +358,17 @@ class Extract_model extends CI_Model {
         $this->db->order_by('created_at', 'ASC');
         return $this->db->get('tbl_queues')->result();
     }
-    public function getApiEndpoint($typeId) {
+    public function getApiEndpoint($typeId)
+    {
         $this->db->select("endpoint");
         $this->db->from("ext_master_api_control");
         $this->db->where(["doctype_id" => $typeId, "status" => 1]);
         $query = $this->db->get();
         return $query->num_rows() > 0 ? $query->row()->endpoint : null;
     }
-    public function getFileLocation($scanId) {
-        $year_id = $this->year_id??null;
+    public function getFileLocation($scanId)
+    {
+        $year_id = $this->year_id ?? null;
         if (!$year_id) {
             $query = $this->db->select("id")->from("financial_years")->where("is_current", 1)->get();
             if ($query->num_rows() > 0) {
@@ -361,7 +384,8 @@ class Extract_model extends CI_Model {
         $query = $this->db->get();
         return $query->num_rows() > 0 ? $query->row()->file_path : null;
     }
-    public function storeExtractedData($typeId, $scanId, $data) {
+    public function storeExtractedData($typeId, $scanId, $data)
+    {
         $tableName = "ext_tempdata_" . $typeId;
         if (!$this->db->table_exists($tableName)) {
             return false;
@@ -392,7 +416,8 @@ class Extract_model extends CI_Model {
         $tableColumns = $this->db->list_fields($tableName);
         $insertData = ["scan_id" => $scanId, "group_id" => $groupId, "location_id" => $location];
         foreach ($flatData as $key => $value) {
-            if (is_array($value)) continue;
+            if (is_array($value))
+                continue;
             $column = strtolower(str_replace([" ", "/", "-"], "_", $key));
             $matchedColumn = $this->getBestMatch($column, $tableColumns);
             if ($matchedColumn) {
@@ -403,7 +428,7 @@ class Extract_model extends CI_Model {
                         $value = preg_replace('/[₹,]/', '', $value);
                     }
                     if (is_numeric($value)) {
-                        $value = (float)$value;
+                        $value = (float) $value;
                     }
                 }
                 $insertData[$matchedColumn] = $value;
@@ -431,13 +456,13 @@ class Extract_model extends CI_Model {
                     if (stripos($particular, 'CGST') !== false || stripos($particular, 'SGST') !== false || stripos($particular, 'IGST') !== false) {
                         if (stripos($particular, 'CGST') !== false && isset($item['GST %'])) {
                             $taxData['gst'] = $item['GST %'];
-                            $taxData['tax_amount']+= isset($item['Amount']) ? (float)$item['Amount'] : 0;
+                            $taxData['tax_amount'] += isset($item['Amount']) ? (float) $item['Amount'] : 0;
                         } elseif (stripos($particular, 'SGST') !== false && isset($item['GST %'])) {
                             $taxData['sgst'] = $item['GST %'];
-                            $taxData['tax_amount']+= isset($item['Amount']) ? (float)$item['Amount'] : 0;
+                            $taxData['tax_amount'] += isset($item['Amount']) ? (float) $item['Amount'] : 0;
                         } elseif (stripos($particular, 'IGST') !== false && isset($item['GST %'])) {
                             $taxData['igst'] = $item['GST %'];
-                            $taxData['tax_amount']+= isset($item['Amount']) ? (float)$item['Amount'] : 0;
+                            $taxData['tax_amount'] += isset($item['Amount']) ? (float) $item['Amount'] : 0;
                         }
                         if (isset($item['Cess %'])) {
                             $taxData['cess'] = $item['Cess %'];
@@ -456,27 +481,27 @@ class Extract_model extends CI_Model {
                         $matchedColumn = $this->getBestMatch($column, $detailsColumns);
                         if ($matchedColumn) {
                             if (in_array($matchedColumn, ['qty', 'mrp', 'discount_in_mrp', 'price', 'amount', 'gst', 'sgst', 'igst', 'cess', 'total_amount']) && !empty($value)) {
-                                $value = (float)preg_replace('/[₹,]/', '', $value);
+                                $value = (float) preg_replace('/[₹,]/', '', $value);
                             }
                             $detailsData[$matchedColumn] = $value;
                         }
                     }
                     if ($taxData['gst'] !== null) {
-                        $detailsData['gst'] = (float)$taxData['gst'];
+                        $detailsData['gst'] = (float) $taxData['gst'];
                     }
                     if ($taxData['sgst'] !== null) {
-                        $detailsData['sgst'] = (float)$taxData['sgst'];
+                        $detailsData['sgst'] = (float) $taxData['sgst'];
                     }
                     if ($taxData['igst'] !== null) {
-                        $detailsData['igst'] = (float)$taxData['igst'];
+                        $detailsData['igst'] = (float) $taxData['igst'];
                     }
                     if ($taxData['cess'] !== null) {
-                        $detailsData['cess'] = (float)$taxData['cess'];
+                        $detailsData['cess'] = (float) $taxData['cess'];
                     }
                     if (isset($detailsData['amount']) && $taxData['tax_amount'] > 0) {
-                        $detailsData['total_amount'] = (float)$detailsData['amount'] + $taxData['tax_amount'];
+                        $detailsData['total_amount'] = (float) $detailsData['amount'] + $taxData['tax_amount'];
                     } elseif (isset($detailsData['amount'])) {
-                        $detailsData['total_amount'] = (float)$detailsData['amount'];
+                        $detailsData['total_amount'] = (float) $detailsData['amount'];
                     }
                     foreach (['particular', 'hsn', 'qty', 'unit', 'price', 'amount', 'mrp', 'discount_in_mrp'] as $requiredField) {
                         if (!isset($detailsData[$requiredField])) {
@@ -499,7 +524,8 @@ class Extract_model extends CI_Model {
         }
         return false;
     }
-    private function getBestMatch($inputColumn, $columns) {
+    private function getBestMatch($inputColumn, $columns)
+    {
         $bestMatch = null;
         $bestScore = 0;
         $minDistance = PHP_INT_MAX;
@@ -516,7 +542,8 @@ class Extract_model extends CI_Model {
         }
         return ($bestScore >= 70 || $minDistance <= 3) ? $bestMatch : null;
     }
-    private function flattenArray($data, $excludeKeys = []) {
+    private function flattenArray($data, $excludeKeys = [])
+    {
         $flatData = [];
         foreach ($data as $key => $value) {
             if (is_array($value) && !in_array($key, $excludeKeys)) {
@@ -529,14 +556,16 @@ class Extract_model extends CI_Model {
         }
         return $flatData;
     }
-    private function isValidDate($date) {
+    private function isValidDate($date)
+    {
         if (empty($date)) {
             return false;
         }
         $timestamp = strtotime($date);
         return $timestamp !== false && date('Y-m-d', $timestamp) === date('Y-m-d', $timestamp);
     }
-    public function moveDataToPunchfile($scanId, $docTypeId) {
+    public function moveDataToPunchfile($scanId, $docTypeId)
+    {
         $docType = $this->customlib->getDocType($docTypeId);
         $tableName = "ext_tempdata_" . $docTypeId;
         if (!$this->db->table_exists($tableName)) {
@@ -552,7 +581,7 @@ class Extract_model extends CI_Model {
         if (!$tempData) {
             return ["status" => "error", "message" => "No data found in temp table for scan_id: $scanId"];
         }
-        $punchData = ["doctype" => $docType, "doctype_id" => $docTypeId, "created_by" => $this->session->userdata("user_id") ??0, "created_at" => date("Y-m-d H:i:s") ];
+        $punchData = ["doctype" => $docType, "doctype_id" => $docTypeId, "created_by" => $this->session->userdata("user_id") ?? 0, "created_at" => date("Y-m-d H:i:s")];
         foreach ($tempData as $key => $value) {
             if (isset($fieldMap[$key])) {
                 $map = $fieldMap[$key];
@@ -574,7 +603,7 @@ class Extract_model extends CI_Model {
             $this->db->insert($punch_table, $punchData);
             $fileID = $this->db->insert_id();
         }
-        $this->db->insert("sub_punchfile", ["FileID" => $fileID, "Amount" => "-" . ($punchData["Total_Amount"]??0), "Comment" => $punchData["Remark"]??""]);
+        $this->db->insert("sub_punchfile", ["FileID" => $fileID, "Amount" => "-" . ($punchData["Total_Amount"] ?? 0), "Comment" => $punchData["Remark"] ?? ""]);
         $detailsTable = "ext_tempdata_{$docTypeId}_details";
         if ($this->db->table_exists($detailsTable)) {
             $detailsData = $this->db->where("scan_id", $scanId)->get($detailsTable)->result_array();
@@ -606,11 +635,12 @@ class Extract_model extends CI_Model {
         }
         return ["status" => "success", "message" => "Data moved successfully."];
     }
-    private function getClosestValueMatch($table, $searchColumn, $searchValue, $returnColumn, $addCondition) {
+    private function getClosestValueMatch($table, $searchColumn, $searchValue, $returnColumn, $addCondition)
+    {
         if (empty($table) || empty($searchColumn) || empty($returnColumn) || empty($searchValue)) {
             return null;
         }
-        $searchValue = trim((string)$searchValue);
+        $searchValue = trim((string) $searchValue);
         if (strlen($searchValue) === 0) {
             return null;
         }
@@ -636,13 +666,14 @@ class Extract_model extends CI_Model {
         $similarityThreshold = 50;
         $highestPercentOverall = 0;
         foreach ($results as $row) {
-            $dbValue = trim((string)$row->$searchColumn);
+            $dbValue = trim((string) $row->$searchColumn);
             if (empty($dbValue)) {
                 continue;
             }
             $highestPercent = 0;
             foreach ($searchParts as $part) {
-                if (empty($part)) continue;
+                if (empty($part))
+                    continue;
                 $percent = 0;
                 similar_text(strtoupper($part), strtoupper($dbValue), $percent);
                 $percent = round($percent, 2);
@@ -663,11 +694,12 @@ class Extract_model extends CI_Model {
             return null;
         }
         usort($matches, function ($a, $b) {
-            return $b['percent']<=>$a['percent'];
+            return $b['percent'] <=> $a['percent'];
         });
         return $matches[0]['return_value'];
     }
-    public function callExternalApi($endpoint, $fileUrl) {
+    public function callExternalApi($endpoint, $fileUrl)
+    {
         $postData = json_encode(["fileUrl" => $fileUrl]);
         $ch = curl_init($endpoint);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -679,7 +711,8 @@ class Extract_model extends CI_Model {
         curl_close($ch);
         return ["statusCode" => $httpCode, "data" => $httpCode === 200 ? json_decode($response, true) : null];
     }
-    private function insertNewItem($itemName) {
+    private function insertNewItem($itemName)
+    {
         $itemName = trim($itemName);
         if (empty($itemName)) {
             return null;
@@ -695,8 +728,9 @@ class Extract_model extends CI_Model {
         $this->db->update('master_item', ['item_code' => $itemCode]);
         return $itemCode;
     }
-    public function get_filtered_list($table, $search_value, $search_column, $return_column, $select_column, $add_condition = '') {
-        $search_value = trim((string)$search_value);
+    public function get_filtered_list($table, $search_value, $search_column, $return_column, $select_column, $add_condition = '')
+    {
+        $search_value = trim((string) $search_value);
         $search_parts = [];
         if (!empty($search_value)) {
             $search_value_cleaned = preg_replace('/\s*\([^)]+\)/', '', $search_value);
@@ -713,12 +747,13 @@ class Extract_model extends CI_Model {
             return [];
         }
         $similarity_threshold = 50;
-        foreach ($results as & $row) {
+        foreach ($results as &$row) {
             $highest_similarity_percent = 0;
-            $db_value = trim((string)$row[$search_column]);
+            $db_value = trim((string) $row[$search_column]);
             if (!empty($search_parts) && !empty($db_value)) {
                 foreach ($search_parts as $part) {
-                    if (empty($part)) continue;
+                    if (empty($part))
+                        continue;
                     $similarity_percent = 0;
                     similar_text(strtoupper($part), strtoupper($db_value), $similarity_percent);
                     $similarity_percent = round($similarity_percent, 2);
@@ -732,16 +767,18 @@ class Extract_model extends CI_Model {
         }
         unset($row);
         usort($results, function ($a, $b) {
-            return $b['similarity']<=>$a['similarity'];
+            return $b['similarity'] <=> $a['similarity'];
         });
         return $results;
     }
-    public function getDepartments() {
+    public function getDepartments()
+    {
         $user_id = $this->session->userdata('user_id');
         $this->db->where_in('api_id', "(SELECT permission_value FROM tbl_user_permissions WHERE user_id = {$user_id} AND permission_type = 'Department')", false);
         return $this->db->get('core_department')->result();
     }
-    public function getSubdepartments($department_id) {
+    public function getSubdepartments($department_id)
+    {
         $this->db->distinct();
         $this->db->select('sd.id as sub_department_id, sd.sub_department_name');
         $this->db->from('core_fun_vertical_dept_mapping fvdm');
@@ -750,17 +787,20 @@ class Extract_model extends CI_Model {
         $this->db->where('fvdm.department_id', $department_id);
         return $this->db->get()->result();
     }
-    public function getBillApprovers($department_id) {
+    public function getBillApprovers($department_id)
+    {
         $this->db->where('role', 'bill_approver');
-        $this->db->where("FIND_IN_SET(" . (int)$department_id . ", department_id) >", 0);
+        $this->db->where("FIND_IN_SET(" . (int) $department_id . ", department_id) >", 0);
         return $this->db->get('users')->result();
     }
-    public function updateDocument($scan_id, $data) {
+    public function updateDocument($scan_id, $data)
+    {
         $tableName = "y{$this->year_id}_scan_file";
         $this->db->where('scan_id', $scan_id);
         return $this->db->update($tableName, $data);
     }
-    public function getScanRejectedScanAdminList($group_id = null, $location_id = null) {
+    public function getScanRejectedScanAdminList($group_id = null, $location_id = null)
+    {
         $this->db->select("
         s.scan_id,
         s.temp_scan_reject_remark,
