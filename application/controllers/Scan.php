@@ -94,7 +94,6 @@ class Scan extends CI_Controller
         $this->data['from_date'] = $from_date;
         $this->data['to_date'] = $to_date;
         $this->data['my_lastest_scan'] = $this->Scan_model->get_my_lastest_temp_scan($status, $document_name, $from_date, $to_date, $page, $per_page);
-
         $this->data['pagination'] = $this->pagination->create_links();
         $this->load->view('layout/template', $this->data);
     }

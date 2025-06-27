@@ -46,8 +46,12 @@ class Scan_model extends MY_Model
             $this->db->where('is_deleted', 'Y');
         }
         if ($document_name) {
-            $this->db->like('document_name', $document_name);
+            $this->db->group_start()
+                ->like('document_name', $document_name)
+                ->or_like('file_name', $document_name)
+                ->group_end();
         }
+
         if ($from_date) {
             $this->db->where('DATE(temp_scan_date) >=', date('Y-m-d', strtotime($from_date)));
         }
@@ -74,7 +78,10 @@ class Scan_model extends MY_Model
             $this->db->where('is_deleted', 'Y');
         }
         if ($document_name) {
-            $this->db->like('document_name', $document_name);
+            $this->db->group_start()
+                ->like('document_name', $document_name)
+                ->or_like('file_name', $document_name)
+                ->group_end();
         }
         if ($from_date) {
             $this->db->where('DATE(temp_scan_date) >=', date('Y-m-d', strtotime($from_date)));
