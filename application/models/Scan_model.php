@@ -309,7 +309,12 @@ class Scan_model extends MY_Model
     public function get_user_dashboard_counts($user_id, $group_id, $year_id)
     {
         $table = "y{$year_id}_scan_file";
-        return ['total_scans' => $this->db->where('temp_scan_by', $user_id)->where('temp_scan_date !=', '0000-00-00')->where('group_id', $group_id)->count_all_results($table), 'final_submitted' => $this->db->where('temp_scan_by', $user_id)->where('temp_scan_date !=', '0000-00-00')->where('is_final_submitted', 'Y')->where('group_id', $group_id)->count_all_results($table), 'pending_submission' => $this->db->where('temp_scan_by', $user_id)->where('temp_scan_date !=', '0000-00-00')->where('is_final_submitted', 'N')->where('group_id', $group_id)->count_all_results($table), 'rejected_scans' => $this->db->where('temp_scan_by', $user_id)->where('temp_scan_date !=', '0000-00-00')->where('is_temp_scan_rejected', 'Y')->where('group_id', $group_id)->count_all_results($table), 'deleted_scans' => $this->db->where('temp_scan_by', $user_id)->where('temp_scan_date !=', '0000-00-00')->where('is_deleted', 'Y')->where('group_id', $group_id)->count_all_results($table),];
+        return [
+            'total_scans' => $this->db->where('temp_scan_by', $user_id)->where('temp_scan_date !=', '0000-00-00')->where('group_id', $group_id)->count_all_results($table), 
+            'final_submitted' => $this->db->where('temp_scan_by', $user_id)->where('temp_scan_date !=', '0000-00-00')->where(['is_final_submitted' => 'Y', 'is_deleted' => 'N'])->where('group_id', $group_id)->count_all_results($table), 
+            'pending_submission' => $this->db->where('temp_scan_by', $user_id)->where('temp_scan_date !=', '0000-00-00')->where(['is_final_submitted' => 'N', 'is_deleted' => 'N'])->where('group_id', $group_id)->count_all_results($table), 
+            'rejected_scans' => $this->db->where('temp_scan_by', $user_id)->where('temp_scan_date !=', '0000-00-00')->where(['is_temp_scan_rejected' => 'Y', 'is_deleted' => 'N'])->where('group_id', $group_id)->count_all_results($table), 
+            'deleted_scans' => $this->db->where('temp_scan_by', $user_id)->where('temp_scan_date !=', '0000-00-00')->where('is_deleted', 'Y')->where('group_id', $group_id)->count_all_results($table),];
     }
     public function get_scan_admin_dashboard_counts($user_id, $group_id, $year_id)
     {
