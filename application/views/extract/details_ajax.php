@@ -61,7 +61,7 @@
                         <option value="">Select Subdepartment</option>
                      </select>
                   </div>
-                  <div class="col-md-6">
+                  <!-- <div class="col-md-6">
                      <p style="margin-top: 5px;"><strong>Location:</strong></p>
                      <select class="form-control select2" id="location_<?= $document->scan_id; ?>" name="location_id">
                         <option value="">Select Location</option>
@@ -75,7 +75,7 @@
                            </option>
                         <?php endforeach; ?>
                      </select>
-                  </div>
+                  </div> -->
                   <div class="col-md-12 text-right mt-3" style="margin-top:20px">
                      <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
                      <button class="btn btn-success extract-btn" data-scan-id="<?= $document->scan_id; ?>">Update</button>

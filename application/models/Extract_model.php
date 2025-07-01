@@ -802,20 +802,20 @@ class Extract_model extends CI_Model
     public function getScanRejectedScanAdminList($group_id = null, $location_id = null)
     {
         $this->db->select("
-        s.scan_id,
-        s.temp_scan_reject_remark,
-        s.temp_scan_reject_date,
-        g.group_name,
-        md.file_type,
-        s.extract_status,
-        l.location_name,
-        s.document_name,
-        s.file_path,
-        IF(s.is_temp_scan = 'Y', s.temp_scan_date, s.scan_date) AS scan_date,
-        IF(s.is_temp_scan = 'Y', CONCAT(sb.first_name, ' ', sb.last_name), CONCAT(ba.first_name, ' ', ba.last_name)) AS scanned_by,
-        CONCAT(ba.first_name, ' ', ba.last_name) AS bill_approver_name,
-        s.bill_approved_date
-    ");
+            s.scan_id,
+            s.temp_scan_reject_remark,
+            s.temp_scan_reject_date,
+            g.group_name,
+            md.file_type,
+            s.extract_status,
+            l.location_name,
+            s.document_name,
+            s.file_path,
+            IF(s.is_temp_scan = 'Y', s.temp_scan_date, s.scan_date) AS scan_date,
+            IF(s.is_temp_scan = 'Y', CONCAT(sb.first_name, ' ', sb.last_name), CONCAT(ba.first_name, ' ', ba.last_name)) AS scanned_by,
+            CONCAT(ba.first_name, ' ', ba.last_name) AS bill_approver_name,
+            s.bill_approved_date
+        ");
         $this->db->from("y{$this->year_id}_scan_file s");
         $this->db->join("master_group g", "g.group_id = s.group_id", "left");
         $this->db->join("master_doctype md", "md.type_id = s.doc_type_id", "left");

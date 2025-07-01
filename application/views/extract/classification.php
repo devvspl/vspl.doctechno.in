@@ -282,10 +282,10 @@
             return;
          }
 
-         if (location === "") {
-            alert("Please select a location.");
-            return;
-         }
+         // if (location === "") {
+         //    alert("Please select a location.");
+         //    return;
+         // }
 
          $button.prop("disabled", true).text("Please wait...");
          $.ajax({
@@ -296,7 +296,7 @@
                type_id: typeId,
                department: department,
                subdepartment: subdepartment,
-               location: location,
+               // location: location,
             },
             success: function (response) {
                let jsonResponse = JSON.parse(response);

@@ -262,7 +262,7 @@ class ExtractorController extends CI_Controller
             'doc_type' => $this->customlib->getDocType($typeId),
             'department_id' => $this->input->post("department"),
             'sub_department_id' => $this->input->post("subdepartment"),
-            'location_id' => $this->input->post("location")
+            // 'location_id' => $this->input->post("location")
         ];
         $updateResult = $this->Extract_model->updateDocument($scanId, $data);
         if (!$updateResult) {
