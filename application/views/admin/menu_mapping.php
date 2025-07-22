@@ -2,7 +2,7 @@
    <section class="content">
       <div class="row">
          <div class="col-md-12">
-            <div class="box box-solid1 box-primary">
+            <div class="box">
                <div class="box-header with-border">
                   <h3 class="box-title"><i class="fa fa-lock"></i> Menu Role Mapping Management</h3>
                </div>
@@ -10,17 +10,21 @@
                   <table id="menuTable" class="table table-bordered table-striped">
                      <thead>
                         <tr>
-                           <th>Menu Name</th>
-                           <th>URL</th>
-                           <th>Roles</th>
+                           <th style="text-align: center;">S No.</th>
+                           <th style="text-align: left;">Menu Name</th>
+                           <th style="text-align: center;">URL</th>
+                           <th style="text-align: center;">Roles</th>
                         </tr>
                      </thead>
                      <tbody>
-                        <?php foreach ($menu_list as $menu): ?>
+                        <?php 
+                        $i = 1;
+                        foreach ($menu_list as $menu): ?>
                            <tr>
-                              <td><?= $menu['name']; ?></td>
-                              <td><?= $menu['url']; ?></td>
-                              <td>
+                              <td style="text-align: center;"><?= $i++; ?></td>
+                              <td style="width: text-align: left;"><?= $menu['name']; ?></td>
+                              <td style="text-align: center;"><?= $menu['url']; ?></td>
+                              <td style="text-align: center;">
                                  <?php
                                  $menu_permissions = json_decode($menu['permission_ids'] ?? '[]', true);
                                  if (!is_array($menu_permissions))
@@ -51,8 +55,18 @@
       $('#menuTable').DataTable({
          "pageLength": 10,
          "ordering": false,
-         "columnDefs": [
-            { "orderable": false, "targets": 1 }
+         dom: 'Bfrtip',
+         pageLength: 10,
+         buttons: [
+            {
+               extend: 'csv',
+               text: '<i class="fa fa-file-text-o"></i> Export',
+               title: 'Menu_mapping_' + new Date().toISOString().slice(0, 10),
+               className: 'btn btn-primary btn-sm',
+               exportOptions: {
+                  columns: ':not(:last-child)'
+               }
+            }
          ]
       });
       $(document).on('change', '.permission-checkbox', function () {

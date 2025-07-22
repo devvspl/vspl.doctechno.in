@@ -1,26 +1,34 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class BaseModel extends CI_Model {
-    public function __construct() {
+class BaseModel extends CI_Model
+{
+    public function __construct()
+    {
         parent::__construct();
         $this->load->database();
     }
 
-    public function getQuery($query = null) {
+    public function getQuery($query = null)
+    {
+        $this->db->trans_start();
         try {
             if ($query === null) {
+                $this->db->trans_complete();
                 return null;
-            } else {
-                return $this->db->query($query);
             }
-        }
-        catch(Exception $e) {
+            $result = $this->db->query($query);
+            $this->db->trans_complete();
+            return $result;
+        } catch (Exception $e) {
+            $this->db->trans_rollback();
             return null;
         }
     }
 
-    public function getData($tbl_name, $cond = null, $order_columns = [], $order_direction = 'ASC', $lim = null) {
+    public function getData($tbl_name, $cond = null, $order_columns = [], $order_direction = 'ASC', $lim = null)
+    {
+        $this->db->trans_start();
         try {
             if ($cond !== null) {
                 $this->db->where($cond);
@@ -33,72 +41,129 @@ class BaseModel extends CI_Model {
             if ($lim !== null) {
                 $this->db->limit($lim);
             }
-            return $this->db->get($tbl_name);
-        }
-        catch(Exception $e) {
+            $result = $this->db->get($tbl_name);
+            $this->db->trans_complete();
+            return $result;
+        } catch (Exception $e) {
+            $this->db->trans_rollback();
             return null;
         }
     }
 
-    public function updateData($tbl_name, $data, $cond = null) {
+    public function updateData($tbl_name, $data, $cond = null)
+    {
+        $this->db->trans_start();
         try {
             if ($cond !== null) {
                 $this->db->where($cond);
-                return $this->db->update($tbl_name, $data);
-            } else {
-                return -1;
+                $result = $this->db->update($tbl_name, $data);
+                $this->db->trans_complete();
+                return $result;
             }
-        }
-        catch(Exception $e) {
+            $this->db->trans_complete();
+            return -1;
+        } catch (Exception $e) {
+            $this->db->trans_rollback();
             return -1;
         }
     }
 
-    public function insertData($tbl_name, $data) {
+    public function insertData($tbl_name, $data)
+    {
+        $this->db->trans_start();
         try {
-            return $this->db->insert($tbl_name, $data);
-        }
-        catch(Exception $e) {
+            $result = $this->db->insert($tbl_name, $data);
+            $this->db->trans_complete();
+            return $result;
+        } catch (Exception $e) {
+            $this->db->trans_rollback();
             return false;
         }
     }
 
-    public function deleteData($tbl_name, $cond = null) {
+    public function insertDataWithLastId($tbl_name, $data)
+    {
+        $this->db->trans_start();
+        try {
+            $result = $this->db->insert($tbl_name, $data);
+            if ($result) {
+                $insert_id = $this->db->insert_id();
+                $this->db->trans_complete();
+                return $insert_id;
+            } else {
+                $this->db->trans_complete();
+                return false;
+            }
+        } catch (Exception $e) {
+            $this->db->trans_rollback();
+            return false;
+        }
+    }
+
+    public function deleteData($tbl_name, $cond = null)
+    {
+        $this->db->trans_start();
         try {
             if ($cond !== null) {
                 $this->db->where($cond);
             }
-            return $this->db->delete($tbl_name);
-        }
-        catch(Exception $e) {
+            $result = $this->db->delete($tbl_name);
+            $this->db->trans_complete();
+            return $result;
+        } catch (Exception $e) {
+            $this->db->trans_rollback();
             return false;
         }
     }
 
-    public function likeData($tbl_name, $like = null) {
+    public function likeData($tbl_name, $like = null)
+    {
+        $this->db->trans_start();
         try {
             if ($like !== null) {
                 $this->db->like($like);
             }
-            return $this->db->get($tbl_name);
-        }
-        catch(Exception $e) {
+            $result = $this->db->get($tbl_name);
+            $this->db->trans_complete();
+            return $result;
+        } catch (Exception $e) {
+            $this->db->trans_rollback();
             return null;
         }
     }
 
-    public function getJoinData($tbl1, $tbl2, $joinCond, $order = null) {
+    public function getJoinData($table, $join = [], $where = [], $select = '*', $order_by = null)
+    {
+        $this->db->trans_start();
+
         try {
-            $this->db->select('*,' . $tbl1 . '.Id as ID');
-            $this->db->from($tbl1);
-            $this->db->join($tbl2, $joinCond);
-            if ($order !== null) {
-                $this->db->order_by($order, 'DESC');
+            $this->db->select($select);
+            $this->db->from($table);
+
+            
+            if (!empty($join)) {
+                $this->db->join($join['table'], $join['condition'], $join['type'] ?? 'left');
             }
-            return $this->db->get();
-        }
-        catch(Exception $e) {
+
+            
+            if (!empty($where)) {
+                $this->db->where($where);
+            }
+
+            
+            if (!empty($order_by)) {
+                $this->db->order_by($order_by, 'DESC');
+            }
+
+            $result = $this->db->get();
+            $this->db->trans_complete();
+
+            return $result;
+
+        } catch (Exception $e) {
+            $this->db->trans_rollback();
             return null;
         }
     }
+
 }

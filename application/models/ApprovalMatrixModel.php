@@ -25,11 +25,11 @@ class ApprovalMatrixModel extends CI_Model
             tam.department,
             tam.sub_department,
             tam.zone,
-            tam.region,
-            tam.bill_type,
+            tam.sales_region,
             tam.vertical,
             tam.business_unit,
-            tam.location
+            tam.location,
+            tam.status
         ");
         $this->db->from('tbl_approval_matrix AS tam');
         $this->db->join('core_org_function AS cof', 'cof.api_id = tam.function', 'LEFT');
@@ -50,7 +50,7 @@ class ApprovalMatrixModel extends CI_Model
             $this->db->where('tam.department', $filters['department']);
         }
         if (!empty($filters['region'])) {
-            $this->db->where('tam.region', $filters['region']);
+            $this->db->where('tam.sales_region', $filters['region']);
         }
         if (!empty($filters['zone'])) {
             $this->db->where('tam.zone', $filters['zone']);

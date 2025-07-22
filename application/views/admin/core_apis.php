@@ -2,7 +2,7 @@
     <section class="content">
         <div class="row">
             <div class="col-md-12">
-                <div class="box box-primary">
+                <div class="box">
                     <div class="box-header with-border">
                         <h3 class="box-title">Core API's</h3>
                         <div class="box-tools">
@@ -123,7 +123,7 @@
                     {
                         extend: 'csv',
                         text: '<i class="fa fa-file-text-o"></i> Export',
-                        title: 'Pending_Classification_List_' + new Date().toISOString().slice(0, 10),
+                        title: 'Core_API_' + new Date().toISOString().slice(0, 10),
                         className: 'btn btn-primary btn-sm',
                         exportOptions: {
                             columns: ':not(:last-child)'
@@ -137,7 +137,7 @@
                 showLoading(button);
 
                 $.ajax({
-                    url: "<?= base_url('master/CoreController/fetch_apis') ?>",
+                    url: "<?= base_url('fetch_apis') ?>",
                     type: "GET",
                     dataType: "json",
                     success: function (response) {
@@ -158,7 +158,7 @@
                 showLoading(button);
 
                 $.ajax({
-                    url: "<?= base_url('master/CoreController/sync_apis') ?>",
+                    url: "<?= base_url('sync_apis') ?>",
                     type: "GET",
                     dataType: "text",
                     success: function (responseText) {
@@ -206,7 +206,7 @@
                 });
             });
 
-            $(".sync-api-btn").click(function () {
+            $(document).on("click", ".sync-api-btn", function () {
                 var button = $(this);
                 var apiEndPoint = button.data("api");
                 var tableName = button.data("table");
@@ -238,7 +238,7 @@
                 showLoading(button);
 
                 $.ajax({
-                    url: "<?= base_url('master/CoreController/sync_single_api') ?>",
+                    url: "<?= base_url('sync_single_api') ?>",
                     type: "POST",
                     data: JSON.stringify(requestData),
                     contentType: "application/json",
@@ -255,12 +255,12 @@
                 });
             });
 
-            $(".view-data-btn").click(function () {
+            $(document).on("click", ".view-data-btn", function () {
                 var button = $(this);
                 showLoading(button);
                 $("#dataTitle").text(button.data("table"));
                 $.ajax({
-                    url: "<?= base_url('master/CoreController/get_api_data') ?>",
+                    url: "<?= base_url('get_api_data') ?>",
                     type: "POST",
                     data: { table_name: button.data("table") },
                     dataType: "json",
@@ -335,7 +335,7 @@
 
 
                                 $.ajax({
-                                    url: "<?= base_url('master/CoreController/update_api_data') ?>",
+                                    url: "<?= base_url('update_api_data') ?>",
                                     type: "POST",
                                     data: {
                                         table_name: tableName,
@@ -404,13 +404,13 @@
                 });
             });
 
-            $(".empty-data-btn").click(function () {
+            $(document).on("click", ".empty-data-btn", function () {
                 var button = $(this);
                 if (!confirm("Are you sure you want to delete all data from this table?")) return;
                 showLoading(button);
 
                 $.ajax({
-                    url: "<?= base_url('master/CoreController/empty_table') ?>",
+                    url: "<?= base_url('empty_table') ?>",
                     type: "POST",
                     data: { table_name: button.data("table") },
                     dataType: "json",
@@ -426,13 +426,13 @@
                 });
             });
 
-            $(".drop-api-btn").click(function () {
+            $(document).on("click", ".drop-api-btn", function () {
                 var button = $(this);
                 if (!confirm("Are you sure you want to delete this API table? This action cannot be undone.")) return;
                 showLoading(button);
 
                 $.ajax({
-                    url: "<?= base_url('master/CoreController/drop_table') ?>",
+                    url: "<?= base_url('drop_table') ?>",
                     type: "POST",
                     data: { table_name: button.data("table") },
                     dataType: "json",

@@ -1,9 +1,109 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-$route['default_controller'] = 'Auth_ctrl/login';
+$route['default_controller'] = 'BaseController/login';
+$route['login'] = 'BaseController/login';
+
+$route['main_dashboard'] = 'MainDashboard/index';
+/***********************************************************************************************************/
+/**********************************************    Scanner  ************************************************/
+/***********************************************************************************************************/
+$route['scanner'] = 'ScannerController/scanner';
+$route['scanner/export/(:any)'] = 'ScannerController/export/$1';
+$route['upload_main'] = 'ScannerController/upload_main';
+$route['upload_supporting_file/(:any)'] = 'ScannerController/upload_supporting_file/$1';
+$route['upload_supporting'] = 'ScannerController/upload_supporting';
+$route['scan_final_submit'] = 'ScannerController/scan_final_submit';
+$route['delete_supporting_file'] = 'ScannerController/delete_supporting_file';
+/***********************************************************************************************************/
+/********************************************  Doc Classifier **********************************************/
+/***********************************************************************************************************/
+$route['classification'] = 'DocClassifierController/classification';
+$route['processed'] = 'DocClassifierController/processed';
+$route['classifications_rejected'] = 'DocClassifierController/classifications_rejected';
+$route['rejected_scans'] = 'DocClassifierController/rejected_scans';
+$route['document_received'] = 'DocClassifierController/document_received';
+/***********************************************************************************************************/
+/********************************************  Super Admin *************************************************/
+/***********************************************************************************************************/
+$route['employee'] = 'AdminController/employee';
+$route['sync_employee'] = 'AdminController/sync_employee';
+$route['approval_matrix'] = 'AdminController/approval_matrix';
+$route['add_approval_matrix'] = 'AdminController/add_approval_matrix';
+$route['edit_approval_matrix/(:any)'] = 'AdminController/edit_approval_matrix/$1';
+$route['save_approval_matrix'] = 'AdminController/save_approval_matrix';
+$route['tag_control'] = 'AdminController/tag_control';
+$route['tag_control_update'] = 'AdminController/tag_control_update';
+$route['set_permission/(:any)'] = 'AdminController/set_permission/$1';
+$route['permissions_data/(:any)'] = 'AdminController/permissions_data/$1';
+$route['save_permissions'] = 'AdminController/save_permissions';
+$route['account'] = 'AdminController/account';
+$route['account/(:any)'] = 'AdminController/account/$1';
+$route['account/export'] = 'AdminController/export_accounts';
+$route['business_entity'] = 'AdminController/business_entity';
+$route['business_entity/(:any)'] = 'AdminController/business_entity/$1';
+$route['save_business_entity'] = 'AdminController/save_business_entity';
+$route['save_business_entity/(:any)'] = 'AdminController/save_business_entity/$1';
+$route['delete_business_entity/(:any)'] = 'AdminController/delete_business_entity/$1';
+$route['roles'] = 'AdminController/roles';
+$route['user'] = 'AdminController/user';
+$route['core_apis'] = 'CoreController/core_apis';
+$route['fetch_apis'] = 'CoreController/fetch_apis';
+$route['sync_apis'] = 'CoreController/sync_apis';
+$route['sync_single_api'] = 'CoreController/sync_single_api';
+$route['get_api_data'] = 'CoreController/get_api_data';
+$route['update_api_data'] = 'CoreController/update_api_data';
+$route['empty_table'] = 'CoreController/empty_table';
+$route['drop_table'] = 'CoreController/drop_table';
+$route['menu_mapping'] = 'AdminController/menu_mapping';
+$route['activity_dep_mapping'] = 'AdminController/activity_dep_mapping';
+/***********************************************************************************************************/
+/********************************************  DMS Punching **********************************************/
+/***********************************************************************************************************/
+$route['punch_file'] = 'DMSPunchingController/punch_file';
+$route['punch_entry/(:any)/(:any)'] = 'DMSPunchingController/punch_entry/$1/$2';
+$route['save_punch_details'] = 'DMSPunchingController/save_punch_details';
+$route['punched_files'] = 'DMSPunchingController/punched_files/1';
+/***********************************************************************************************************/
+/********************************************  Common Functions **********************************************/
+/***********************************************************************************************************/
+$route['temp_files'] = 'CommonController/temp_files';
+$route['temp_files/download/(:any)'] = 'CommonController/temp_file_download/$1';
+$route['temp_files/view/(:any)'] = 'CommonController/temp_file_view/$1';
+$route['temp_files/delete/(:any)'] = 'CommonController/temp_file_delete/$1';
+$route['change_password'] = 'CommonController/change_password';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // >>>>>>>>>>>>>>>>>>>>>>>>> Dashboard Section <<<<<<<<<<<<<<<<<<<<<<<<< //
-$route['dashboard'] = 'Dashboard';
+// $route['dashboard'] = 'Dashboard';
 $route['logout'] = 'Dashboard/logout';
 $route['changepass'] = 'Dashboard/changepass';
 $route['get_overall_report'] = 'Dashboard/get_overall_report';
@@ -12,11 +112,11 @@ $route['get_report_for_super_approver'] = 'Dashboard/get_report_for_super_approv
 $route['get_report_for_super_scanner'] = 'Dashboard/get_report_for_super_scanner';
 // >>>>>>>>>>>>>>>>>>>>>>>>> Master Section <<<<<<<<<<<<<<<<<<<<<<<<<<< //
 $route['location'] = 'Location';
-$route['user'] = 'master/UserController';
-$route['roles'] = 'master/UserController/roles';
-$route['menu-mapping'] = 'master/UserController/menuMapping';
-$route['activity-dep-mapping'] = 'master/UserController/activityDepMapping';
-$route['tag-control'] = 'master/UserController/tagControl';
+
+
+
+
+
 $route['user/delete/(:any)'] = 'master/UserController';
 $route['bill_approver'] = 'master/BillApproverController';
 $route['ledger'] = 'master/LedgerController';
@@ -29,25 +129,25 @@ $route['group'] = 'master/GroupController';
 $route['unit'] = 'master/UnitController';
 $route['hotel'] = 'master/HotelController';
 $route['item'] = 'master/ItemController';
-$route['employee'] = 'master/EmployeeController';
-$route['account'] = 'master/AccountController';
+
+// $route['account'] = 'master/AccountController';
 $route['master/AccountController/index/(:num)'] = 'master/AccountController/index/$1';
 $route['master/AccountController/index'] = 'master/AccountController/index';
 $route['activity'] = 'master/ActivityController';
 $route['business_unit'] = 'master/BusinessUnitController';
-$route['business_entity'] = 'master/BusinessEntityController';
+
 $route['rejection_reason'] = 'master/RejectionReasonController';
-$route['pending_bill_approve'] ='master/BillApproverController/pending_bill_approve';
-$route['reject_bill_approve'] ='master/BillApproverController/reject_bill_approve';
-$route['approved_bill_approve'] ='master/BillApproverController/approved_bill_approve';
-$route['bill_detail/(:any)'] = 'master/BillApproverController/bill_detail/$1';   
-$route['my_approved_bill'] ='master/BillApproverController/my_approved_bill';
-$route['rejected_bill_by_me'] ='master/BillApproverController/rejected_bill_by_me';
-$route['reject_bill/(:any)'] = 'master/BillApproverController/reject_bill/$1';   
+$route['pending_bill_approve'] = 'master/BillApproverController/pending_bill_approve';
+$route['reject_bill_approve'] = 'master/BillApproverController/reject_bill_approve';
+$route['approved_bill_approve'] = 'master/BillApproverController/approved_bill_approve';
+$route['bill_detail/(:any)'] = 'master/BillApproverController/bill_detail/$1';
+$route['my_approved_bill'] = 'master/BillApproverController/my_approved_bill';
+$route['rejected_bill_by_me'] = 'master/BillApproverController/rejected_bill_by_me';
+$route['reject_bill/(:any)'] = 'master/BillApproverController/reject_bill/$1';
 $route['approve_bill/(:any)'] = 'master/BillApproverController/approve_bill/$1';
 $route['employee_import'] = 'master/EmployeeController/employee_import';
 $route['firm_import'] = 'master/FirmController/firm_import';
-$route['core-apis'] = 'master/CoreController/core_apis';
+
 $route['create_account'] = 'master/AccountController/create';
 // Admin Section
 $route['approval-matrix'] = 'AdminController/approvalMatrix';
@@ -60,9 +160,8 @@ $route['approval-matrix/get-approval-matrix-by-id/(:any)'] = 'AdminController/ge
 // >>>>>>>>>>>>>>>>>>>>>>>>> Document Classification Section <<<<<<<<<<<<<<<<<<<<<<<<< //
 $route['doc-received'] = 'DocClassifierController/doc_verification';
 // >>>>>>>>>>>>>>>>>>>>>>>>> Data Extraction Section <<<<<<<<<<<<<<<<<<<<<<<<< //
-$route['classification'] = 'extract/ExtractorController/classification';
-$route['processed'] = 'extract/ExtractorController/processed';
-$route['classifications-rejected'] = 'extract/ExtractorController/classificationsRejected';
+
+
 $route['scan-rejected-scan-admin'] = 'extract/ExtractorController/scanRejectedScanAdmin';
 $route['change-request'] = 'extract/ExtractorController/changeRequestList';
 $route['extraction-queue'] = 'extract/ExtractorController/getQueueList';
@@ -79,7 +178,7 @@ $route['search_with_filter'] = 'Search/search_with_filter';
 $route['search_with_filter_status'] = 'Search/search_with_filter_status';
 $route['get_search_with_filter_data'] = 'Search/get_search_with_filter_data';
 // >>>>>>>>>>>>>>>>>>>>>>>>> Punch Section <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
-$route['punch/my-punched-file'] = 'punch/my_punched_file';      
+$route['punch/my-punched-file'] = 'punch/my_punched_file';
 $route['punch/my-punched-file/all'] = 'punch/my_punched_file/1';
 $route['finance/my-punched-file'] = 'punch/my_finance_punched_file';
 $route['finance/my-punched-file/all'] = 'punch/my_finance_punched_file/1';
@@ -90,8 +189,11 @@ $route['get-cost-centers'] = 'accounts/AdditionalController/get_cost_centers';
 $route['get-departments'] = 'accounts/AdditionalController/get_departments';
 $route['get-business-units'] = 'accounts/AdditionalController/get_business_units';
 $route['get-regions'] = 'accounts/AdditionalController/get_regions';
+$route['get-territory'] = 'accounts/AdditionalController/get_territory';
 $route['get-states'] = 'accounts/AdditionalController/get_states';
 $route['get-locations'] = 'accounts/AdditionalController/get_locations';
+$route['get-ledger'] = 'accounts/AdditionalController/get_ledger';
+$route['get-subledger'] = 'accounts/AdditionalController/get_subledger';
 $route['get-categories'] = 'accounts/AdditionalController/get_categories';
 $route['get-crops'] = 'accounts/AdditionalController/get_crops';
 $route['get-activities'] = 'accounts/AdditionalController/get_activities';
@@ -128,24 +230,24 @@ $route['super_scan/(:any)'] = 'Super_scan/index/$1';
 $route['super_scan_rejected_list/(:any)'] = 'Super_scan/super_scan_rejected_list/$1';
 $route['super_scan_naming_list/(:any)'] = 'Super_scan/super_scan_naming_list/$1';
 $route['super_scan_verification_list/(:any)'] = 'Super_scan/super_scan_verification_list/$1';
-$route['verification']  = 'Super_scan/verification';
+$route['verification'] = 'Super_scan/verification';
 $route['all_trashed_bill'] = 'Scan/all_trashed_bill';
 //--------------Punch File-------------------
 $route['punch'] = 'Punch';
 $route['my_punched_file'] = 'Punch/my_punched_file';
 $route['my_punched_file/(:any)'] = 'Punch/my_punched_file/$1';
 $route['my_saved_file'] = 'Punch/my_saved_file';
-$route['file_entry/(:any)/(:any)'] = 'Punch/file_entry/$1/$2';  
+$route['file_entry/(:any)/(:any)'] = 'Punch/file_entry/$1/$2';
 $route['rejected_punch'] = 'Punch/rejected_punch';
 $route['finance_rejected_punch'] = 'Punch/finance_rejected_punch';
 $route['finance_rejected_punch_1'] = 'Punch/finance_rejected_punch_1';
 $route['resend_scan/(:any)'] = 'Punch/resend_scan/$1';
 $route['finance_resend_scan/(:any)'] = 'Punch/finance_resend_scan/$1';
 // VSPL Punch
-$route['vspl_file_entry/(:any)/(:any)'] = 'Punch/file_entry/$1/$2'; 
-$route['focus_exports'] = 'VSPL_Punch/focus_exports'; 
-$route['export_csv'] = 'VSPL_Punch/export_csv'; 
-$route['export_cash_payment'] = 'VSPL_Punch/export_cash_payment'; 
+$route['vspl_file_entry/(:any)/(:any)'] = 'Punch/file_entry/$1/$2';
+$route['focus_exports'] = 'VSPL_Punch/focus_exports';
+$route['export_csv'] = 'VSPL_Punch/export_csv';
+$route['export_cash_payment'] = 'VSPL_Punch/export_cash_payment';
 //--------------Finance_Punch File-------------------
 $route['finance_punch'] = 'Finance_Punch';
 $route['my_finance_punched_file'] = 'Finance_Punch/my_punched_file';
@@ -162,7 +264,7 @@ $route['approve_record/(:any)'] = 'Approve/approve_record/$1';   //$1=scan_id
 $route['approve_record_by_super_approver/(:any)'] = 'Approve/approve_record_by_super_approver/$1';   //$1=scan_id
 $route['reject_record/(:any)'] = 'Approve/reject_record/$1';   //$1=scan_id
 $route['rejected_by_me'] = 'Approve/rejected_by_me';
-$route['reject_list_company/(:any)']='Approve/reject_list_company/$1';
+$route['reject_list_company/(:any)'] = 'Approve/reject_list_company/$1';
 //----------------Admin ------------------
 $route['admin_rejected_list'] = 'Record/admin_rejected_list';
 $route['give_edit_permission/(:any)'] = 'Record/give_edit_permission/$1';   //$1=scan_id
@@ -183,7 +285,7 @@ $route['reject_list'] = 'Record/super_admin_reject_list';
 $route['agrisoft_data_set'] = 'api/Agrisoft_ctrl/set_data';
 $route['journal-entry/get-account-options'] = 'form/JournalEntry_ctrl/getAccountOptions';
 // Routes for temp files
-$route['temp-files'] = 'TempFilesController/temp_files';
+
 //Routes for core apis
 
 $route['focus-export'] = 'api/Agrisoft_ctrl/set_data';
@@ -192,4 +294,4 @@ $route['focus-export'] = 'api/Agrisoft_ctrl/set_data';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 //==========================================
-$route['ledger_wise_report'] ='Record/ledger_wise_report';
+$route['ledger_wise_report'] = 'Record/ledger_wise_report';

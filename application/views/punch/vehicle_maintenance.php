@@ -1,5 +1,5 @@
 <div id="invoice-details" class="tab-content active">
-   <form action="<?= base_url(); ?>Punch/savePunchToDatabase" id="punch_form" name="punch_form"
+   <form action="<?= base_url('save_punch_details'); ?>" id="punch_form" name="punch_form"
       method="post" accept-charset="utf-8">
          <input type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id ?>">
          <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $doc_type_id ?>">

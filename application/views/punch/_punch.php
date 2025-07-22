@@ -194,41 +194,40 @@
          font-size: 12px;
       }
 
-      .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th
+      .table>tbody>tr>td,
+      .table>tbody>tr>th,
+      .table>tfoot>tr>td,
+      .table>tfoot>tr>th,
+      .table>thead>tr>td,
+      .table>thead>tr>th {
+         padding: 5px;
+         line-height: 1.42857143;
+         vertical-align: baseline !important;
+         border-top: 1px solid #ddd;
+      }
 
- {
-    padding: 5px;
-    line-height: 1.42857143;
-    vertical-align: baseline !important;
-    border-top: 1px solid #ddd;
-}
+      #multi_record .form-control {
+         padding: 0px 3px;
 
-#multi_record .form-control{
-   padding: 0px 3px;
+      }
 
-}
-.select2-container .select2-selection--single .select2-selection__rendered {
-    display: block;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
+      .select2-container .select2-selection--single .select2-selection__rendered {
+         display: block;
+         padding-left: 0 !important;
+         padding-right: 0 !important;
+         overflow: hidden;
+         text-overflow: ellipsis;
+         white-space: nowrap;
+      }
    </style>
    <section class="content">
       <div class="row">
          <div class="col-md-12">
-            <div class="box box-primary">
+            <div class="box">
                <div class="box-body">
                   <div class="row">
                      <div class="col-md-4 section-wrapper">
-                        <h3 class="box-title" style="font-size: 14px;padding-top: 0;margin-top: 0;">
-                           <?= ucfirst($doc_type_name); ?>
-                           <?php if (!empty($document_name)): ?>
-                              - (<?= $document_name; ?>)
-                           <?php endif; ?>
-                        </h3>
+
                         <div class="col-md-12 section-content">
                            <?php if ($rec->file_extension == 'pdf'): ?>
                               <object data="<?= $rec->file_path ?>" type="" height="490px" width="100%;"></object>
@@ -269,6 +268,17 @@
                         <?php endif; ?>
 
                         <div class="scrollable-content">
+                           <div
+                              style="margin-bottom: 10px; display: flex; justify-content: start; align-items: baseline; gap: 4px; background-color: #e9ecef; padding: 5px; border-radius: 4px; border: 1px solid #ddd;">
+                              <h3 style="font-size: 14px; color: #333; font-weight: 600; margin: 0;">
+                                 <?= ucfirst($doc_type_name); ?>:
+                              </h3>
+                              <?php if (!empty($document_name)): ?>
+                                 <span style="font-size: 14px; color: #1b98ae; font-weight: 400;">
+                                    <?= $document_name; ?>
+                                 </span>
+                              <?php endif; ?>
+                           </div>
                            <?php if (!empty($doc_config['view'])): ?>
                               <?php $this->load->view('punch/' . $doc_config['view']); ?>
                            <?php endif; ?>

@@ -30,7 +30,7 @@
     <section class="content">
         <div class="row">
             <div class="col-md-12">
-                <div class="box box-primary">
+                <div class="box">
 
                     <div class="box-body" id="form_div">
                         <form action="<?= base_url() ?>Search/search_global" method="POST" id="search_form" role="form">
@@ -58,7 +58,7 @@
 
         <div class="row">
             <div class="col-md-12">
-                <div class="box box-primary">
+                <div class="box">
                     <div class="box-body">
                         <table class="table table-striped table-bordered table-hover " id="mytable">
                             <thead>

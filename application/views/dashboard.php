@@ -124,7 +124,7 @@ $total_bill_approved_by_me = count($total_bill_approved_by_me_query);
       <?php if ($_SESSION['role'] == 'super_approver') { ?>
       <div class="row" id="company_wise_report">
          <div class="col-lg-12">
-            <div class="box box-primary">
+            <div class="box">
                <div class="box-header with-border">
                   <h3 class="box-title">Company Wise Report</h3>
                </div>
@@ -237,7 +237,7 @@ $total_bill_approved_by_me = count($total_bill_approved_by_me_query);
       <?php if ($_SESSION['role'] == 'super_admin') { ?>
       <div class="row">
          <div class="col-lg-12">
-            <div class="box box-primary">
+            <div class="box">
                <div class="box-header with-border" style="padding: 4px;">
                   <h3 class="box-title">Overall Report</h3>
                </div>
@@ -290,7 +290,7 @@ $total_bill_approved_by_me = count($total_bill_approved_by_me_query);
       </div>
       <div class="row">
          <div class="col-md-12">
-            <div class="box box-primary">
+            <div class="box">
                <div class="box-body">
                   <form role="form" action="" method="post" class="class_search_form">
                      <div class="row">
@@ -362,7 +362,7 @@ $total_bill_approved_by_me = count($total_bill_approved_by_me_query);
       </div>
       <div class="row" id="company_wise_report">
          <div class="col-lg-12">
-            <div class="box box-primary">
+            <div class="box">
                <div class="box-header with-border">
                   <h3 class="box-title">Company Wise Report (Overall)</h3>
                </div>
@@ -428,7 +428,7 @@ $total_bill_approved_by_me = count($total_bill_approved_by_me_query);
       </div>
       <div class="row" id="bill_approver_report">
          <div class="col-lg-12">
-            <div class="box box-primary">
+            <div class="box">
                <div class="box-header with-border">
                   <h3 class="box-title">Bill Approver Report (Overall)</h3>
                </div>
@@ -519,7 +519,7 @@ $total_bill_approved_by_me = count($total_bill_approved_by_me_query);
       </div>
       <div class="row" id="company_wise_report_scan">
          <div class="col-lg-12">
-            <div class="box box-primary">
+            <div class="box">
                <div class="box-header with-border">
                   <h3 class="box-title">Company Wise Report</h3>
                </div>

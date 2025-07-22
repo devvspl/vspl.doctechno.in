@@ -56,7 +56,7 @@ $doctype_list = $this->db->select('type_id,file_type')->from('master_doctype')->
 
 		<div class="row" id="table_div" style="display: none;">
 			<div class="col-md-12">
-				<div class="box box-primary">
+				<div class="box">
 					<div class="box-header with-border">
 						<h3 class="box-title">Pending Files for Approval (<b id="group_name"></b>)</h3>
 						<?php if ($this->session->flashdata('message')) { ?>

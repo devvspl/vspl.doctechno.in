@@ -24,7 +24,7 @@ class BusinessEntityController extends CI_Controller
         $this->session->set_userdata('top_menu', 'master');
         $this->session->set_userdata('sub_menu', 'business_entity');
         $this->data['main'] = 'business_entity/business_entitylist';
-        $this->data['business_entitylist'] = $this->Business_entity_model->get_business_entity_list();
+        $this->data['business_entitylist'] = $this->BaseModel->getData('');
         $this->load->view('layout/template', $this->data);
     }
 

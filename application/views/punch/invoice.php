@@ -1,15 +1,11 @@
 <?php
 function formatNumber($num) {
-   
-   // Convert to float to handle database values (which may be strings or floats)
    $floatNum = floatval($num);
-   
-   // Return integer if no decimal part, otherwise keep two decimals
    return $floatNum == intval($floatNum) ? intval($floatNum) : number_format($floatNum, 2);
 }
 ?>
 <div id="invoice-details" class="tab-content active">
-   <form action="<?= base_url(); ?>Punch/savePunchToDatabase" id="invoice_form" name="invoice_form" method="post"
+   <form action="<?= base_url('save_punch_details'); ?>" id="invoice_form" name="invoice_form" method="post"
       accept-charset="utf-8">
       <input type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id ?>">
       <input type="hidden" name="DocTypeId" id="DocTypeId" value="<?= $doc_type_id ?>">
@@ -224,10 +220,8 @@ function formatNumber($num) {
                               <?php 
                                  if (isset($punch_detail->total_discount) && $punch_detail->grand_total > $punch_detail->total) {
                                     echo '#007bff'; 
-                                    // blue if selected
                                  } else {
                                     echo '#ccc'; 
-                                    // gray if not
                                  } 
                               ?>"></i>
                            </label>
@@ -247,23 +241,21 @@ function formatNumber($num) {
                                  if (isset($punch_detail->total_discount)) {
                                     if ($punch_detail->grand_total < $punch_detail->total) {
                                        echo '#dc3545'; 
-                                       // red if selected
                                     } else {
                                        echo '#ccc'; 
-                                       // gray if not
                                     }
                                  } else {
                                     echo '#dc3545'; 
-                                    // red by default for minus
+
                                  } 
                               ?>"></i>
                            </label>
                         </div>
                      </div>
                   </td>
-                  <td colspan="1" style="text-align: right;"><b>Grand Total :</b></td>
+                  <td colspan="1" style="text-align: right;"><b>Grand_Total</b></td>
                   <td colspan="1">
-                     <input type="text" name="Grand_Total" id="Grand_Total" class="form-control form-control-sm"
+                     <input type="text" name="Grand_Total" id="Grand_Total" class="form-control form-control-sm text-right"
                         readonly value="<?= (isset($punch_detail->grand_total)) ? formatNumber($punch_detail->grand_total) : '' ?>">
                   </td>
                </tr>
@@ -418,7 +410,6 @@ function formatNumber($num) {
       </div>
    </div>
 </div>
-
 <script>
    function calculate(num) {
       
@@ -518,8 +509,7 @@ function formatNumber($num) {
    }
 
    $(document).ready(function () {
-      
-      // Function definitions within ready block
+
       function initUI() {
          $("#From, #To").select2();
          $(".datepicker").datetimepicker({
@@ -626,8 +616,6 @@ function formatNumber($num) {
             .fail(() => alert("Error fetching data."));
       }
 
-
-
       function populateRow(index, item) {
          const $particular = $(`#Particular${index}`);
          $particular.val(item.particular).trigger("change");
@@ -670,10 +658,10 @@ function formatNumber($num) {
                     <td><input type="text" name="Discount[]" id="Discount${serialNo}" class="form-control form-control-sm text-right" onkeypress="return isNumberKey(event)"></td>
                     <td><input type="text" name="Price[]" id="Price${serialNo}" class="form-control form-control-sm text-right" readonly></td>
                     <td><input type="text" name="Amount[]" id="Amount${serialNo}" class="form-control form-control-sm text-right Amount" readonly></td>
-                    <td><input type="text" name="GST[]" id="GST${serialNo}" class="form-control form-control-sm text-right" onkeypress="return isNumberKey(event)"></td>
-                    <td><input type="text" name="SGST[]" id="SGST${serialNo}" class="form-control form-control-sm text-right" readonly></td>
-                    <td><input type="text" name="IGST[]" id="IGST${serialNo}" class="form-control form-control-sm text-right" onkeypress="return isNumberKey(event)"></td>
-                    <td><input type="text" name="Cess[]" id="Cess${serialNo}" class="form-control form-control-sm text-right" onkeypress="return isNumberKey(event)"></td>
+                    <td><input type="text" name="GST[]" id="GST${serialNo}" class="form-control form-control-sm text-center" onkeypress="return isNumberKey(event)"></td>
+                    <td><input type="text" name="SGST[]" id="SGST${serialNo}" class="form-control form-control-sm text-center" readonly></td>
+                    <td><input type="text" name="IGST[]" id="IGST${serialNo}" class="form-control form-control-sm text-center" onkeypress="return isNumberKey(event)"></td>
+                    <td><input type="text" name="Cess[]" id="Cess${serialNo}" class="form-control form-control-sm text-center" onkeypress="return isNumberKey(event)"></td>
                     <td><input type="text" name="TAmount[]" id="TAmount${serialNo}" class="form-control form-control-sm TAmount text-right" readonly></td>
                     <td><button type="button" name="remove" style="margin-top: 0;padding: 0 4px;" class="btn btn-danger btn-xs removeRow"><i class="fa fa-minus"></i></button></td>
                 </tr>`;
@@ -789,28 +777,30 @@ function formatNumber($num) {
       $(document).on("click", ".removeRow", removeItemRow);
       $(document).on("change", ".plus_minus", calculatePlusMinus);
 
-      <?php
-      $cleanedBuyer = cleanSearchValue(
-         isset($temp_punch_detail->buyer) && !is_null($temp_punch_detail->buyer) ? $temp_punch_detail->buyer : ""
-      );
-      $cleanedVendor = cleanSearchValue(
-         isset($temp_punch_detail->vendor) && !is_null($temp_punch_detail->vendor) ? $temp_punch_detail->vendor : ""
-      );
-      ?>
+     <?php
+    $cleanedBuyer = cleanSearchValue(
+        isset($temp_punch_detail->buyer) && !is_null($temp_punch_detail->buyer) ? $temp_punch_detail->buyer : ""
+    );
+    $cleanedVendor = cleanSearchValue(
+        isset($temp_punch_detail->vendor) && !is_null($temp_punch_detail->vendor) ? $temp_punch_detail->vendor : ""
+    );
+    $selectedBuyer = isset($punch_detail->buyer) ? $punch_detail->buyer : "";
+    $selectedVendor = isset($punch_detail->vendor) ? $punch_detail->vendor : "";
+    ?>
 
-      loadDropdownOptions(
-         'From',
-         '<?= base_url("extract/ExtractorController/get_company_options") ?>',
-         <?= json_encode($cleanedBuyer) ?>,
-         '<?= isset($punch_detail->buyer) ? $punch_detail->buyer : "" ?>'
-      );
+    loadDropdownOptions(
+        'From',
+        <?= json_encode(base_url("extract/ExtractorController/get_company_options")) ?>,
+        <?= json_encode($cleanedBuyer) ?>,
+        <?= json_encode($selectedBuyer) ?>
+    );
 
-      loadDropdownOptions(
-         'To',
-         '<?= base_url("extract/ExtractorController/get_vendor_options") ?>',
-         <?= json_encode($cleanedVendor) ?>,
-         '<?= isset($punch_detail->vendor) ? $punch_detail->vendor : "" ?>'
-      );
+    loadDropdownOptions(
+        'To',
+        <?= json_encode(base_url("extract/ExtractorController/get_vendor_options")) ?>,
+        <?= json_encode($cleanedVendor) ?>,
+        <?= json_encode($selectedVendor) ?>
+    );
 
       $("#To").on("change", function () {
          var selectedVendor = $(this).val();

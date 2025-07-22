@@ -12,7 +12,7 @@
         <div class="row">
             <div class="col-md-3">
                 <!-- Horizontal Form -->
-                <div class="box box-primary">
+                <div class="box">
                     <div class="box-header with-border">
                         <h3 class="box-title">Add Category</h3>
                     </div><!-- /.box-header -->
@@ -54,7 +54,7 @@
             <!-- left column -->
             <div class="col-md-9">
                 <!-- general form elements -->
-                <div class="box box-primary" id="exphead">
+                <div class="box" id="exphead">
                     <div class="box-header ptbnull">
                         <h3 class="box-title titlefix">Category List</h3>
                     </div><!-- /.box-header -->

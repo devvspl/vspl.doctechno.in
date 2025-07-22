@@ -53,9 +53,9 @@ class CoreController extends CI_Controller
             return;
         }
         $query = $this->db->get("core_api_list");
-        $this->data["main"] = "core_apis";
-        $this->data["api_list"] = $query->result_array();
-        $this->load->view("layout/template", $this->data);
+        $data["main"] = "admin/core_apis";
+        $data["api_list"] = $query->result_array();
+        $this->load->view("layout/template", $data);
     }
     public function fetch_apis()
     {

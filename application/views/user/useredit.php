@@ -2,7 +2,7 @@
     <section class="content">
         <div class="row">
             <div class="col-md-3">
-                <div class="box box-primary">
+                <div class="box">
                     <div class="box-header with-border">
                         <h3 class="box-title">Update User</h3>
                     </div>
@@ -49,7 +49,7 @@
                 </div>
             </div>
             <div class="col-md-9">
-                <div class="box box-primary" id="exphead">
+                <div class="box" id="exphead">
                     <div class="box-header ptbnull">
                         <h3 class="box-title titlefix">User List</h3>
                     </div>
@@ -84,15 +84,15 @@
                                                     <?php echo $row['username'] ?>
                                                 </td>
                                                 <td class="mailbox-date pull-right no-print">
-                                                    <a href="<?= base_url(); ?>master/UserController/permission/<?php echo $row['user_id'] ?>"
+                                                    <a href="<?= base_url('set_permission/') . $row['user_id']; ?>"
                                                         class="btn btn-default btn-xs">
                                                         <i class="fa fa-key"></i>
                                                     </a>
-                                                    <a href="<?= base_url(); ?>master/UserController/edit/<?php echo $row['user_id'] ?>"
+                                                    <a href="<?= base_url('master/UserController/edit/') . $row['user_id']; ?>"
                                                         class="btn btn-default btn-xs">
                                                         <i class="fa fa-pencil"></i>
                                                     </a>
-                                                    <a href="<?= base_url(); ?>user/delete/<?php echo $row['user_id'] ?>"
+                                                    <a href="<?= base_url('user/delete/') . $row['user_id']; ?>"
                                                         class="btn btn-default btn-xs"
                                                         onclick="return confirm('Are you sure to delete');">
                                                         <i class="fa fa-remove"></i>

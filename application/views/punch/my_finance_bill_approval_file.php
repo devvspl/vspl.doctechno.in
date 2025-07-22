@@ -12,7 +12,7 @@
                <?php echo $this->session->flashdata('error'); ?>
             </div>
             <?php endif; ?>
-            <div class="box box-primary">
+            <div class="box">
                <div class="box-header with-border">
                   <h3 class="box-title">Punched Files</h3>
                </div>

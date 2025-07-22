@@ -2,18 +2,20 @@
    <section class="content">
       <div class="row">
          <div class="col-md-4">
-            <div class="box box-primary">
+            <div class="box">
                <div class="box-header with-border">
                   <h3 class="box-title">Upload - Supporting File</h3>
                </div>
-               <form id="form1" action="<?= base_url(); ?>Scan/temp_upload_support" id="scan_support" name="scan_support" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+               <form id="form1" action="<?= base_url('upload_supporting'); ?>" id="scan_support" name="scan_support"
+                  method="post" accept-charset="utf-8" enctype="multipart/form-data">
                   <div class="box-body">
                      <?php if ($this->session->flashdata('message')) { ?>
-                     <?php echo $this->session->flashdata('message') ?>
+                        <?php echo $this->session->flashdata('message') ?>
                      <?php } ?>
                      <div class="form-group">
                         <input type="hidden" name="scan_id" id="scan_id" value="<?= $scan_id; ?>">
-                        <input class="filestyle form-control" type='file' name='support_file' id="support_file" accept="image/*,application/pdf">
+                        <input class="filestyle form-control" type='file' name='support_file' id="support_file"
+                           accept="image/*,application/pdf">
                      </div>
                   </div>
                   <div class="box-footer">
@@ -23,7 +25,7 @@
             </div>
          </div>
          <div class="col-md-8">
-            <div class="box box-primary">
+            <div class="box">
                <div class="box-header with-border">
                   <h3 class="box-title"><?= $this->customlib->getDocumentName($scan_id); ?>
                   </h3>
@@ -40,37 +42,40 @@
                            </tr>
                         </thead>
                         <tbody>
-                           <?php                        
+                           <?php
                            if (!empty($main_file)): ?>
-                           <tr>
-                              <td>1</td>
-                              <td>
-                                 <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $main_file->file_path; ?>','popup','width=600,height=600');">
-                                 <?= $main_file->file_name; ?>
-                                 </a>
-                              </td>
-                              <td><?= ($main_file->is_main_file == 'Y') ? 'Main File' : 'Support File'; ?></td>
-                              <td></td>
-                           </tr>
+                              <tr>
+                                 <td>1</td>
+                                 <td>
+                                    <a href="javascript:void(0);" target="popup"
+                                       onclick="window.open('<?= $main_file->file_path; ?>','popup','width=600,height=600');">
+                                       <?= $main_file->file_name; ?>
+                                    </a>
+                                 </td>
+                                 <td><?= ($main_file->is_main_file == 'Y') ? 'Main File' : 'Support File'; ?></td>
+                                 <td></td>
+                              </tr>
                            <?php endif; ?>
                            <?php
-                              $i = 2;
-                              foreach ($supporting_files as $supporting_file):
+                           $i = 2;
+                           foreach ($supporting_files as $supporting_file):
                               ?>
-                           <tr>
-                              <td><?= $i++; ?></td>
-                              <td>
-                                 <a href="javascript:void(0);" target="popup" onclick="window.open('<?= $supporting_file->file_path; ?>','popup','width=600,height=600');">
-                                 <?= $supporting_file->file_name; ?>
-                                 </a>
-                              </td>
-                              <td><?= ($supporting_file->is_main_file == 'Y') ? 'Main File' : 'Support File'; ?></td>
-                              <td>
-                                 <a href="javascript:void(0);" class="btn btn-danger btn-xs" onclick="delete_file(<?= $supporting_file->support_id ?>)">
-                                 <i class="fa fa-trash"></i>
-                                 </a>
-                              </td>
-                           </tr>
+                              <tr>
+                                 <td><?= $i++; ?></td>
+                                 <td>
+                                    <a href="javascript:void(0);" target="popup"
+                                       onclick="window.open('<?= $supporting_file->file_path; ?>','popup','width=600,height=600');">
+                                       <?= $supporting_file->file_name; ?>
+                                    </a>
+                                 </td>
+                                 <td><?= ($supporting_file->is_main_file == 'Y') ? 'Main File' : 'Support File'; ?></td>
+                                 <td>
+                                    <a href="javascript:void(0);" data-support_id="<?= $supporting_file->support_id ?>"
+                                       class="btn btn-danger btn-xs delete_file">
+                                       <i class="fa fa-trash"></i>
+                                    </a>
+                                 </td>
+                              </tr>
                            <?php endforeach; ?>
                         </tbody>
                      </table>
@@ -85,63 +90,66 @@
    </section>
 </div>
 <script type="text/javascript">
-$(document).ready(function () {
-    $(document).on("click", "#delete_all", function () {
-        var scan_id = $("#scan_id").val();
-        var url = "<?= base_url() ?>Scan/delete_all";
-        if (confirm("Are you sure to delete all ?")) {
+   $(document).ready(function () {
+      
+      $(document).on("click", "#delete_all", function () {
+         var scan_id = $("#scan_id").val();
+         var url = "<?= base_url() ?>Scan/delete_all";
+         if (confirm("Are you sure to delete all ?")) {
             $.ajax({
-                url: url,
-                type: "POST",
-                data: {
-                    scan_id: scan_id,
-                },
-                dataType: "json",
-                success: function (data) {
-                    if (data.status == 200) {
-                        window.location.href = "<?= base_url() ?>Scan";
-                    }
-                },
+               url: url,
+               type: "POST",
+               data: {
+                  scan_id: scan_id,
+               },
+               dataType: "json",
+               success: function (data) {
+                  if (data.status == 200) {
+                     window.location.href = "<?= base_url() ?>Scan";
+                  }
+               },
             });
-        }
-    });
+         }
+      });
 
-    $(document).on("click", "#final_submit", function () {
-        var scan_id = $("#scan_id").val();
-        var url = "<?= base_url('temp-final-submit') ?>";
-        if (confirm("Are you sure to final submit ?")) {
+      $(document).on("click", "#final_submit", function () {
+         var scan_id = $("#scan_id").val();
+         var url = "<?= base_url('scan_final_submit') ?>";
+         if (confirm("Are you sure to final submit ?")) {
             $.ajax({
-                url: url,
-                type: "POST",
-                data: {
-                    scan_id: scan_id,
-                },
-                dataType: "json",
-                success: function (data) {
-                    if (data.status == 200) {
-                        window.location.href = "<?= base_url() ?>temp_scan";
-                    }
-                },
+               url: url,
+               type: "POST",
+               data: {
+                  scan_id: scan_id,
+               },
+               dataType: "json",
+               success: function (data) {
+                  if (data.status == 200) {
+                     window.location.href = "<?= base_url('scanner?status=submitted');?>";
+                  }
+               },
             });
-        }
-    });
-});
-function delete_file(id) {
-    var url = "<?= base_url() ?>Scan/delete_file";
-    if (confirm("Are you sure to delete ?")) {
-        $.ajax({
-            url: url,
-            type: "POST",
-            data: {
-                id: id,
-            },
-            dataType: "json",
-            success: function (data) {
-                if (data.status == 200) {
-                    window.location.href = "<?= base_url() ?>Scan/upload_supporting/<?= $scan_id; ?>";
-                }
-            },
-        });
-    }
-}
+         }
+      });
+
+      $(document).on("click", ".delete_file", function () {
+         var support_id = $(this).data('support_id')
+         var url = "<?= base_url('delete_supporting_file') ?>";
+         if (confirm("Are you sure to delete?")) {
+            $.ajax({
+               url: url,
+               type: "POST",
+               data: {
+                  id: support_id,
+               },
+               dataType: "json",
+               success: function (data) {
+                  if (data.status == 200) {
+                     window.location.href = "<?= base_url('upload_supporting_file/') . $scan_id ?>";
+                  }
+               },
+            });
+         }
+      });
+   });
 </script>

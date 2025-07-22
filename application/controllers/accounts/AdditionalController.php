@@ -43,8 +43,41 @@ class AdditionalController extends CI_Controller
     public function get_regions()
     {
         $query = $this->input->post('term');
-        $result = $this->AdditionalModel->get_autocomplete_list('core_region', 'region_name', 'api_id', $query);
-        echo json_encode($result);
+        $sales_zone = $this->input->post('sales_zone');
+        $production_zone = $this->input->post('production_zone');
+
+        $this->db->select('core_region.api_id, core_region.region_name');
+        $this->db->from('zone_region_mapping');
+        $this->db->join('core_region', 'core_region.api_id = zone_region_mapping.region_id', 'LEFT');
+
+        if (!empty($sales_zone) || !empty($production_zone)) {
+            $this->db->group_start();
+            if (!empty($sales_zone)) {
+                $this->db->or_where('zone_region_mapping.zone_id', $sales_zone);
+            }
+            if (!empty($production_zone)) {
+                $this->db->or_where('zone_region_mapping.zone_id', $production_zone);
+            }
+            $this->db->group_end();
+        }
+
+        if (!empty($query)) {
+            $this->db->like('core_region.region_name', $query);
+        }
+
+        $this->db->group_by('core_region.api_id');
+        $this->db->limit(5);
+
+        $q = $this->db->get();
+        $data = [];
+
+        foreach ($q->result() as $row) {
+            $data[] = [
+                'label' => $row->region_name,
+                'value' => $row->api_id,
+            ];
+        }
+        echo json_encode($data);
     }
     public function get_states()
     {
@@ -94,8 +127,8 @@ class AdditionalController extends CI_Controller
     }
     public function get_activities()
     {
-        $term = $this->input->post('term'); 
-        $department_id = $this->input->post('department'); 
+        $term = $this->input->post('term');
+        $department_id = $this->input->post('department');
 
         $this->db->select('core_activity.api_id AS value, core_activity.activity_name AS label');
         $this->db->from('core_activity');
@@ -110,7 +143,7 @@ class AdditionalController extends CI_Controller
             $this->db->like('core_activity.activity_name', $term, 'both');
         }
 
-        $this->db->limit(5); 
+        $this->db->limit(5);
 
         $query = $this->db->get();
         $result = [];
@@ -125,7 +158,7 @@ class AdditionalController extends CI_Controller
         }
 
         echo json_encode($result);
-    } 
+    }
     public function get_credit_accounts()
     {
         $query = $this->input->post('term');
@@ -152,12 +185,86 @@ class AdditionalController extends CI_Controller
         $result = $this->AdditionalModel->get_autocomplete_list('core_org_function', 'function_name', 'api_id', $query);
         echo json_encode($result);
     }
+    public function get_ledger()
+    {
+        $query = $this->input->post('term');
+        $result = $this->AdditionalModel->get_autocomplete_list('master_account_ledger', 'account_name', 'id', $query);
+        echo json_encode($result);
+    }
+    public function get_subledger()
+    {
+        $query = $this->input->post('term');
+        $result = $this->AdditionalModel->get_autocomplete_list('master_cost_center', 'name', 'id', $query);
+        last_query();
+        echo json_encode($result);
+    }
+
     public function get_zone()
     {
         $query = $this->input->post('term');
-        $result = $this->AdditionalModel->get_autocomplete_list('core_zone', 'zone_name', 'api_id', $query);
-        echo json_encode($result);
+        $business_unit = $this->input->post('business_unit');
+
+        $this->db->select('core_zone.api_id, core_zone.zone_name');
+        $this->db->from('core_bu_zone_mapping');
+        $this->db->join('core_zone', 'core_zone.api_id = core_bu_zone_mapping.zone_id', 'LEFT');
+
+        if (!empty($business_unit)) {
+            $this->db->where('core_bu_zone_mapping.business_unit_id', $business_unit);
+        }
+
+        if (!empty($query)) {
+            $this->db->like('core_zone.zone_name', $query);
+        }
+
+        $this->db->group_by('core_zone.api_id');
+        $this->db->limit(5);
+
+        $q = $this->db->get();
+        $data = [];
+
+        foreach ($q->result() as $row) {
+            $data[] = [
+                'label' => $row->zone_name,
+                'value' => $row->api_id,
+            ];
+        }
+
+        echo json_encode($data);
     }
+
+    public function get_territory()
+    {
+        $query = $this->input->post('term');
+        $sales_region = $this->input->post('sales_region');
+
+        $this->db->select('core_territory.api_id, core_territory.territory_name');
+        $this->db->from('core_region_territory_mapping');
+        $this->db->join('core_territory', 'core_territory.api_id = core_region_territory_mapping.region_id', 'LEFT');
+
+        if (!empty($sales_region)) {
+            $this->db->where('core_region_territory_mapping.region_id', $sales_region);
+        }
+
+        if (!empty($query)) {
+            $this->db->like('core_territory.territory_name', $query);
+        }
+
+        $this->db->group_by('core_territory.api_id');
+        $this->db->limit(5);
+
+        $q = $this->db->get();
+        $data = [];
+
+        foreach ($q->result() as $row) {
+            $data[] = [
+                'label' => $row->territory_name,
+                'value' => $row->api_id,
+            ];
+        }
+
+        echo json_encode($data);
+    }
+
     public function get_vertical()
     {
         $query = $this->input->post('term');
@@ -171,6 +278,7 @@ class AdditionalController extends CI_Controller
         if (!empty($query)) {
             $this->db->like('core_vertical.vertical_name', $query);
         }
+        $this->db->group_by('core_vertical.api_id');
         $this->db->limit(5);
         $q = $this->db->get();
         $data = [];
@@ -190,7 +298,7 @@ class AdditionalController extends CI_Controller
         if ($vertical_id) {
             $subquery = "(SELECT vfm.api_id FROM core_function_vertical_mapping AS vfm WHERE vfm.vertical_id = " . (int) $vertical_id . ")";
             $this->db->join('core_fun_vertical_dept_mapping AS vdm', 'd.api_id = vdm.department_id', 'INNER');
-            $this->db->where_in('vdm.function_vertical_id', $subquery, false); 
+            $this->db->where_in('vdm.function_vertical_id', $subquery, false);
         }
 
         if (!empty($query)) {
@@ -225,10 +333,10 @@ class AdditionalController extends CI_Controller
         if ($department_id) {
             $this->db->join('core_department_subdepartment_mapping AS sdm', 'sd.api_id = sdm.sub_department_id', 'INNER');
 
-            
+
             $subquery = "(SELECT vdm.api_id FROM core_fun_vertical_dept_mapping AS vdm WHERE vdm.department_id = " . (int) $department_id . ")";
 
-            $this->db->where_in('sdm.fun_vertical_dept_id', $subquery, false); 
+            $this->db->where_in('sdm.fun_vertical_dept_id', $subquery, false);
         }
 
         if (!empty($query)) {

@@ -6,39 +6,93 @@ class DocClassifierController extends CI_Controller
     function __construct()
     {
         parent::__construct();
-        $this->logged_in();
-        $this->check_role();
         $this->load->model("Extract_model");
-        $this->year_id = $this->session->userdata('year_id') ?? ($this->db->select('id')->from('financial_years')->where('is_current', 1)->get()->row()->id ?? null);
+        $this->year_id =
+            $this->session->userdata('year_id') ??
+            ($this->db
+                ->select('id')
+                ->from('financial_years')
+                ->where('is_current', 1)
+                ->get()
+                ->row()->id ??
+                null);
     }
-    private function logged_in()
+    public function classification()
     {
-        if (!$this->session->userdata('authenticated')) {
-            redirect('/');
+        if (!getRoutePermission("classification")) {
+            show_error('You do not have permission to access this page.', 403);
         }
+        $group_id = $this->input->get("group_id");
+        $location_id = $this->input->get("location_id");
+        $this->data["groups"] = $this->Extract_model->getGroups();
+        $this->data["locations"] = $this->Extract_model->getLocations();
+        $this->data["documents"] = $this->Extract_model->getClassificationList($group_id, $location_id);
+        $this->data["main"] = "extract/classification";
+        $this->load->view("layout/template", $this->data);
     }
-    private function check_role()
+    public function processed()
     {
-        $allowed_roles = [3];
-        $role_id = $this->session->userdata('role_id');
-        if (!in_array($role_id, $allowed_roles)) {
-            show_error('You are not authorized to access this page.', 403);
+        if (!getRoutePermission("processed")) {
+            show_error('You do not have permission to access this page.', 403);
         }
-    }
-    public function doc_verification()
-    {
         $group_id = $this->input->get('group_id');
         $location_id = $this->input->get('location_id');
         $doc_type_id = $this->input->get('doc_type_id');
         $department_id = $this->input->get('department_id');
         $sub_department_id = $this->input->get('sub_department_id');
-        $is_verified = $this->input->get('is_verified');
         $this->data["groups"] = $this->Extract_model->getGroups();
         $this->data["locations"] = $this->Extract_model->getLocations();
         $this->data["docTypes"] = $this->Extract_model->getDocTypes();
         $this->data["departments"] = $this->Extract_model->getDepartments();
         $this->data["subdepartments"] = $this->Extract_model->getSubdepartments($department_id);
-        $this->data["documents"] = $this->Extract_model->getProcessedList($group_id, $location_id, $doc_type_id, $department_id, $sub_department_id, $is_verified);
+        $this->data["documents"] = $this->Extract_model->getProcessedList($group_id, $location_id, $doc_type_id, $department_id, $sub_department_id);
+        $this->data["main"] = "extract/processed";
+        $this->load->view("layout/template", $this->data);
+    }
+
+    public function classifications_rejected()
+    {
+        if (!getRoutePermission("classifications_rejected")) {
+            show_error('You do not have permission to access this page.', 403);
+        }
+        $group_id = $this->input->get("group_id");
+        $location_id = $this->input->get("location_id");
+        $this->data["groups"] = $this->Extract_model->getGroups();
+        $this->data["locations"] = $this->Extract_model->getLocations();
+        $this->data["documents"] = $this->Extract_model->getclassificationsRejectedList($group_id, $location_id);
+        $this->data["main"] = "extract/classifications-rejected";
+        $this->load->view("layout/template", $this->data);
+    }
+
+
+    public function rejected_scans()
+    {
+        if (!getRoutePermission("rejected_scans")) {
+            show_error('You do not have permission to access this page.', 403);
+        }
+        $this->data["documents"] = $this->Extract_model->getScanRejectedScanAdminList();
+        $this->data["main"] = "extract/scans-rejected";
+        $this->load->view("layout/template", $this->data);
+    }
+
+
+    public function document_received()
+    {
+        if (!getRoutePermission("document_received")) {
+            show_error('You do not have permission to access this page.', 403);
+        }
+        $group_id = $this->input->get('group_id');
+        $location_id = $this->input->get('location_id');
+        $doc_type_id = $this->input->get('doc_type_id');
+        $department_id = $this->input->get('department_id');
+        $sub_department_id = $this->input->get('sub_department_id');
+        $status = $this->input->get('status');
+        $this->data["groups"] = $this->Extract_model->getGroups();
+        $this->data["locations"] = $this->Extract_model->getLocations();
+        $this->data["docTypes"] = $this->Extract_model->getDocTypes();
+        $this->data["departments"] = $this->Extract_model->getDepartments();
+        $this->data["subdepartments"] = $this->Extract_model->getSubdepartments($department_id);
+        $this->data["documents"] = $this->Extract_model->getProcessedList($group_id, $location_id, $doc_type_id, $department_id, $sub_department_id, $status);
         $this->data['main'] = 'doc_classifier/doc_verification';
         $this->load->view('layout/template', $this->data);
     }
@@ -73,7 +127,6 @@ class DocClassifierController extends CI_Controller
 
         $table = "y{$this->year_id}_scan_file";
 
-        // Total Classified Count
         $this->db->from($table);
         $this->db->where('document_name !=', '');
         $this->db->where('is_classified', 'Y');
@@ -82,7 +135,6 @@ class DocClassifierController extends CI_Controller
         $this->db->where('DATE(classified_date)', $selected_date);
         $classified = $this->db->count_all_results();
 
-        // Classification Rejected Count
         $this->db->from($table);
         $this->db->where('document_name !=', '');
         $this->db->where('is_classified', 'Y');
@@ -92,7 +144,6 @@ class DocClassifierController extends CI_Controller
         $this->db->where('DATE(classified_date)', $selected_date);
         $classified_rejected = $this->db->count_all_results();
 
-        // Total Scans Rejected by Me Count
         $this->db->from($table);
         $this->db->where('document_name !=', '');
         $this->db->where('temp_scan_rejected_by', $user_id);
@@ -101,7 +152,6 @@ class DocClassifierController extends CI_Controller
         $this->db->where('DATE(temp_scan_reject_date)', $selected_date);
         $rejected = $this->db->count_all_results();
 
-        // Document Received Count
         $this->db->from($table);
         $this->db->where('document_name !=', '');
         $this->db->where('is_classified', 'Y');
@@ -115,7 +165,7 @@ class DocClassifierController extends CI_Controller
             'classified_by_me' => $classified,
             'classified_rejected' => $classified_rejected,
             'scan_rejected_by_me' => $rejected,
-            'document_verified_count' => $document_verified_count
+            'document_verified_count' => $document_verified_count,
         ];
 
         echo json_encode($response);

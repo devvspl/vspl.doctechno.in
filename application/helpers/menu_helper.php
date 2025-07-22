@@ -1,4 +1,5 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
 
 if (!function_exists('get_menu')) {
     function get_menu($user_id, $role_id)
@@ -9,6 +10,7 @@ if (!function_exists('get_menu')) {
             $CI->db->select('*');
             $CI->db->from('tbl_menus');
             $CI->db->where('is_active', 1);
+            $CI->db->where('id', 1);
             $CI->db->order_by('parent_id ASC, `order` ASC');
             $query = $CI->db->get();
             $menus = $query->result_array();
@@ -35,8 +37,8 @@ if (!function_exists('get_menu')) {
             $menus = [];
             foreach ($menus_all as $menu) {
                 // Handle null or empty permission_ids
-                $menu_permissions = !empty($menu['permission_ids']) && is_string($menu['permission_ids']) 
-                    ? json_decode($menu['permission_ids'], true) 
+                $menu_permissions = !empty($menu['permission_ids']) && is_string($menu['permission_ids'])
+                    ? json_decode($menu['permission_ids'], true)
                     : [];
                 if (!is_array($menu_permissions)) {
                     $menu_permissions = []; // Fallback to empty array if decoding fails

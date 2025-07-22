@@ -6,7 +6,7 @@ $scan_id = $this->uri->segment(3);
     <section class="content">
         <div class="row">
             <div class="col-md-5">
-                <div class="box box-primary">
+                <div class="box">
                     <div class="box-header with-border">
                         <h3 class="box-title">Upload - Supporting File</h3>
                     </div>
@@ -27,7 +27,7 @@ $scan_id = $this->uri->segment(3);
                 </div>
             </div>
             <div class="col-md-7">
-                <div class="box box-primary">
+                <div class="box">
                     <div class="box-header with-border">
                         <h3 class="box-title"><?= $this->customlib->getDocumentName($scan_id); ?>
                         </h3>

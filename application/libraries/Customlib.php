@@ -7,7 +7,7 @@ if (!defined('BASEPATH')) {
 class Customlib
 {
     public $CI;
-    protected  $year_id; 
+    protected $year_id;
 
     public function __construct()
     {
@@ -15,7 +15,7 @@ class Customlib
         $this->CI->jwt = new JWT();
         $this->CI->load->library('session');
         $this->CI->load->library('form_validation');
-         $this->year_id = $this->CI->session->userdata('year_id');
+        $this->year_id = $this->CI->session->userdata('year_id');
     }
 
     function is_valid($jwt)
@@ -240,7 +240,7 @@ class Customlib
         return $result[0]['department_name'];
     }
 
-    public function update_file_path($scan_id)
+    public function update_file_path($scan_id, $approvers = [])
     {
         $Get_Scan_Detail = $this->getScanData($scan_id);
         $DocType = $Get_Scan_Detail->doc_type;
@@ -258,7 +258,16 @@ class Customlib
         $file_location1 = $upload_dir . '/' . $File;
         $this->CI->db
             ->where('scan_id', $scan_id)
-            ->update("y{$this->year_id}_scan_file", ['file_path' => $file_location, 'secondary_file_path' => $file_location1, 'is_file_punched' => 'Y', 'punched_by' => $this->CI->session->userdata('user_id'), 'punched_date' => date('Y-m-d H:i:s')]);
+            ->update("y{$this->year_id}_scan_file", [
+                'file_path' => $file_location,
+                'secondary_file_path' => $file_location1,
+                'is_file_punched' => 'Y',
+                'punched_by' => $this->CI->session->userdata('user_id'),
+                'punched_date' => date('Y-m-d H:i:s'),
+                'l1_approved_by' => isset($approvers['l1_approver']) ? $approvers['l1_approver'] : null,
+                'l2_approved_by' => isset($approvers['l2_approver']) ? $approvers['l2_approver'] : null,
+                'l3_approved_by' => isset($approvers['l3_approver']) ? $approvers['l3_approver'] : null
+            ]);
         if ($this->haveSupportFile($scan_id) == true) {
             $support_file = $this->getSupportFile($scan_id);
             foreach ($support_file as $key => $value) {
@@ -293,7 +302,7 @@ class Customlib
     {
         $chk = $this->CI->db
             ->select('*')
-            ->from('y'.$this->year_id.'_punchdata')
+            ->from('y' . $this->year_id . '_punchdata')
             ->where('scan_id', $scan_id)
             ->get()
             ->num_rows();
@@ -338,23 +347,23 @@ class Customlib
         return $result;
     }
 
-   function dateDiff($date1, $date2)
-{
-    if (empty($date1) || empty($date2)) {
-        return null; // or return 0, or handle the error as appropriate
+    function dateDiff($date1, $date2)
+    {
+        if (empty($date1) || empty($date2)) {
+            return null; // or return 0, or handle the error as appropriate
+        }
+
+        $date1 = strtotime($date1);
+        $date2 = strtotime($date2);
+
+        if ($date1 === false || $date2 === false) {
+            return null; // handle invalid date strings
+        }
+
+        $datediff = $date1 - $date2;
+
+        return round($datediff / (60 * 60 * 24));
     }
-
-    $date1 = strtotime($date1);
-    $date2 = strtotime($date2);
-
-    if ($date1 === false || $date2 === false) {
-        return null; // handle invalid date strings
-    }
-
-    $datediff = $date1 - $date2;
-
-    return round($datediff / (60 * 60 * 24));
-}
 
 
     function getMonthName($month)
@@ -419,7 +428,7 @@ class Customlib
         $secondaryDb = $this->CI->load->database('secondary', true);
 
         $secondaryDb->insert('y{ $this->year_id}_scan_file', $data);
-        
+
         if (!$secondaryDb) {
             log_message('error', 'Failed to load secondary database.');
             die("Failed to load secondary database.");
@@ -479,7 +488,7 @@ class Customlib
                     log_message('debug', 'Punchfile inserted successfully into secondary DB.');
                 } else {
                     log_message('error', 'Failed to insert punchfile into secondary DB.');
-                    print_r($secondaryDb->error()); 
+                    print_r($secondaryDb->error());
                 }
 
                 $secondaryDb->trans_complete();

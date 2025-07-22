@@ -2,7 +2,7 @@
    <section class="content">
       <div class="row">
          <div class="col-md-12">
-            <div class="box box-solid1 box-primary">
+            <div class="box">
                <div class="box-header with-border">
                   <h3 class="box-title"><i class="fa fa-lock"></i> Department Activity Mapping</h3>
                </div>
@@ -14,8 +14,8 @@
                      <table id="mappingTable" class="table table-bordered table-striped">
                         <thead>
                            <tr>
-                              <th style="text-align:left">S No.</th>
-                              <th style="text-align:left;width:200px">Activity</th>
+                              <th style="text-align:center">S No.</th>
+                              <th style="text-align:left">Activity</th>
                               <?php foreach ($departments as $dept): ?>
                                  <th style="text-align:center; cursor:pointer"
                                     title="<?= htmlspecialchars($dept['department_name']) ?>">
@@ -28,7 +28,7 @@
                            <?php $sno = 1; ?>
                            <?php foreach ($activities as $act): ?>
                               <tr>
-                                 <td><?= $sno++; ?></td>
+                                 <td style="text-align:center"><?= $sno++; ?></td>
                                  <td><?= $act['activity_name']; ?></td>
                                  <?php foreach ($departments as $dept): ?>
                                     <?php

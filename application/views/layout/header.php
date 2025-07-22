@@ -9,14 +9,12 @@
             sessionStorage.setItem("sidebar-toggle-collapsed", "1");
          }
       }
-
       function checksidebar() {
          if (Boolean(sessionStorage.getItem("sidebar-toggle-collapsed"))) {
             var body = document.getElementsByTagName("body")[0];
             body.className = body.className + " sidebar-collapse";
          }
       }
-
       checksidebar();
    </script>
    <div class="wrapper">
@@ -32,28 +30,23 @@
          <nav class="navbar navbar-static-top">
             <style>
                .dropdown-menu {
-                     width: 200px;
+                  width: 200px;
                }
 
                .dropdown-menu .dropdown-menu {
                   position: absolute;
                   top: 0;
                   left: 100%;
-                  
                   margin-top: -1px;
-                  
                   display: none;
-                  
                }
 
                .navbar-nav>.dropdown:hover>.dropdown-menu {
                   display: block;
-                  
                }
 
                .dropdown-submenu:hover>.dropdown-menu {
                   display: block;
-                  
                }
 
                .nav .open>a,
@@ -67,14 +60,11 @@
                   display: inline-block;
                   vertical-align: middle;
                   margin-left: 20px;
-                  
                }
 
                .headertopmenu {
                   display: flex;
                   align-items: center;
-                  
-                  
                }
 
                .dropdown-user {
@@ -100,7 +90,6 @@
                </ul>
                <div class="navbar-custom-menu">
                   <ul class="nav navbar-nav headertopmenu">
-                     <!-- User Menu Dropdown -->
                      <li class="dropdown user-menu">
                         <a class="dropdown-toggle" style="padding: 15px 13px;" data-toggle="dropdown" href="#"
                            aria-expanded="false">
@@ -112,14 +101,15 @@
                               <div class="sstopuser">
                                  <div class="sstopuser-test">
                                     <h4 class="text-capitalize"><?= $_SESSION['name']; ?></h4>
-                                    <h5>User Role</h5>
+                                    <h5>User Role: <?= getPermissionNames(); ?></h5>
                                  </div>
                                  <div class="divider"></div>
-                                 <div class="sspass" style="display: flex; gap: 10px; flex-direction: row;justify-content: space-between;">
+                                 <div class="sspass"
+                                    style="display: flex; gap: 10px; flex-direction: row;justify-content: space-between;">
                                     <a href="#" data-toggle="tooltip" title="My Profile">
                                        <i class="fa fa-user"></i> Profile
                                     </a>
-                                    <a href="<?= base_url(); ?>changepass" data-toggle="tooltip"
+                                    <a href="<?= base_url('change_password'); ?>" data-toggle="tooltip"
                                        title="Change Password">
                                        <i class="fa fa-key"></i> Password
                                     </a>
@@ -131,8 +121,6 @@
                            </li>
                         </ul>
                      </li>
-
-                     <!-- Back Button -->
                      <li>
                         <a href="javascript:history.back()"
                            style="display: flex; gap: 8px; background-color: #ffffff; align-items: center; color: #1b98ae;"
@@ -142,25 +130,23 @@
                      </li>
                   </ul>
                </div>
-
             </div>
          </nav>
-
          <script>
             $(document).ready(function () {
-               // Enable dropdown for nested levels in Bootstrap 3
+
                $('.dropdown-submenu a.dropdown-toggle').on('click', function (e) {
                   var $this = $(this);
                   if ($this.next().hasClass('dropdown-menu')) {
                      e.preventDefault();
                      e.stopPropagation();
                      $this.parent().toggleClass('open');
-                     // Close other open submenus at the same level
+
                      $this.parent().siblings().removeClass('open');
                   }
                });
 
-               // Ensure top-level dropdown opens on hover
+
                $('.navbar-nav > .dropdown').hover(
                   function () {
                      $(this).addClass('open');
@@ -171,8 +157,6 @@
                );
             });
          </script>
-
-
       </header>
       <script src="<?= base_url(); ?>assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
    </div>

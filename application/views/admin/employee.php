@@ -2,13 +2,13 @@
 	<section class="content">
 		<div class="row">
 			<div class="col-md-12">
-				<div class="box box-primary" id="exphead">
+				<div class="box" id="exphead">
 					<div class="box-header with-border">
-						<h3 class="box-title titlefix">Employee List (with Company & Status Details)</h3>
+						<h3 class="box-title titlefix">Employee List (With Company & Status Details)</h3>
 						<div class="box-tools pull-right">
 							<div class="btn-group pull-right">
-								<button type="button" class="btn btn-primary btn-sm"
-									id="sync"><i class="fa fa-refresh"></i> Sync Employee
+								<button type="button" class="btn btn-primary btn-sm" id="sync"><i
+										class="fa fa-refresh"></i> Sync Employee
 								</button>
 							</div>
 						</div>
@@ -23,6 +23,7 @@
 										<th style="text-align: left;">Employee</th>
 										<th style="text-align: center;">Emp Code</th>
 										<th style="text-align: center;">Company Code</th>
+										<th style="text-align: center;">Nova Access</th>
 										<th style="text-align: center;">Status</th>
 									</tr>
 								</thead>
@@ -45,7 +46,14 @@
 													<?php echo $row['emp_code']; ?>
 												</td>
 												<td class="mailbox-name" style="text-align: center;">
-													<?php echo $row['company_code']; ?>
+													<?php echo $row['company_id']; ?>
+												</td>
+												<td class="mailbox-name" style="text-align: center;">
+													<?php if ($row['is_nova_access'] == '1'): ?>
+														Yes
+													<?php else: ?>
+														No
+													<?php endif; ?>
 												</td>
 												<td class="mailbox-name" style="text-align: center;">
 													<?php if ($row['status'] == 'A'): ?>
@@ -104,7 +112,6 @@
 		</div>
 	</div>
 </div>
-<input type="hidden" id="base_url" value="<?= base_url(); ?>">
 <script>
 	$(document).ready(function () {
 		$("#employeeTable").DataTable({
@@ -116,26 +123,42 @@
 			}],
 			"language": {
 				"emptyTable": "No data available in table"
-			}
+			},
+			dom: 'Bfrtip',
+			buttons: [
+				{
+					extend: 'csv',
+					text: '<i class="fa fa-file-text-o"></i> Export',
+					title: 'Employee_List_' + new Date().toISOString().slice(0, 10),
+					className: 'btn btn-primary btn-sm'
+				}
+			]
+
 		});
 		$(document).on("click", "#sync", function () {
-			if (confirm("Are you sure to sync!")) {
-				var baseUrl = $("#base_url").val();
+			if (confirm("Are you sure to sync?")) {
 				$.ajax({
 					type: "GET",
-					url: baseUrl + "master/EmployeeController/sync_employee",
+					url: "<?= base_url('sync_employee'); ?>",
 					dataType: "json",
 					beforeSend: function () {
-						$("#sync").html('<i class="fa fa-spinner fa-spin"></i> Syncing');
+						$("#sync").prop("disabled", true).html('<i class="fa fa-spinner fa-spin"></i> Syncing...');
 					},
 					success: function (response) {
 						if (response.status == 200) {
-							alert("Employee Sync Successfully");
+							alert("Employee synced successfully.");
 							location.reload();
 						} else {
-							alert("something went wrong...!!");
+							alert(response.message || "Something went wrong while syncing.");
 						}
 					},
+					error: function (xhr, status, error) {
+						console.error("AJAX error:", error);
+						alert("Server error! Could not complete sync.");
+					},
+					complete: function () {
+						$("#sync").prop("disabled", false).html('<i class="fa fa-refresh"></i> Sync Employee');
+					}
 				});
 			}
 		});

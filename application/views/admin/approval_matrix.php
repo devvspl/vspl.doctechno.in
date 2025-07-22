@@ -2,11 +2,11 @@
     <section class="content">
         <div class="row">
             <div class="col-md-12">
-                <div class="box box-solid1 box-primary">
+                <div class="box">
                     <div class="box-header with-border">
                         <h3 class="box-title"><i class="fa fa-dashboard"></i> Approval Rules Overview</h3>
                         <div class="box-tools">
-                            <a href="<?php echo site_url('approval-matrix/add'); ?>"
+                            <a href="<?php echo site_url('add_approval_matrix'); ?>"
                                 class="btn btn-primary btn-sm pull-right">Create New Rule</a>
                         </div>
                     </div>
@@ -65,67 +65,79 @@
                                         <div class="col-md-2" style="margin-bottom: 5px;">
 
                                             <select style="width: 100%;" class="form-control select2 mb-10"
-                                                id="billType" name="bill_type">
-                                                <option value="">Select bill type</option>
-                                            </select>
-                                            <span class="error" id="billTypeError"></span>
-                                        </div>
-                                        <div class="col-md-2" style="margin-bottom: 5px;">
-
-                                            <select style="width: 100%;" class="form-control select2 mb-10"
                                                 id="location" name="location">
                                                 <option value="">Select location</option>
                                             </select>
                                             <span class="error" id="locationError"></span>
                                         </div>
                                         <div class="col-md-8">
-                                            <button type="submit" class="btn btn-sm btn-primary">Apply Filter</button>
+                                            <button type="submit" class="btn btn-sm btn-secondary">Apply Filter</button>
                                             <button type="reset" class="btn btn-sm btn-default">Reset</button>
                                         </div>
 
                                     </div>
                                 </form>
-                                <table class="table table-bordered table-striped">
+                                <hr>
+                                <table id="approvalMatrixTable" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Rule ID</th>
-                                            <th>Function</th>
-                                            <th>Department</th>
-                                            <th>Ledger</th>
-                                            <th>Amount Range</th>
-                                            <th>Bill Type</th>
-                                            <th>Approver Levels</th>
-                                            <th>Status</th>
-                                            <th>Actions</th>
+                                            <th style="text-align: center;">S No.</th>
+                                            <th style="text-align: center;">Role Id</th>
+                                            <th style="text-align: center;">Function</th>
+                                            <th style="text-align: center;">Department</th>
+                                            <th style="text-align: center;">Ledger</th>
+                                            <th style="text-align: center;">Amount Range</th>
+                                            <th style="text-align: center;">Bill Type</th>
+                                            <th style="text-align: center;">Status</th>
+                                            <th style="text-align: center;">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php
                                         if (!empty($approval_matrices)) {
+                                            $s_no = 1;
                                             foreach ($approval_matrices as $matrix): ?>
                                                 <tr class="matrix-row">
-                                                    <td><?= htmlspecialchars($matrix['rule_id'] ?? '') ?></td>
-                                                    <td><?= htmlspecialchars($matrix['function_name'] ?? '') ?></td>
-                                                    <td><?= htmlspecialchars($matrix['department_name'] ?? '') ?></td>
-                                                    <td><?= htmlspecialchars($matrix['ledger'] ?? '') ?></td>
-                                                    <td><?= htmlspecialchars($matrix['amount_range'] ?? '') ?></td>
-                                                    <td><?= htmlspecialchars($matrix['bill_type'] ?? '') ?></td>
-                                                    <td><?= htmlspecialchars($matrix['approver_levels'] ?? '') ?></td>
-                                                    <td>
-                                                        <span
-                                                            class="label label-<?= ($matrix['status'] ?? '') === '1' ? 'success' : 'danger' ?>">
-                                                            <?= htmlspecialchars($matrix['status'] ?? '') ?>
+                                                    <td style="text-align: center;">
+                                                        <?= htmlspecialchars($s_no++) ?>
+                                                    </td>
+                                                    <td style="text-align: center;">
+                                                        <?= htmlspecialchars($matrix['rule_id'] ?? '') ?>
+                                                    </td>
+                                                    <td style="text-align: center;">
+                                                        <?= htmlspecialchars($matrix['function_name'] ?? '') ?>
+                                                    </td>
+                                                    <td style="text-align: center;">
+                                                        <?= htmlspecialchars($matrix['department_name'] ?? '') ?>
+                                                    </td>
+                                                    <td style="text-align: center;">
+                                                        <?= htmlspecialchars($matrix['ledger'] ?? '') ?>
+                                                    </td>
+                                                    <td style="text-align: center;">
+                                                        <?= htmlspecialchars($matrix['amount_range'] ?? '') ?>
+                                                    </td>
+                                                    <td style="text-align: center;">
+                                                        <?= htmlspecialchars($matrix['bill_type'] ?? '') ?>
+                                                    </td>
+                                                    <td style="text-align: center;">
+                                                        <?php
+                                                        $status_value = $matrix['status'] ?? '';
+                                                        $label_class = ($status_value === '1') ? 'success' : 'danger';
+                                                        $label_text = ($status_value === '1') ? 'Active' : 'Inactive';
+                                                        ?>
+                                                        <span class="label label-<?= $label_class ?>">
+                                                            <?= $label_text ?>
                                                         </span>
                                                     </td>
-                                                    <td class="text-center">
+                                                    <td style="text-align: center;" class="text-center">
                                                         <a style="padding: 4px 8px"
-                                                            href="<?= base_url('AdminController/editApprovalMatrix/' . ($matrix['rule_id'] ?? '')) ?>"
+                                                            href="<?= base_url('edit_approval_matrix/' . ($matrix['rule_id'] ?? '')) ?>"
                                                             class="btn btn-sm btn-primary">
                                                             <i class="fa fa-pencil"></i>
                                                         </a>
                                                     </td>
                                                 </tr>
-                                            <?php
+                                                <?php
                                             endforeach;
                                         } else { ?>
                                             <tr>
@@ -144,6 +156,24 @@
 </div>
 <script>
     $(document).ready(function () {
+        $("#approvalMatrixTable").DataTable({
+            paging: true,
+            searching: true,
+            ordering: true,
+            dom: 'Bfrtip',
+            pageLength: 10,
+            buttons: [
+                {
+                    extend: 'csv',
+                    text: '<i class="fa fa-file-text-o"></i> Export',
+                    title: 'Approval_Matrix_' + new Date().toISOString().slice(0, 10),
+                    className: 'btn btn-primary btn-sm',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    }
+                }
+            ]
+        });
         $('.select2').select2();
         // Populate Function dropdown
         $.ajax({

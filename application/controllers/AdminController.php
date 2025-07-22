@@ -1,73 +1,38 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-
 class AdminController extends CI_Controller
 {
     function __construct()
     {
         parent::__construct();
         $this->load->model('ApprovalMatrixModel');
-        $this->load->library('form_validation');
-        $this->logged_in();
-        $this->check_role();
+        $this->load->model('AdminModel');
     }
-
-    private function logged_in()
+    public function approval_matrix()
     {
-        if (!$this->session->userdata('authenticated')) {
-            redirect('/');
+        if (!getRoutePermission("approval_matrix")) {
+            show_error('You do not have permission to access this page.', 403);
         }
-    }
-
-    private function check_role()
-    {
-        $allowed_roles = [1];
-        $role_id = $this->session->userdata('role_id');
-        if (!in_array($role_id, $allowed_roles)) {
-            show_error('You are not authorized to access this page.', 403);
-        }
-    }
-
-    public function approvalMatrix()
-    {
-        // Extract filter parameters from GET
-        $filters = [
-            'function' => $this->input->get('function', TRUE),
-            'vertical' => $this->input->get('vertical', TRUE),
-            'department' => $this->input->get('department', TRUE),
-            'region' => $this->input->get('region', TRUE),
-            'zone' => $this->input->get('zone', TRUE),
-            'business_unit' => $this->input->get('business_unit', TRUE),
-            'bill_type' => $this->input->get('bill_type', TRUE),
-            'location' => $this->input->get('location', TRUE)
-        ];
-
-        $this->data['main'] = 'admin/approval-matrix';
+        $filters = ['function' => $this->input->get('function', true), 'vertical' => $this->input->get('vertical', true), 'department' => $this->input->get('department', true), 'region' => $this->input->get('region', true), 'zone' => $this->input->get('zone', true), 'business_unit' => $this->input->get('business_unit', true), 'bill_type' => $this->input->get('bill_type', true), 'location' => $this->input->get('location', true),];
+        $this->data['main'] = 'admin/approval_matrix';
         $this->data['approval_matrices'] = $this->ApprovalMatrixModel->getAllApprovalMatrices($filters);
-        $this->data['filters'] = $filters; // Pass filters to view for pre-selection
+        $this->data['filters'] = $filters;
         $this->load->view('layout/template', $this->data);
     }
-
-    public function addApprovalMatrix()
+    public function add_approval_matrix()
     {
-        $this->data['main'] = 'admin/add-approval-matrix';
+        $this->data['main'] = 'admin/add_approval_matrix';
         $this->load->view('layout/template', $this->data);
     }
-
-    public function editApprovalMatrix($id)
+    public function edit_approval_matrix($id)
     {
-        $this->data['main'] = 'admin/add-approval-matrix';
+        $this->data['main'] = 'admin/add_approval_matrix';
         $this->data['matrix'] = $this->ApprovalMatrixModel->getApprovalMatrixById($id);
-        // echo "<pre>";
-        // print_r($this->data['matrix']);
-        // echo "</pre>";
-        // exit;
         if (!$this->data['matrix']) {
             show_error('Approval matrix not found.', 404);
         }
         $this->load->view('layout/template', $this->data);
     }
-
     public function getUniqueLedgers()
     {
         $this->db->select('ledger');
@@ -76,7 +41,6 @@ class AdminController extends CI_Controller
         $query = $this->db->get();
         echo json_encode($query->result());
     }
-
     public function getFunction()
     {
         $query = $this->input->post('query');
@@ -88,7 +52,6 @@ class AdminController extends CI_Controller
         $q = $this->db->get();
         echo json_encode($q->result());
     }
-
     public function getVertical()
     {
         $function_id = $this->input->post('function');
@@ -105,7 +68,6 @@ class AdminController extends CI_Controller
             echo json_encode([]);
         }
     }
-
     public function getDepartment()
     {
         $vertical_id = $this->input->post('vertical');
@@ -125,7 +87,6 @@ class AdminController extends CI_Controller
             echo json_encode([]);
         }
     }
-
     public function getSubDepartment()
     {
         $department_id = $this->input->post('department');
@@ -144,7 +105,6 @@ class AdminController extends CI_Controller
             echo json_encode([]);
         }
     }
-
     public function getCrop()
     {
         $vertical = $this->input->post('vertical');
@@ -160,7 +120,6 @@ class AdminController extends CI_Controller
             echo json_encode([]);
         }
     }
-
     public function getActivity()
     {
         $department_id = $this->input->post('department');
@@ -178,7 +137,6 @@ class AdminController extends CI_Controller
             echo json_encode([]);
         }
     }
-
     public function getLocation()
     {
         $this->db->select('location_id, location_name');
@@ -188,7 +146,6 @@ class AdminController extends CI_Controller
         $q = $this->db->get();
         echo json_encode($q->result());
     }
-
     public function getRegion()
     {
         $vertical = $this->input->post('vertical');
@@ -202,7 +159,6 @@ class AdminController extends CI_Controller
             echo json_encode([]);
         }
     }
-
     public function getZone()
     {
         $region_id = $this->input->post('region');
@@ -219,7 +175,6 @@ class AdminController extends CI_Controller
             echo json_encode([]);
         }
     }
-
     public function getBusinessUnit()
     {
         $vertical = $this->input->post('vertical');
@@ -233,17 +188,15 @@ class AdminController extends CI_Controller
             echo json_encode([]);
         }
     }
-
     public function getLedger()
     {
-        $this->db->select('account_name');
+        $this->db->select('account_name, id');
         $this->db->from('master_account_ledger');
         $this->db->where('status', 'Y');
         $this->db->where('is_deleted', 'N');
         $q = $this->db->get();
         echo json_encode($q->result());
     }
-
     public function getSubledger()
     {
         $this->db->select('id, name');
@@ -252,7 +205,6 @@ class AdminController extends CI_Controller
         $q = $this->db->get();
         echo json_encode($q->result());
     }
-
     public function getBillType()
     {
         $this->db->select('type_id, file_type');
@@ -262,54 +214,48 @@ class AdminController extends CI_Controller
         $q = $this->db->get();
         echo json_encode($q->result());
     }
-
     public function getApprovers()
     {
-        $this->db->select('user_id, CONCAT(first_name, " ", last_name) AS full_name');
-        $this->db->from('users');
-        $this->db->where('role_id', 4);
-        $q = $this->db->get();
-        echo json_encode($q->result());
+        $department = $this->input->post('department');
+        $billType = $this->input->post('billType');
+        $location = $this->input->post('location');
+        $locations = !empty($location) ? array_filter(explode(',', $location), 'strlen') : [];
+        $this->db->select('u.user_id, CONCAT(u.first_name, " ", u.last_name) AS full_name');
+        $this->db->from('tbl_user_permissions p');
+        $this->db->join('users u', 'u.user_id = p.user_id', 'inner');
+        $this->db->where('u.role_id', '4');
+        $this->db->where('p.permission_type !=', 'Permission');
+        $has_conditions = !empty($department) || !empty($billType) || !empty($locations);
+        if ($has_conditions) {
+            $this->db->group_start();
+            if (!empty($department)) {
+                $this->db->where('p.permission_type', 'Department');
+                $this->db->where('p.permission_value', $department);
+            }
+            if (!empty($billType)) {
+                $this->db->or_where('p.permission_type', 'Document');
+                $this->db->where('p.permission_value', $billType);
+            }
+            if (!empty($locations)) {
+                $this->db->or_where('p.permission_type', 'Location');
+                $this->db->where_in('p.permission_value', $locations);
+            }
+            $this->db->group_end();
+        }
+        $this->db->group_by('u.user_id');
+        $query = $this->db->get();
+        echo json_encode($query->result());
     }
-
-    public function saveApprovalMatrix()
+    public function save_approval_matrix()
     {
         $this->form_validation->set_rules('min_amount', 'Minimum Amount', 'numeric|greater_than_equal_to[0]');
         $this->form_validation->set_rules('max_amount', 'Maximum Amount', 'numeric|greater_than_equal_to[0]|callback_check_amount_range');
-        $this->form_validation->set_rules('valid_from', 'Valid From', 'required');
-        $this->form_validation->set_rules('valid_to', 'Valid To', 'callback_check_date_range');
-        if ($this->form_validation->run() == FALSE) {
-            $response = [
-                'status' => 'error',
-                'errors' => $this->form_validation->error_array()
-            ];
+        if ($this->form_validation->run() == false) {
+            $response = ['status' => 'error', 'errors' => $this->form_validation->error_array()];
             echo json_encode($response);
             return;
         }
-        // Prepare data
-        $data = [
-            'function' => $this->input->post('function'),
-            'vertical' => $this->input->post('vertical'),
-            'department' => $this->input->post('department'),
-            'sub_department' => implode(',', $this->input->post('sub_department') ?? []),
-            'ledger' => $this->input->post('ledger'),
-            'subledger' => $this->input->post('subledger'),
-            'crop' => implode(',', $this->input->post('crop') ?? []),
-            'activity' => implode(',', $this->input->post('activity') ?? []),
-            'location' => implode(',', $this->input->post('location') ?? []),
-            'zone' => $this->input->post('zone'),
-            'region' => $this->input->post('region'),
-            'business_unit' => $this->input->post('business_unit'),
-            'amount_min' => $this->input->post('min_amount'),
-            'amount_max' => $this->input->post('max_amount'),
-            'bill_type' => $this->input->post('bill_type'),
-            'l1_approver' => $this->input->post('l1_approver'),
-            'l2_approver' => $this->input->post('l2_approver'),
-            'l3_approver' => $this->input->post('l3_approver'),
-            'valid_from' => $this->input->post('valid_from'),
-            'valid_to' => $this->input->post('valid_to'),
-            'updated_by' => $this->session->userdata('user_id')
-        ];
+        $data = ['function' => $this->input->post('function'), 'validity_option' => $this->input->post('validity_option'), 'vertical' => $this->input->post('vertical'), 'department' => $this->input->post('department'), 'sub_department' => implode(',', $this->input->post('sub_department') ?? []), 'ledger' => $this->input->post('ledger'), 'subledger' => $this->input->post('subledger'), 'crop' => implode(',', $this->input->post('crop') ?? []), 'activity' => implode(',', $this->input->post('activity') ?? []), 'location' => implode(',', $this->input->post('location') ?? []), 'zone' => $this->input->post('zone'), 'sales_region' => $this->input->post('region'), 'business_unit' => $this->input->post('business_unit'), 'amount_min' => $this->input->post('min_amount'), 'amount_max' => $this->input->post('max_amount'), 'bill_type' => $this->input->post('bill_type'), 'l1_approver' => $this->input->post('l1_approver'), 'l2_approver' => $this->input->post('l2_approver'), 'l3_approver' => $this->input->post('l3_approver'), 'valid_from' => $this->input->post('valid_from'), 'valid_to' => $this->input->post('valid_to'), 'updated_by' => $this->session->userdata('user_id'),];
         if (!$this->input->post('id')) {
             $data['created_by'] = $this->session->userdata('user_id');
         }
@@ -321,31 +267,277 @@ class AdminController extends CI_Controller
             $result = $this->ApprovalMatrixModel->insertApprovalMatrix($data);
             $message = 'Approval matrix created successfully.';
         }
-
         if ($result) {
             echo json_encode(['status' => 'success', 'message' => $message]);
         } else {
             echo json_encode(['status' => 'error', 'message' => 'Failed to save approval matrix.']);
         }
     }
-
     public function check_amount_range($max_amount)
     {
         $min_amount = $this->input->post('min_amount');
         if ($max_amount < $min_amount) {
             $this->form_validation->set_message('check_amount_range', 'Maximum Amount must be greater than or equal to Minimum Amount.');
-            return FALSE;
+            return false;
         }
-        return TRUE;
+        return true;
     }
-
     public function check_date_range($valid_to)
     {
         $valid_from = $this->input->post('valid_from');
         if (strtotime($valid_to) < strtotime($valid_from)) {
             $this->form_validation->set_message('check_date_range', 'Valid To date must be greater than or equal to Valid From date.');
-            return FALSE;
+            return false;
         }
-        return TRUE;
+        return true;
+    }
+    public function employee()
+    {
+        if (!getRoutePermission("employee")) {
+            show_error('You do not have permission to access this page.', 403);
+        }
+        $this->data['employeelist'] = $this->BaseModel->getData('master_employee', ['is_deleted' => 'N'])->result_array();
+        $this->data['main'] = 'admin/employee';
+        $this->load->view('layout/template', $this->data);
+    }
+    public function sync_employee()
+    {
+        $is_nova_access = [1];
+        $url = 'https://vnrseeds.co.in/RcdDetails.php?action=Details&val=Employee';
+        $json = @file_get_contents($url);
+        if ($json === false) {
+            echo json_encode(['status' => 400, 'message' => 'Failed to fetch data from remote server.',]);
+            return;
+        }
+        $data = json_decode($json, true);
+        if (!isset($data['employee_list']) || !is_array($data['employee_list'])) {
+            echo json_encode(['status' => 400, 'message' => 'Invalid or empty data received from remote server.',]);
+            return;
+        }
+        foreach ($data['employee_list'] as $value) {
+            if ($value['CompanyId'] != 4) {
+                $query = $this->BaseModel->getData('master_employee', ['company_id' => $value['CompanyId'], 'emp_code' => $value['EmpCode'], 'emp_vspl' => 'Y',]);
+                $employee_data = ['emp_name' => trim($value['Fname'] . ' ' . $value['Sname'] . ' ' . $value['Lname']), 'status' => $value['EmpStatus'], 'is_nova_access' => in_array($value['EmpCode'], $is_nova_access) ? '1' : '0',];
+                if ($query->num_rows() > 0) {
+                    $this->BaseModel->updateData('master_employee', $employee_data, ['company_id' => $value['CompanyId'], 'emp_code' => $value['EmpCode'], 'emp_vspl' => 'Y',]);
+                } else {
+                    $user_id = $this->session->userdata('user_id');
+                    $employee_data['emp_vspl'] = 'Y';
+                    $employee_data['emp_code'] = $value['EmpCode'];
+                    $employee_data['company_id'] = $value['CompanyId'];
+                    $employee_data['created_by'] = $user_id;
+                    $employee_data['is_nova_access'] = in_array($value['EmpCode'], $is_nova_access) ? '1' : '0';
+                    $this->BaseModel->insertData('master_employee', $employee_data);
+                }
+                $is_nova = in_array($value['EmpCode'], $is_nova_access) ? '1' : '0';
+                $user_query = $this->BaseModel->getData('users', ['username' => $value['EmpCode']]);
+                $user_data = ['group_id' => $this->session->userdata('group_id'), 'first_name' => trim($value['Fname'] . ' ' . $value['Sname']), 'last_name' => $value['Lname'], 'username' => $value['EmpCode'], 'password' => md5($value['EmpCode']), 'status' => $is_nova === '1' ? 'A' : 'D', 'created_by' => $this->session->userdata('user_id'),];
+                if ($user_query->num_rows() > 0) {
+                    $user_data['updated_at'] = date('Y-m-d H:i:s');
+                    $user_data['updated_by'] = $this->session->userdata('user_id');
+                    $this->BaseModel->updateData('users', $user_data, ['username' => $value['EmpCode'],]);
+                } elseif ($is_nova === '1') {
+                    $user_data['created_at'] = date('Y-m-d H:i:s');
+                    $this->BaseModel->insertData('users', $user_data);
+                }
+            }
+        }
+        echo json_encode(['status' => 200, 'message' => 'Employee and user sync completed']);
+    }
+    public function tag_control()
+    {
+        if (!getRoutePermission("tag_control")) {
+            last_query();
+            show_error('You do not have permission to access this page.', 403);
+        }
+        $data['departments'] = $this->db->get_where('core_department', ['is_active' => 1])->result_array();
+        $data['document_type'] = $this->db->select('type_id, file_type')->from('master_doctype')->where_in('type_id', [1, 6, 7, 13, 17, 20, 22, 23, 27, 28, 29, 31, 42, 43, 44, 46, 47, 48, 50, 56])->get()->result_array();
+        $selected_doc_type = $this->input->get('doc_type') ? $this->input->get('doc_type') : 0;
+        $data['selected_doc_type'] = $selected_doc_type;
+        $data['mappings'] = $this->db->from('tbl_tag_control')->where('document_type_id', $selected_doc_type)->get()->result_array();
+        $data['main'] = 'admin/tag_control';
+        $this->load->view('layout/template', $data);
+    }
+    public function tag_control_update()
+    {
+        $department_id = $this->input->post('department_id');
+        $document_type_id = $this->input->post('document_type_id');
+        $field = $this->input->post('field');
+        $checked = $this->input->post('checked');
+        $this->db->trans_start();
+        $data = ['updated_by' => $this->session->userdata('user_id'), 'updated_time' => date('Y-m-d H:i:s'), $field => $checked,];
+        $existing = $this->db->from('tbl_tag_control')->where('document_type_id', $document_type_id == '0' ? 0 : $document_type_id)->where('department_id', $department_id)->get()->row_array();
+        if ($existing) {
+            $this->db->where('document_type_id', $document_type_id == '0' ? 0 : $document_type_id);
+            $this->db->where('department_id', $department_id);
+            $this->db->update('tbl_tag_control', $data);
+        } else {
+            $data['document_type_id'] = $document_type_id == '0' ? 0 : $document_type_id;
+            $data['department_id'] = $department_id;
+            $all_fields = ['ledger', 'subledger', 'vertical', 'activity', 'crop', 'business_unit', 'zone', 'region'];
+            foreach ($all_fields as $f) {
+                if ($f !== $field) {
+                    $data[$f] = 'N';
+                }
+            }
+            $this->db->insert('tbl_tag_control', $data);
+        }
+        $this->db->trans_complete();
+        if ($this->db->trans_status() === false) {
+            echo json_encode(['status' => 'error']);
+        } else {
+            echo json_encode(['status' => 'success']);
+        }
+    }
+    function set_permission($id)
+    {
+        if (!getRoutePermission("set_permission")) {
+            show_error('You do not have permission to access this page.', 403);
+        }
+        $this->data['user'] = $this->BaseModel->getData('users', ['user_id' => $id])->row_array();
+        $this->data['user_permission'] = $this->BaseModel->getData('tbl_user_permissions', ['user_id' => $id])->result_array();
+        $this->data['main'] = 'user/set_permission';
+        $this->load->view('layout/template', $this->data);
+    }
+    public function permissions_data($user_id)
+    {
+        $data = ['permissions' => $this->db->select('tbl_permissions.permission_id, tbl_permissions.permission_name')->from('tbl_permissions')->join('tbl_role_permissions', 'tbl_permissions.permission_id = tbl_role_permissions.permission_id', 'left')->join('users', 'users.role_id = tbl_role_permissions.role_id', 'left')->where('users.user_id', $user_id)->where('tbl_permissions.status', 1)->get()->result_array(), 'documents' => $this->BaseModel->getData('master_doctype', ['type_id IN (1, 6, 7, 13, 17, 20, 22, 23, 27, 28, 29, 31, 42, 43, 44, 46, 47, 48, 50, 56)'])->result_array(), 'departments' => $this->BaseModel->getData('core_department', ['is_active' => 1])->result_array(), 'locations' => $this->BaseModel->getData('master_work_location', ['status' => 'A'])->result_array(), 'user_permissions' => $this->BaseModel->getData('tbl_user_permissions', ['user_id' => $user_id])->result_array()];
+        echo json_encode($data);
+    }
+    public function save_permissions()
+    {
+        $user_id = $this->input->post('user_id');
+        $permissions = $this->input->post('permissions');
+        $documents = $this->input->post('documents');
+        $departments = $this->input->post('departments');
+        $locations = $this->input->post('locations');
+        $created_by = $this->session->userdata('user_id');
+        $this->db->where('user_id', $user_id)->delete('tbl_user_permissions');
+        $insert_data = [];
+        if (!empty($permissions)) {
+            foreach ($permissions as $perm_id) {
+                $insert_data[] = ['user_id' => $user_id, 'permission_type' => 'Permission', 'permission_value' => $perm_id, 'created_by' => $created_by];
+            }
+        }
+        if (!empty($documents)) {
+            foreach ($documents as $doc_id) {
+                $insert_data[] = ['user_id' => $user_id, 'permission_type' => 'Document', 'permission_value' => $doc_id, 'created_by' => $created_by];
+            }
+        }
+        if (!empty($departments)) {
+            foreach ($departments as $dept_id) {
+                $insert_data[] = ['user_id' => $user_id, 'permission_type' => 'Department', 'permission_value' => $dept_id, 'created_by' => $created_by];
+            }
+        }
+        if (!empty($locations)) {
+            foreach ($locations as $loc_id) {
+                $insert_data[] = ['user_id' => $user_id, 'permission_type' => 'Location', 'permission_value' => $loc_id, 'created_by' => $created_by];
+            }
+        }
+        if (!empty($insert_data)) {
+            $this->db->insert_batch('tbl_user_permissions', $insert_data);
+        }
+        echo json_encode(['status' => 'success', 'message' => 'Permissions saved successfully']);
+    }
+    public function account()
+    {
+        if ($this->input->is_ajax_request()) {
+            $draw = $this->input->post('draw');
+            $start = $this->input->post('start');
+            $length = $this->input->post('length');
+            $search = $this->input->post('search')['value'] ?? '';
+            $group = $this->input->post('group') ?? '';
+            $total_rows = $this->AdminModel->get_account_count('', '');
+            $filtered_rows = $this->AdminModel->get_account_count($search, $group);
+            $accountlist = $this->AdminModel->get_account_list($length, $start, $search, $group);
+            $response = ["draw" => intval($draw), "recordsTotal" => $total_rows, "recordsFiltered" => $filtered_rows, "data" => $accountlist];
+            echo json_encode($response);
+            exit();
+        }
+        $this->data['main'] = 'admin/account';
+        $this->load->view('layout/template', $this->data);
+    }
+    public function business_entity($id = null)
+    {
+        if (!getRoutePermission("business_entity")) {
+            show_error('You do not have permission to access this page.', 403);
+        }
+        if ($id) {
+            $data['business_entity'] = $this->BaseModel->getData('master_business_entity', ['business_entity_id' => $id])->row_array();
+        } else {
+            $data['business_entity'] = [];
+        }
+        $data['main'] = 'admin/business_entity';
+        $data['business_entity_list'] = $this->BaseModel->getData('master_business_entity', ['is_deleted' => 'N'])->result_array();
+        $this->load->view('layout/template', $data);
+    }
+    public function save_business_entity($id = null)
+    {
+        $this->form_validation->set_rules('business_entity_name', 'Business Entity Name', 'trim|required');
+        $this->form_validation->set_rules('focus_code', 'Business Entity Code', 'trim|required');
+        if ($this->form_validation->run() == false) {
+            $this->data['main'] = 'admin/business_entity';
+            $this->load->view('layout/template', $this->data);
+        } else {
+            $data = ['business_entity_name' => $this->input->post('business_entity_name'), 'focus_code' => $this->input->post('focus_code'), 'status' => $this->input->post('status')];
+            if (!empty($id)) {
+                $data['updated_by'] = $this->session->userdata('user_id');
+                $data['updated_at'] = date('Y-m-d H:i:s');
+                $result = $this->BaseModel->updateData('master_business_entity', $data, ['business_entity_id' => $id]);
+                if ($result) {
+                    $this->session->set_flashdata('message', '<p class="text-success text-center">Business Entity Updated Successfully.</p>');
+                } else {
+                    $this->session->set_flashdata('message', '<p class="text-warning text-center">No changes made or update failed.</p>');
+                }
+            } else {
+                $data['created_by'] = $this->session->userdata('user_id');
+                $data['created_at'] = date('Y-m-d H:i:s');
+                $result = $this->BaseModel->insertData('master_business_entity', $data);
+                if ($result) {
+                    $this->session->set_flashdata('message', '<p class="text-success text-center">Business Entity Created Successfully.</p>');
+                } else {
+                    $this->session->set_flashdata('message', '<p class="text-danger text-center">Failed to create business entity.</p>');
+                }
+            }
+            redirect('business_entity');
+        }
+    }
+    public function roles()
+    {
+        if (!getRoutePermission("roles")) {
+            show_error('You do not have permission to access this page.', 403);
+        }
+        $data['roles'] = $this->BaseModel->getData('tbl_roles')->result_array();
+        $data['main'] = 'admin/roles';
+        $this->load->view('layout/template', $data);
+    }
+    public function user()
+    {
+        if (!getRoutePermission("user")) {
+            show_error('You do not have permission to access this page.', 403);
+        }
+        $data['userlist'] = $this->BaseModel->getJoinData('users u', ['table' => 'tbl_roles r', 'condition' => 'u.role_id = r.id', 'type' => 'left'], ['u.status' => 'A', 'u.user_id !=' => 1], 'u.*, r.role_name, u.user_id as ID', 'u.user_id')->result_array();
+        $data['role_list'] = $this->BaseModel->getData('tbl_roles')->result_array();
+        $data['main'] = 'admin/user';
+        $this->load->view('layout/template', $data);
+    }
+    public function menu_mapping()
+    {
+        if (!getRoutePermission("menu_mapping")) {
+            show_error('You do not have permission to access this page.', 403);
+        }
+        $this->data['main'] = 'admin/menu_mapping';
+        $this->data['menu_list'] = $this->BaseModel->getData('tbl_menus', ['is_active' => 1])->result_array();
+        $this->data['permission_list'] = $this->BaseModel->getData('tbl_permissions', ['status' => 1])->result_array();
+        $this->load->view('layout/template', $this->data);
+    }
+
+    public function activity_dep_mapping()
+    {
+        $data['departments'] = $this->BaseModel->getData('core_department', ['is_active' => 1])->result_array();
+        $data['activities'] = $this->BaseModel->getData('core_activity', ['is_active' => 1])->result_array();
+        $data['mappings'] = $this->BaseModel->getData('tbl_department_activity_mapping')->result_array();
+        $data['main'] = 'admin/activity_dep_mapping';
+        $this->load->view('layout/template', $data);
     }
 }

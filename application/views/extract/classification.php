@@ -2,7 +2,7 @@
    <section class="content">
       <div class="row">
          <div class="col-md-12">
-            <div class="box box-primary">
+            <div class="box">
                <div class="box-header with-border">
                   <h3 class="box-title">Pending Classification List</h3>
                   
@@ -118,7 +118,7 @@
       });
       $("#location_id").select2();
       $('.select2').select2();
-      $(".view-details").on("click", function () {
+      $(document).on("click", ".view-details", function () {
          let scanId = $(this).data("scan-id");
          $("#documentDetailsModal").modal("show");
          $.ajax({

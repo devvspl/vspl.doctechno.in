@@ -12,7 +12,9 @@
 	},
 	"require": {
 		"php": ">=5.3.7",
-		"dompdf/dompdf": "*"
+		"dompdf/dompdf": "*",
+		"setasign/fpdf": "*",
+		"setasign/fpdi": "*"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"

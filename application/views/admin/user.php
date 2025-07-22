@@ -2,7 +2,7 @@
     <section class="content">
         <div class="row">
             <div class="col-md-3">
-                <div class="box box-primary">
+                <div class="box">
                     <div class="box-header with-border">
                         <h3 class="box-title">Add User</h3>
                     </div>
@@ -56,7 +56,7 @@
                 </div>
             </div>
             <div class="col-md-9">
-                <div class="box box-primary" id="exphead">
+                <div class="box" id="exphead">
                     <div class="box-header ptbnull">
                         <h3 class="box-title titlefix">User List</h3>
                     </div>
@@ -66,10 +66,11 @@
                             <table id="usersTable" class="table table-striped table-bordered table-hover">
                                 <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Role</th>
-                                        <th>Username</th>
-                                        <th class="text-right no-print">Action</th>
+                                        <th style="text-align: center;">S No.</th>
+                                        <th style="text-align: left;">Name</th>
+                                        <th style="text-align: center;">Role</th>
+                                        <th style="text-align: center;">Username</th>
+                                        <th style="text-align: center;">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -81,17 +82,20 @@
                                         foreach ($userlist as $row) {
                                             ?>
                                             <tr>
-                                                <td class="mailbox-name">
+                                                <td style="text-align: center;" class="mailbox-name">
+                                                    <?php echo $count++; ?>
+                                                </td>
+                                                <td style="text-align: left;" class="mailbox-name">
                                                     <?php echo $row['first_name'] . ' ' . $row['last_name'] ?>
                                                 </td>
-                                                <td class="mailbox-name">
+                                                <td class="mailbox-name" style="text-align: center;">
                                                     <?php echo $row['role_name'] ?>
                                                 </td>
-                                                <td class="mailbox-name">
+                                                <td class="mailbox-name" style="text-align: center;">
                                                     <?php echo $row['username'] ?>
                                                 </td>
-                                                <td class="mailbox-date pull-right no-print">
-                                                    <a href="<?= base_url(); ?>master/UserController/permission/<?php echo $row['user_id'] ?>"
+                                                <td class="mailbox-name" style="text-align: center;">
+                                                    <a href="<?= base_url('set_permission/') . $row['user_id']; ?>"
                                                         class="btn btn-default btn-xs">
                                                         <i class="fa fa-key"></i>
                                                     </a>
@@ -141,7 +145,6 @@
                 }
             ]
         });
-
         $(document).ready(function () {
             $('#department').select2({
                 placeholder: ""

@@ -2,7 +2,7 @@
    <section class="content">
       <div class="row">
          <div class="col-md-12">
-            <div class="box box-primary" id="exphead">
+            <div class="box" id="exphead">
                <div class="box-header ptbnull">
                   <h3 class="box-title titlefix">Role List</h3>
                </div>
@@ -29,8 +29,7 @@
                                     <td><?= $row['id']; ?></td>
                                     <td><?= $row['role_name']; ?></td>
                                     <td><?= $row['description']; ?></td>
-                                    <td><?= $row['status'] == 1 ? 'Active' : 'Inactive'; ?></td>
-
+                                    <td style="text-align: center;"><?= $row['status'] == 1 ? 'Active' : 'Inactive'; ?></td>
                                  </tr>
                               <?php }
                            } ?>

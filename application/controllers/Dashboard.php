@@ -47,6 +47,8 @@ class Dashboard extends CI_Controller
     // }
     public function index()
     {
+        redirect('main_dashboard');
+
         $this->session->set_userdata('top_menu', 'dashboard');
         $this->session->set_userdata('sub_menu', '');
         $role = $_SESSION['role'] ?? 'user';

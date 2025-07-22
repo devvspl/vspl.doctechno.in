@@ -1,5 +1,5 @@
 <div id="invoice-details" class="tab-content active">
-   <form action="<?= base_url(); ?>Punch/savePunchToDatabase" id="labour_form" name="labour_form" method="post"
+   <form action="<?= base_url('save_punch_details'); ?>" id="labour_form" name="labour_form" method="post"
       accept-charset="utf-8">
       <div style="display: flex; flex-direction: column; align-items: center;">
          <div class="loader" id="loader" style="display: none;"></div>

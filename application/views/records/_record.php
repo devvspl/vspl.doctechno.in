@@ -10,7 +10,7 @@ $doc_type_id = $this->uri->segment(3);
         <div class="row">
             
             <div class="col-md-12">
-                <div class="box box-primary">
+                <div class="box">
                     <div class="box-header with-border">
                         <h3 class="box-title">Record Detail - <?php echo $this->customlib->getDocType($doc_type_id); ?>
                             <?php

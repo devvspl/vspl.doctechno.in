@@ -252,7 +252,7 @@ body.hold-transition .main-header .logo {
     transition: none;
 }
 .content {
-    min-height: 250px;
+    /* min-height: 250px; */
     padding: 10px;
     margin-right: auto;
     margin-left: auto;
@@ -1510,7 +1510,7 @@ a:focus {
     border-radius: 2px;
     position: relative;
     display: block;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
 .small-box > .inner {
@@ -5155,7 +5155,7 @@ ul.dt-button-collection.dropdown-menu > * {
 }
 /* tfoot{display: none;} */
 table {
-    empty-cells: hide;
+    /* empty-cells: hide; */
     color: #444;
 }
 @media print {
@@ -5213,10 +5213,11 @@ table.dataTable thead .sorting:last-child:after {
     float: right;
 }
 .table > thead > tr > th {
-    background: #fff;
+    /* background: #fff; */
     vertical-align: top;
     color: #444;
     font-family: "Roboto-Bold";
+    font-weight: 100;
 }
 @media (max-width: 767px) {
     .table > thead > tr > th {

@@ -2,11 +2,11 @@
    <section class="content">
       <div class="row">
          <div class="col-md-4">
-            <div class="box box-primary">
+            <div class="box">
                <div class="box-header with-border">
                   <h3 class="box-title">Scan File</h3>
                </div>
-               <form id="form1" action="<?= base_url(); ?>Scan/temp_upload_main" id="scan_main" name="scan_main"
+               <form id="form1" action="<?= base_url('upload_main'); ?>" id="scan_main" name="scan_main"
                   method="post" accept-charset="utf-8" enctype="multipart/form-data">
                   <div class="box-body">
                      <?php if ($this->session->flashdata('message')) { ?>
@@ -24,7 +24,7 @@
             </div>
          </div>
          <div class="col-md-8">
-            <div class="box box-primary" id="exphead">
+            <div class="box" id="exphead">
                <div class="box-header ptbnull">
                   <h3 class="box-title titlefix">Latest Scan File</h3>
                   <div class="box-tools pull-right">
@@ -36,13 +36,13 @@
                            <span class="sr-only">Toggle Dropdown</span>
                         </button>
                         <ul class="dropdown-menu" role="menu">
-                           <li> <a href="<?= base_url('scan/export/csv') . '?' . http_build_query([
+                           <li> <a href="<?= base_url('scanner/export/csv') . '?' . http_build_query([
                               'status' => $status,
                               'document_name' => $document_name,
                               'from_date' => $from_date,
                               'to_date' => $to_date
                            ]) ?>">Export CSV</a></li>
-                           <li> <a href="<?= base_url('scan/export/pdf') . '?' . http_build_query([
+                           <li> <a href="<?= base_url('scanner/export/pdf') . '?' . http_build_query([
                               'status' => $status,
                               'document_name' => $document_name,
                               'from_date' => $from_date,
@@ -56,7 +56,7 @@
                <div class="box-body">
                   <div class="table-responsive mailbox-messages">
                      <div class="download_label">Latest Scan File</div>
-                     <form method="get" action="<?= base_url('scan/temp_scan') ?>" class="form-inline mb-3">
+                     <form method="get" action="<?= base_url('scanner') ?>" class="form-inline mb-3">
                         <div class="form-group mr-2">
                            <label for="status" class="sr-only">Status</label>
                            <select name="status" id="status" class="form-control">
@@ -81,8 +81,23 @@
                            <label for="to_date" class="sr-only">To Date</label>
                            <input type="date" name="to_date" id="to_date" class="form-control" value="<?= $to_date ?>">
                         </div>
-                        <button type="submit" class="btn btn-sm btn-primary">Search</button>
-                        <a href="<?= base_url('scan/temp_scan') ?>" class="btn btn-sm btn-default ml-2">Reset</a>
+                        <div class="form-group mr-2">
+                           <select class="form-control" onchange="location.href=this.value">
+                              <option
+                                 value="<?= current_url() ?>?<?= http_build_query(array_merge($_GET, ['per_page' => 2])) ?>"
+                                 <?= (isset($_GET['per_page']) && $_GET['per_page'] != 'all') ? 'selected' : '' ?>>
+                                 Paginated
+                              </option>
+                              <option
+                                 value="<?= current_url() ?>?<?= http_build_query(array_merge($_GET, ['per_page' => 'all'])) ?>"
+                                 <?= (isset($_GET['per_page']) && $_GET['per_page'] == 'all') ? 'selected' : '' ?>>Show All
+                              </option>
+                           </select>
+                        </div>
+                        <div class="form-group mr-2">
+                           <button type="submit" class="btn btn-sm btn-primary">Search</button>
+                           <a href="<?= base_url('scan/temp_scan') ?>" class="btn btn-sm btn-default ml-2">Reset</a>
+                        </div>
                      </form>
                      <table class="table table-striped table-bordered table-hover mt-3">
                         <thead>
@@ -106,9 +121,9 @@
                               </tr>
                            <?php } else {
                               $count = 1;
-                              foreach ($my_lastest_scan as $row) { ?>
+                              foreach ($my_lastest_scan as $index => $row) { ?>
                                  <tr class="text-center">
-                                    <td><?= $count++; ?></td>
+                                    <td><?= $offset + $index + 1 ?></td>
                                     <td>
                                        <a href="javascript:void(0);"
                                           onclick="window.open('<?= $row['file_path'] ?>','popup','width=600,height=600');">
@@ -143,7 +158,6 @@
                                           $is_final_submitted = $row['is_final_submitted'];
                                           $is_temp_scan_rejected = $row['is_temp_scan_rejected'];
                                           $is_deleted = $row['is_deleted'];
-                                          // Decide whether to show Edit/Delete
                                           $showEditDelete = false;
                                           if ($is_deleted !== 'Y') {
                                              if ($is_temp_scan_rejected === 'Y') {

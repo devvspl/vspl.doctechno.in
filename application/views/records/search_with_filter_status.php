@@ -47,7 +47,7 @@
    <section class="content">
       <div class="row">
          <div class="col-md-12">
-            <div class="box box-primary">
+            <div class="box">
                <div class="box-header with-border">
                   <h3 class="box-title">Reports Filter:</h3>
                   <div class="box-tools" style="margin-top: 7px;">
@@ -169,7 +169,7 @@
       </div>
       <div class="row">
          <div class="col-md-12">
-            <div class="box box-primary">
+            <div class="box">
                <div class="box-body table-responsive">
                <table class="table table-striped table-bordered table-hover example">
     <thead>

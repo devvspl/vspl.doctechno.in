@@ -51,7 +51,7 @@ $scan_pending_verification = $result->num_rows();
 	<section class="content">
 		<div class="row">
 			<div class="col-md-12">
-				<div class="box box-primary">
+				<div class="box">
 					<div class="box-header with-border">
 						<h3 class="box-title text-danger"><?= $group_name ?></h3>
 					</div>
@@ -99,7 +99,7 @@ $scan_pending_verification = $result->num_rows();
 			<div class="col-md-4">
 				
 			<!-- Horizontal Form -->
-				<div class="box box-primary">
+				<div class="box">
 					<div class="box-header with-border">
 						<h3 class="box-title">Scan File</h3>
 					</div>
@@ -205,7 +205,7 @@ $scan_pending_verification = $result->num_rows();
 			<div class="col-md-8">
 				
 			<!-- general form elements -->
-				<div class="box box-primary" id="exphead">
+				<div class="box" id="exphead">
 					<div class="box-header ptbnull">
 						<h3 class="box-title titlefix">Latest Scan File <small style="color:red;">(Pending for Punching)</small></h3>
 					</div>

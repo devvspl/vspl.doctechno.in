@@ -2,14 +2,17 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 $active_group = 'default';
 $query_builder = true;
-if ($_SERVER['SERVER_NAME'] == 'localhost') {
+if (
+    $_SERVER['SERVER_NAME'] == 'localhost' ||
+    $_SERVER['SERVER_NAME'] == '192.168.34.59'
+) {
     // Local Development Configuration
     $db['default'] = [
         'dsn' => '',
-        'hostname' => 'localhost',
+        'hostname' => 'localhost:2025',
         'username' => 'root',
-        'password' => '',
-        'database' => 'vspl_nova_new',
+        'password' => 'root',
+        'database' => 'vspl_nova',
         'dbdriver' => 'mysqli',
         'dbprefix' => '',
         'pconnect' => false,
@@ -49,24 +52,3 @@ if ($_SERVER['SERVER_NAME'] == 'localhost') {
         'save_queries' => true,
     ];
 }
-$db['secondary'] = [
-    'dsn' => '',
-    'hostname' => 'localhost',
-    'username' => 'root',
-    'password' => '',
-    'database' => 'scan_ocr_agrisoft',
-    'dbdriver' => 'mysqli',
-    'dbprefix' => '',
-    'pconnect' => false,
-    'db_debug' => ENVIRONMENT !== 'production',
-    'cache_on' => false,
-    'cachedir' => '',
-    'char_set' => 'utf8',
-    'dbcollat' => 'utf8_general_ci',
-    'swap_pre' => '',
-    'encrypt' => false,
-    'compress' => false,
-    'stricton' => false,
-    'failover' => [],
-    'save_queries' => true,
-];

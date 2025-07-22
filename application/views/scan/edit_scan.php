@@ -8,7 +8,7 @@ $group_id = $this->uri->segment(4);
 	<section class="content">
 		<div class="row">
 			<div class="col-md-5">
-				<div class="box box-primary">
+				<div class="box">
 					<div class="box-header with-border">
 						<h3 class="box-title">Upload - Supporting File</h3>
 					</div>
@@ -30,7 +30,7 @@ $group_id = $this->uri->segment(4);
 				</div>
 			</div>
 			<div class="col-md-7">
-				<div class="box box-primary">
+				<div class="box">
 					<div class="box-header with-border">
 						<h3 class="box-title"><?= $this->customlib->getDocumentName($scan_id); ?>
 						</h3>
