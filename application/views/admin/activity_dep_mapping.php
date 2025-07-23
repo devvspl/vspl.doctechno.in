@@ -98,5 +98,31 @@
             }
          ]
       });
+      $(document).on('change', '.mapping-checkbox', function () {
+         var departmentId = $(this).data('department-id');
+         var activityId = $(this).data('activity-id');
+         var checked = $(this).is(':checked');
+
+         $.ajax({
+            url: "<?= base_url('master/UserController/updateMapping'); ?>",
+            type: "POST",
+            data: {
+               department_id: departmentId,
+               activity_id: activityId,
+               checked: checked
+            },
+            dataType: "json",
+            success: function (response) {
+               if (response.status === 'success') {
+                  console.log('Mapping updated successfully');
+               } else {
+                  console.log('Failed to update mapping');
+               }
+            },
+            error: function () {
+               console.log('Error occurred while updating mapping');
+            }
+         });
+      });
    });
 </script>

@@ -128,9 +128,7 @@ class AdminController extends CI_Controller
             $this->db->from('core_activity');
             $this->db->join('tbl_department_activity_mapping', 'tbl_department_activity_mapping.activity_id = core_activity.api_id', 'left');
             $this->db->where('core_activity.is_active', 1);
-            if (!empty($department_id)) {
-                $this->db->where('tbl_department_activity_mapping.department_id', $department_id);
-            }
+            $this->db->where('tbl_department_activity_mapping.department_id', $department_id);
             $q = $this->db->get();
             echo json_encode($q->result());
         } else {
@@ -148,11 +146,12 @@ class AdminController extends CI_Controller
     }
     public function getRegion()
     {
-        $vertical = $this->input->post('vertical');
-        if (!empty($vertical)) {
-            $this->db->select('api_id, region_name');
-            $this->db->from('core_region');
-            $this->db->where('vertical_id', $vertical);
+        $zone_id = $this->input->post('zone');
+        if (!empty($zone_id)) {
+            $this->db->select('core_region.api_id, core_region.region_name');
+            $this->db->from('core_zone_region_mapping');
+            $this->db->join('core_region', 'core_region.api_id = core_zone_region_mapping.zone_id', 'LEFT');
+            $this->db->where('core_zone_region_mapping.zone_id', $zone_id);
             $q = $this->db->get();
             echo json_encode($q->result());
         } else {
@@ -161,14 +160,12 @@ class AdminController extends CI_Controller
     }
     public function getZone()
     {
-        $region_id = $this->input->post('region');
-        if (!empty($region_id)) {
+        $business_unit_id = $this->input->post('business_unit');
+        if (!empty($business_unit_id)) {
             $this->db->select('core_zone.api_id, core_zone.zone_name');
-            $this->db->from('core_zone_region_mapping');
-            $this->db->join('core_zone', 'core_zone.api_id = core_zone_region_mapping.zone_id', 'LEFT');
-            if ($region_id) {
-                $this->db->where('region_id', $region_id);
-            }
+            $this->db->from('core_bu_zone_mapping');
+            $this->db->join('core_zone', 'core_zone.api_id = core_bu_zone_mapping.zone_id', 'LEFT');
+            $this->db->where('business_unit_id', $business_unit_id);
             $q = $this->db->get();
             echo json_encode($q->result());
         } else {
@@ -190,20 +187,51 @@ class AdminController extends CI_Controller
     }
     public function getLedger()
     {
-        $this->db->select('account_name, id');
+        $term = $this->input->post('term');
+        $page = $this->input->post('page') ? (int) $this->input->post('page') : 1;
+        $perPage = 10;
+        $offset = ($page - 1) * $perPage;
+        $this->db->select("CONCAT(account_name, ' - ', focus_code) AS account_name, id");
         $this->db->from('master_account_ledger');
         $this->db->where('status', 'Y');
         $this->db->where('is_deleted', 'N');
+        if (!empty($term)) {
+            $this->db->group_start();
+            $this->db->like('account_name', $term);
+            $this->db->or_like('focus_code', $term);
+            $this->db->group_end();
+        }
+        if (!empty($this->input->post('id'))) {
+            $this->db->where('id', $this->input->post('id'));
+        }
+        $this->db->limit($perPage, $offset);
         $q = $this->db->get();
         echo json_encode($q->result());
     }
     public function getSubledger()
     {
-        $this->db->select('id, name');
-        $this->db->from('master_cost_center');
-        $this->db->where('status', 1);
-        $q = $this->db->get();
-        echo json_encode($q->result());
+        $ledger_id = $this->input->post('ledger');
+        $term = $this->input->post('term');
+        $id = $this->input->post('id');
+        $results = [];
+        if (!empty($ledger_id)) {
+            $this->db->select("id, CONCAT(name, ' - ', focus_code) AS name");
+            $this->db->from('master_cost_center');
+            $this->db->where('status', 1);
+            $this->db->where('parent_id', $ledger_id);
+            if (!empty($id)) {
+                $this->db->where('id', $id);
+            } elseif (!empty($term)) {
+                $this->db->group_start();
+                $this->db->like('name', $term);
+                $this->db->or_like('focus_code', $term);
+                $this->db->group_end();
+            }
+            $this->db->limit(10);
+            $q = $this->db->get();
+            $results = $q->result();
+        }
+        echo json_encode($results);
     }
     public function getBillType()
     {
@@ -439,7 +467,7 @@ class AdminController extends CI_Controller
         }
         echo json_encode(['status' => 'success', 'message' => 'Permissions saved successfully']);
     }
-    public function account()
+    public function ledger()
     {
         if ($this->input->is_ajax_request()) {
             $draw = $this->input->post('draw');
@@ -447,15 +475,51 @@ class AdminController extends CI_Controller
             $length = $this->input->post('length');
             $search = $this->input->post('search')['value'] ?? '';
             $group = $this->input->post('group') ?? '';
-            $total_rows = $this->AdminModel->get_account_count('', '');
-            $filtered_rows = $this->AdminModel->get_account_count($search, $group);
-            $accountlist = $this->AdminModel->get_account_list($length, $start, $search, $group);
-            $response = ["draw" => intval($draw), "recordsTotal" => $total_rows, "recordsFiltered" => $filtered_rows, "data" => $accountlist];
+            $total_rows = $this->AdminModel->get_ledger_count();
+            $filtered_rows = $this->AdminModel->get_ledger_count($search, $group);
+            $list = $this->AdminModel->get_ledger_list($length, $start, $search, $group);
+            $response = ["draw" => intval($draw), "recordsTotal" => $total_rows, "recordsFiltered" => $filtered_rows, "data" => $list];
             echo json_encode($response);
             exit();
         }
-        $this->data['main'] = 'admin/account';
+        $this->data['main'] = 'admin/ledger';
         $this->load->view('layout/template', $this->data);
+    }
+    public function sub_ledger()
+    {
+        if ($this->input->is_ajax_request()) {
+            $draw = $this->input->post('draw');
+            $start = $this->input->post('start');
+            $length = $this->input->post('length');
+            $search = $this->input->post('search')['value'] ?? '';
+            $group = $this->input->post('group') ?? '';
+            $total_rows = $this->AdminModel->get_sub_ledger_count();
+            $filtered_rows = $this->AdminModel->get_sub_ledger_count($search, $group);
+            $list = $this->AdminModel->get_sub_ledger_list($length, $start, $search, $group);
+            $response = ["draw" => intval($draw), "recordsTotal" => $total_rows, "recordsFiltered" => $filtered_rows, "data" => $list];
+            echo json_encode($response);
+            exit;
+        }
+        $this->data['main'] = 'admin/sub_ledger';
+        $this->load->view('layout/template', $this->data);
+    }
+    public function update_sub_ledger()
+    {
+        $id = $this->input->post('id');
+        $data = [];
+        if ($this->input->post('focus_code') !== null) {
+            $data['focus_code'] = $this->input->post('focus_code');
+        }
+        if ($this->input->post('parent_id') !== null) {
+            $data['parent_id'] = $this->input->post('parent_id');
+            $data['parent_name'] = $this->input->post('parent_name');
+        }
+        if (!empty($data) && $id) {
+            $this->BaseModel->updateData('master_cost_center', $data, ['id' => $id]);
+            echo json_encode(['status' => 'success']);
+        } else {
+            echo json_encode(['status' => 'fail', 'message' => 'Invalid data']);
+        }
     }
     public function business_entity($id = null)
     {
@@ -531,7 +595,6 @@ class AdminController extends CI_Controller
         $this->data['permission_list'] = $this->BaseModel->getData('tbl_permissions', ['status' => 1])->result_array();
         $this->load->view('layout/template', $this->data);
     }
-
     public function activity_dep_mapping()
     {
         $data['departments'] = $this->BaseModel->getData('core_department', ['is_active' => 1])->result_array();

@@ -518,3 +518,6 @@ table.dataTable.no-footer {
 		font-size: 0.875rem;
 	}
 }
+
+
+.editable { cursor: pointer; }
