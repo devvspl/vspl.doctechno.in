@@ -57,6 +57,17 @@ $route['empty_table'] = 'CoreController/empty_table';
 $route['drop_table'] = 'CoreController/drop_table';
 $route['menu_mapping'] = 'AdminController/menu_mapping';
 $route['activity_dep_mapping'] = 'AdminController/activity_dep_mapping';
+$route['location'] = 'AdminController/location';
+$route['location/(:any)'] = 'AdminController/location/$1';
+$route['save_location'] = 'AdminController/save_location';
+$route['save_location/(:any)'] = 'AdminController/save_location/$1';
+$route['delete_location/(:any)'] = 'AdminController/delete_location/$1';
+$route['vendors'] = 'AdminController/vendors';
+$route['vendor/(:any)'] = 'AdminController/vendors/$1';
+$route['save_vendor'] = 'AdminController/save_vendor';
+$route['save_vendor/(:any)'] = 'AdminController/save_vendor/$1';
+$route['delete_vendor/(:any)'] = 'AdminController/delete_vendor/$1';
+$route['get_vendor_details/(:any)'] = 'AdminController/get_vendor_details/$1';
 /***********************************************************************************************************/
 /********************************************  DMS Punching **********************************************/
 /***********************************************************************************************************/
@@ -111,7 +122,7 @@ $route['get_overall_report_bill_approver'] = 'Dashboard/get_overall_report_bill_
 $route['get_report_for_super_approver'] = 'Dashboard/get_report_for_super_approver';
 $route['get_report_for_super_scanner'] = 'Dashboard/get_report_for_super_scanner';
 // >>>>>>>>>>>>>>>>>>>>>>>>> Master Section <<<<<<<<<<<<<<<<<<<<<<<<<<< //
-$route['location'] = 'Location';
+// $route['location'] = 'Location';
 
 
 

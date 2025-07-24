@@ -11,7 +11,7 @@
                      <table id="ledgerTable" class="table">
                         <thead>
                            <tr>
-                              <th style="text-align:left">Ledger Id</th>
+                              <th style="text-align:center">S No.</th>
                               <th style="text-align:left">Ledger</th>
                               <th style="text-align:center">Ledger Type</th>
                               <th style="text-align:center">Focus Code</th>
@@ -33,17 +33,18 @@
          $('#ledgerTable').DataTable({
             processing: true,
             serverSide: true,
+            ordering: false,
             pageLength: 10,
             ajax: {
                url: '<?= base_url('ledger') ?>',
                type: 'POST',
                data: function (d) {
-                  d.search = { value: d.search.value };
+                 
                   d.group = '';
                },
                dataSrc: function (json) {
                   console.log('AJAX response:', json);
-                  if (!json || !Array.isArray(json.data)) {
+                  if (!json || typeof json !== 'object' || !Array.isArray(json.data)) {
                      console.error("Invalid data format from server.");
                      alert('Failed to load data.');
                      return [];
@@ -56,14 +57,13 @@
                }
             },
             columns: [
-               { data: 'id', className: 'text-left' },
+               { data: 'id', className: 'text-center' },
                { data: 'account_name', className: 'text-left' },
                { data: 'ledger_type', className: 'text-center' },
                { data: 'focus_code', className: 'text-center' }
             ],
             paging: true,
-            searching: true,
-            ordering: true,
+            searching: true
          });
       }
    });

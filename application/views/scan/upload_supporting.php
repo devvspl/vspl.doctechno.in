@@ -2,7 +2,7 @@
 $scan_id = $this->uri->segment(3);
 ?>
 
-<div class="content-wrapper" style="min-height: 946px;">
+<div class="content-wrapper" >
     <section class="content">
         <div class="row">
             <div class="col-md-5">

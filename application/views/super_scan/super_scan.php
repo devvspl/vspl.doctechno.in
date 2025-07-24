@@ -47,7 +47,7 @@ $result = $this->db->get();
 $scan_pending_verification = $result->num_rows();
 ?>
 
-<div class="content-wrapper" style="min-height: 946px;">
+<div class="content-wrapper" >
 	<section class="content">
 		<div class="row">
 			<div class="col-md-12">

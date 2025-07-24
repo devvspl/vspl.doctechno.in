@@ -6,7 +6,7 @@
    
    ?>
    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.0/themes/base/jquery-ui.css" />
-<div class="content-wrapper" style="min-height: 946px;">
+<div class="content-wrapper" >
    <section class="content">
       <div class="box-body">
          <div class="row">

@@ -56,7 +56,7 @@ $doc_type_id = $this->uri->segment(3);
 }
 </style>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<div class="content-wrapper" style="min-height: 946px;">
+<div class="content-wrapper" >
 	<section class="content">
 		<div class="row">
 			<div class="col-md-12">

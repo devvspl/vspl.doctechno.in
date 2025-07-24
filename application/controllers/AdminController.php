@@ -566,6 +566,24 @@ class AdminController extends CI_Controller
             redirect('business_entity');
         }
     }
+    public function delete_business_entity($id = null)
+    {
+        if (!getRoutePermission("business_entity")) {
+            show_error('You do not have permission to access this page.', 403);
+        }
+        if (empty($id) || !is_numeric($id)) {
+            $this->session->set_flashdata('message', '<p class="text-danger text-center">Invalid business entity ID.</p>');
+            redirect('business_entity');
+        }
+        $data = ['is_deleted' => 'Y', 'updated_by' => $this->session->userdata('user_id'), 'updated_at' => date('Y-m-d H:i:s')];
+        $result = $this->BaseModel->updateData('master_business_entity', $data, ['business_entity_id' => $id, 'is_deleted' => 'N']);
+        if ($result) {
+            $this->session->set_flashdata('message', '<p class="text-success text-center">Business Entity Deleted Successfully.</p>');
+        } else {
+            $this->session->set_flashdata('message', '<p class="text-danger text-center">Failed to delete business entity or entity not found.</p>');
+        }
+        redirect('business_entity');
+    }
     public function roles()
     {
         if (!getRoutePermission("roles")) {
@@ -603,4 +621,197 @@ class AdminController extends CI_Controller
         $data['main'] = 'admin/activity_dep_mapping';
         $this->load->view('layout/template', $data);
     }
+    public function location($id = null)
+    {
+        if (!getRoutePermission("location")) {
+            show_error('You do not have permission to access this page.', 403);
+        }
+        if ($id) {
+            $data['location'] = $this->BaseModel->getData('master_work_location', ['location_id' => $id])->row_array();
+        } else {
+            $data['location'] = [];
+        }
+        $data['main'] = 'admin/location';
+        $data['location_list'] = $this->BaseModel->getData('master_work_location', ['is_deleted' => 'N'])->result_array();
+        $this->load->view('layout/template', $data);
+    }
+    public function save_location($id = null)
+    {
+        $this->form_validation->set_rules('location_name', 'Location Name', 'trim|required');
+        $this->form_validation->set_rules('focus_code', 'Location Code', 'trim|required');
+        $this->form_validation->set_rules('status', 'Status', 'trim|required|in_list[A,D]');
+        if ($this->form_validation->run() == false) {
+            $this->data['main'] = 'admin/location';
+            if ($id) {
+                $this->data['location'] = $this->BaseModel->getData('master_work_location', ['location_id' => $id, 'is_deleted' => 'N'])->row_array();
+            } else {
+                $this->data['location'] = [];
+            }
+            $this->data['location_list'] = $this->BaseModel->getData('master_work_location', ['is_deleted' => 'N'])->result_array();
+            $this->load->view('layout/template', $this->data);
+        } else {
+            $data = ['location_name' => $this->input->post('location_name', true), 'focus_code' => $this->input->post('focus_code', true), 'status' => $this->input->post('status', true)];
+            if (!empty($id)) {
+                $data['updated_by'] = $this->session->userdata('user_id');
+                $data['updated_at'] = date('Y-m-d H:i:s');
+                $result = $this->BaseModel->updateData('master_work_location', $data, ['location_id' => $id, 'is_deleted' => 'N']);
+                if ($result) {
+                    $this->session->set_flashdata('message', '<p class="text-success text-center">Location Updated Successfully.</p>');
+                } else {
+                    $this->session->set_flashdata('message', '<p class="text-warning text-center">No changes made or update failed.</p>');
+                }
+            } else {
+                $data['created_by'] = $this->session->userdata('user_id');
+                $data['created_at'] = date('Y-m-d H:i:s');
+                $data['is_deleted'] = 'N';
+                $result = $this->BaseModel->insertData('master_work_location', $data);
+                if ($result) {
+                    $this->session->set_flashdata('message', '<p class="text-success text-center">Location Created Successfully.</p>');
+                } else {
+                    $this->session->set_flashdata('message', '<p class="text-danger text-center">Failed to create business entity.</p>');
+                }
+            }
+            redirect('location');
+        }
+    }
+    public function delete_location($id = null)
+    {
+        if (!getRoutePermission("location")) {
+            show_error('You do not have permission to access this page.', 403);
+        }
+        if (empty($id) || !is_numeric($id)) {
+            $this->session->set_flashdata('message', '<p class="text-danger text-center">Invalid location ID.</p>');
+            redirect('location');
+        }
+        $data = ['is_deleted' => 'Y', 'updated_by' => $this->session->userdata('user_id'), 'updated_at' => date('Y-m-d H:i:s')];
+        $result = $this->BaseModel->updateData('master_work_location', $data, ['location_id' => $id, 'is_deleted' => 'N']);
+        if ($result) {
+            $this->session->set_flashdata('message', '<p class="text-success text-center">Location Deleted Successfully.</p>');
+        } else {
+            $this->session->set_flashdata('message', '<p class="text-danger text-center">Failed to delete Location or location not found.</p>');
+        }
+        redirect('location');
+    }
+    public function vendors($id = null)
+    {
+        if (!getRoutePermission("vendors")) {
+            show_error('You do not have permission to access this page.', 403);
+        }
+        if ($id) {
+            $data['vendor'] = $this->BaseModel->getData('master_firm', ['firm_id' => $id, 'firm_type' => 'Vendor'])->row_array();
+        } else {
+            $data['vendor'] = [];
+        }
+        $data['main'] = 'admin/vendors';
+        $data['vendor_list'] = $this->BaseModel->getData('master_firm', ['is_deleted' => 'N', 'firm_type' => 'Vendor'])->result_array();
+        $this->load->view('layout/template', $data);
+    }
+    public function save_vendor($id = null)
+    {
+        if (!getRoutePermission("vendors")) {
+            show_error('You do not have permission to access this page.', 403);
+        }
+        $this->form_validation->set_rules('firm_name', 'Firm Name', 'trim|required|max_length[200]');
+        $this->form_validation->set_rules('firm_type', 'Firm Type', 'trim|required|in_list[Company,Vendor,Farmer]');
+        $this->form_validation->set_rules('focus_code', 'Focus Code', 'trim');
+        $this->form_validation->set_rules('gst', 'GST', 'trim|max_length[30]');
+        $this->form_validation->set_rules('address', 'Address', 'trim|max_length[65535]');
+        $this->form_validation->set_rules('country_id', 'Country', 'trim|required|integer');
+        $this->form_validation->set_rules('state_id', 'State', 'trim|required|integer');
+        $this->form_validation->set_rules('city_name', 'City', 'trim|max_length[60]');
+        $this->form_validation->set_rules('pin_code', 'Pin Code', 'trim|max_length[10]');
+        $this->form_validation->set_rules('status', 'Status', 'trim|required|in_list[A,D,R]');
+        if ($this->form_validation->run() == false) {
+            $this->data['vendor'] = $id ? $this->BaseModel->getData('master_firm', ['firm_id' => $id, 'is_deleted' => 'N'])->row_array() : [];
+            $this->data['vendor_list'] = $this->BaseModel->getData('master_firm', ['is_deleted' => 'N', 'firm_type' => 'Vendor'])->result_array();
+            $this->data['countries'] = $this->BaseModel->getData('master_country', ['is_deleted' => 'N'])->result_array();
+            $this->data['states'] = $this->BaseModel->getData('master_state', ['is_deleted' => 'N'])->result_array();
+            $this->data['main'] = 'admin/vendor';
+            $this->load->view('layout/template', $this->data);
+        } else {
+            $data = ['firm_name' => $this->input->post('firm_name', true), 'firm_type' => $this->input->post('firm_type', true), 'focus_code' => $this->input->post('focus_code', true) ?: null, 'gst' => $this->input->post('gst', true) ?: null, 'address' => $this->input->post('address', true) ?: null, 'country_id' => $this->input->post('country_id', true), 'state_id' => $this->input->post('state_id', true), 'city_name' => $this->input->post('city_name', true) ?: null, 'pin_code' => $this->input->post('pin_code', true) ?: null, 'status' => $this->input->post('status', true), 'focus_data' => 'N', 'msme_status' => 'N'];
+            if (!empty($id)) {
+                $data['updated_by'] = $this->session->userdata('user_id');
+                $data['updated_at'] = date('Y-m-d H:i:s');
+                $result = $this->BaseModel->updateData('master_firm', $data, ['firm_id' => $id, 'is_deleted' => 'N']);
+                if ($result) {
+                    $this->session->set_flashdata('message', '<p class="text-success text-center">Firm Updated Successfully.</p>');
+                } else {
+                    $this->session->set_flashdata('message', '<p class="text-warning text-center">No changes made or update failed.</p>');
+                }
+            } else {
+                $data['created_by'] = $this->session->userdata('user_id');
+                $data['created_at'] = date('Y-m-d H:i:s');
+                $data['is_deleted'] = 'N';
+                $result = $this->BaseModel->insertData('master_firm', $data);
+                if ($result) {
+                    $this->session->set_flashdata('message', '<p class="text-success text-center">Firm Created Successfully.</p>');
+                } else {
+                    $this->session->set_flashdata('message', '<p class="text-danger text-center">Failed to create firm.</p>');
+                }
+            }
+            redirect('vendors');
+        }
+    }
+    public function delete_vendor($id = null)
+    {
+        if (!getRoutePermission("vendors")) {
+            show_error('You do not have permission to access this page.', 403);
+        }
+
+        if (empty($id) || !is_numeric($id)) {
+            $this->session->set_flashdata('message', '<p class="text-danger text-center">Invalid vendor ID.</p>');
+            redirect('vendors');
+        }
+
+        $data = [
+            'is_deleted' => 'Y',
+            'updated_by' => $this->session->userdata('user_id'),
+            'updated_at' => date('Y-m-d H:i:s')
+        ];
+
+        $result = $this->BaseModel->updateData('master_firm', $data, ['firm_id' => $id, 'is_deleted' => 'N', 'firm_type' => 'Vendor']);
+        if ($result) {
+            $this->session->set_flashdata('message', '<p class="text-success text-center">Vendor Deleted Successfully.</p>');
+        } else {
+            $this->session->set_flashdata('message', '<p class="text-danger text-center">Failed to delete vendor or vendor not found.</p>');
+        }
+
+        redirect('vendors');
+    }
+
+
+    public function get_vendor_details($id = null)
+    {
+        if (!getRoutePermission("vendors")) {
+            $this->output->set_status_header(403)->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'You do not have permission to access this resource.']));
+            return;
+        }
+
+        if (empty($id) || !is_numeric($id)) {
+            $this->output->set_status_header(400)->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Invalid vendor ID.']));
+            return;
+        }
+
+        $vendor = $this->BaseModel->getData('master_firm', ['firm_id' => $id, 'is_deleted' => 'N', 'firm_type' => 'Vendor'])->row_array();
+
+        if (!$vendor) {
+            $this->output->set_status_header(404)->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Vendor not found.']));
+            return;
+        }
+
+        // Fetch country and state names for display
+        $country = $this->BaseModel->getData('core_country', ['api_id' => $vendor['country_id']])->row_array();
+        $state = $this->BaseModel->getData('core_state', ['api_id' => $vendor['state_id']])->row_array();
+
+        $vendor['country_name'] = $country ? $country['country_name'] : 'N/A';
+        $vendor['state_name'] = $state ? $state['state_name'] : 'N/A';
+        $vendor['status_label'] = $vendor['status'] == 'A' ? 'Active' : ($vendor['status'] == 'D' ? 'Deactive' : 'Rejected');
+
+        $this->output->set_content_type('application/json')->set_output(json_encode($vendor));
+    }
+
 }

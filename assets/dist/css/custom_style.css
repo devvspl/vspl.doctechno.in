@@ -521,3 +521,19 @@ table.dataTable.no-footer {
 
 
 .editable { cursor: pointer; }
+
+ .blink-icon {
+                     animation: blink-icon 1s linear infinite;
+                  }
+
+                  @keyframes blink-icon {
+
+                     0%,
+                     100% {
+                        opacity: 1;
+                     }
+
+                     50% {
+                        opacity: 0;
+                     }
+                  }

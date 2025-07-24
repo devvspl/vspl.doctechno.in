@@ -5,6 +5,13 @@
             <div class="box" id="exphead">
                <div class="box-header ptbnull">
                   <h3 class="box-title titlefix">Sub Ledger List</h3>
+                  <div class="box-tools" style="top: 10px;font-size: 11px;">
+                     <span style="color: #ff0000c7;">
+                        <i class="fa fa-exclamation-circle blink-icon"></i>
+                        Note: <u>Focus Code</u> and <u>Ledger Name</u> columns are editable. Please click on a cell to
+                        edit.
+                     </span>
+                  </div>
                </div>
                <div class="box-body">
                   <div class="table-responsive mailbox-messages">
@@ -33,12 +40,13 @@
          $('#SubLedgerTable').DataTable({
             processing: true,
             serverSide: true,
+            ordering: false,
             pageLength: 10,
             ajax: {
                url: '<?= base_url('sub_ledger') ?>',
                type: 'POST',
                data: function (d) {
-                  d.search = { value: d.search.value };
+                 
                   d.group = '';
                },
                dataSrc: function (json) {
@@ -62,40 +70,39 @@
                   data: 'focus_code',
                   className: 'text-center editable',
                   render: function (data, type, row) {
-                     return `<span title="Click to edit focus code">${data ? data : 'N/A'}</span>`;
+                     return `<span title="Click to edit Focus Code">${data || 'N/A'}</span>`;
                   }
                },
                {
                   data: 'ledger_name',
                   className: 'text-left editable',
                   render: function (data, type, row) {
-                     return `<span title="Click to edit ledger name">${data ? data : 'N/A'}</span>`;
+                     return `<span title="Click to edit Ledger Name">${data || 'N/A'}</span>`;
                   }
-               },
+               }
             ],
             paging: true,
             searching: true,
-            ordering: true,
             drawCallback: function () {
                $('#SubLedgerTable .editable span').tooltip();
             }
          });
 
          $('#SubLedgerTable .editable span').tooltip();
-      } 
-      
+      }
+
       $('#SubLedgerTable tbody').on('click', 'td.editable', function () {
          let cell = $(this);
          let columnIndex = cell.index();
          let rowData = $('#SubLedgerTable').DataTable().row(cell.closest('tr')).data();
 
-         // Function to handle cell cleanup
+
          function cleanupCell(cell, value) {
             cell.removeClass('editing').html(`<span title="Click to edit ${columnIndex === 2 ? 'focus code' : 'ledger name'}">${value ? value : (columnIndex === 2 ? 'N/A' : 'N/A')}</span>`);
             cell.find('span').tooltip();
          }
 
-         if (columnIndex === 2) { // Focus code column
+         if (columnIndex === 2) {
             if (!cell.hasClass('editing')) {
                cell.addClass('editing');
                let currentVal = rowData.focus_code || '';
@@ -105,11 +112,11 @@
                input.focus().on('blur', function () {
                   let newVal = $(this).val().trim();
                   if (newVal === '' && currentVal !== '') {
-                     // Show message if attempting to save an empty value
+
                      alert('Focus code cannot be empty. Please enter a value.');
                      cleanupCell(cell, currentVal);
                   } else if (newVal !== currentVal) {
-                     // Only update if value changed and not empty
+
                      if (confirm('Do you want to save the new focus code: "' + newVal + '"?')) {
                         $.post('<?= base_url('update_sub_ledger') ?>', {
                            id: rowData.id,
@@ -133,16 +140,16 @@
                            alert('Error updating focus code: ' + thrown + '. Changes not saved.');
                         });
                      } else {
-                        cleanupCell(cell, currentVal); // Revert if user cancels
+                        cleanupCell(cell, currentVal);
                      }
                   } else {
-                     cleanupCell(cell, currentVal); // Revert if no change
+                     cleanupCell(cell, currentVal);
                   }
                });
             }
          }
 
-         if (columnIndex === 3) { // Ledger name column
+         if (columnIndex === 3) {
             if (!cell.hasClass('editing')) {
                cell.addClass('editing');
                let currentVal = rowData.ledger_name || '';
@@ -172,7 +179,7 @@
                   minLength: 0,
                   select: function (event, ui) {
                      if (ui.item.label.trim() === '') {
-                        // Show message if selected value is empty
+
                         alert('Ledger name cannot be empty. Please select a valid ledger.');
                         cleanupCell(cell, currentVal);
                         return false;
@@ -204,14 +211,14 @@
                            alert('Error updating ledger: ' + thrown + '. Changes not saved.');
                         });
                      } else {
-                        cleanupCell(cell, currentVal); // Revert if user cancels
+                        cleanupCell(cell, currentVal);
                      }
                      return false;
                   }
                }).focus(function () {
                   $(this).autocomplete('search', '');
                }).on('blur', function () {
-                  // Delay to allow autocomplete select to process first
+
                   setTimeout(() => {
                      if (!rowData.ledger_name || rowData.ledger_name.trim() === '') {
                         alert('Ledger name cannot be empty. Please select a valid ledger.');
