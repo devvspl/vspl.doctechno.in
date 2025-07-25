@@ -230,7 +230,7 @@
                dataType: 'json',
                success: function (data) {
                   if (data.status == 200) {
-                     window.location.href = '<?= base_url() ?>temp_scan';
+                     window.location.href = '<?= base_url('scanner?status=rejected') ?>';
                   }
                }
             });
