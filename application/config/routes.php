@@ -68,6 +68,24 @@ $route['save_vendor'] = 'AdminController/save_vendor';
 $route['save_vendor/(:any)'] = 'AdminController/save_vendor/$1';
 $route['delete_vendor/(:any)'] = 'AdminController/delete_vendor/$1';
 $route['get_vendor_details/(:any)'] = 'AdminController/get_vendor_details/$1';
+$route['hotel'] = 'AdminController/hotel';
+$route['hotel/(:any)'] = 'AdminController/hotel/$1';
+$route['save_hotel'] = 'AdminController/save_hotel';
+$route['save_hotel/(:any)'] = 'AdminController/save_hotel/$1';
+$route['delete_hotel/(:any)'] = 'AdminController/delete_hotel/$1';
+$route['get_hotel_details/(:any)'] = 'AdminController/get_hotel_details/$1';
+$route['item'] = 'AdminController/item';
+$route['item/(:any)'] = 'AdminController/item/$1';
+$route['save_item'] = 'AdminController/save_item';
+$route['save_item/(:any)'] = 'AdminController/save_item/$1';
+$route['delete_item/(:any)'] = 'AdminController/delete_item/$1';
+$route['get_item_details/(:any)'] = 'AdminController/get_item_details/$1';
+$route['unit'] = 'AdminController/unit';
+$route['unit/(:any)'] = 'AdminController/unit/$1';
+$route['save_unit'] = 'AdminController/save_unit';
+$route['save_unit/(:any)'] = 'AdminController/save_unit/$1';
+$route['delete_unit/(:any)'] = 'AdminController/delete_unit/$1';
+$route['get_unit_details/(:any)'] = 'AdminController/get_unit_details/$1';
 /***********************************************************************************************************/
 /********************************************  DMS Punching **********************************************/
 /***********************************************************************************************************/
@@ -137,9 +155,8 @@ $route['vendor-request'] = 'master/FirmController/vendorRequest';
 $route['approve-vendor'] = 'master/FirmController/approveVendor';
 $route['file'] = 'master/FileController';
 $route['group'] = 'master/GroupController';
-$route['unit'] = 'master/UnitController';
-$route['hotel'] = 'master/HotelController';
-$route['item'] = 'master/ItemController';
+
+
 
 // $route['account'] = 'master/AccountController';
 $route['master/AccountController/index/(:num)'] = 'master/AccountController/index/$1';

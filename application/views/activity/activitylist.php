@@ -115,7 +115,7 @@
                                                     <a href="<?= base_url(); ?>activity/edit/<?php echo $row['activity_id'] ?>" class="btn btn-default btn-xs">
                                                         <i class="fa fa-pencil"></i>
                                                     </a>
-                                                    <a href="<?= base_url(); ?>activity/delete/<?php echo $row['activity_id'] ?>" class="btn btn-default btn-xs" onclick="return confirm('Are you sure to delete');">
+                                                    <a href="<?= base_url(); ?>activity/delete/<?php echo $row['activity_id'] ?>" class="btn btn-default btn-xs" onclick="return confirm('Are you sure to delete?');">
                                                         <i class="fa fa-remove"></i>
                                                     </a>
 

@@ -110,7 +110,7 @@
                                  <?php echo ($row['status'] == 'A') ? 'Active' : 'Deactive' ?>
                               </td>
                               <td class="mailbox-date pull-right no-print">
-                                 <a href="<?= base_url(); ?>account/delete/<?php echo $row['account_id'] ?>" class="btn btn-default btn-xs" onclick="return confirm('Are you sure to delete');">
+                                 <a href="<?= base_url(); ?>account/delete/<?php echo $row['account_id'] ?>" class="btn btn-default btn-xs" onclick="return confirm('Are you sure to delete?');">
                                  <i class="fa fa-remove"></i>
                                  </a>
                               </td>

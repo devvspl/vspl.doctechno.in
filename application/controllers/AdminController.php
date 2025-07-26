@@ -758,10 +758,217 @@ class AdminController extends CI_Controller
         if (!getRoutePermission("vendors")) {
             show_error('You do not have permission to access this page.', 403);
         }
-
         if (empty($id) || !is_numeric($id)) {
             $this->session->set_flashdata('message', '<p class="text-danger text-center">Invalid vendor ID.</p>');
             redirect('vendors');
+        }
+        $data = ['is_deleted' => 'Y', 'updated_by' => $this->session->userdata('user_id'), 'updated_at' => date('Y-m-d H:i:s')];
+        $result = $this->BaseModel->updateData('master_firm', $data, ['firm_id' => $id, 'is_deleted' => 'N', 'firm_type' => 'Vendor']);
+        if ($result) {
+            $this->session->set_flashdata('message', '<p class="text-success text-center">Vendor Deleted Successfully.</p>');
+        } else {
+            $this->session->set_flashdata('message', '<p class="text-danger text-center">Failed to delete vendor or vendor not found.</p>');
+        }
+        redirect('vendors');
+    }
+    public function get_vendor_details($id = null)
+    {
+        if (!getRoutePermission("vendors")) {
+            $this->output->set_status_header(403)->set_content_type('application/json')->set_output(json_encode(['error' => 'You do not have permission to access this resource.']));
+            return;
+        }
+        if (empty($id) || !is_numeric($id)) {
+            $this->output->set_status_header(400)->set_content_type('application/json')->set_output(json_encode(['error' => 'Invalid vendor ID.']));
+            return;
+        }
+        $vendor = $this->BaseModel->getData('master_firm', ['firm_id' => $id, 'is_deleted' => 'N', 'firm_type' => 'Vendor'])->row_array();
+        if (!$vendor) {
+            $this->output->set_status_header(404)->set_content_type('application/json')->set_output(json_encode(['error' => 'Vendor not found.']));
+            return;
+        }
+        $country = $this->BaseModel->getData('core_country', ['api_id' => $vendor['country_id']])->row_array();
+        $state = $this->BaseModel->getData('core_state', ['api_id' => $vendor['state_id']])->row_array();
+        $vendor['country_name'] = $country ? $country['country_name'] : 'N/A';
+        $vendor['state_name'] = $state ? $state['state_name'] : 'N/A';
+        $vendor['status_label'] = $vendor['status'] == 'A' ? 'Active' : ($vendor['status'] == 'D' ? 'Deactive' : 'Rejected');
+        $this->output->set_content_type('application/json')->set_output(json_encode($vendor));
+    }
+    public function hotel($id = null)
+    {
+        if (!getRoutePermission("hotel")) {
+            show_error('You do not have permission to access this page.', 403);
+        }
+        $this->data['hotel'] = $id ? $this->BaseModel->getData('master_hotel', ['hotel_id' => $id, 'is_deleted' => 'N'])->row_array() : [];
+        if ($id && empty($this->data['hotel'])) {
+            $this->session->set_flashdata('message', '<p class="text-danger text-center">Hotel not found.</p>');
+            redirect('hotel');
+        }
+        $this->data['hotel_list'] = $this->BaseModel->getData('master_hotel', ['is_deleted' => 'N'])->result_array();
+        $this->data['main'] = 'admin/hotel';
+        $this->load->view('layout/template', $this->data);
+    }
+    public function save_hotel($id = null)
+    {
+        if (!getRoutePermission("hotel")) {
+            show_error('You do not have permission to access this page.', 403);
+        }
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('hotel_name', 'Hotel Name', 'trim|required|max_length[100]');
+        $this->form_validation->set_rules('address', 'Address', 'trim|max_length[65535]');
+        $this->form_validation->set_rules('country_id', 'Country', 'trim|integer');
+        $this->form_validation->set_rules('state_id', 'State', 'trim|integer');
+        $this->form_validation->set_rules('city_name', 'City', 'trim|required|max_length[70]');
+        $this->form_validation->set_rules('status', 'Status', 'trim|required|in_list[A,D]');
+        if ($this->form_validation->run() == false) {
+            $this->data['hotel'] = $id ? $this->BaseModel->getData('master_hotel', ['hotel_id' => $id, 'is_deleted' => 'N'])->row_array() : [];
+            $this->data['hotel_list'] = $this->BaseModel->getData('master_hotel', ['is_deleted' => 'N'])->result_array();
+            $this->data['main'] = 'admin/hotel';
+            $this->load->view('layout/template', $this->data);
+        } else {
+            $data = ['hotel_name' => $this->input->post('hotel_name', true), 'address' => $this->input->post('address', true) ?: null, 'country_id' => $this->input->post('country_id', true) ?: null, 'state_id' => $this->input->post('state_id', true) ?: null, 'city_name' => $this->input->post('city_name', true), 'status' => $this->input->post('status', true)];
+            if (!empty($id)) {
+                $data['updated_by'] = $this->session->userdata('user_id');
+                $data['updated_at'] = date('Y-m-d H:i:s');
+                $result = $this->BaseModel->updateData('master_hotel', $data, ['hotel_id' => $id, 'is_deleted' => 'N']);
+                if ($result) {
+                    $this->session->set_flashdata('message', '<p class="text-success text-center">Hotel Updated Successfully.</p>');
+                } else {
+                    $this->session->set_flashdata('message', '<p class="text-warning text-center">No changes made or update failed.</p>');
+                }
+            } else {
+                $data['created_by'] = $this->session->userdata('user_id');
+                $data['created_at'] = date('Y-m-d H:i:s');
+                $data['is_deleted'] = 'N';
+                $result = $this->BaseModel->insertData('master_hotel', $data);
+                if ($result) {
+                    $this->session->set_flashdata('message', '<p class="text-success text-center">Hotel Created Successfully.</p>');
+                } else {
+                    $this->session->set_flashdata('message', '<p class="text-danger text-center">Failed to create hotel.</p>');
+                }
+            }
+            redirect('hotel');
+        }
+    }
+    public function delete_hotel($id = null)
+    {
+        if (!getRoutePermission("hotel")) {
+            show_error('You do not have permission to access this page.', 403);
+        }
+        if (empty($id) || !is_numeric($id)) {
+            $this->session->set_flashdata('message', '<p class="text-danger text-center">Invalid hotel ID.</p>');
+            redirect('hotel');
+        }
+        $data = ['is_deleted' => 'Y', 'updated_by' => $this->session->userdata('user_id'), 'updated_at' => date('Y-m-d H:i:s')];
+        $result = $this->BaseModel->updateData('master_hotel', $data, ['hotel_id' => $id, 'is_deleted' => 'N']);
+        if ($result) {
+            $this->session->set_flashdata('message', '<p class="text-success text-center">Hotel Deleted Successfully.</p>');
+        } else {
+            $this->session->set_flashdata('message', '<p class="text-danger text-center">Failed to delete hotel or hotel not found.</p>');
+        }
+        redirect('hotel');
+    }
+    public function get_hotel_details($id = null)
+    {
+        if (!getRoutePermission("hotel")) {
+            $this->output->set_status_header(403)->set_content_type('application/json')->set_output(json_encode(['error' => 'You do not have permission to access this resource.']));
+            return;
+        }
+        if (empty($id) || !is_numeric($id)) {
+            $this->output->set_status_header(400)->set_content_type('application/json')->set_output(json_encode(['error' => 'Invalid hotel ID.']));
+            return;
+        }
+        $hotel = $this->BaseModel->getData('master_hotel', ['hotel_id' => $id, 'is_deleted' => 'N'])->row_array();
+        if (!$hotel) {
+            $this->output->set_status_header(404)->set_content_type('application/json')->set_output(json_encode(['error' => 'Hotel not found.']));
+            return;
+        }
+        if ($hotel['state_id']) {
+            $state = $this->BaseModel->getData('master_state', ['state_id' => $hotel['state_id'], 'is_deleted' => 'N'])->row_array();
+            $hotel['state_name'] = $state ? $state['state_name'] : 'N/A';
+            $country = $state ? $this->BaseModel->getData('master_country', ['country_id' => $state['country_id'], 'is_deleted' => 'N'])->row_array() : null;
+            $hotel['country_name'] = $country ? $country['country_name'] : 'N/A';
+        } else {
+            $hotel['state_name'] = 'N/A';
+            $hotel['country_name'] = 'N/A';
+        }
+        $hotel['status_label'] = $hotel['status'] == 'A' ? 'Active' : 'Deactive';
+        $this->output->set_content_type('application/json')->set_output(json_encode($hotel));
+    }
+    public function item($id = null)
+    {
+        if (!getRoutePermission("item")) {
+            show_error('You do not have permission to access this page.', 403);
+        }
+
+        $this->data['item'] = $id ? $this->BaseModel->getData('master_item', ['item_id' => $id, 'is_deleted' => 'N'])->row_array() : [];
+        if ($id && empty($this->data['item'])) {
+            $this->session->set_flashdata('message', '<p class="text-danger text-center">Item not found.</p>');
+            redirect('item');
+        }
+
+        $this->data['item_list'] = $this->BaseModel->getData('master_item', ['is_deleted' => 'N'])->result_array();
+        $this->data['main'] = 'admin/item';
+        $this->load->view('layout/template', $this->data);
+    }
+
+    public function save_item($id = null)
+    {
+        if (!getRoutePermission("item")) {
+            show_error('You do not have permission to access this page.', 403);
+        }
+
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('item_name', 'Item Name', 'trim|required|max_length[255]');
+        $this->form_validation->set_rules('item_code', 'Item Code', 'trim|required|max_length[60]');
+        $this->form_validation->set_rules('status', 'Status', 'trim|required|in_list[A,D]');
+
+        if ($this->form_validation->run() == false) {
+            $this->data['item'] = $id ? $this->BaseModel->getData('master_item', ['item_id' => $id, 'is_deleted' => 'N'])->row_array() : [];
+            $this->data['item_list'] = $this->BaseModel->getData('master_item', ['is_deleted' => 'N'])->result_array();
+            $this->data['main'] = 'admin/item';
+            $this->load->view('layout/template', $this->data);
+        } else {
+            $data = [
+                'item_name' => $this->input->post('item_name', true),
+                'item_code' => $this->input->post('item_code', true),
+                'focus_data' => 'N',
+                'status' => $this->input->post('status', true),
+                'Import_Flag' => '0'
+            ];
+
+            if (!empty($id)) {
+                $data['updated_by'] = $this->session->userdata('user_id');
+                $data['updated_at'] = date('Y-m-d H:i:s');
+                $result = $this->BaseModel->updateData('master_item', $data, ['item_id' => $id, 'is_deleted' => 'N']);
+                if ($result) {
+                    $this->session->set_flashdata('message', '<p class="text-success text-center">Item Updated Successfully.</p>');
+                } else {
+                    $this->session->set_flashdata('message', '<p class="text-warning text-center">No changes made or update failed.</p>');
+                }
+            } else {
+                $data['created_by'] = $this->session->userdata('user_id');
+                $data['created_at'] = date('Y-m-d H:i:s');
+                $data['is_deleted'] = 'N';
+                $result = $this->BaseModel->insertData('master_item', $data);
+                if ($result) {
+                    $this->session->set_flashdata('message', '<p class="text-success text-center">Item Created Successfully.</p>');
+                } else {
+                    $this->session->set_flashdata('message', '<p class="text-danger text-center">Failed to create item.</p>');
+                }
+            }
+            redirect('item');
+        }
+    }
+
+    public function delete_item($id = null)
+    {
+        if (!getRoutePermission("item")) {
+            show_error('You do not have permission to access this page.', 403);
+        }
+
+        if (empty($id) || !is_numeric($id)) {
+            $this->session->set_flashdata('message', '<p class="text-danger text-center">Invalid item ID.</p>');
+            redirect('item');
         }
 
         $data = [
@@ -770,20 +977,20 @@ class AdminController extends CI_Controller
             'updated_at' => date('Y-m-d H:i:s')
         ];
 
-        $result = $this->BaseModel->updateData('master_firm', $data, ['firm_id' => $id, 'is_deleted' => 'N', 'firm_type' => 'Vendor']);
+        $result = $this->BaseModel->updateData('master_item', $data, ['item_id' => $id, 'is_deleted' => 'N']);
+
         if ($result) {
-            $this->session->set_flashdata('message', '<p class="text-success text-center">Vendor Deleted Successfully.</p>');
+            $this->session->set_flashdata('message', '<p class="text-success text-center">Item Deleted Successfully.</p>');
         } else {
-            $this->session->set_flashdata('message', '<p class="text-danger text-center">Failed to delete vendor or vendor not found.</p>');
+            $this->session->set_flashdata('message', '<p class="text-danger text-center">Failed to delete item or item not found.</p>');
         }
 
-        redirect('vendors');
+        redirect('item');
     }
 
-
-    public function get_vendor_details($id = null)
+    public function get_item_details($id = null)
     {
-        if (!getRoutePermission("vendors")) {
+        if (!getRoutePermission("item")) {
             $this->output->set_status_header(403)->set_content_type('application/json')
                 ->set_output(json_encode(['error' => 'You do not have permission to access this resource.']));
             return;
@@ -791,27 +998,141 @@ class AdminController extends CI_Controller
 
         if (empty($id) || !is_numeric($id)) {
             $this->output->set_status_header(400)->set_content_type('application/json')
-                ->set_output(json_encode(['error' => 'Invalid vendor ID.']));
+                ->set_output(json_encode(['error' => 'Invalid item ID.']));
             return;
         }
 
-        $vendor = $this->BaseModel->getData('master_firm', ['firm_id' => $id, 'is_deleted' => 'N', 'firm_type' => 'Vendor'])->row_array();
+        $item = $this->BaseModel->getData('master_item', ['item_id' => $id, 'is_deleted' => 'N'])->row_array();
 
-        if (!$vendor) {
+        if (!$item) {
             $this->output->set_status_header(404)->set_content_type('application/json')
-                ->set_output(json_encode(['error' => 'Vendor not found.']));
+                ->set_output(json_encode(['error' => 'Item not found.']));
             return;
         }
 
-        // Fetch country and state names for display
-        $country = $this->BaseModel->getData('core_country', ['api_id' => $vendor['country_id']])->row_array();
-        $state = $this->BaseModel->getData('core_state', ['api_id' => $vendor['state_id']])->row_array();
+        $item['status_label'] = $item['status'] == 'A' ? 'Active' : 'Deactive';
+        $item['focus_data_label'] = $item['focus_data'] == 'Y' ? 'Yes' : 'No';
+        $item['import_flag_label'] = $item['Import_Flag'] == '1' ? 'Yes' : 'No';
 
-        $vendor['country_name'] = $country ? $country['country_name'] : 'N/A';
-        $vendor['state_name'] = $state ? $state['state_name'] : 'N/A';
-        $vendor['status_label'] = $vendor['status'] == 'A' ? 'Active' : ($vendor['status'] == 'D' ? 'Deactive' : 'Rejected');
-
-        $this->output->set_content_type('application/json')->set_output(json_encode($vendor));
+        $this->output->set_content_type('application/json')->set_output(json_encode($item));
     }
 
+    public function unit($id = null)
+    {
+        if (!getRoutePermission("unit")) {
+            show_error('You do not have permission to access this page.', 403);
+        }
+
+        $this->data['unit'] = $id ? $this->BaseModel->getData('master_unit', ['unit_id' => $id, 'is_deleted' => 'N'])->row_array() : [];
+        if ($id && empty($this->data['unit'])) {
+            $this->session->set_flashdata('message', '<p class="text-danger text-center">Unit not found.</p>');
+            redirect('unit');
+        }
+
+        $this->data['unit_list'] = $this->BaseModel->getData('master_unit', ['is_deleted' => 'N'])->result_array();
+        $this->data['main'] = 'admin/unit';
+        $this->load->view('layout/template', $this->data);
+    }
+
+    public function save_unit($id = null)
+    {
+        if (!getRoutePermission("unit")) {
+            show_error('You do not have permission to access this page.', 403);
+        }
+
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('unit_name', 'Unit Name', 'trim|required|max_length[40]');
+        $this->form_validation->set_rules('unit_code', 'Unit Code', 'trim|required|max_length[10]');
+        $this->form_validation->set_rules('status', 'Status', 'trim|required|in_list[A,D]');
+
+        if ($this->form_validation->run() == false) {
+            $this->data['unit'] = $id ? $this->BaseModel->getData('master_unit', ['unit_id' => $id, 'is_deleted' => 'N'])->row_array() : [];
+            $this->data['unit_list'] = $this->BaseModel->getData('master_unit', ['is_deleted' => 'N'])->result_array();
+            $this->data['main'] = 'admin/unit';
+            $this->load->view('layout/template', $this->data);
+        } else {
+            $data = [
+                'unit_name' => $this->input->post('unit_name', true),
+                'unit_code' => $this->input->post('unit_code', true),
+                'status' => $this->input->post('status', true)
+            ];
+
+            if (!empty($id)) {
+                $data['updated_by'] = $this->session->userdata('user_id');
+                $data['updated_at'] = date('Y-m-d H:i:s');
+                $result = $this->BaseModel->updateData('master_unit', $data, ['unit_id' => $id, 'is_deleted' => 'N']);
+                if ($result) {
+                    $this->session->set_flashdata('message', '<p class="text-success text-center">Unit Updated Successfully.</p>');
+                } else {
+                    $this->session->set_flashdata('message', '<p class="text-warning text-center">No changes made or update failed.</p>');
+                }
+            } else {
+                $data['created_by'] = $this->session->userdata('user_id');
+                $data['created_at'] = date('Y-m-d H:i:s');
+                $data['is_deleted'] = 'N';
+                $result = $this->BaseModel->insertData('master_unit', $data);
+                if ($result) {
+                    $this->session->set_flashdata('message', '<p class="text-success text-center">Unit Created Successfully.</p>');
+                } else {
+                    $this->session->set_flashdata('message', '<p class="text-danger text-center">Failed to create unit.</p>');
+                }
+            }
+            redirect('unit');
+        }
+    }
+
+    public function delete_unit($id = null)
+    {
+        if (!getRoutePermission("unit")) {
+            show_error('You do not have permission to access this page.', 403);
+        }
+
+        if (empty($id) || !is_numeric($id)) {
+            $this->session->set_flashdata('message', '<p class="text-danger text-center">Invalid unit ID.</p>');
+            redirect('unit');
+        }
+
+        $data = [
+            'is_deleted' => 'Y',
+            'updated_by' => $this->session->userdata('user_id'),
+            'updated_at' => date('Y-m-d H:i:s')
+        ];
+
+        $result = $this->BaseModel->updateData('master_unit', $data, ['unit_id' => $id, 'is_deleted' => 'N']);
+
+        if ($result) {
+            $this->session->set_flashdata('message', '<p class="text-success text-center">Unit Deleted Successfully.</p>');
+        } else {
+            $this->session->set_flashdata('message', '<p class="text-danger text-center">Failed to delete unit or unit not found.</p>');
+        }
+
+        redirect('unit');
+    }
+
+    public function get_unit_details($id = null)
+    {
+        if (!getRoutePermission("unit")) {
+            $this->output->set_status_header(403)->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'You do not have permission to access this resource.']));
+            return;
+        }
+
+        if (empty($id) || !is_numeric($id)) {
+            $this->output->set_status_header(400)->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Invalid unit ID.']));
+            return;
+        }
+
+        $unit = $this->BaseModel->getData('master_unit', ['unit_id' => $id, 'is_deleted' => 'N'])->row_array();
+
+        if (!$unit) {
+            $this->output->set_status_header(404)->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Unit not found.']));
+            return;
+        }
+
+        $unit['status_label'] = $unit['status'] == 'A' ? 'Active' : 'Deactive';
+
+        $this->output->set_content_type('application/json')->set_output(json_encode($unit));
+    }
 }

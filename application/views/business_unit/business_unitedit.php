@@ -114,7 +114,7 @@
                                                 <td class="mailbox-date pull-right no-print">
 
 
-                                                    <a href="<?= base_url(); ?>business_unit/delete/<?php echo $row['business_unit_id'] ?>" class="btn btn-default btn-xs" onclick="return confirm('Are you sure to delete');">
+                                                    <a href="<?= base_url(); ?>business_unit/delete/<?php echo $row['business_unit_id'] ?>" class="btn btn-default btn-xs" onclick="return confirm('Are you sure to delete?');">
                                                         <i class="fa fa-remove"></i>
                                                     </a>
 

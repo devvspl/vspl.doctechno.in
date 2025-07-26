@@ -142,7 +142,7 @@
                                  <i class="fa fa-pencil"></i>
                                  </a>
                                  <a href="<?= base_url(); ?>delete_vendor/<?php echo $row['firm_id'] ?>"
-                                    class="btn btn-default btn-xs" onclick="return confirm('Are you sure to delete');">
+                                    class="btn btn-default btn-xs" onclick="return confirm('Are you sure to delete?');">
                                  <i class="fa fa-remove"></i>
                                  </a>
                               </td>
@@ -158,7 +158,6 @@
       </div>
    </section>
 </div>
-<!-- Modal for Vendor Details -->
 <div class="modal fade" id="vendorModal" tabindex="-1" role="dialog" aria-labelledby="vendorModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

@@ -87,7 +87,7 @@
                                           <i class="fa fa-pencil"></i>
                                        </a>
                                        <a href="<?= base_url('delete_business_entity/') . $row['business_entity_id']; ?>"
-                                          class="btn btn-default btn-xs" onclick="return confirm('Are you sure to delete');">
+                                          class="btn btn-default btn-xs" onclick="return confirm('Are you sure to delete?');">
                                           <i class="fa fa-remove"></i>
                                        </a>
                                     </td>

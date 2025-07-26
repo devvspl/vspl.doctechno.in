@@ -151,7 +151,7 @@
                                           <i class="fa fa-pencil"></i>
                                        </a>
                                        <a href="<?= base_url(); ?>bill_approver/delete/<?php echo $row['user_id'] ?>"
-                                          class="btn btn-default btn-xs" onclick="return confirm('Are you sure to delete');">
+                                          class="btn btn-default btn-xs" onclick="return confirm('Are you sure to delete?');">
                                           <i class="fa fa-remove"></i>
                                        </a>
                                     </td>
