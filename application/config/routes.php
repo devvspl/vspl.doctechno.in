@@ -101,9 +101,6 @@ $route['rejected_scans'] = 'DocClassifierController/rejected_scans';
 $route['document_received'] = 'DocClassifierController/document_received';
 $route['scan_document_details'] = 'DocClassifierController/scan_document_details';
 $route['update_received_status'] = 'DocClassifierController/update_received_status';
-
-
-
 /***********************************************************************************************************/
 /********************************************  DMS Punching ************************************************/
 /***********************************************************************************************************/
