@@ -90,6 +90,7 @@ $route['upload_main'] = 'ScannerController/upload_main';
 $route['upload_supporting_file/(:any)'] = 'ScannerController/upload_supporting_file/$1';
 $route['upload_supporting'] = 'ScannerController/upload_supporting';
 $route['scan_final_submit'] = 'ScannerController/scan_final_submit';
+$route['temp_supporting/(:any)'] = 'ScannerController/temp_supporting/$1';
 $route['delete_supporting_file'] = 'ScannerController/delete_supporting_file';
 /***********************************************************************************************************/
 /********************************************  Doc Classifier **********************************************/
@@ -251,7 +252,7 @@ $route['finance/bill-approval/(:any)'] = 'punch/my_finance_bill_approval_file/$1
 $route['approve_file/(:num)'] = 'punch/approve_file/$1';
 $route['reject_file/(:num)'] = 'punch/reject_file/$1';
 // ===========================Temp Scanner===========================
-$route['temp-supporting/(:any)'] = 'Scan/temp_upload_supporting/$1';
+
 $route['temp-final-submit'] = 'Scan/final_submit';
 //--------------Scan File-------------------
 $route['scan'] = 'Scan';

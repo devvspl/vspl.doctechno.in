@@ -230,4 +230,15 @@ class ScannerController extends CI_Controller
             echo json_encode(['status' => 400]);
         }
     }
+    public function temp_supporting($id)
+    {
+        $year_id = $this->session->userdata('year_id');
+        $main_file = $this->db->where('scan_id', $id)->get("y{$year_id}_scan_file")->row();
+        $supporting_files = $this->db->where('scan_id', $id)->get('support_file')->result();
+        $this->data['scan_id'] = $id;
+        $this->data['main_file'] = $main_file;
+        $this->data['supporting_files'] = $supporting_files;
+        $this->data['main'] = 'scanner/temp_supporting';
+        $this->load->view('layout/template', $this->data);
+    }
 }
