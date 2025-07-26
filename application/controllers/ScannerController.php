@@ -153,6 +153,22 @@ class ScannerController extends CI_Controller
             }
         }
     }
+    public function delete_scan_file()
+    {
+        $this->db->trans_start();
+        $this->db->trans_strict(false);
+        $scan_id = $this->input->post('scan_id');
+        $this->db->delete('support_file', ['scan_id' => $scan_id]);
+        $this->db->delete('scan_file', ['scan_id' => $scan_id]);
+        $this->db->trans_complete();
+        if ($this->db->trans_status() === false) {
+            $this->db->trans_rollback();
+            echo json_encode(['status' => 400]);
+        } else {
+            $this->db->trans_commit();
+            echo json_encode(['status' => 200]);
+        }
+    }
     public function upload_supporting_file($id)
     {
         if (!getRoutePermission("scanner?status=all")) {

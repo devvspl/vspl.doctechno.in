@@ -87,6 +87,7 @@ $route['get_unit_details/(:any)'] = 'AdminController/get_unit_details/$1';
 $route['scanner'] = 'ScannerController/scanner';
 $route['scanner/export/(:any)'] = 'ScannerController/export/$1';
 $route['upload_main'] = 'ScannerController/upload_main';
+$route['delete_scan_file'] = 'ScannerController/delete_scan_file';
 $route['upload_supporting_file/(:any)'] = 'ScannerController/upload_supporting_file/$1';
 $route['upload_supporting'] = 'ScannerController/upload_supporting';
 $route['delete_supporting_file'] = 'ScannerController/delete_supporting_file';

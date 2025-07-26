@@ -219,8 +219,8 @@
    $(document).ready(function () {
       $(document).on('click', '.delete-scan', function () {
          var scan_id = $(this).data('scan_id');
-         var url = '<?= base_url() ?>Scan/delete_all';
-         if (confirm('Are you sure to delete all ?')) {
+         var url = "<?= base_url('delete_scan_file') ?>";
+         if (confirm('Are you sure to delete all?')) {
             $.ajax({
                url: url,
                type: 'POST',
