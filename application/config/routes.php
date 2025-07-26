@@ -119,31 +119,6 @@ $route['punched_files'] = 'DMSPunchingController/punched_files/1';
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // >>>>>>>>>>>>>>>>>>>>>>>>> Dashboard Section <<<<<<<<<<<<<<<<<<<<<<<<< //
 // $route['dashboard'] = 'Dashboard';
 $route['logout'] = 'Dashboard/logout';
