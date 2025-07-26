@@ -27,7 +27,7 @@ class DocClassifierController extends CI_Controller
         $this->data["groups"] = $this->Extract_model->getGroups();
         $this->data["locations"] = $this->Extract_model->getLocations();
         $this->data["documents"] = $this->Extract_model->getClassificationList($group_id, $location_id);
-        $this->data["main"] = "extract/classification";
+        $this->data["main"] = "doc_classifier/classification";
         $this->load->view("layout/template", $this->data);
     }
     public function processed()
@@ -46,10 +46,9 @@ class DocClassifierController extends CI_Controller
         $this->data["departments"] = $this->Extract_model->getDepartments();
         $this->data["subdepartments"] = $this->Extract_model->getSubdepartments($department_id);
         $this->data["documents"] = $this->Extract_model->getProcessedList($group_id, $location_id, $doc_type_id, $department_id, $sub_department_id);
-        $this->data["main"] = "extract/processed";
+        $this->data["main"] = "doc_classifier/processed";
         $this->load->view("layout/template", $this->data);
     }
-
     public function classifications_rejected()
     {
         if (!getRoutePermission("classifications_rejected")) {
@@ -60,22 +59,18 @@ class DocClassifierController extends CI_Controller
         $this->data["groups"] = $this->Extract_model->getGroups();
         $this->data["locations"] = $this->Extract_model->getLocations();
         $this->data["documents"] = $this->Extract_model->getclassificationsRejectedList($group_id, $location_id);
-        $this->data["main"] = "extract/classifications-rejected";
+        $this->data["main"] = "doc_classifier/classifications_rejected";
         $this->load->view("layout/template", $this->data);
     }
-
-
     public function rejected_scans()
     {
         if (!getRoutePermission("rejected_scans")) {
             show_error('You do not have permission to access this page.', 403);
         }
         $this->data["documents"] = $this->Extract_model->getScanRejectedScanAdminList();
-        $this->data["main"] = "extract/scans-rejected";
+        $this->data["main"] = "doc_classifier/scans_rejected";
         $this->load->view("layout/template", $this->data);
     }
-
-
     public function document_received()
     {
         if (!getRoutePermission("document_received")) {
@@ -96,13 +91,13 @@ class DocClassifierController extends CI_Controller
         $this->data['main'] = 'doc_classifier/doc_verification';
         $this->load->view('layout/template', $this->data);
     }
-    public function getDocumentDetails()
+    public function scan_document_details()
     {
         $scanId = $this->input->post("scan_id");
         $data["document"] = $this->Extract_model->getDocumentDetails($scanId);
         $this->load->view("doc_classifier/document_details", $data);
     }
-    public function updateReceivedStatus()
+    public function update_received_status()
     {
         $scanId = $this->input->post("scan_id");
         $receivedDate = $this->input->post("received_date");
@@ -114,7 +109,7 @@ class DocClassifierController extends CI_Controller
             echo json_encode(["status" => "error", "message" => "Invalid input."]);
         }
     }
-    public function get_scan_admin_dashboard_datewise_counts()
+    public function scan_counts_by_date()
     {
         $user_id = $this->session->userdata('user_id');
         $group_id = $_SESSION['group_id'];

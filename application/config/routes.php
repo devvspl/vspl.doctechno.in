@@ -6,23 +6,13 @@ $route['login'] = 'BaseController/login';
 
 $route['main_dashboard'] = 'MainDashboard/index';
 /***********************************************************************************************************/
-/**********************************************    Scanner  ************************************************/
+/********************************************  Common Functions **********************************************/
 /***********************************************************************************************************/
-$route['scanner'] = 'ScannerController/scanner';
-$route['scanner/export/(:any)'] = 'ScannerController/export/$1';
-$route['upload_main'] = 'ScannerController/upload_main';
-$route['upload_supporting_file/(:any)'] = 'ScannerController/upload_supporting_file/$1';
-$route['upload_supporting'] = 'ScannerController/upload_supporting';
-$route['scan_final_submit'] = 'ScannerController/scan_final_submit';
-$route['delete_supporting_file'] = 'ScannerController/delete_supporting_file';
-/***********************************************************************************************************/
-/********************************************  Doc Classifier **********************************************/
-/***********************************************************************************************************/
-$route['classification'] = 'DocClassifierController/classification';
-$route['processed'] = 'DocClassifierController/processed';
-$route['classifications_rejected'] = 'DocClassifierController/classifications_rejected';
-$route['rejected_scans'] = 'DocClassifierController/rejected_scans';
-$route['document_received'] = 'DocClassifierController/document_received';
+$route['temp_files'] = 'CommonController/temp_files';
+$route['temp_files/download/(:any)'] = 'CommonController/temp_file_download/$1';
+$route['temp_files/view/(:any)'] = 'CommonController/temp_file_view/$1';
+$route['temp_files/delete/(:any)'] = 'CommonController/temp_file_delete/$1';
+$route['change_password'] = 'CommonController/change_password';
 /***********************************************************************************************************/
 /********************************************  Super Admin *************************************************/
 /***********************************************************************************************************/
@@ -47,6 +37,11 @@ $route['save_business_entity/(:any)'] = 'AdminController/save_business_entity/$1
 $route['delete_business_entity/(:any)'] = 'AdminController/delete_business_entity/$1';
 $route['roles'] = 'AdminController/roles';
 $route['user'] = 'AdminController/user';
+$route['user/(:any)'] = 'AdminController/user/$1';
+$route['save_user'] = 'AdminController/save_user';
+$route['save_user/(:any)'] = 'AdminController/save_user/$1';
+$route['delete_user/(:any)'] = 'AdminController/delete_user/$1';
+$route['get_user_details/(:any)'] = 'AdminController/get_user_details/$1';
 $route['core_apis'] = 'CoreController/core_apis';
 $route['fetch_apis'] = 'CoreController/fetch_apis';
 $route['sync_apis'] = 'CoreController/sync_apis';
@@ -87,20 +82,40 @@ $route['save_unit/(:any)'] = 'AdminController/save_unit/$1';
 $route['delete_unit/(:any)'] = 'AdminController/delete_unit/$1';
 $route['get_unit_details/(:any)'] = 'AdminController/get_unit_details/$1';
 /***********************************************************************************************************/
-/********************************************  DMS Punching **********************************************/
+/**********************************************    Scanner  ************************************************/
+/***********************************************************************************************************/
+$route['scanner'] = 'ScannerController/scanner';
+$route['scanner/export/(:any)'] = 'ScannerController/export/$1';
+$route['upload_main'] = 'ScannerController/upload_main';
+$route['upload_supporting_file/(:any)'] = 'ScannerController/upload_supporting_file/$1';
+$route['upload_supporting'] = 'ScannerController/upload_supporting';
+$route['scan_final_submit'] = 'ScannerController/scan_final_submit';
+$route['delete_supporting_file'] = 'ScannerController/delete_supporting_file';
+/***********************************************************************************************************/
+/********************************************  Doc Classifier **********************************************/
+/***********************************************************************************************************/
+$route['classification'] = 'DocClassifierController/classification';
+$route['processed'] = 'DocClassifierController/processed';
+$route['classifications_rejected'] = 'DocClassifierController/classifications_rejected';
+$route['rejected_scans'] = 'DocClassifierController/rejected_scans';
+$route['document_received'] = 'DocClassifierController/document_received';
+$route['scan_document_details'] = 'DocClassifierController/scan_document_details';
+$route['update_received_status'] = 'DocClassifierController/update_received_status';
+
+
+
+/***********************************************************************************************************/
+/********************************************  DMS Punching ************************************************/
 /***********************************************************************************************************/
 $route['punch_file'] = 'DMSPunchingController/punch_file';
 $route['punch_entry/(:any)/(:any)'] = 'DMSPunchingController/punch_entry/$1/$2';
 $route['save_punch_details'] = 'DMSPunchingController/save_punch_details';
 $route['punched_files'] = 'DMSPunchingController/punched_files/1';
 /***********************************************************************************************************/
-/********************************************  Common Functions **********************************************/
+/********************************************  Punch Approver ************************************************/
 /***********************************************************************************************************/
-$route['temp_files'] = 'CommonController/temp_files';
-$route['temp_files/download/(:any)'] = 'CommonController/temp_file_download/$1';
-$route['temp_files/view/(:any)'] = 'CommonController/temp_file_view/$1';
-$route['temp_files/delete/(:any)'] = 'CommonController/temp_file_delete/$1';
-$route['change_password'] = 'CommonController/change_password';
+
+
 
 
 
@@ -186,7 +201,6 @@ $route['approval-matrix/edit/(:any)'] = 'AdminController/editApprovalMatrix/$1';
 $route['approval-matrix/get-approval-matrix'] = 'AdminController/getApprovalMatrix';
 $route['approval-matrix/get-approval-matrix-by-id/(:any)'] = 'AdminController/getApprovalMatrixById/$1';
 // >>>>>>>>>>>>>>>>>>>>>>>>> Document Classification Section <<<<<<<<<<<<<<<<<<<<<<<<< //
-$route['doc-received'] = 'DocClassifierController/doc_verification';
 // >>>>>>>>>>>>>>>>>>>>>>>>> Data Extraction Section <<<<<<<<<<<<<<<<<<<<<<<<< //
 
 

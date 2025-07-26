@@ -239,7 +239,7 @@
                             function fetchCounts() {
                                 var selectedDate = $('#scan_date').val();
                                 $.ajax({
-                                    url: '<?= base_url('DocClassifierController/get_scan_admin_dashboard_datewise_counts') ?>',
+                                    url: '<?= base_url('DocClassifierController/scan_counts_by_date') ?>',
                                     type: 'POST',
                                     data: {
                                         selected_date: selectedDate,

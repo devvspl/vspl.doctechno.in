@@ -1,11 +1,11 @@
-<div class="content-wrapper" >
+<div class="content-wrapper">
     <section class="content">
         <div class="row">
             <div class="col-md-12">
                 <div class="box">
                     <div class="box-header with-border">
                         <h3 class="box-title">Document Received Report</h3>
-                        
+
                     </div>
                     <div class="box-body">
                         <div class="table-responsive mailbox-messages">
@@ -81,7 +81,7 @@
                                         <button type="submit" class="btn btn-primary btn-sm"
                                             style="padding: 4px 12px;">Apply Filters</button>
                                         <button type="reset" class="btn btn-default btn-sm" style="padding: 4px 12px;"
-                                            onclick="window.location.href='<?php echo base_url('doc-received') ?>';">Clear
+                                            onclick="window.location.href='<?php echo base_url('document_received') ?>';">Clear
                                             Filters</button>
                                     </div>
                                 </div>
@@ -257,7 +257,7 @@
             let scanId = $(this).data("scan-id");
             $("#documentDetailsModal").modal("show");
             $.ajax({
-                url: "<?= base_url('DocClassifierController/getDocumentDetails'); ?>",
+                url: "<?= base_url('scan_document_details'); ?>",
                 type: "POST",
                 data: { scan_id: scanId },
                 beforeSend: function () {
@@ -281,7 +281,7 @@
             }
             $button.prop("disabled", true).text("Please wait...");
             $.ajax({
-                url: "<?= base_url('DocClassifierController/updateReceivedStatus'); ?>",
+                url: "<?= base_url('update_received_status'); ?>",
                 type: "POST",
                 data: {
                     scan_id: scanId,

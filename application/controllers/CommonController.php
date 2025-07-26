@@ -32,7 +32,7 @@ class CommonController extends CI_Controller
             }
         }
         $data["data"] = $files;
-        $data["main"] = "admin/temp_files";
+        $data["main"] = "super_admin/temp_files";
         $this->load->view("layout/template", $data);
     }
     public function temp_file_delete($file_name = "")

@@ -1,4 +1,4 @@
-<div class="content-wrapper" >
+<div class="content-wrapper">
    <section class="content">
       <div class="row">
          <div class="col-md-4">
@@ -6,8 +6,8 @@
                <div class="box-header with-border">
                   <h3 class="box-title">Scan File</h3>
                </div>
-               <form id="form1" action="<?= base_url('upload_main'); ?>" id="scan_main" name="scan_main"
-                  method="post" accept-charset="utf-8" enctype="multipart/form-data">
+               <form id="form1" action="<?= base_url('upload_main'); ?>" id="scan_main" name="scan_main" method="post"
+                  accept-charset="utf-8" enctype="multipart/form-data">
                   <div class="box-body">
                      <?php if ($this->session->flashdata('message')) { ?>
                         <?php echo $this->session->flashdata('message') ?>
