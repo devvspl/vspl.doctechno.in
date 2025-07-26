@@ -89,9 +89,8 @@ $route['scanner/export/(:any)'] = 'ScannerController/export/$1';
 $route['upload_main'] = 'ScannerController/upload_main';
 $route['upload_supporting_file/(:any)'] = 'ScannerController/upload_supporting_file/$1';
 $route['upload_supporting'] = 'ScannerController/upload_supporting';
-$route['scan_final_submit'] = 'ScannerController/scan_final_submit';
-$route['temp_supporting/(:any)'] = 'ScannerController/temp_supporting/$1';
 $route['delete_supporting_file'] = 'ScannerController/delete_supporting_file';
+$route['scan_final_submit'] = 'ScannerController/scan_final_submit';
 /***********************************************************************************************************/
 /********************************************  Doc Classifier **********************************************/
 /***********************************************************************************************************/

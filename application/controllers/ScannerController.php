@@ -204,6 +204,19 @@ class ScannerController extends CI_Controller
             }
         }
     }
+    public function delete_supporting_file()
+    {
+        if (!getRoutePermission("scanner?status=all")) {
+            show_error('You do not have permission to access this page.', 403);
+        }
+        $id = $this->input->post('id');
+        $delete_result = $this->BaseModel->deleteData('support_file', ['support_id' => $id]);
+        if ($delete_result) {
+            echo json_encode(['status' => 200]);
+        } else {
+            echo json_encode(['status' => 400]);
+        }
+    }
     public function scan_final_submit()
     {
         if (!getRoutePermission("scanner?status=all")) {
@@ -217,28 +230,5 @@ class ScannerController extends CI_Controller
             echo json_encode(['status' => 400]);
         }
     }
-    public function delete_file()
-    {
-        if (!getRoutePermission("scanner?status=all")) {
-            show_error('You do not have permission to access this page.', 403);
-        }
-        $id = $this->input->post('id');
-        $delete_result = $this->BaseModel->deleteData('support_file', ['support_id' => $id]);
-        if ($delete_result) {
-            echo json_encode(['status' => 200]);
-        } else {
-            echo json_encode(['status' => 400]);
-        }
-    }
-    public function temp_supporting($id)
-    {
-        $year_id = $this->session->userdata('year_id');
-        $main_file = $this->db->where('scan_id', $id)->get("y{$year_id}_scan_file")->row();
-        $supporting_files = $this->db->where('scan_id', $id)->get('support_file')->result();
-        $this->data['scan_id'] = $id;
-        $this->data['main_file'] = $main_file;
-        $this->data['supporting_files'] = $supporting_files;
-        $this->data['main'] = 'scanner/temp_supporting';
-        $this->load->view('layout/template', $this->data);
-    }
+
 }

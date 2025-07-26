@@ -167,7 +167,7 @@
                                              }
                                           }
                                           if ($showEditDelete): ?>
-                                             <a href="<?= base_url('temp_supporting/' . $row['scan_id']); ?>"
+                                             <a href="<?= base_url('upload_supporting_file/' . $row['scan_id']); ?>"
                                                 class="btn btn-warning btn-xs" title="Edit">
                                                 <i class="fa fa-pencil"></i>
                                              </a>
