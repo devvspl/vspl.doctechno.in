@@ -7,15 +7,7 @@ class DocClassifierController extends CI_Controller
     {
         parent::__construct();
         $this->load->model("Extract_model");
-        $this->year_id =
-            $this->session->userdata('year_id') ??
-            ($this->db
-                ->select('id')
-                ->from('financial_years')
-                ->where('is_current', 1)
-                ->get()
-                ->row()->id ??
-                null);
+        $this->year_id = $this->session->userdata('year_id') ?? ($this->db->select('id')->from('financial_years')->where('is_current', 1)->get()->row()->id ?? null);
     }
     public function classification()
     {
@@ -114,14 +106,11 @@ class DocClassifierController extends CI_Controller
         $user_id = $this->session->userdata('user_id');
         $group_id = $_SESSION['group_id'];
         $selected_date = $this->input->post('selected_date');
-
         if (!$user_id || !$group_id || !$this->year_id || !$selected_date) {
             echo json_encode(['error' => 'Missing required parameters']);
             return;
         }
-
         $table = "y{$this->year_id}_scan_file";
-
         $this->db->from($table);
         $this->db->where('document_name !=', '');
         $this->db->where('is_classified', 'Y');
@@ -129,7 +118,6 @@ class DocClassifierController extends CI_Controller
         $this->db->where('group_id', $group_id);
         $this->db->where('DATE(classified_date)', $selected_date);
         $classified = $this->db->count_all_results();
-
         $this->db->from($table);
         $this->db->where('document_name !=', '');
         $this->db->where('is_classified', 'Y');
@@ -138,7 +126,6 @@ class DocClassifierController extends CI_Controller
         $this->db->where('group_id', $group_id);
         $this->db->where('DATE(classified_date)', $selected_date);
         $classified_rejected = $this->db->count_all_results();
-
         $this->db->from($table);
         $this->db->where('document_name !=', '');
         $this->db->where('temp_scan_rejected_by', $user_id);
@@ -146,7 +133,6 @@ class DocClassifierController extends CI_Controller
         $this->db->where('group_id', $group_id);
         $this->db->where('DATE(temp_scan_reject_date)', $selected_date);
         $rejected = $this->db->count_all_results();
-
         $this->db->from($table);
         $this->db->where('document_name !=', '');
         $this->db->where('is_classified', 'Y');
@@ -155,14 +141,24 @@ class DocClassifierController extends CI_Controller
         $this->db->where('group_id', $group_id);
         $this->db->where('DATE(verified_date)', $selected_date);
         $document_verified_count = $this->db->count_all_results();
-
-        $response = [
-            'classified_by_me' => $classified,
-            'classified_rejected' => $classified_rejected,
-            'scan_rejected_by_me' => $rejected,
-            'document_verified_count' => $document_verified_count,
-        ];
-
+        $response = ['classified_by_me' => $classified, 'classified_rejected' => $classified_rejected, 'scan_rejected_by_me' => $rejected, 'document_verified_count' => $document_verified_count,];
         echo json_encode($response);
+    }
+    public function reject_scanned_bill($scan_id)
+    {
+        $user_id = $this->session->userdata('user_id');
+        $remark = trim($this->input->post('Remark'));
+        if (empty($scan_id) || empty($user_id) || empty($remark)) {
+            echo json_encode(['status' => 400, 'message' => 'Invalid input. Please check scan ID and remark.',]);
+            return;
+        }
+        $data = ['is_temp_scan_rejected' => 'Y', 'temp_scan_rejected_by' => $user_id, 'temp_scan_reject_remark' => $remark, 'temp_scan_reject_date' => date('Y-m-d'),];
+        $table = 'y' . $this->year_id . '_scan_file';
+        $result = $this->BaseModel->updateData($table, $data, ['scan_id' => $scan_id]);
+        if ($result) {
+            echo json_encode(['status' => 200, 'message' => 'Bill rejected successfully.',]);
+        } else {
+            echo json_encode(['status' => 500, 'message' => 'Something went wrong. Please try again.',]);
+        }
     }
 }

@@ -1,11 +1,11 @@
-<div class="content-wrapper" >
+<div class="content-wrapper">
    <section class="content">
       <div class="row">
          <div class="col-md-12">
             <div class="box">
                <div class="box-header with-border">
                   <h3 class="box-title">Pending Classification List</h3>
-                  
+
                </div>
                <div class="box-body">
                   <div class="table-responsive mailbox-messages">
@@ -244,7 +244,7 @@
          showLoader();
          $.ajax({
             type: "POST",
-            url: "<?= base_url('reject_bill/') ?>" + scanId,
+            url: "<?= base_url('reject_scanned_bill/') ?>" + scanId,
             data: { Remark: remark },
             dataType: "json",
             success: function (response) {
@@ -281,12 +281,6 @@
             alert("Please select a department.");
             return;
          }
-
-         // if (location === "") {
-         //    alert("Please select a location.");
-         //    return;
-         // }
-
          $button.prop("disabled", true).text("Please wait...");
          $.ajax({
             url: "<?= base_url('extract/ExtractorController/extractDetails'); ?>",
@@ -296,7 +290,6 @@
                type_id: typeId,
                department: department,
                subdepartment: subdepartment,
-               // location: location,
             },
             success: function (response) {
                let jsonResponse = JSON.parse(response);

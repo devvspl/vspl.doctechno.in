@@ -99,6 +99,7 @@ $route['classification'] = 'DocClassifierController/classification';
 $route['processed'] = 'DocClassifierController/processed';
 $route['classifications_rejected'] = 'DocClassifierController/classifications_rejected';
 $route['rejected_scans'] = 'DocClassifierController/rejected_scans';
+$route['reject_scanned_bill/(:any)'] = 'DocClassifierController/reject_scanned_bill/$1';
 $route['document_received'] = 'DocClassifierController/document_received';
 $route['scan_document_details'] = 'DocClassifierController/scan_document_details';
 $route['update_received_status'] = 'DocClassifierController/update_received_status';
@@ -159,7 +160,7 @@ $route['approved_bill_approve'] = 'master/BillApproverController/approved_bill_a
 $route['bill_detail/(:any)'] = 'master/BillApproverController/bill_detail/$1';
 $route['my_approved_bill'] = 'master/BillApproverController/my_approved_bill';
 $route['rejected_bill_by_me'] = 'master/BillApproverController/rejected_bill_by_me';
-$route['reject_bill/(:any)'] = 'master/BillApproverController/reject_bill/$1';
+
 $route['approve_bill/(:any)'] = 'master/BillApproverController/approve_bill/$1';
 $route['employee_import'] = 'master/EmployeeController/employee_import';
 $route['firm_import'] = 'master/FirmController/firm_import';

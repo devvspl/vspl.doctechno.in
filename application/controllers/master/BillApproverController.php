@@ -190,24 +190,24 @@ class BillApproverController extends CI_Controller
         $this->data['main'] = 'bill_approver/rejected_bill_list';
         $this->load->view('layout/template', $this->data);
     }
-    public function reject_bill($scan_id)
-    {
+public function reject_bill($scan_id)
+{
 
-        $user_id = $this->session->userdata('user_id');
-        $Reject_Remark = $this->input->post('Remark');
-        $this->db->where('scan_id', $scan_id);
-        if ($_SESSION['role'] === 'scan_admin') {
-            $data = array('is_temp_scan_rejected' => 'Y', 'temp_scan_rejected_by' => $user_id, 'temp_scan_reject_remark' => $Reject_Remark, 'temp_scan_reject_date' => date('Y-m-d'));
-        } else {
-            $data = array('bill_approval_status' => 'R', 'bill_approver_id' => $user_id, 'bill_approver_remark' => $Reject_Remark, 'bill_approved_date' => date('Y-m-d'));
-        }
-        $result = $this->db->update("y{$this->year_id}_scan_file", $data);
-        if ($result) {
-            echo json_encode(array('status' => '200', 'message' => 'Bill Rejected Successfully.'));
-        } else {
-            echo json_encode(array('status' => '400', 'message' => 'Something went wrong. Please try again.'));
-        }
+    $user_id = $this->session->userdata('user_id');
+    $Reject_Remark = $this->input->post('Remark');
+    $this->db->where('scan_id', $scan_id);
+    if ($_SESSION['role'] === 'scan_admin') {
+        $data = array('is_temp_scan_rejected' => 'Y', 'temp_scan_rejected_by' => $user_id, 'temp_scan_reject_remark' => $Reject_Remark, 'temp_scan_reject_date' => date('Y-m-d'));
+    } else {
+        $data = array('bill_approval_status' => 'R', 'bill_approver_id' => $user_id, 'bill_approver_remark' => $Reject_Remark, 'bill_approved_date' => date('Y-m-d'));
     }
+    $result = $this->db->update("y{$this->year_id}_scan_file", $data);
+    if ($result) {
+        echo json_encode(array('status' => '200', 'message' => 'Bill Rejected Successfully.'));
+    } else {
+        echo json_encode(array('status' => '400', 'message' => 'Something went wrong. Please try again.'));
+    }
+}
     public function approve_bill($scan_id)
     {
         $user_id = $this->session->userdata('user_id');
