@@ -123,7 +123,7 @@ class ScannerController extends CI_Controller
         $year = date('Y');
         $config['upload_path'] = './uploads/temp/';
         $config['allowed_types'] = 'jpg|png|jpeg|pdf';
-        $config['max_size'] = 70000;
+        $config['max_size'] = 80000;
         $var_temp_name = time() . '.' . $file_ext;
         $config['file_name'] = $var_temp_name;
         $this->load->library('upload', $config);
@@ -192,7 +192,7 @@ class ScannerController extends CI_Controller
         $file_ext = pathinfo($file, PATHINFO_EXTENSION);
         $config['upload_path'] = './uploads/temp/';
         $config['allowed_types'] = 'jpg|png|jpeg|pdf';
-        $config['max_size'] = 70000;
+        $config['max_size'] = 80000;
         $var_temp_name = time() . '.' . $file_ext;
         $config['file_name'] = $var_temp_name;
         $this->load->library('upload', $config);
