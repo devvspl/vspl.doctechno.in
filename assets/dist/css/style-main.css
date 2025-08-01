@@ -10155,7 +10155,7 @@ table.table-bordered.dataTable th:last-child,
 table.table-bordered.dataTable th:last-child,
 table.table-bordered.dataTable td:last-child,
 table.table-bordered.dataTable td:last-child {
-    text-align: right;
+    /* text-align: right; */
 }
 .topictable tr td h4 {
     font-family: "Roboto-Bold";

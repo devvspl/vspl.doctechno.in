@@ -429,7 +429,13 @@ class AdminController extends CI_Controller
     }
     public function permissions_data($user_id)
     {
-        $data = ['permissions' => $this->db->select('tbl_permissions.permission_id, tbl_permissions.permission_name')->from('tbl_permissions')->join('tbl_role_permissions', 'tbl_permissions.permission_id = tbl_role_permissions.permission_id', 'left')->join('users', 'users.role_id = tbl_role_permissions.role_id', 'left')->where('users.user_id', $user_id)->where('tbl_permissions.status', 1)->get()->result_array(), 'documents' => $this->BaseModel->getData('master_doctype', ['type_id IN (1, 6, 7, 13, 17, 20, 22, 23, 27, 28, 29, 31, 42, 43, 44, 46, 47, 48, 50, 56)'])->result_array(), 'departments' => $this->BaseModel->getData('core_department', ['is_active' => 1])->result_array(), 'locations' => $this->BaseModel->getData('master_work_location', ['status' => 'A'])->result_array(), 'user_permissions' => $this->BaseModel->getData('tbl_user_permissions', ['user_id' => $user_id])->result_array()];
+        $data = [
+            'permissions' => $this->db->select('tbl_permissions.permission_id, tbl_permissions.permission_name')->from('tbl_permissions')->join('tbl_role_permissions', 'tbl_permissions.permission_id = tbl_role_permissions.permission_id', 'left')->join('users', 'users.role_id = tbl_role_permissions.role_id', 'left')->where('users.user_id', $user_id)->where('tbl_permissions.status', 1)->get()->result_array(),
+            'documents' => $this->BaseModel->getData('master_doctype', ['type_id IN (1, 6, 7, 13, 17, 20, 22, 23, 27, 28, 29, 31, 42, 43, 44, 46, 47, 48, 50, 56)'])->result_array(),
+            'departments' => $this->BaseModel->getData('core_department', ['is_active' => 1])->result_array(),
+            'locations' => $this->BaseModel->getData('master_work_location', ['status' => 'A'])->result_array(),
+            'user_permissions' => $this->BaseModel->getData('tbl_user_permissions', ['user_id' => $user_id])->result_array()
+        ];
         echo json_encode($data);
     }
     public function save_permissions()
@@ -589,9 +595,65 @@ class AdminController extends CI_Controller
         if (!getRoutePermission("roles")) {
             show_error('You do not have permission to access this page.', 403);
         }
-        $data['roles'] = $this->BaseModel->getData('tbl_roles')->result_array();
+
+        // Fetch active permissions
+        $data['permissions'] = $this->BaseModel->getData('tbl_permissions', ['status' => 1])->result_array();
+
+        // Fetch active roles from tbl_roles
+        $data['roles'] = $this->BaseModel->getData('tbl_roles', ['status' => 1])->result_array();
+
+        // Fetch role-permission mappings
+        $this->db->select('role_id, permission_id');
+        $this->db->from('tbl_role_permissions');
+        $query = $this->db->get();
+        $result = $query->result_array();
+        $role_permissions = [];
+        foreach ($result as $row) {
+            $role_permissions[$row['role_id']][] = $row;
+        }
+        $data['role_permissions'] = $role_permissions;
         $data['main'] = 'super_admin/roles';
         $this->load->view('layout/template', $data);
+    }
+
+    public function assign_role_permission($role_id, $permission_id)
+    {
+        $data = [
+            'role_id' => $role_id,
+            'permission_id' => $permission_id,
+            'assigned_at' => date('Y-m-d H:i:s'),
+            'assigned_by' => $this->session->userdata('user_id')
+        ];
+        return $this->db->insert('tbl_role_permissions', $data);
+    }
+
+    public function remove_role_permission($role_id, $permission_id)
+    {
+        $this->db->where('role_id', $role_id);
+        $this->db->where('permission_id', $permission_id);
+        return $this->db->delete('tbl_role_permissions');
+    }
+    public function assign_permission()
+    {
+        $role_id = $this->input->post('role_id');
+        $permission_id = $this->input->post('permission_id');
+        $action = $this->input->post('action');
+
+        if ($action === 'assign') {
+            $result = $this->assign_role_permission($role_id, $permission_id);
+        } else {
+            $result = $this->remove_role_permission($role_id, $permission_id);
+        }
+
+        if ($result) {
+            $response = ['status' => 'success', 'message' => 'Permission updated successfully'];
+        } else {
+            $response = ['status' => 'error', 'message' => 'Failed to update permission'];
+        }
+
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($response));
     }
     public function user($id = null)
     {

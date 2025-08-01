@@ -14,6 +14,10 @@ $route['temp_files/view/(:any)'] = 'CommonController/temp_file_view/$1';
 $route['temp_files/delete/(:any)'] = 'CommonController/temp_file_delete/$1';
 $route['change_password'] = 'CommonController/change_password';
 /***********************************************************************************************************/
+/********************************************  Reports Controller **********************************************/
+/***********************************************************************************************************/
+$route['scanned_files'] = 'ReportsController/scanned_files';
+/***********************************************************************************************************/
 /********************************************  Super Admin *************************************************/
 /***********************************************************************************************************/
 $route['employee'] = 'AdminController/employee';
@@ -36,6 +40,7 @@ $route['save_business_entity'] = 'AdminController/save_business_entity';
 $route['save_business_entity/(:any)'] = 'AdminController/save_business_entity/$1';
 $route['delete_business_entity/(:any)'] = 'AdminController/delete_business_entity/$1';
 $route['roles'] = 'AdminController/roles';
+$route['assign_permission'] = 'AdminController/assign_permission';
 $route['user'] = 'AdminController/user';
 $route['user/(:any)'] = 'AdminController/user/$1';
 $route['save_user'] = 'AdminController/save_user';

@@ -502,8 +502,6 @@ table.dataTable.no-footer {
 	border-top: 1px solid #e5e5e5;
 }
 
-
-
 /* Responsive adjustments for smaller screens */
 @media (max-width: 576px) {
 	#password-form-container {
@@ -519,21 +517,26 @@ table.dataTable.no-footer {
 	}
 }
 
+.editable {
+	cursor: pointer;
+}
 
-.editable { cursor: pointer; }
+.blink-icon {
+	animation: blink-icon 1s linear infinite;
+}
 
- .blink-icon {
-                     animation: blink-icon 1s linear infinite;
-                  }
+@keyframes blink-icon {
+	0%,
+	100% {
+		opacity: 1;
+	}
 
-                  @keyframes blink-icon {
+	50% {
+		opacity: 0;
+	}
+}
 
-                     0%,
-                     100% {
-                        opacity: 1;
-                     }
-
-                     50% {
-                        opacity: 0;
-                     }
-                  }
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+	color: #ffffff !important;
+}

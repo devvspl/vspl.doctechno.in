@@ -1,4 +1,4 @@
-<div class="content-wrapper" >
+<div class="content-wrapper">
    <section class="content">
       <div class="row">
          <div class="col-md-12">
@@ -38,7 +38,7 @@
                         <p><strong>Location:</strong> <?= $bill_detail->location_name ?></p>
 
                         <p><strong>Department:</strong>
-                           <?= !empty($bill_detail->department_name) ? $bill_detail->department_name  : 'NA' ?>
+                           <?= !empty($bill_detail->department_name) ? $bill_detail->department_name : 'NA' ?>
                         </p>
 
                         <p><strong>Sub Department:</strong>
