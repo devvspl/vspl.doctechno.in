@@ -51,7 +51,7 @@
                             <table id="scannedFiles" class="table table-striped table-bordered table-hover">
                                 <thead>
                                     <tr>
-                                        <th style="background-color: white;">ID</th>
+                                        <th style="background-color: white;text-align:center">ID</th>
                                         <th style="text-align:left">File</th>
                                         <th style="text-align:left">Document Name</th>
                                         <th style="text-align:center">Scanned By</th>
